@@ -19,10 +19,10 @@ body {
 .gradient-bg {
   position: fixed;
   inset: -20%;
-  background: linear-gradient(120deg, #000, #111, #0b0b0b);
+  background: linear-gradient(120deg, #000, #0d0d0d, #1a1a1a);
   background-size: 400% 400%;
   animation: gradientMove 35s ease-in-out infinite;
-  filter: blur(60px);
+  filter: blur(40px);
   z-index: 0;
   pointer-events: none;
 }
@@ -36,8 +36,8 @@ body {
 @media (prefers-color-scheme: light) {
   body { background: #fff; color: #111; }
   .gradient-bg {
-    background: linear-gradient(120deg, #fff, #f6f6f6, #f2f2f2);
-    filter: blur(32px);
+    background: linear-gradient(120deg, #fff, #ededed, #e5e5e5);
+    filter: blur(24px);
   }
 }
 
