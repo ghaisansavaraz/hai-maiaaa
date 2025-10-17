@@ -1,57 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hai Maiaaa,  From Gesan</title>
-  <meta name="description" content="from Gesan for Maiaa.">
 
-  <!-- ⚘ Black & white flower favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚘</text></svg>">
+  <!-- black/white flower favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚘</text></svg>">
 
-  <meta name="color-scheme" content="light dark">
+  <!-- Use Apple system fonts with fallbacks -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main id="app">
-    <!-- COUNTDOWN SCREEN -->
-    <section id="countdown-view" class="view full">
-      <div id="countdown" class="countdown">
-        <span id="days">00</span>
-        <span class="sep">:</span>
-        <span id="hours">00</span>
-        <span class="sep">:</span>
-        <span id="minutes">00</span>
-        <span class="sep">:</span>
-        <span id="seconds">00</span>
-      </div>
-    </section>
+  <!-- COUNTDOWN -->
+  <div class="countdown-container" id="countdown-container">
+    <div id="countdown" class="countdown" aria-live="polite">00 00 00 00</div>
+    <!-- hidden input appears after triple-click (for bypass) -->
+    <input id="secret-input" type="password" placeholder="Enter code..." class="secret-input" />
+  </div>
 
-    <!-- DASHBOARD SCREEN -->
-    <section id="dashboard-view" class="view hidden" aria-hidden="true">
-      <div class="dash-container">
-        <header class="dash-header">
-          <h1 id="greeting">Hai Maiaaa</h1>
-        </header>
+  <!-- DASHBOARD -->
+  <main class="dashboard hidden" id="dashboard" aria-hidden="true">
+    <h1 class="greeting">Hai Maiaaa</h1>
+    <div class="reminder-input">
+      <input id="reminderText" type="text" placeholder="Write a reminder..." />
+      <button id="addReminder">Add</button>
+    </div>
 
-        <section class="reminders-panel">
-          <form id="reminder-form" class="reminder-form">
-            <input id="reminder-input" placeholder="Add a reminder..." autocomplete="off" />
-            <button class="btn" type="submit">Add</button>
-          </form>
-
-          <ul id="reminder-list" class="reminder-list"></ul>
-
-          <div class="panel-actions">
-            <button id="export-reminders" class="btn small">Export</button>
-            <button id="import-reminders" class="btn small">Import</button>
-            <input id="import-file" type="file" accept=".json" hidden />
-            <button id="clear-all" class="btn small danger">Clear</button>
-          </div>
-        </section>
-      </div>
-    </section>
+    <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
+    <div class="dashboard-actions">
+      <button id="exportReminders" class="small">Export</button>
+      <button id="importReminders" class="small">Import</button>
+      <input id="importFile" type="file" accept=".json" hidden />
+      <button id="clearReminders" class="small danger">Clear</button>
+    </div>
   </main>
+
   <script src="script.js"></script>
 </body>
 </html>
