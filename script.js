@@ -1,4 +1,4 @@
-// Target birthday countdown: October 19, local Jakarta time
+// Countdown target: October 19, 2025 (Jakarta time)
 const targetDate = new Date('2025-10-19T00:00:00+07:00');
 
 const countdownView = document.getElementById('countdown-view');
@@ -23,16 +23,17 @@ function updateCountdown() {
   const minutes = Math.floor((diff / (1000 * 60)) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
 
-  daysEl.textContent = days;
+  daysEl.textContent = String(days).padStart(2, '0');
   hoursEl.textContent = String(hours).padStart(2, '0');
   minutesEl.textContent = String(minutes).padStart(2, '0');
   secondsEl.textContent = String(seconds).padStart(2, '0');
 }
 
+// Run countdown every second
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-// ========== Reminder dashboard ==========
+// === Reminder Dashboard ===
 const reminderForm = document.getElementById('reminder-form');
 const reminderInput = document.getElementById('reminder-input');
 const reminderList = document.getElementById('reminder-list');
@@ -98,7 +99,7 @@ importFile.addEventListener('change', e => {
         saveReminders(data);
         renderReminders();
       }
-    } catch (err) {
+    } catch {
       alert('Invalid file format');
     }
   };
