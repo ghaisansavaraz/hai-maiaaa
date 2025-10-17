@@ -1,134 +1,144 @@
-:root { color-scheme: light dark; }
-
-/* font stack: SF Pro (mac), system fallbacks */
-body {
-  margin:0;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: linear-gradient(180deg, var(--bg-start, #fff), var(--bg-end, #f7f7f7));
-  transition: background .6s ease, color .6s ease;
-  font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, system-ui, sans-serif;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+:root {
+  color-scheme: light dark;
 }
 
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(-45deg, var(--g1), var(--g2), var(--g3), var(--g4));
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+  transition: background 1s ease, color 1s ease;
+  overflow: hidden;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Dark mode colors */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-start: #000;
-    --bg-end: #111;
-    --text: #fff;
-    --card-bg: rgba(255,255,255,0.03);
-    --input-bg: rgba(255,255,255,0.03);
-    --btn-bg: rgba(255,255,255,0.06);
+    --g1: #000000;
+    --g2: #111111;
+    --g3: #1a1a1a;
+    --g4: #0a0a0a;
+    --text-color: #fff;
+    --input-bg: #1a1a1a;
+    --button-bg: #222;
   }
 }
+
+/* Light mode colors */
 @media (prefers-color-scheme: light) {
   :root {
-    --bg-start: #ffffff;
-    --bg-end: #f7f7f7;
-    --text: #000;
-    --card-bg: rgba(0,0,0,0.04);
-    --input-bg: rgba(0,0,0,0.04);
-    --btn-bg: rgba(0,0,0,0.06);
+    --g1: #ffffff;
+    --g2: #f8f8f8;
+    --g3: #efefef;
+    --g4: #fafafa;
+    --text-color: #000;
+    --input-bg: #f0f0f0;
+    --button-bg: #ddd;
   }
 }
 
-/* Countdown area */
-.countdown-container { text-align:center; transition:opacity .9s ease; }
-.countdown {
-  font-size: clamp(48px, 11vw, 120px);
-  font-weight: 200;            /* thin */
-  letter-spacing: 0.18em;
-  color: var(--text);
-  user-select:none;
-  cursor:pointer;
-  animation: pulse 2.6s ease-in-out infinite;
-  transition: transform .4s ease, opacity .4s ease;
-}
-@keyframes pulse {
-  0% { transform: scale(1); opacity:.92; }
-  50% { transform: scale(1.014); opacity:1; }
-  100% { transform: scale(1); opacity:.92; }
+/* Countdown container */
+.countdown-container {
+  text-align: center;
+  transition: opacity 1s ease;
 }
 
-/* Secret input (hidden by default) */
-.secret-input {
-  display:none;
-  margin-top:18px;
-  padding:8px 12px;
-  border-radius:10px;
-  border:1px solid rgba(0,0,0,0.08);
-  background:var(--input-bg);
-  color:var(--text);
-  font-size:16px;
-  text-align:center;
+.countdown {
+  font-size: 7rem;
+  letter-spacing: 0.2em;
+  font-weight: 200;
+  color: var(--text-color);
+  cursor: pointer;
+  user-select: none;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+.greeting {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--text-color);
+  opacity: 0.85;
+  transition: opacity 0.5s ease;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% { opacity: 0.9; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.015); }
+  100% { opacity: 0.9; transform: scale(1); }
 }
 
 /* Dashboard */
 .dashboard {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:14px;
-  max-width:680px;
-  width:92%;
-  padding:22px;
-  border-radius:14px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.65));
-  box-shadow:0 18px 40px rgba(0,0,0,0.08);
-  opacity:0;
-  transform: translateY(18px);
-  transition: opacity .9s ease, transform .9s ease;
-  color:var(--text);
+  opacity: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 1.2s ease, transform 0.8s ease;
+  transform: translateY(20px);
+  color: var(--text-color);
 }
-@media (prefers-color-scheme: dark) {
-  .dashboard {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-  }
-}
-.dashboard.visible { opacity:1; transform: translateY(0); }
 
-/* heading */
-.greeting { font-weight:300; margin:0; font-size:1.4rem; }
-
-/* reminder input */
-.reminder-input { display:flex; gap:10px; width:100%; justify-content:center; }
-.reminder-input input {
-  flex:0 0 320px;
-  padding:12px 14px;
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,0.06);
-  background:var(--input-bg);
-  color:var(--text);
-  font-weight:300;
-  outline:none;
+.dashboard.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
+
+.dashboard h1 {
+  font-weight: 300;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.reminder-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input {
+  background: var(--input-bg);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 12px;
+  color: var(--text-color);
+  width: 220px;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
 button {
-  padding:10px 14px;
-  border-radius:12px;
-  border:none;
-  background:var(--btn-bg);
-  color:var(--text);
-  cursor:pointer;
-  font-weight:600;
-}
-button.small { padding:8px 10px; font-size:.95rem; }
-button.danger { background:#e25656; color:#fff; }
-
-/* reminder list */
-.reminder-list { list-style:none; padding:0; margin:0; width:100%; display:flex; flex-direction:column; gap:10px; align-items:center; }
-.reminder-list li {
-  width:100%;
-  max-width:640px;
-  background:var(--card-bg);
-  padding:12px 16px;
-  border-radius:12px;
-  font-weight:300;
-  transition:transform .25s ease, opacity .4s ease;
+  background: var(--button-bg);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--text-color);
+  font-weight: 400;
+  transition: opacity 0.3s ease;
 }
 
-/* helpers */
-.hidden { display:none; }
+button:hover { opacity: 0.7; }
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 6px 0;
+  font-weight: 300;
+}
