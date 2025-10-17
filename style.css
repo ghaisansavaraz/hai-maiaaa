@@ -1,144 +1,125 @@
 :root {
   color-scheme: light dark;
+  --radius: 12px;
 }
 
+/* body + animated gradient background */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-stack);
   margin: 0;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(-45deg, var(--g1), var(--g2), var(--g3), var(--g4));
-  background-size: 400% 400%;
-  animation: gradientMove 15s ease infinite;
-  transition: background 1s ease, color 1s ease;
   overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #000;
+  color: #fff;
 }
 
+/* gradient background (slow, soft) */
+.gradient-bg {
+  position: fixed;
+  inset: -20%;
+  background: linear-gradient(120deg, #000, #111, #0b0b0b);
+  background-size: 400% 400%;
+  animation: gradientMove 35s ease-in-out infinite;
+  filter: blur(60px);
+  z-index: 0;
+  pointer-events: none;
+}
 @keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% { background-position: 0% 50%;}
+  50% { background-position: 100% 50%;}
+  100% { background-position: 0% 50%;}
 }
 
-/* Dark mode colors */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --g1: #000000;
-    --g2: #111111;
-    --g3: #1a1a1a;
-    --g4: #0a0a0a;
-    --text-color: #fff;
-    --input-bg: #1a1a1a;
-    --button-bg: #222;
-  }
-}
-
-/* Light mode colors */
+/* light mode overrides */
 @media (prefers-color-scheme: light) {
-  :root {
-    --g1: #ffffff;
-    --g2: #f8f8f8;
-    --g3: #efefef;
-    --g4: #fafafa;
-    --text-color: #000;
-    --input-bg: #f0f0f0;
-    --button-bg: #ddd;
+  body { background: #fff; color: #111; }
+  .gradient-bg {
+    background: linear-gradient(120deg, #fff, #f6f6f6, #f2f2f2);
+    filter: blur(32px);
   }
 }
 
-/* Countdown container */
-.countdown-container {
-  text-align: center;
-  transition: opacity 1s ease;
-}
+/* center content */
+.center { position: relative; z-index: 2; display:flex; flex-direction:column; align-items:center; gap:18px; padding: 28px; }
 
-.countdown {
-  font-size: 7rem;
-  letter-spacing: 0.2em;
+/* countdown timer */
+.countdown-container { text-align:center; }
+.timer {
+  font-size: clamp(44px, 12vw, 120px);
   font-weight: 200;
-  color: var(--text-color);
+  letter-spacing: 0.18em;
+  opacity: 1;
+  transition: transform .45s ease, opacity .45s ease;
   cursor: pointer;
   user-select: none;
-  animation: pulse 2.5s ease-in-out infinite;
 }
 
+/* greeting under timer */
 .greeting {
-  margin-top: 1rem;
-  font-size: 1.2rem;
+  margin-top: 12px;
+  font-size: 1.05rem;
   font-weight: 300;
-  color: var(--text-color);
-  opacity: 0.85;
-  transition: opacity 0.5s ease;
-}
-
-/* Pulse animation */
-@keyframes pulse {
-  0% { opacity: 0.9; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.015); }
-  100% { opacity: 0.9; transform: scale(1); }
-}
-
-/* Dashboard */
-.dashboard {
   opacity: 0;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  transition: opacity 1.2s ease, transform 0.8s ease;
-  transform: translateY(20px);
-  color: var(--text-color);
+  transform: translateY(6px);
+  transition: opacity .8s ease .6s, transform .8s ease .6s;
 }
 
-.dashboard.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* reveal greeting (class added by JS) */
+.greeting.visible { opacity: 0.86; transform: translateY(0); }
+
+/* secret input (hidden by default) */
+.secret-input {
+  display:none;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  color: inherit;
 }
 
-.dashboard h1 {
-  font-weight: 300;
-  margin-bottom: 20px;
-  font-size: 1.6rem;
-  text-align: center;
+/* dashboard */
+.dashboard {
+  width: min(760px, 94vw);
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:center;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .9s ease, transform .9s ease;
 }
-
-.reminder-input {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+@media (prefers-color-scheme: light) {
+  .dashboard {
+    background: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.01));
+    box-shadow: 0 10px 40px rgba(16,20,26,0.06);
+  }
 }
+.dashboard.visible { opacity: 1; transform: translateY(0); }
+.hidden { display:none; }
 
-input {
-  background: var(--input-bg);
-  border: none;
-  padding: 10px 15px;
-  border-radius: 12px;
-  color: var(--text-color);
-  width: 220px;
-  font-size: 1rem;
-  font-weight: 300;
-}
+/* reminder controls */
+.reminder-controls { display:flex; gap:10px; width:100%; justify-content:center; }
+.reminder-input { padding:12px 14px; border-radius:12px; border:none; width:60%; background: rgba(255,255,255,0.02); color:inherit; font-weight:300; }
+.btn { padding:8px 14px; border-radius:12px; border:none; background: rgba(255,255,255,0.04); color:inherit; cursor:pointer; font-weight:600; }
+.btn.small { padding:6px 10px; font-size:.95rem; }
+.btn.danger { background:#e05a5a; color:white; }
 
-button {
-  background: var(--button-bg);
-  border: none;
-  padding: 10px 18px;
-  border-radius: 12px;
-  cursor: pointer;
-  color: var(--text-color);
-  font-weight: 400;
-  transition: opacity 0.3s ease;
-}
+/* reminder list */
+.reminder-list { list-style:none; padding:0; margin:0; width:100%; display:flex; flex-direction:column; gap:8px; align-items:center; }
+.reminder-list li { width:100%; max-width:720px; padding:10px 14px; border-radius:12px; background: rgba(255,255,255,0.02); font-weight:300; }
 
-button:hover { opacity: 0.7; }
+.dash-title { margin:0; font-weight:300; }
+.deck { display:flex; gap:8px; align-items:center; }
 
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  margin: 6px 0;
-  font-weight: 300;
+/* small screens */
+@media (max-width:520px) {
+  .timer { font-size: clamp(36px, 20vw, 72px); letter-spacing:0.12em; }
+  .reminder-input { width: 56%; }
 }

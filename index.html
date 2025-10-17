@@ -1,39 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hai Maiaaa,  From Gesan</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hai Maiaa · From Gesan</title>
 
-    <!-- ⚘ Favicon -->
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚘</text></svg>"
-    />
+  <!-- black/white flower favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚘</text></svg>">
 
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="countdown-container" class="countdown-container">
-      <div id="countdown" class="countdown"></div>
-      <div id="greeting" class="greeting"></div>
-      <input
-        type="password"
-        id="secret-input"
-        placeholder="Enter code"
-        style="display:none;"
-      />
+  <!-- SF Pro / system stack (no external download) -->
+  <style>
+    /* minimal font fallback stack */
+    :root { --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, system-ui, sans-serif; }
+    html,body { height:100%; margin:0; }
+  </style>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- animated gradient background layer -->
+  <div class="gradient-bg" aria-hidden="true"></div>
+
+  <!-- central area -->
+  <div id="center" class="center">
+    <div id="countdownContainer" class="countdown-container">
+      <div id="timer" class="timer" aria-live="polite">-- -- -- --</div>
+      <div id="greeting" class="greeting" aria-hidden="false"></div>
+      <input id="secretInput" class="secret-input" type="password" placeholder="Enter code" aria-label="secret code" />
     </div>
 
-    <div id="dashboard" class="dashboard hidden">
-      <h1> Maiaaa’s Reminders</h1>
-      <div class="reminder-input">
-        <input type="text" id="reminderText" placeholder="Write a reminder..." />
-        <button id="addReminder">Add</button>
+    <main id="dashboard" class="dashboard hidden" aria-hidden="true">
+      <h1 class="dash-title">🌸 Maia’s Reminder Board</h1>
+
+      <div class="reminder-controls">
+        <input id="reminderText" class="reminder-input" type="text" placeholder="Write a reminder..." />
+        <button id="addReminder" class="btn">Add</button>
       </div>
-      <ul id="reminderList"></ul>
-    </div>
 
-    <script src="script.js"></script>
-  </body>
+      <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
+
+      <div class="deck">
+        <button id="exportReminders" class="btn small">Export</button>
+        <button id="importReminders" class="btn small">Import</button>
+        <input id="importFile" type="file" accept=".json" hidden />
+        <button id="clearReminders" class="btn small danger">Clear</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
