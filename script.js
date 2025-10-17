@@ -1,116 +1,102 @@
-// Countdown target: October 19, 2025 (Jakarta time)
-const targetDate = new Date('2025-10-19T00:00:00+07:00');
+const countdown = document.getElementById('countdown');
+const dashboard = document.getElementById('dashboard');
+const countdownContainer = document.getElementById('countdown-container');
+const secretInput = document.getElementById('secret-input');
+const remindersList = document.getElementById('reminders');
+const addReminderBtn = document.getElementById('add-reminder');
+let clickCount = 0;
 
-const countdownView = document.getElementById('countdown-view');
-const dashboardView = document.getElementById('dashboard-view');
-const daysEl = document.getElementById('days');
-const hoursEl = document.getElementById('hours');
-const minutesEl = document.getElementById('minutes');
-const secondsEl = document.getElementById('seconds');
+// 🎯 Countdown target (Jakarta)
+let targetDate = new Date('2025-10-19T00:00:00+07:00');
 
+// ⏳ Countdown logic
 function updateCountdown() {
   const now = new Date();
   const diff = targetDate - now;
 
   if (diff <= 0) {
-    countdownView.classList.add('hidden');
-    dashboardView.classList.remove('hidden');
+    showDashboard();
     return;
   }
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
 
-  daysEl.textContent = String(days).padStart(2, '0');
-  hoursEl.textContent = String(hours).padStart(2, '0');
-  minutesEl.textContent = String(minutes).padStart(2, '0');
-  secondsEl.textContent = String(seconds).padStart(2, '0');
+  const formatted = `${d.toString().padStart(2, '0')} ${h
+    .toString()
+    .padStart(2, '0')} ${m.toString().padStart(2, '0')} ${s
+    .toString()
+    .padStart(2, '0')}`;
+
+  countdown.style.opacity = 0;
+  countdown.style.transform = "translateY(10px)";
+  setTimeout(() => {
+    countdown.textContent = formatted;
+    countdown.style.opacity = 1;
+    countdown.style.transform = "translateY(0)";
+  }, 200);
 }
 
-// Run countdown every second
-setInterval(updateCountdown, 1000);
-updateCountdown();
-
-// === Reminder Dashboard ===
-const reminderForm = document.getElementById('reminder-form');
-const reminderInput = document.getElementById('reminder-input');
-const reminderList = document.getElementById('reminder-list');
-const exportBtn = document.getElementById('export-reminders');
-const importBtn = document.getElementById('import-reminders');
-const importFile = document.getElementById('import-file');
-const clearBtn = document.getElementById('clear-all');
-
-function loadReminders() {
-  const data = localStorage.getItem('maiaa_reminders');
-  return data ? JSON.parse(data) : [];
+function showDashboard() {
+  countdownContainer.classList.add('hidden');
+  dashboard.classList.remove('hidden');
+  setTimeout(() => {
+    dashboard.classList.add('visible');
+  }, 100);
+  loadReminders();
 }
 
-function saveReminders(reminders) {
-  localStorage.setItem('maiaa_reminders', JSON.stringify(reminders));
-}
-
-function renderReminders() {
-  const reminders = loadReminders();
-  reminderList.innerHTML = '';
-  reminders.forEach((text, i) => {
-    const li = document.createElement('li');
-    li.textContent = text;
-    li.addEventListener('click', () => {
-      reminders.splice(i, 1);
-      saveReminders(reminders);
-      renderReminders();
-    });
-    reminderList.appendChild(li);
-  });
-}
-
-reminderForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const value = reminderInput.value.trim();
-  if (!value) return;
-  const reminders = loadReminders();
-  reminders.push(value);
-  saveReminders(reminders);
-  reminderInput.value = '';
-  renderReminders();
-});
-
-exportBtn.addEventListener('click', () => {
-  const data = JSON.stringify(loadReminders(), null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'reminders.json';
-  a.click();
-});
-
-importBtn.addEventListener('click', () => importFile.click());
-importFile.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const data = JSON.parse(ev.target.result);
-      if (Array.isArray(data)) {
-        saveReminders(data);
-        renderReminders();
-      }
-    } catch {
-      alert('Invalid file format');
-    }
-  };
-  reader.readAsText(file);
-});
-
-clearBtn.addEventListener('click', () => {
-  if (confirm('Clear all reminders?')) {
-    localStorage.removeItem('maiaa_reminders');
-    renderReminders();
+// 🕵️ Hidden bypass
+countdown.addEventListener('click', () => {
+  clickCount++;
+  if (clickCount === 3) {
+    secretInput.style.display = 'block';
+    secretInput.focus();
   }
 });
 
-renderReminders();
+secretInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    if (secretInput.value === 'maiacantik') {
+      showDashboard();
+    }
+    secretInput.value = '';
+    secretInput.style.display = 'none';
+    clickCount = 0;
+  }
+});
+
+// 🗒 Reminder System
+function loadReminders() {
+  const stored = JSON.parse(localStorage.getItem('maiaaa_reminders')) || [];
+  remindersList.innerHTML = '';
+  stored.forEach((text, i) => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    li.className = 'reminder';
+    remindersList.appendChild(li);
+    setTimeout(() => li.classList.add('visible'), i * 100);
+  });
+}
+
+function saveReminders() {
+  const items = Array.from(remindersList.children).map(li => li.textContent);
+  localStorage.setItem('maiaaa_reminders', JSON.stringify(items));
+}
+
+addReminderBtn.addEventListener('click', () => {
+  const text = prompt('What would you like to remind Maiaa?');
+  if (text && text.trim() !== '') {
+    const li = document.createElement('li');
+    li.textContent = text.trim();
+    li.className = 'reminder';
+    remindersList.appendChild(li);
+    setTimeout(() => li.classList.add('visible'), 50);
+    saveReminders();
+  }
+});
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
