@@ -1,145 +1,131 @@
-/* style.css
-   Minimalist, responsive, auto light/dark using prefers-color-scheme.
-   Uses system fonts and clean layout.
-*/
-
-/* --- Base / system fonts --- */
-:root{
-  --bg: #ffffff;
-  --card: #f7f7f8;
-  --text: #111;
-  --muted: #666;
-  --accent: #5b6cff;
-  --danger: #d9534f;
-  --radius: 12px;
-  --shadow: 0 6px 20px rgba(16,20,26,0.06);
+:root {
+  color-scheme: light dark;
+  --bg-light: linear-gradient(180deg, #ffffff, #f4f4f4);
+  --bg-dark: linear-gradient(180deg, #0a0a0a, #1a1a1a);
+  --text-light: #000;
+  --text-dark: #fff;
+  --accent: #888;
+  --radius: 1.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root{
-    --bg: #0b0b0c;
-    --card: #0f1112;
-    --text: #ececec;
-    --muted: #a8a8a8;
-    --accent: #7f8cff;
-    --danger: #ff7b7b;
-    --shadow: 0 8px 30px rgba(0,0,0,0.6);
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
-* { box-sizing: border-box; }
-html,body { height:100%; }
-body{
-  margin:0;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.3;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:32px;
+body {
+  background: light-dark(var(--bg-light), var(--bg-dark));
+  color: light-dark(var(--text-light), var(--text-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-/* main card layout */
-.card {
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:20px;
-  max-width:900px;
-  width:100%;
+.view.full {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 2rem;
 }
 
-/* centered small card for countdown */
-.centered { text-align:center; padding:36px; }
+.hidden { display: none; }
 
-/* countdown */
+/* COUNTDOWN */
 .countdown {
-  display:flex;
-  gap:16px;
-  justify-content:center;
-  margin:20px 0 28px;
-  flex-wrap:wrap;
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.time-col {
-  min-width:78px;
-  background:transparent;
-  padding:12px 10px;
-  border-radius:10px;
-}
-.time-col span { display:block; font-size:28px; font-weight:700; }
-.time-col small { color:var(--muted); font-size:12px; }
 
-/* buttons */
+.countdown .sep {
+  margin: 0 0.3em;
+  opacity: 0.5;
+}
+
+/* DASHBOARD */
+.dash-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.dash-header h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.reminder-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+#reminder-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid light-dark(#ddd, #333);
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+}
+
 .btn {
-  background:var(--accent);
-  color:white;
-  border:none;
-  padding:10px 14px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
-}
-.btn.small { padding:6px 8px; font-size:13px; }
-.btn.danger { background:var(--danger); }
-.icon-btn {
-  background:transparent; border:none; cursor:pointer; font-size:18px;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: var(--radius);
+  background: light-dark(#000, #fff);
+  color: light-dark(#fff, #000);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
-/* hide / show helpers */
-.hidden { display:none; }
-
-/* dashboard layout */
-.dash-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-.meta { display:flex; align-items:center; gap:12px; }
-.quote { font-size:13px; color:var(--muted); max-width:380px; }
-
-/* grid */
-.dashboard-grid {
-  display:grid;
-  grid-template-columns: 1fr 280px;
-  gap:18px;
-  margin-top:16px;
-}
-@media (max-width:800px) {
-  .dashboard-grid { grid-template-columns: 1fr; }
+.btn:hover {
+  opacity: 0.8;
 }
 
-/* panels */
-.panel { background:transparent; padding:10px; border-radius:10px; }
-.panel-header { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; }
-.reminder-form { display:flex; gap:8px; margin-bottom:12px; }
-.reminder-form input { flex:1; padding:8px 10px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); background:transparent; color:var(--text); }
-.reminder-list { list-style:none; padding:0; margin:0; display:grid; gap:8px; }
-
-/* reminder item */
-.reminder-item {
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding:10px; border-radius:8px; background: rgba(0,0,0,0.03);
+.btn.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
 }
-@media (prefers-color-scheme: dark) {
-  .reminder-item { background: rgba(255,255,255,0.03); }
+
+.btn.danger {
+  background: #e74c3c;
+  color: #fff;
 }
-.reminder-text { flex:1; margin-right:8px; word-break:break-word; }
-.reminder-actions { display:flex; gap:8px; align-items:center; }
 
-/* footer */
-.card-footer { margin-top:16px; text-align:center; color:var(--muted); font-size:12px; }
+.reminder-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-/* small interactive effects */
-.btn, .icon-btn { transition:transform .12s ease, opacity .12s ease; }
-.btn:active { transform:translateY(1px); }
+.reminder-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: light-dark(#f8f8f8, #1e1e1e);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
+  border-radius: var(--radius);
+  transition: transform 0.2s ease;
+}
 
-/* fade animation between views */
-.view { transition:opacity .45s ease, transform .45s ease; }
-.view.hidden { opacity:0; transform:translateY(8px); pointer-events:none; }
+.reminder-list li:hover {
+  transform: translateY(-2px);
+}
 
-/* focus accessibility */
-button:focus, input:focus { outline:3px solid rgba(100,120,255,0.18); outline-offset:2px; border-radius:8px; }
-
-/* small helper styles */
-.widget { background:transparent; padding:8px; border-radius:8px; margin-bottom:10px; color:var(--muted); }
+.panel-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
