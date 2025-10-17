@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maiaaa — Birthday Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="color-scheme" content="light dark">
+</head>
+<body>
+  <main id="app">
+    <!-- Countdown view -->
+    <section id="countdown-view" class="view">
+      <div class="card centered">
+        <h1 id="countdown-title">Countdown to Maiaaa's Birthday</h1>
+        <div id="countdown" class="countdown" aria-live="polite">
+          <div class="time-col"><span id="days">0</span><small>days</small></div>
+          <div class="time-col"><span id="hours">0</span><small>hours</small></div>
+          <div class="time-col"><span id="minutes">0</span><small>minutes</small></div>
+          <div class="time-col"><span id="seconds">0</span><small>seconds</small></div>
+        </div>
+        <button id="skip-to-dashboard" class="btn">Open Dashboard</button>
+      </div>
+    </section>
+
+    <!-- Dashboard view (hidden until countdown end or skip) -->
+    <section id="dashboard-view" class="view hidden" aria-hidden="true">
+      <div class="card">
+        <header class="dash-header">
+          <h1 id="greeting">Happy Birthday Maiaaa!</h1>
+          <div class="meta">
+            <div id="today-quote" class="quote" aria-live="polite"></div>
+            <button id="toggle-theme" class="icon-btn" title="Toggle theme">🌓</button>
+          </div>
+        </header>
+
+        <section class="dashboard-grid">
+          <!-- Reminder board -->
+          <div class="panel reminders" aria-labelledby="reminders-heading">
+            <div class="panel-header">
+              <h2 id="reminders-heading">Reminder Board</h2>
+              <div class="panel-actions">
+                <button id="export-reminders" class="btn small">Export</button>
+                <button id="import-reminders" class="btn small">Import</button>
+                <input id="import-file" type="file" accept=".json" hidden />
+              </div>
+            </div>
+
+            <form id="reminder-form" class="reminder-form" aria-label="Add reminder">
+              <input id="reminder-input" placeholder="Write a reminder..." required />
+              <button class="btn" type="submit">Add</button>
+            </form>
+
+            <ul id="reminder-list" class="reminder-list" aria-live="polite"></ul>
+          </div>
+
+          <!-- Small widgets: next event + quick actions -->
+          <aside class="panel widgets" aria-labelledby="widgets-heading">
+            <h2 id="widgets-heading">Quick Dashboard</h2>
+
+            <div class="widget">
+              <strong>Next event</strong>
+              <div id="next-event">Birthday: Oct 19</div>
+            </div>
+
+            <div class="widget">
+              <strong>Clear all</strong>
+              <button id="clear-all" class="btn small danger">Clear reminders</button>
+            </div>
+
+            <div class="widget">
+              <strong>Backup</strong>
+              <div><small>Reminders saved in your browser.</small></div>
+            </div>
+          </aside>
+        </section>
+
+        <footer class="card-footer">
+          <small>Minimalist Birthday Dashboard • Local-only reminders (stored in your browser)</small>
+        </footer>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
