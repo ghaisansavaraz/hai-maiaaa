@@ -26,7 +26,7 @@
   --star-color: rgba(255,255,255,0.8);
 }
 
-/* body + animated gradient background */
+/* body + moving gradient background */
 body {
   font-family: var(--font-stack);
   margin: 0;
@@ -34,14 +34,12 @@ body {
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  background: var(--bg-gradient) !important;
-  background-attachment: fixed !important;
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-  color: #fff !important;
+  background: #000000;
+  background-size: 400% 400%;
+  color: #ffffff;
   position: relative;
   padding: 0;
-  transition: background var(--transition-slow) ease;
+  transition: background 0.5s ease, color 0.5s ease;
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
 }
@@ -122,60 +120,19 @@ body.hide-stars::after {
   opacity: 0 !important;
 }
 
-/* gradient background - pure black with subtle shifting */
-.gradient-bg {
-  position: fixed;
-  inset: -20%;
-  /* Pure black base with very subtle shifting gradients */
-  background:
-    radial-gradient(1200px 800px at 12% 22%, rgba(255, 255, 255, 0.01), transparent 60%),
-    radial-gradient(800px 600px at 88% 78%, rgba(0, 0, 0, 0.05), transparent 60%),
-    radial-gradient(600px 400px at 50% 50%, rgba(255, 255, 255, 0.005), transparent 60%),
-    linear-gradient(135deg, rgba(0,0,0,1), rgba(0,0,0,0.95));
-  background-size: auto auto, auto auto, auto auto, 400% 400%;
-  animation: gradientMove var(--gradient-speed, 12s) ease-in-out infinite;
-  filter: blur(35px);
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Additional glow layer - very subtle */
-.gradient-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(800px 800px at 50% 50%, rgba(255,255,255,0.005), transparent 70%);
-  animation: glowPulse 8s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
-}
+/* Moving gradient animation */
 @keyframes gradientMove {
   0% {
-    background-position:
-      0% 50%,
-      100% 50%,
-      50% 50%,
-      0% 50%;
+    background-position: 0% 50%;
   }
   50% {
-    background-position:
-      100% 60%,
-      0% 40%,
-      50% 60%,
-      100% 50%;
+    background-position: 100% 50%;
   }
   100% {
-    background-position:
-      0% 50%,
-      100% 50%,
-      50% 50%,
-      0% 50%;
+    background-position: 0% 50%;
   }
 }
+
 
 /* light mode overrides */
 

@@ -133,184 +133,98 @@
     } catch (e) { console.error(e); }
   }
 
-  // ---- Dynamic Background System ----
+  // ---- Original Light/Dark Background System with Moving Gradients ----
   class DynamicBackground {
     constructor() {
-      this.currentHour = new Date().getHours();
-      this.timeThemes = {
-        morning: { // 6 AM - 12 PM
-          bgPrimary: '#ff9a9e',
-          bgSecondary: '#fecfef',
-          accentColor: 'rgba(255,107,107,0.2)',
-          starColor: 'rgba(255,107,107,0.6)',
-          gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)'
-        },
-        afternoon: { // 12 PM - 6 PM
-          bgPrimary: '#a8edea',
-          bgSecondary: '#fed6e3',
-          accentColor: 'rgba(78,205,196,0.2)',
-          starColor: 'rgba(78,205,196,0.6)',
-          gradient: 'linear-gradient(135deg, #a8edea, #fed6e3)'
-        },
-        evening: { // 6 PM - 10 PM
-          bgPrimary: '#ffecd2',
-          bgSecondary: '#fcb69f',
-          accentColor: 'rgba(254,202,87,0.2)',
-          starColor: 'rgba(254,202,87,0.6)',
-          gradient: 'linear-gradient(135deg, #ffecd2, #fcb69f)'
-        },
-        night: { // 10 PM - 6 AM
-          bgPrimary: '#667eea',
-          bgSecondary: '#764ba2',
-          accentColor: 'rgba(69,183,209,0.2)',
-          starColor: 'rgba(69,183,209,0.6)',
-          gradient: 'linear-gradient(135deg, #667eea, #764ba2)'
-        }
-      };
-      
-      this.init();
-    }
-
-    init() {
-      debugLog("Initializing dynamic background system...");
+      debugLog("Initializing original light/dark background system...");
       this.updateBackground();
       this.startTimeSync();
     }
 
     getCurrentTheme() {
-      const now = new Date();
-      const hour = now.getHours();
-      const minute = now.getMinutes();
+      const hour = new Date().getHours();
       
-      // Calculate brightness based on time (0 = darkest, 1 = brightest)
-      let brightness;
-      
+      // Simple time-based theme selection
       if (hour >= 6 && hour < 18) {
-        // Daytime: 6 AM to 6 PM (12 hours)
-        const dayProgress = ((hour - 6) * 60 + minute) / (12 * 60);
-        // Peak brightness at noon (12 PM)
-        brightness = Math.sin(dayProgress * Math.PI);
+        return { 
+          name: 'light', 
+          isLight: true,
+          gradient: 'linear-gradient(135deg, #ffffff, #f0f0f0, #e8e8e8, #f5f5f5)'
+        };
       } else {
-        // Nighttime: 6 PM to 6 AM (12 hours)
-        const nightProgress = ((hour - 18 + 24) % 24 * 60 + minute) / (12 * 60);
-        // Darkest at midnight (12 AM)
-        brightness = Math.sin(nightProgress * Math.PI);
+        return { 
+          name: 'dark', 
+          isLight: false,
+          gradient: 'linear-gradient(135deg, #000000, #111111, #0a0a0a, #1a1a1a)'
+        };
       }
-      
-      return {
-        brightness: Math.max(0, Math.min(1, brightness)),
-        isDay: hour >= 6 && hour < 18
-      };
     }
 
     updateBackground() {
       const theme = this.getCurrentTheme();
-      const root = document.documentElement;
       
-      debugLog(`Updating background - brightness: ${theme.brightness.toFixed(2)}, isDay: ${theme.isDay}`);
+      debugLog(`Updating background to ${theme.name} mode`);
       
-      // Force override system theme detection completely
+      // Force override system theme detection
       document.body.style.setProperty('color-scheme', 'dark', 'important');
       document.documentElement.style.setProperty('color-scheme', 'dark', 'important');
-      document.body.style.setProperty('-webkit-color-scheme', 'dark', 'important');
-      document.documentElement.style.setProperty('-webkit-color-scheme', 'dark', 'important');
       
       // Remove any system theme classes
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Prevent light mode browser effects
-      document.body.style.setProperty('filter', 'none', 'important');
-      document.body.style.setProperty('backdrop-filter', 'none', 'important');
-      document.body.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
-      document.documentElement.style.setProperty('filter', 'none', 'important');
+      // Set background with moving gradient
+      document.body.style.setProperty('background', theme.gradient, 'important');
+      document.body.style.setProperty('background-size', '400% 400%', 'important');
+      document.body.style.setProperty('animation', 'gradientMove 8s ease-in-out infinite', 'important');
       
-      // Force override any browser light mode styling
-      document.body.style.setProperty('background-image', 'none', 'important');
-      document.body.style.setProperty('background-attachment', 'fixed', 'important');
+      // Set text color
+      if (theme.isLight) {
+        document.body.style.setProperty('color', '#000000', 'important');
+      } else {
+        document.body.style.setProperty('color', '#ffffff', 'important');
+      }
       
-      // Create smooth gradient based on brightness - pure black with subtle shading
-      const baseBrightness = theme.brightness;
-      
-      // Pure black base with very subtle shading
-      const blackBase = 'rgba(0, 0, 0, 1)';
-      const subtleShade = theme.isDay ? 
-        `rgba(255, 255, 255, ${baseBrightness * 0.02})` : 
-        `rgba(0, 0, 0, ${(1 - baseBrightness) * 0.1})`;
-      
-      // Fast shifting gradients for daytime, slower for nighttime
-      const gradientSpeed = theme.isDay ? '2s' : '8s';
-      
-      const gradient = `
-        linear-gradient(135deg, 
-          ${blackBase} 0%, 
-          ${subtleShade} 25%, 
-          ${blackBase} 50%, 
-          ${subtleShade} 75%, 
-          ${blackBase} 100%
-        )
-      `;
-      
-      // Update CSS variables
-      root.style.setProperty('--bg-gradient', gradient);
-      root.style.setProperty('--gradient-speed', gradientSpeed);
-      
-      // Update body background with smooth transition
-      document.body.style.setProperty('background', gradient, 'important');
-      document.body.style.setProperty('color', theme.brightness > 0.3 ? '#000' : '#fff', 'important');
-      
-      // Apply dashboard theme based on brightness
+      // Apply dashboard theme
       const dashboard = document.getElementById('dashboard');
       if (dashboard) {
-        if (theme.brightness < 0.3) {
-          // Dark theme for low brightness
-          dashboard.classList.remove('light-theme');
-          debugLog('Applied dark theme to dashboard');
-        } else {
-          // Light theme for high brightness
+        if (theme.isLight) {
           dashboard.classList.add('light-theme');
           debugLog('Applied light theme to dashboard');
+        } else {
+          dashboard.classList.remove('light-theme');
+          debugLog('Applied dark theme to dashboard');
         }
       }
       
-      // Apply night theme class to body for time glow effect
-      if (theme.brightness < 0.3) {
-        document.body.classList.add('night-theme');
-        debugLog('Applied night-theme class for time glow');
-      } else {
+      // Apply night theme class for glow effects
+      if (theme.isLight) {
         document.body.classList.remove('night-theme');
         debugLog('Removed night-theme class');
+      } else {
+        document.body.classList.add('night-theme');
+        debugLog('Applied night-theme class for time glow');
       }
       
-      // Control star visibility based on brightness
-      if (theme.brightness < 0.4) {
-        // Show white stars for low brightness
-        document.body.classList.add('show-stars');
-        document.body.classList.remove('hide-stars');
-        debugLog('Stars visible');
-      } else {
-        // Hide stars for high brightness
+      // Control star visibility
+      if (theme.isLight) {
         document.body.classList.add('hide-stars');
         document.body.classList.remove('show-stars');
         debugLog('Stars hidden');
+      } else {
+        document.body.classList.add('show-stars');
+        document.body.classList.remove('hide-stars');
+        debugLog('Stars visible');
       }
       
-      debugLog(`Background updated - brightness: ${theme.brightness.toFixed(2)}`);
+      debugLog(`Background updated: ${theme.name} mode`);
     }
 
     startTimeSync() {
       // Update every hour
-      const now = new Date();
-      const nextHour = new Date(now);
-      nextHour.setHours(now.getHours() + 1, 0, 0, 0);
-      const timeUntilNextHour = nextHour.getTime() - now.getTime();
-      
-      debugLog(`Next background update in ${Math.round(timeUntilNextHour / 60000)} minutes`);
-      
-      setTimeout(() => {
+      setInterval(() => {
         this.updateBackground();
-        this.startTimeSync(); // Schedule next update
-      }, timeUntilNextHour);
+      }, 3600000);
     }
   }
 
