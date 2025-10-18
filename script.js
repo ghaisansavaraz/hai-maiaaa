@@ -149,13 +149,13 @@
         return { 
           name: 'light', 
           isLight: true,
-          gradient: 'linear-gradient(45deg, #ffffff, #f0f0f0, #e8e8e8, #f5f5f5, #ffffff, #f8f8f8, #e0e0e0)'
+          gradient: 'linear-gradient(45deg, #ffffff, #e0e0e0, #f0f0f0, #d0d0d0, #ffffff, #c0c0c0, #f8f8f8)'
         };
       } else {
         return { 
           name: 'dark', 
           isLight: false,
-          gradient: 'linear-gradient(45deg, #000000, #1a1a1a, #0d0d0d, #2a2a2a, #000000, #111111, #333333)'
+          gradient: 'linear-gradient(45deg, #000000, #2a2a2a, #1a1a1a, #333333, #000000, #444444, #111111)'
         };
       }
     }
@@ -173,14 +173,22 @@
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Set moving gradient background with higher opacity
-      document.body.style.setProperty('background', theme.gradient, 'important');
+      // Set moving gradient background - force it to work
+      const gradientStyle = `${theme.gradient}, ${theme.gradient}`;
+      document.body.style.setProperty('background', gradientStyle, 'important');
       document.body.style.setProperty('background-size', '400% 400%', 'important');
-      document.body.style.setProperty('animation', 'gradientMove 12s linear infinite', 'important');
+      document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      document.body.style.setProperty('animation', 'testGradient 4s linear infinite', 'important');
       document.body.style.setProperty('background-attachment', 'fixed', 'important');
       
-      debugLog(`Applied gradient: ${theme.gradient}`);
-      debugLog(`Animation: gradientMove 12s linear infinite`);
+      // Force remove any conflicting styles
+      document.body.style.removeProperty('background-image');
+      document.body.style.removeProperty('background-color');
+      
+      debugLog(`Applied gradient: ${gradientStyle}`);
+      debugLog(`Animation: testGradient 4s linear infinite`);
+      console.log('Body background:', document.body.style.background);
+      console.log('Body animation:', document.body.style.animation);
       
       // Set text color
       if (theme.isLight) {

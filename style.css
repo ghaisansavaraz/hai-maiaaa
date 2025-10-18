@@ -26,7 +26,7 @@
   --star-color: rgba(255,255,255,0.8);
 }
 
-/* body + moving gradient background */
+/* Force gradient animation to work */
 body {
   font-family: var(--font-stack);
   margin: 0;
@@ -40,6 +40,9 @@ body {
   transition: color 0.5s ease;
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
+  /* Force animation to work */
+  animation-play-state: running !important;
+  will-change: background-position !important;
 }
 
 /* Blur layer for depth */
@@ -131,6 +134,19 @@ body.hide-stars::after {
   }
   75% {
     background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* Test gradient animation - force it to work */
+@keyframes testGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
   }
   100% {
     background-position: 0% 0%;
