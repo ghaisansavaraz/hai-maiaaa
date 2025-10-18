@@ -580,7 +580,7 @@ body.hide-stars .shooting-stars-container {
   transform: translateY(0);
 }
 
-/* Dashboard Header */
+/* Dashboard Header with Clock */
 .dashboard-header {
   text-align: center;
   margin-bottom: 48px;
@@ -588,20 +588,46 @@ body.hide-stars .shooting-stars-container {
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.dash-title {
-  font-size: clamp(32px, 6vw, 48px);
-  font-weight: 300;
-  margin: 0 0 8px 0;
-  color: #fff;
-  letter-spacing: 0.02em;
+.header-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
-.header-subtitle {
-  font-size: 16px;
+.header-time-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-current-time {
+  font-size: clamp(36px, 8vw, 56px);
+  font-weight: 200;
+  font-family: var(--font-stack);
+  color: #fff;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+
+.header-current-date {
+  font-size: clamp(14px, 3vw, 18px);
   font-weight: 300;
-  color: rgba(255,255,255,0.6);
-  letter-spacing: 0.1em;
+  font-family: var(--font-stack);
+  color: rgba(255,255,255,0.7);
   text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.header-time-greeting {
+  font-size: clamp(16px, 4vw, 22px);
+  font-weight: 300;
+  color: #fff;
+  text-align: center;
+  opacity: 0.8;
+  letter-spacing: 0.02em;
 }
 
 /* Dashboard Grid Layout */
@@ -1135,6 +1161,146 @@ body.hide-stars .shooting-stars-container {
   .dash-title {
     font-size: clamp(24px, 8vw, 32px);
   }
+}
+
+/* Card Header with Clear Button */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.card-header-content {
+  flex: 1;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.05em;
+}
+
+.btn-clear {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 12px;
+  font-family: var(--font-stack);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+}
+
+.btn-clear:hover {
+  border-color: rgba(255,255,255,0.15);
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+
+/* Reminder Cards Style */
+.reminder-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reminder-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)),
+    linear-gradient(45deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.reminder-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.reminder-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.reminder-text {
+  font-size: 14px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Coming Soon Style */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.coming-soon-icon {
+  font-size: 48px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+
+.coming-soon-text {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.05em;
+}
+
+/* Task Completion Styling */
+.task-item.completed {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.05);
+  opacity: 0.6;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.task-item.completed .task-checkbox {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.task-item.completed .task-checkbox.checked::after {
+  content: '✓';
+  color: rgba(255,255,255,0.8);
 }
 
 /* AGGRESSIVE OVERRIDE - Force dark mode and prevent light vignette */

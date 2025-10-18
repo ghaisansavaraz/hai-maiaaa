@@ -107,10 +107,15 @@
       <!-- Main dashboard content -->
       <div id="dashboardContent" class="dashboard-content">
         
-        <!-- Header -->
+        <!-- Header with Clock -->
         <header class="dashboard-header">
-          <h1 class="dash-title">Maia's Day</h1>
-          <div class="header-subtitle">Your personal space</div>
+          <div class="header-clock">
+            <div class="header-time-container">
+              <div id="headerCurrentTime" class="header-current-time">--:--:--</div>
+              <div id="headerCurrentDate" class="header-current-date">Loading...</div>
+            </div>
+            <div id="headerTimeGreeting" class="header-time-greeting">Good morning Maiaaa</div>
+          </div>
         </header>
 
         <!-- Main Grid Layout -->
@@ -124,6 +129,7 @@
               <div class="card-header">
                 <h2 class="card-title">Mood</h2>
                 <div class="card-subtitle">How are you feeling today?</div>
+                <button id="clearMood" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="mood-input-container">
@@ -138,10 +144,11 @@
               <div class="card-header">
                 <h2 class="card-title">Tasks</h2>
                 <div class="card-subtitle">Stay organized</div>
+                <button id="clearTasks" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="task-controls">
-                  <input id="taskText" class="task-input" type="text" placeholder="Add a new task..." />
+                  <input id="taskText" class="task-input" type="text" placeholder="Task description..." />
                   <div class="deadline-controls">
                     <input id="taskDeadlineDate" class="deadline-date" type="text" placeholder="Date (YYYY-MM-DD)" />
                     <input id="taskDeadlineTime" class="deadline-time" type="text" placeholder="Time (HH:MM)" />
@@ -162,13 +169,14 @@
               <div class="card-header">
                 <h2 class="card-title">Reminders</h2>
                 <div class="card-subtitle">Important notes</div>
+                <button id="clearReminders" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="reminder-controls">
                   <input id="reminderText" class="reminder-input" type="text" placeholder="Write a reminder..." />
                   <button id="addReminder" class="btn-primary">Add</button>
                 </div>
-                <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
+                <div id="reminderList" class="reminder-cards" aria-live="polite"></div>
               </div>
             </section>
 
@@ -177,9 +185,13 @@
               <div class="card-header">
                 <h2 class="card-title">Letters</h2>
                 <div class="card-subtitle">Messages from Gesan</div>
+                <button id="clearLetters" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
-                <div id="lettersContainer" class="letters-container"></div>
+                <div class="coming-soon">
+                  <div class="coming-soon-icon">?</div>
+                  <div class="coming-soon-text">Coming Soon</div>
+                </div>
               </div>
             </section>
 
@@ -187,15 +199,6 @@
 
         </div>
 
-        <!-- Footer Controls -->
-        <footer class="dashboard-footer">
-          <div class="footer-controls">
-            <button id="exportReminders" class="btn-secondary">Export Data</button>
-            <button id="importReminders" class="btn-secondary">Import Data</button>
-            <input id="importFile" type="file" accept=".json" hidden />
-            <button id="clearReminders" class="btn-danger">Clear All</button>
-          </div>
-        </footer>
 
       </div>
     </main>

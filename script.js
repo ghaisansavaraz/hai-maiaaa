@@ -72,6 +72,11 @@
   const moodInput = document.getElementById("moodInput");
   const moodTags = document.getElementById("moodTags");
   const lettersContainer = document.getElementById("lettersContainer");
+  
+  // Header clock elements
+  const headerCurrentTime = document.getElementById("headerCurrentTime");
+  const headerCurrentDate = document.getElementById("headerCurrentDate");
+  const headerTimeGreeting = document.getElementById("headerTimeGreeting");
 
   // Debug element availability
   debugLog("Element availability check:", {
@@ -314,6 +319,11 @@
         debugLog("Greeting updated:", greeting);
       }
       
+      // Also update header clock
+      if (headerCurrentTime) headerCurrentTime.textContent = timeString;
+      if (headerCurrentDate) headerCurrentDate.textContent = dateString;
+      if (headerTimeGreeting) headerTimeGreeting.textContent = greeting;
+      
     } catch (error) {
       debugError("Failed to update time", error);
     }
@@ -526,15 +536,19 @@
       const arr = raw ? JSON.parse(raw) : [];
       reminderList.innerHTML = "";
       arr.forEach((t) => {
-        const li = document.createElement("li");
-        li.textContent = t;
-        li.addEventListener("click", () => {
+        const card = document.createElement("div");
+        card.className = "reminder-card";
+        const textEl = document.createElement("p");
+        textEl.className = "reminder-text";
+        textEl.textContent = t;
+        card.addEventListener("click", () => {
           // remove on click
-          const updated = Array.from(reminderList.children).map(n => n.textContent).filter(x => x !== t);
+          const updated = arr.filter(x => x !== t);
           saveReminders(updated);
           renderReminders();
         });
-        reminderList.appendChild(li);
+        card.appendChild(textEl);
+        reminderList.appendChild(card);
       });
     } catch (e) { console.error(e); }
   }
@@ -555,12 +569,36 @@
     });
   }
 
-  // clear
-  if (clearReminders) {
-    clearReminders.addEventListener("click", () => {
+  // clear reminders
+  const clearRemindersBtn = document.getElementById("clearReminders");
+  if (clearRemindersBtn) {
+    clearRemindersBtn.addEventListener("click", () => {
       if (confirm("Clear all reminders?")) {
         localStorage.removeItem(STORAGE_KEY);
         renderReminders();
+      }
+    });
+  }
+  
+  // clear mood
+  const clearMoodBtn = document.getElementById("clearMood");
+  if (clearMoodBtn) {
+    clearMoodBtn.addEventListener("click", () => {
+      if (confirm("Clear mood tags?")) {
+        localStorage.removeItem(MOOD_STORAGE_KEY);
+        if (moodTags) moodTags.innerHTML = "";
+      }
+    });
+  }
+  
+  // clear tasks
+  const clearTasksBtn = document.getElementById("clearTasks");
+  if (clearTasksBtn) {
+    clearTasksBtn.addEventListener("click", () => {
+      if (confirm("Clear all tasks?")) {
+        localStorage.removeItem(TASKS_STORAGE_KEY);
+        tasks = [];
+        renderTasks();
       }
     });
   }
