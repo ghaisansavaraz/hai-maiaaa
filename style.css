@@ -58,32 +58,6 @@ body::before {
   pointer-events: none;
 }
 
-/* Light mode particles */
-@media (prefers-color-scheme: light) {
-  body::before {
-    background: 
-      radial-gradient(2px 2px at 20px 30px, rgba(0,0,0,0.08), transparent),
-      radial-gradient(2px 2px at 40px 70px, rgba(0,0,0,0.06), transparent),
-      radial-gradient(1px 1px at 90px 40px, rgba(0,0,0,0.05), transparent),
-      radial-gradient(1px 1px at 130px 80px, rgba(0,0,0,0.04), transparent);
-  }
-  
-  body::after {
-    background: 
-      radial-gradient(1px 1px at 25px 25px, rgba(0,0,0,0.3), transparent),
-      radial-gradient(1px 1px at 50px 75px, rgba(0,0,0,0.2), transparent),
-      radial-gradient(1px 1px at 75px 15px, rgba(0,0,0,0.4), transparent),
-      radial-gradient(1px 1px at 100px 50px, rgba(0,0,0,0.3), transparent),
-      radial-gradient(1px 1px at 125px 25px, rgba(0,0,0,0.2), transparent),
-      radial-gradient(1px 1px at 150px 75px, rgba(0,0,0,0.3), transparent),
-      radial-gradient(1px 1px at 175px 40px, rgba(0,0,0,0.2), transparent),
-      radial-gradient(1px 1px at 200px 10px, rgba(0,0,0,0.4), transparent),
-      radial-gradient(1px 1px at 225px 60px, rgba(0,0,0,0.3), transparent),
-      radial-gradient(1px 1px at 250px 30px, rgba(0,0,0,0.2), transparent),
-      radial-gradient(1px 1px at 275px 80px, rgba(0,0,0,0.3), transparent),
-      radial-gradient(1px 1px at 300px 45px, rgba(0,0,0,0.2), transparent);
-  }
-}
 
 @keyframes particleFloat {
   0% { transform: translate(0, 0); }
@@ -187,19 +161,6 @@ body::after {
 }
 
 /* light mode overrides */
-@media (prefers-color-scheme: light) {
-  body { background: #fff; color: #111; }
-  .gradient-bg {
-    background: 
-      radial-gradient(1200px 800px at 14% 24%, rgba(255, 153, 204, 0.15), transparent 60%),
-      radial-gradient(1000px 700px at 84% 76%, rgba(153, 204, 255, 0.15), transparent 58%),
-      radial-gradient(900px 900px at 50% 54%, rgba(204, 153, 255, 0.12), transparent 55%),
-      radial-gradient(600px 600px at 30% 80%, rgba(255, 200, 160, 0.08), transparent 50%),
-      linear-gradient(120deg, #fff, #f5f5f5, #eeeeee);
-    background-size: auto auto, auto auto, auto auto, auto auto, 400% 400%;
-    filter: blur(25px);
-  }
-}
 
 /* center content */
 .center { 
@@ -296,12 +257,6 @@ body::after {
     0 32px 128px rgba(0,0,0,0.3),
     inset 0 1px 0 rgba(255,255,255,0.15),
     0 0 0 1px rgba(255,255,255,0.1);
-}
-@media (prefers-color-scheme: light) {
-  .dashboard {
-    background: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.01));
-    box-shadow: 0 10px 40px rgba(16,20,26,0.06);
-  }
 }
 .dashboard.visible { opacity: 1; transform: translateY(0); }
 
@@ -755,208 +710,6 @@ body::after {
 }
 
 /* light mode adjustments - ROBUST VERSION */
-@media (prefers-color-scheme: light) {
-  body { 
-    background: #f8f9fa !important; 
-    color: #212529 !important; 
-  }
-  
-  .gradient-bg {
-    background: 
-      radial-gradient(1200px 800px at 14% 24%, rgba(255, 153, 204, 0.15), transparent 60%),
-      radial-gradient(1000px 700px at 84% 76%, rgba(153, 204, 255, 0.15), transparent 58%),
-      radial-gradient(900px 900px at 50% 54%, rgba(204, 153, 255, 0.12), transparent 55%),
-      radial-gradient(600px 600px at 30% 80%, rgba(255, 200, 160, 0.1), transparent 50%),
-      linear-gradient(120deg, #f8f9fa, #e9ecef, #dee2e6) !important;
-    filter: blur(15px) !important;
-  }
-  
-  .dashboard {
-    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.1), rgba(153,204,255,0.1)) !important;
-    background-color: rgba(255,255,255,0.7) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-    box-shadow: 0 24px 96px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8), 0 0 0 1px rgba(255,255,255,0.2) !important;
-  }
-  
-  .dashboard-section {
-    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)), linear-gradient(45deg, rgba(255,153,204,0.08), rgba(153,204,255,0.08)) !important;
-    background-color: rgba(255,255,255,0.5) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6) !important;
-  }
-  
-  .time-display {
-    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.15), rgba(153,204,255,0.15)) !important;
-    background-color: rgba(255,255,255,0.7) !important;
-    border: 1px solid rgba(255,255,255,0.4) !important;
-    box-shadow: 0 16px 64px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8) !important;
-  }
-  
-  .current-time {
-    color: #212529 !important;
-    text-shadow: 0 0 20px rgba(0,0,0,0.1) !important;
-  }
-  
-  .current-date {
-    color: #495057 !important;
-  }
-  
-  .time-greeting {
-    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)) !important;
-    background-color: rgba(255,255,255,0.7) !important;
-    border: 1px solid rgba(255,255,255,0.4) !important;
-    color: #212529 !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
-  }
-  
-  .greeting-text {
-    background: rgba(255,255,255,0.7) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-    color: #212529 !important;
-  }
-  
-  .mood-input {
-    background: rgba(255,255,255,0.6) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    color: #212529 !important;
-  }
-  
-  .mood-input:focus {
-    border-color: rgba(255,153,204,0.5) !important;
-    background: rgba(255,255,255,0.8) !important;
-    box-shadow: 0 0 0 3px rgba(255,153,204,0.2) !important;
-  }
-  
-  .btn {
-    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)), linear-gradient(45deg, rgba(255,153,204,0.1), rgba(153,204,255,0.1)) !important;
-    background-color: rgba(255,255,255,0.5) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    color: #212529 !important;
-  }
-  
-  .btn:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.15), rgba(153,204,255,0.15)) !important;
-    background-color: rgba(255,255,255,0.7) !important;
-    border-color: rgba(255,255,255,0.3) !important;
-  }
-  
-  .mood-tag {
-    background: linear-gradient(135deg, rgba(255,153,204,0.2), rgba(153,204,255,0.2)), linear-gradient(45deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)) !important;
-    background-color: rgba(255,255,255,0.7) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-    color: #212529 !important;
-  }
-  
-  .letter-card {
-    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)), linear-gradient(45deg, rgba(255,153,204,0.08), rgba(153,204,255,0.08)) !important;
-    background-color: rgba(255,255,255,0.5) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    color: #212529 !important;
-  }
-  
-  .letter-card:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.12), rgba(153,204,255,0.12)) !important;
-    background-color: rgba(255,255,255,0.7) !important;
-    border-color: rgba(255,255,255,0.3) !important;
-  }
-  
-  .letter-card.open {
-    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7)), linear-gradient(45deg, rgba(255,153,204,0.15), rgba(153,204,255,0.15)) !important;
-    background-color: rgba(255,255,255,0.8) !important;
-    border-color: rgba(255,255,255,0.4) !important;
-  }
-  
-  .reminder-input {
-    background: rgba(255,255,255,0.6) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    color: #212529 !important;
-  }
-  
-  .reminder-input:focus {
-    border-color: rgba(255,153,204,0.5) !important;
-    background: rgba(255,255,255,0.8) !important;
-    box-shadow: 0 0 0 3px rgba(255,153,204,0.2) !important;
-  }
-  
-  .reminder-list li {
-    background: rgba(255,255,255,0.6) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    color: #212529 !important;
-  }
-  
-  .section-title {
-    color: #495057 !important;
-  }
-  
-  .dash-title {
-    color: #212529 !important;
-  }
-}
-
-/* Additional light mode class-based styles for extra robustness */
-body.light-mode {
-  background: #f8f9fa !important;
-  color: #212529 !important;
-}
-
-body.light-mode .dashboard {
-  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.1), rgba(153,204,255,0.1)) !important;
-  background-color: rgba(255,255,255,0.7) !important;
-  border: 1px solid rgba(255,255,255,0.3) !important;
-}
-
-body.light-mode .dashboard-section {
-  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)), linear-gradient(45deg, rgba(255,153,204,0.08), rgba(153,204,255,0.08)) !important;
-  background-color: rgba(255,255,255,0.5) !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
-}
-
-body.light-mode .time-display {
-  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.15), rgba(153,204,255,0.15)) !important;
-  background-color: rgba(255,255,255,0.7) !important;
-  border: 1px solid rgba(255,255,255,0.4) !important;
-}
-
-body.light-mode .current-time {
-  color: #212529 !important;
-  text-shadow: 0 0 20px rgba(0,0,0,0.1) !important;
-}
-
-body.light-mode .current-date {
-  color: #495057 !important;
-}
-
-body.light-mode .time-greeting {
-  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)) !important;
-  background-color: rgba(255,255,255,0.7) !important;
-  border: 1px solid rgba(255,255,255,0.4) !important;
-  color: #212529 !important;
-}
-
-body.light-mode .btn {
-  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)), linear-gradient(45deg, rgba(255,153,204,0.1), rgba(153,204,255,0.1)) !important;
-  background-color: rgba(255,255,255,0.5) !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
-  color: #212529 !important;
-}
-
-body.light-mode .mood-tag {
-  background: linear-gradient(135deg, rgba(255,153,204,0.2), rgba(153,204,255,0.2)), linear-gradient(45deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)) !important;
-  background-color: rgba(255,255,255,0.7) !important;
-  border: 1px solid rgba(255,255,255,0.3) !important;
-  color: #212529 !important;
-}
-
-body.light-mode .letter-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)), linear-gradient(45deg, rgba(255,153,204,0.08), rgba(153,204,255,0.08)) !important;
-  background-color: rgba(255,255,255,0.5) !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
-  color: #212529 !important;
-}
 
 /* small screens */
 @media (max-width:520px) {

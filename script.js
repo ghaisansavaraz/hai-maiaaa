@@ -597,51 +597,24 @@
     });
   }
 
-  // ---- Theme detection and application ----
+  // ---- Time-based theme application ----
   function applyTheme() {
-    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
-    debugLog(`Theme detected: ${isLightMode ? 'Light' : 'Dark'} mode`);
+    debugLog("Applying time-based theme (no system light/dark mode)");
     
-    if (isLightMode) {
-      // Light mode - use light backgrounds
-      document.body.style.setProperty('color', '#212529', 'important');
-      document.body.classList.add('light-mode');
-      
-      // Update dynamic background for light mode
-      if (dynamicBackground) {
-        const theme = dynamicBackground.getCurrentTheme();
-        // Use lighter versions for light mode
-        const lightTheme = {
-          ...theme,
-          bgPrimary: theme.bgPrimary + '40', // Add transparency
-          bgSecondary: theme.bgSecondary + '40',
-          gradient: `linear-gradient(135deg, ${theme.bgPrimary}40, ${theme.bgSecondary}40)`
-        };
-        
-        document.body.style.setProperty('background', lightTheme.gradient, 'important');
-        debugLog("Applied light mode with dynamic background");
-      } else {
-        document.body.style.setProperty('background', '#f8f9fa', 'important');
-      }
-      
-      debugLog("Applied light mode styles - UI should now be dark on light background");
-      console.log("🌞 Light mode active - Dashboard should be dark/visible");
+    // Always use white text for better contrast with dynamic backgrounds
+    document.body.style.setProperty('color', '#fff', 'important');
+    document.body.classList.remove('light-mode');
+    
+    // Let dynamic background handle the background
+    if (dynamicBackground) {
+      dynamicBackground.updateBackground();
+      debugLog("Applied time-based dynamic background");
     } else {
-      // Dark mode - use dynamic background
-      document.body.style.setProperty('color', '#fff', 'important');
-      document.body.classList.remove('light-mode');
-      
-      // Let dynamic background handle the background
-      if (dynamicBackground) {
-        dynamicBackground.updateBackground();
-        debugLog("Applied dark mode with dynamic background");
-      } else {
-        document.body.style.setProperty('background', '#000', 'important');
-      }
-      
-      debugLog("Applied dark mode styles - UI should now be whiteish on dark background");
-      console.log("🌙 Dark mode active - Dashboard should be whiteish/visible");
+      document.body.style.setProperty('background', '#000', 'important');
     }
+    
+    debugLog("Applied time-based theme - Background changes with time of day");
+    console.log("🕐 Time-based theme active - Background adapts to time of day");
   }
 
   // ---- Init ----
@@ -650,14 +623,11 @@
       debugLog("Initializing application...");
       debugLog("Target date:", new Date(targetMs).toString());
       
-      // Apply theme immediately
-      applyTheme();
-      
-      // Listen for theme changes
-      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', applyTheme);
-      
-      // Initialize dynamic background
+      // Initialize dynamic background first
       dynamicBackground = new DynamicBackground();
+      
+      // Apply time-based theme
+      applyTheme();
       
       // Initialize all components
       if (greetingEl) setGreeting();
