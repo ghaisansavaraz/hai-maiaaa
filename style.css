@@ -24,13 +24,10 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: #000;
   color: #fff;
   position: relative;
-  padding: 20px;
+  padding: 0;
 }
 
 /* Advanced particle background */
@@ -148,11 +145,13 @@ body::before {
   flex-direction: column; 
   align-items: center; 
   gap: 18px; 
-  padding: 28px;
+  padding: 20px;
   width: 100%;
   max-width: 100%;
   min-height: 100vh;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 40px;
+  padding-bottom: 60px;
 }
 
 /* countdown timer */
