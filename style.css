@@ -556,33 +556,36 @@ body.hide-stars .shooting-stars-container {
 
 /* Time Display Styles - Top Left Corner */
 .time-display {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 100;
-  background: none;
-  border: none;
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  padding: 0;
-  margin: 0;
+  position: fixed !important;
+  top: 20px !important;
+  left: 20px !important;
+  z-index: 100 !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
 }
 
 .time-widget {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  width: auto;
-  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  width: auto !important;
+  position: relative !important;
 }
 
 .time-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
 }
 
 .current-time {
