@@ -156,12 +156,16 @@
       if (document.body.classList.contains('show-stars')) {
         const randomStar = this.shootingStars[Math.floor(Math.random() * this.shootingStars.length)];
         
-        // Reset animation
+        // Get the star number to determine which animation to use
+        const starNumber = randomStar.className.match(/shooting-star-(\d+)/)[1];
+        const animationName = `shoot${starNumber}`;
+        
+        // Reset and trigger animation
         randomStar.style.animation = 'none';
         randomStar.offsetHeight; // Trigger reflow
-        randomStar.style.animation = null;
+        randomStar.style.animation = `${animationName} 2s ease-out`;
         
-        debugLog('Shooting star triggered!');
+        debugLog(`Shooting star ${starNumber} triggered!`);
       }
     }
   }

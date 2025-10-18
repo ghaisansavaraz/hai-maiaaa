@@ -156,29 +156,29 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   width: 100px;
   height: 1px;
-  background: linear-gradient(90deg, #ffffff, transparent);
-  transform-origin: left center;
+  background: linear-gradient(270deg, #ffffff, transparent);
+  transform-origin: right center;
 }
 
 .shooting-star-1 {
   top: 20%;
   right: 0%;
-  animation: shoot1 2s ease-out infinite;
+  animation: none;
 }
 
 .shooting-star-2 {
   top: 50%;
   right: 0%;
-  animation: shoot2 2.5s ease-out infinite;
+  animation: none;
 }
 
 .shooting-star-3 {
   top: 80%;
   right: 0%;
-  animation: shoot3 3s ease-out infinite;
+  animation: none;
 }
 
 @keyframes shoot1 {
