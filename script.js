@@ -69,6 +69,16 @@
   const moodTags = document.getElementById("moodTags");
   const lettersContainer = document.getElementById("lettersContainer");
 
+  // Debug element availability
+  debugLog("Element availability check:", {
+    timerEl: !!timerEl,
+    dashboard: !!dashboard,
+    dashboardContent: !!dashboardContent,
+    currentTime: !!currentTime,
+    currentDate: !!currentDate,
+    timeGreeting: !!timeGreeting
+  });
+
   // Existing elements
   const reminderText = document.getElementById("reminderText");
   const addReminderBtn = document.getElementById("addReminder");
@@ -122,7 +132,12 @@
   // ---- Dynamic greeting for dashboard ----
   // Time Display Functions
   function updateTime() {
-    if (!currentTime || !currentDate || !timeGreeting) return;
+    debugLog("updateTime called");
+    
+    if (!currentTime || !currentDate || !timeGreeting) {
+      debugError("Time elements not available for update");
+      return;
+    }
     
     try {
       const now = new Date();
@@ -134,7 +149,11 @@
         minute: '2-digit',
         second: '2-digit'
       });
-      currentTime.textContent = timeString;
+      
+      if (currentTime) {
+        currentTime.textContent = timeString;
+        debugLog("Time updated:", timeString);
+      }
       
       // Update date
       const dateString = now.toLocaleDateString('en-US', {
@@ -143,7 +162,11 @@
         month: 'long',
         day: 'numeric'
       });
-      currentDate.textContent = dateString;
+      
+      if (currentDate) {
+        currentDate.textContent = dateString;
+        debugLog("Date updated:", dateString);
+      }
       
       // Update greeting based on time
       const hour = now.getHours();
@@ -151,17 +174,29 @@
       if (hour >= 5 && hour < 12) greeting = "Good morning, sunshine";
       else if (hour >= 12 && hour < 18) greeting = "Good afternoon, lovely";
       
-      timeGreeting.textContent = greeting;
+      if (timeGreeting) {
+        timeGreeting.textContent = greeting;
+        debugLog("Greeting updated:", greeting);
+      }
       
-      debugLog(`Time updated: ${timeString}, Greeting: ${greeting}`);
     } catch (error) {
       debugError("Failed to update time", error);
     }
   }
 
   function startTimeDisplay() {
+    debugLog("Starting time display...");
+    debugLog("currentTime element:", currentTime);
+    debugLog("currentDate element:", currentDate);
+    debugLog("timeGreeting element:", timeGreeting);
+    
     if (!currentTime || !currentDate || !timeGreeting) {
-      debugError("Time display elements not found");
+      debugError("Time display elements not found!");
+      console.error("Missing elements:", {
+        currentTime: !!currentTime,
+        currentDate: !!currentDate,
+        timeGreeting: !!timeGreeting
+      });
       return;
     }
     
@@ -171,7 +206,7 @@
     // Update every second
     setInterval(updateTime, 1000);
     
-    debugLog("Time display started");
+    debugLog("Time display started successfully");
   }
 
   // ---- Mood system ----
@@ -301,6 +336,12 @@
             setTimeout(() => {
               debugLog("Revealing sections...");
               revealSections();
+              
+              // Start time display after dashboard is fully visible
+              setTimeout(() => {
+                debugLog("Starting time display...");
+                startTimeDisplay();
+              }, 500);
             }, 300);
           } else {
             debugError("dashboardContent element not found!");
@@ -498,7 +539,6 @@
       
       // Initialize all components
       if (greetingEl) setGreeting();
-      if (currentTime && currentDate && timeGreeting) startTimeDisplay();
       if (moodTags) loadMoods();
       if (reminderList) renderReminders();
       if (lettersContainer) renderLetters();
