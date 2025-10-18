@@ -178,24 +178,36 @@
     }
 
     getCurrentTheme() {
-      const hour = new Date().getHours();
+      const now = new Date();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
       
-      if (hour >= 6 && hour < 12) {
-        return { name: 'morning', ...this.timeThemes.morning };
-      } else if (hour >= 12 && hour < 18) {
-        return { name: 'afternoon', ...this.timeThemes.afternoon };
-      } else if (hour >= 18 || hour < 6) {
-        return { name: 'night', ...this.timeThemes.night };
+      // Calculate brightness based on time (0 = darkest, 1 = brightest)
+      let brightness;
+      
+      if (hour >= 6 && hour < 18) {
+        // Daytime: 6 AM to 6 PM (12 hours)
+        const dayProgress = ((hour - 6) * 60 + minute) / (12 * 60);
+        // Peak brightness at noon (12 PM)
+        brightness = Math.sin(dayProgress * Math.PI);
       } else {
-        return { name: 'evening', ...this.timeThemes.evening };
+        // Nighttime: 6 PM to 6 AM (12 hours)
+        const nightProgress = ((hour - 18 + 24) % 24 * 60 + minute) / (12 * 60);
+        // Darkest at midnight (12 AM)
+        brightness = Math.sin(nightProgress * Math.PI);
       }
+      
+      return {
+        brightness: Math.max(0, Math.min(1, brightness)),
+        isDay: hour >= 6 && hour < 18
+      };
     }
 
     updateBackground() {
       const theme = this.getCurrentTheme();
       const root = document.documentElement;
       
-      debugLog(`Updating background to ${theme.name} theme`);
+      debugLog(`Updating background - brightness: ${theme.brightness.toFixed(2)}, isDay: ${theme.isDay}`);
       
       // Force override system theme detection completely
       document.body.style.setProperty('color-scheme', 'dark', 'important');
@@ -217,57 +229,68 @@
       document.body.style.setProperty('background-image', 'none', 'important');
       document.body.style.setProperty('background-attachment', 'fixed', 'important');
       
+      // Create smooth gradient based on brightness
+      const lightColor = `rgba(255, 255, 255, ${theme.brightness * 0.1})`;
+      const darkColor = `rgba(0, 0, 0, ${(1 - theme.brightness) * 0.8})`;
+      
+      // Fast shifting gradients for daytime, slower for nighttime
+      const gradientSpeed = theme.isDay ? '2s' : '8s';
+      
+      const gradient = `
+        linear-gradient(135deg, 
+          ${lightColor} 0%, 
+          ${darkColor} 25%, 
+          ${lightColor} 50%, 
+          ${darkColor} 75%, 
+          ${lightColor} 100%
+        )
+      `;
+      
       // Update CSS variables
-      root.style.setProperty('--bg-primary', theme.bgPrimary);
-      root.style.setProperty('--bg-secondary', theme.bgSecondary);
-      root.style.setProperty('--bg-gradient', theme.gradient);
-      root.style.setProperty('--accent-color', theme.accentColor);
+      root.style.setProperty('--bg-gradient', gradient);
+      root.style.setProperty('--gradient-speed', gradientSpeed);
       
-        // Update body background with !important to override system
-        document.body.style.setProperty('background', theme.gradient, 'important');
-        document.body.style.setProperty('color', '#fff', 'important');
-        
-        // Apply dashboard theme based on time
-        const dashboard = document.getElementById('dashboard');
-        if (dashboard) {
-          if (theme.name === 'night') {
-            // Dark theme for night
-            dashboard.classList.remove('light-theme');
-            debugLog('Applied dark theme to dashboard for night');
-          } else {
-            // Light theme for morning, afternoon, evening
-            dashboard.classList.add('light-theme');
-            debugLog(`Applied light theme to dashboard for ${theme.name}`);
-          }
-        }
-        
-        // Apply night theme class to body for time glow effect
-        if (theme.name === 'night') {
-          document.body.classList.add('night-theme');
-          debugLog('Applied night-theme class for time glow');
-        } else {
-          document.body.classList.remove('night-theme');
-          debugLog('Removed night-theme class');
-        }
-        
-        // Control star visibility based on time
-        if (theme.name === 'night' || theme.name === 'evening') {
-          // Show white stars for night and evening
-          document.body.classList.add('show-stars');
-          document.body.classList.remove('hide-stars');
-          debugLog(`Stars visible for ${theme.name} theme`);
-        } else {
-          // Hide stars for morning and afternoon
-          document.body.classList.add('hide-stars');
-          document.body.classList.remove('show-stars');
-          debugLog(`Stars hidden for ${theme.name} theme`);
-        }
+      // Update body background with smooth transition
+      document.body.style.setProperty('background', gradient, 'important');
+      document.body.style.setProperty('color', theme.brightness > 0.5 ? '#000' : '#fff', 'important');
       
-      debugLog(`Background updated: ${theme.name}`, {
-        bgPrimary: theme.bgPrimary,
-        bgSecondary: theme.bgSecondary,
-        starsVisible: theme.name === 'night' || theme.name === 'evening'
-      });
+      // Apply dashboard theme based on brightness
+      const dashboard = document.getElementById('dashboard');
+      if (dashboard) {
+        if (theme.brightness < 0.3) {
+          // Dark theme for low brightness
+          dashboard.classList.remove('light-theme');
+          debugLog('Applied dark theme to dashboard');
+        } else {
+          // Light theme for high brightness
+          dashboard.classList.add('light-theme');
+          debugLog('Applied light theme to dashboard');
+        }
+      }
+      
+      // Apply night theme class to body for time glow effect
+      if (theme.brightness < 0.3) {
+        document.body.classList.add('night-theme');
+        debugLog('Applied night-theme class for time glow');
+      } else {
+        document.body.classList.remove('night-theme');
+        debugLog('Removed night-theme class');
+      }
+      
+      // Control star visibility based on brightness
+      if (theme.brightness < 0.4) {
+        // Show white stars for low brightness
+        document.body.classList.add('show-stars');
+        document.body.classList.remove('hide-stars');
+        debugLog('Stars visible');
+      } else {
+        // Hide stars for high brightness
+        document.body.classList.add('hide-stars');
+        document.body.classList.remove('show-stars');
+        debugLog('Stars hidden');
+      }
+      
+      debugLog(`Background updated - brightness: ${theme.brightness.toFixed(2)}`);
     }
 
     startTimeSync() {

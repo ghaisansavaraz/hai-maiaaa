@@ -31,9 +31,13 @@ body {
   font-family: var(--font-stack);
   margin: 0;
   min-height: 100vh;
+  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--bg-gradient) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
   color: #fff !important;
   position: relative;
   padding: 0;
@@ -130,7 +134,7 @@ body.hide-stars::after {
     radial-gradient(600px 600px at 30% 80%, rgba(255, 200, 160, 0.08), transparent 50%),
     linear-gradient(120deg, #000, #0d0d0d, #1a1a1a);
   background-size: auto auto, auto auto, auto auto, auto auto, 400% 400%;
-  animation: gradientMove 12s ease-in-out infinite;
+  animation: gradientMove var(--gradient-speed, 12s) ease-in-out infinite;
   filter: blur(35px);
   z-index: 0;
   pointer-events: none;
