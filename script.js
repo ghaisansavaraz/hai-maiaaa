@@ -691,10 +691,6 @@
       if (reminderList) renderReminders();
       if (lettersContainer) renderLetters();
       
-      // Add visible class to countdown container for subtle dark overlay
-      if (countdownContainer) {
-        countdownContainer.classList.add('visible');
-      }
       
       // Start countdown
       if (timerEl && countdownContainer) {
