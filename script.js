@@ -133,7 +133,38 @@
     } catch (e) { console.error(e); }
   }
 
-  // ---- Original Light/Dark Background System with Moving Gradients ----
+  // ---- Shooting Stars System ----
+  class ShootingStars {
+    constructor() {
+      this.shootingStars = document.querySelectorAll('.shooting-star');
+      this.startShootingStars();
+    }
+
+    startShootingStars() {
+      // Initial delay
+      setTimeout(() => {
+        this.triggerShootingStar();
+        // Then every 30 seconds
+        setInterval(() => {
+          this.triggerShootingStar();
+        }, 30000);
+      }, 5000); // Start after 5 seconds
+    }
+
+    triggerShootingStar() {
+      // Only show shooting stars during night time
+      if (document.body.classList.contains('show-stars')) {
+        const randomStar = this.shootingStars[Math.floor(Math.random() * this.shootingStars.length)];
+        
+        // Reset animation
+        randomStar.style.animation = 'none';
+        randomStar.offsetHeight; // Trigger reflow
+        randomStar.style.animation = null;
+        
+        debugLog('Shooting star triggered!');
+      }
+    }
+  }
   class DynamicBackground {
     constructor() {
       debugLog("Initializing original light/dark background system...");
@@ -225,8 +256,9 @@
     }
   }
 
-  // Initialize dynamic background
+  // Initialize systems
   let dynamicBackground = null;
+  let shootingStars = null;
 
   // ---- Dynamic greeting for dashboard ----
   // Time Display Functions
@@ -716,6 +748,9 @@
       
       // Initialize dynamic background first
       dynamicBackground = new DynamicBackground();
+      
+      // Initialize shooting stars
+      shootingStars = new ShootingStars();
       
       // Apply time-based theme
       applyTheme();
