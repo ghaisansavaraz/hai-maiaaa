@@ -280,23 +280,23 @@ body.hide-stars .shooting-stars-container {
   font-size: clamp(44px, 12vw, 120px);
   font-weight: 200;
   letter-spacing: 0.18em;
-  opacity: 1;
+  opacity: 1 !important;
   transition: transform .45s ease, opacity .45s ease;
   cursor: pointer;
   user-select: none;
   color: #fff !important;
   position: relative;
   z-index: 10;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
-  animation: timerGlow 3s ease-in-out infinite alternate;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3) !important;
+  animation: timerGlow 3s ease-in-out infinite alternate !important;
 }
 
 @keyframes timerGlow {
   0% {
-    text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(255,255,255,0.1);
+    text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2);
   }
   100% {
-    text-shadow: 0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.2);
+    text-shadow: 0 0 40px rgba(255,255,255,0.8), 0 0 80px rgba(255,255,255,0.4);
   }
 }
 
