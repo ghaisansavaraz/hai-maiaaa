@@ -149,13 +149,13 @@
         return { 
           name: 'light', 
           isLight: true,
-          gradient: 'linear-gradient(135deg, #ffffff, #f8f8f8, #e0e0e0, #f0f0f0, #ffffff)'
+          gradient: 'linear-gradient(45deg, #ffffff, #f0f0f0, #e8e8e8, #f5f5f5, #ffffff, #f8f8f8, #e0e0e0)'
         };
       } else {
         return { 
           name: 'dark', 
           isLight: false,
-          gradient: 'linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d, #2a2a2a, #000000)'
+          gradient: 'linear-gradient(45deg, #000000, #1a1a1a, #0d0d0d, #2a2a2a, #000000, #111111, #333333)'
         };
       }
     }
@@ -178,6 +178,9 @@
       document.body.style.setProperty('background-size', '400% 400%', 'important');
       document.body.style.setProperty('animation', 'gradientMove 12s linear infinite', 'important');
       document.body.style.setProperty('background-attachment', 'fixed', 'important');
+      
+      debugLog(`Applied gradient: ${theme.gradient}`);
+      debugLog(`Animation: gradientMove 12s linear infinite`);
       
       // Set text color
       if (theme.isLight) {
