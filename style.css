@@ -53,6 +53,17 @@ body::before {
   pointer-events: none;
 }
 
+/* Light mode particles */
+@media (prefers-color-scheme: light) {
+  body::before {
+    background: 
+      radial-gradient(2px 2px at 20px 30px, rgba(0,0,0,0.08), transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(0,0,0,0.06), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(0,0,0,0.05), transparent),
+      radial-gradient(1px 1px at 130px 80px, rgba(0,0,0,0.04), transparent);
+  }
+}
+
 @keyframes particleFloat {
   0% { transform: translate(0, 0); }
   100% { transform: translate(-200px, -200px); }
@@ -587,29 +598,30 @@ body::before {
   
   .gradient-bg {
     background: 
-      radial-gradient(1200px 800px at 14% 24%, rgba(0, 0, 0, 0.08), transparent 60%),
-      radial-gradient(1000px 700px at 84% 76%, rgba(0, 0, 0, 0.06), transparent 58%),
-      radial-gradient(900px 900px at 50% 54%, rgba(0, 0, 0, 0.05), transparent 55%),
+      radial-gradient(1200px 800px at 14% 24%, rgba(0, 0, 0, 0.15), transparent 60%),
+      radial-gradient(1000px 700px at 84% 76%, rgba(0, 0, 0, 0.12), transparent 58%),
+      radial-gradient(900px 900px at 50% 54%, rgba(0, 0, 0, 0.1), transparent 55%),
+      radial-gradient(600px 600px at 30% 80%, rgba(0, 0, 0, 0.08), transparent 50%),
       linear-gradient(120deg, #f8f9fa, #e9ecef, #dee2e6) !important;
-    filter: blur(20px) !important;
+    filter: blur(15px) !important;
   }
   
   .dashboard {
-    background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05)) !important;
-    background-color: rgba(0,0,0,0.2) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)), linear-gradient(45deg, rgba(0,0,0,0.06), rgba(0,0,0,0.04)) !important;
+    background-color: rgba(0,0,0,0.08) !important;
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
-    border: 2px solid rgba(0,0,0,0.3) !important;
-    box-shadow: 0 24px 96px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3), 0 0 0 1px rgba(0,0,0,0.2) !important;
+    border: 1px solid rgba(0,0,0,0.15) !important;
+    box-shadow: 0 24px 96px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(0,0,0,0.1) !important;
   }
   
   .dashboard-section {
-    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
-    background-color: rgba(0,0,0,0.15) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)), linear-gradient(45deg, rgba(0,0,0,0.04), rgba(0,0,0,0.03)) !important;
+    background-color: rgba(0,0,0,0.06) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
-    border: 1px solid rgba(0,0,0,0.25) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+    border: 1px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15) !important;
   }
   
   .greeting-text {
@@ -631,42 +643,42 @@ body::before {
   }
   
   .btn {
-    background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
-    background-color: rgba(0,0,0,0.1) !important;
-    border: 1px solid rgba(0,0,0,0.25) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)), linear-gradient(45deg, rgba(0,0,0,0.04), rgba(0,0,0,0.03)) !important;
+    background-color: rgba(0,0,0,0.06) !important;
+    border: 1px solid rgba(0,0,0,0.12) !important;
     color: #212529 !important;
   }
   
   .btn:hover {
-    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)) !important;
-    background-color: rgba(0,0,0,0.15) !important;
-    border-color: rgba(0,0,0,0.35) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)), linear-gradient(45deg, rgba(0,0,0,0.06), rgba(0,0,0,0.04)) !important;
+    background-color: rgba(0,0,0,0.08) !important;
+    border-color: rgba(0,0,0,0.18) !important;
   }
   
   .mood-tag {
-    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.08)) !important;
-    background-color: rgba(0,0,0,0.15) !important;
-    border: 1px solid rgba(0,0,0,0.3) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.08)), linear-gradient(45deg, rgba(0,0,0,0.06), rgba(0,0,0,0.05)) !important;
+    background-color: rgba(0,0,0,0.08) !important;
+    border: 1px solid rgba(0,0,0,0.15) !important;
     color: #212529 !important;
   }
   
   .letter-card {
-    background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
-    background-color: rgba(0,0,0,0.1) !important;
-    border: 1px solid rgba(0,0,0,0.2) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.06)), linear-gradient(45deg, rgba(0,0,0,0.05), rgba(0,0,0,0.03)) !important;
+    background-color: rgba(0,0,0,0.06) !important;
+    border: 1px solid rgba(0,0,0,0.12) !important;
     color: #212529 !important;
   }
   
   .letter-card:hover {
-    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)) !important;
-    background-color: rgba(0,0,0,0.15) !important;
-    border-color: rgba(0,0,0,0.3) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)), linear-gradient(45deg, rgba(0,0,0,0.06), rgba(0,0,0,0.04)) !important;
+    background-color: rgba(0,0,0,0.08) !important;
+    border-color: rgba(0,0,0,0.18) !important;
   }
   
   .letter-card.open {
-    background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.2)), linear-gradient(45deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)) !important;
-    background-color: rgba(0,0,0,0.2) !important;
-    border-color: rgba(0,0,0,0.4) !important;
+    background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.12)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.06)) !important;
+    background-color: rgba(0,0,0,0.1) !important;
+    border-color: rgba(0,0,0,0.2) !important;
   }
   
   .reminder-input {
@@ -703,35 +715,35 @@ body.light-mode {
 }
 
 body.light-mode .dashboard {
-  background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05)) !important;
-  background-color: rgba(0,0,0,0.2) !important;
-  border: 2px solid rgba(0,0,0,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)), linear-gradient(45deg, rgba(0,0,0,0.06), rgba(0,0,0,0.04)) !important;
+  background-color: rgba(0,0,0,0.08) !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
 }
 
 body.light-mode .dashboard-section {
-  background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
-  background-color: rgba(0,0,0,0.15) !important;
-  border: 1px solid rgba(0,0,0,0.25) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)), linear-gradient(45deg, rgba(0,0,0,0.04), rgba(0,0,0,0.03)) !important;
+  background-color: rgba(0,0,0,0.06) !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
 }
 
 body.light-mode .btn {
-  background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
-  background-color: rgba(0,0,0,0.1) !important;
-  border: 1px solid rgba(0,0,0,0.25) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)), linear-gradient(45deg, rgba(0,0,0,0.04), rgba(0,0,0,0.03)) !important;
+  background-color: rgba(0,0,0,0.06) !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
   color: #212529 !important;
 }
 
 body.light-mode .mood-tag {
-  background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.08)) !important;
-  background-color: rgba(0,0,0,0.15) !important;
-  border: 1px solid rgba(0,0,0,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.08)), linear-gradient(45deg, rgba(0,0,0,0.06), rgba(0,0,0,0.05)) !important;
+  background-color: rgba(0,0,0,0.08) !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
   color: #212529 !important;
 }
 
 body.light-mode .letter-card {
-  background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
-  background-color: rgba(0,0,0,0.1) !important;
-  border: 1px solid rgba(0,0,0,0.2) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.06)), linear-gradient(45deg, rgba(0,0,0,0.05), rgba(0,0,0,0.03)) !important;
+  background-color: rgba(0,0,0,0.06) !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
   color: #212529 !important;
 }
 
