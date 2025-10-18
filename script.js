@@ -58,6 +58,7 @@
   const secretInput = document.getElementById("secretInput");
   const countdownContainer = document.getElementById("countdownContainer");
   const dashboard = document.getElementById("dashboard");
+  const centerContainer = document.querySelector(".center");
 
   // New dashboard elements
   const dashboardContent = document.getElementById("dashboardContent");
@@ -235,6 +236,11 @@
       if (dashboard) {
         debugLog("Showing dashboard element...");
         dashboard.classList.remove("hidden");
+        
+        // Add dashboard-active class to center container for proper layout
+        if (centerContainer) {
+          centerContainer.classList.add("dashboard-active");
+        }
         
         // Force visibility with immediate styles
         dashboard.style.opacity = "1";

@@ -149,7 +149,7 @@ body::before {
   width: 100%;
   max-width: 100%;
   min-height: 100vh;
-  justify-content: flex-start;
+  justify-content: center;
   padding-top: 40px;
   padding-bottom: 60px;
 }
@@ -242,6 +242,13 @@ body::before {
   }
 }
 .dashboard.visible { opacity: 1; transform: translateY(0); }
+
+/* When dashboard is visible, change center container to flex-start */
+.center.dashboard-active {
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 20px;
+}
 .hidden { display:none; }
 
 /* reminder controls */
