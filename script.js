@@ -144,11 +144,11 @@
       // Initial delay
       setTimeout(() => {
         this.triggerShootingStar();
-        // Then every 2 minutes
+        // Then every 5 minutes
         setInterval(() => {
           this.triggerShootingStar();
-        }, 120000);
-      }, 10000); // Start after 10 seconds
+        }, 300000);
+      }, 15000); // Start after 15 seconds
     }
 
     triggerShootingStar() {

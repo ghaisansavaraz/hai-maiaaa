@@ -165,19 +165,19 @@ body {
 
 .shooting-star-1 {
   top: 20%;
-  left: 0%;
+  right: 0%;
   animation: shoot1 2s ease-out infinite;
 }
 
 .shooting-star-2 {
-  top: 60%;
-  left: 0%;
+  top: 50%;
+  right: 0%;
   animation: shoot2 2.5s ease-out infinite;
 }
 
 .shooting-star-3 {
-  top: 40%;
-  left: 0%;
+  top: 80%;
+  right: 0%;
   animation: shoot3 3s ease-out infinite;
 }
 
@@ -194,7 +194,7 @@ body {
   }
   100% {
     opacity: 0;
-    transform: translateX(100vw) translateY(50px);
+    transform: translateX(-100vw) translateY(50px);
   }
 }
 
@@ -211,7 +211,7 @@ body {
   }
   100% {
     opacity: 0;
-    transform: translateX(100vw) translateY(-30px);
+    transform: translateX(-100vw) translateY(30px);
   }
 }
 
@@ -228,7 +228,7 @@ body {
   }
   100% {
     opacity: 0;
-    transform: translateX(100vw) translateY(20px);
+    transform: translateX(-100vw) translateY(20px);
   }
 }
 
