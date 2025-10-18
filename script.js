@@ -173,25 +173,14 @@
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Let CSS handle the gradient animation - just set theme-specific gradients
-      if (theme.isLight) {
-        document.body.style.setProperty('background', 'linear-gradient(45deg, #ffffff, #e0e0e0, #f0f0f0, #d0d0d0, #ffffff, #c0c0c0, #f8f8f8)', 'important');
-      } else {
-        document.body.style.setProperty('background', 'linear-gradient(45deg, #000000, #2a2a2a, #1a1a1a, #333333, #000000, #444444, #111111)', 'important');
-      }
-      document.body.style.setProperty('background-size', '400% 400%', 'important');
-      document.body.style.setProperty('animation', 'gradientMove 6s linear infinite', 'important');
+      // Robust black background - always black
+      document.body.style.setProperty('background', '#000000', 'important');
+      document.body.style.setProperty('background-color', '#000000', 'important');
       
-      debugLog(`Applied ${theme.name} gradient`);
-      console.log('Body background:', document.body.style.background);
-      console.log('Body animation:', document.body.style.animation);
+      debugLog(`Applied robust black background`);
       
-      // Set text color
-      if (theme.isLight) {
-        document.body.style.setProperty('color', '#000000', 'important');
-      } else {
-        document.body.style.setProperty('color', '#ffffff', 'important');
-      }
+      // Set text color - always white for visibility
+      document.body.style.setProperty('color', '#ffffff', 'important');
       
       // Apply dashboard theme
       const dashboard = document.getElementById('dashboard');
