@@ -305,9 +305,9 @@
       
       // Update greeting based on time
       const hour = now.getHours();
-      let greeting = "Good evening, beautiful";
-      if (hour >= 5 && hour < 12) greeting = "Good morning, sunshine";
-      else if (hour >= 12 && hour < 18) greeting = "Good afternoon, lovely";
+      let greeting = "Good evening Maiaaa";
+      if (hour >= 5 && hour < 12) greeting = "Good morning Maiaaa";
+      else if (hour >= 12 && hour < 18) greeting = "Good afternoon Maiaaa";
       
       if (timeGreeting) {
         timeGreeting.textContent = greeting;
