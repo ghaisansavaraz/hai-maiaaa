@@ -173,12 +173,10 @@
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Set simple background color (pseudo-elements handle the gradient)
-      if (theme.isLight) {
-        document.body.style.setProperty('background', '#f5f5f5', 'important');
-      } else {
-        document.body.style.setProperty('background', '#000000', 'important');
-      }
+      // Set moving gradient background
+      document.body.style.setProperty('background', theme.gradient, 'important');
+      document.body.style.setProperty('background-size', '400% 400%', 'important');
+      document.body.style.setProperty('animation', 'gradientMove 12s linear infinite', 'important');
       
       // Set text color
       if (theme.isLight) {
