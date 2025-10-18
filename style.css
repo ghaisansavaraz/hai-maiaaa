@@ -503,8 +503,27 @@ body.hide-stars::after {
   font-weight: 300;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   color: #fff;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
   letter-spacing: 2px;
+}
+
+/* Nighttime glow effect */
+.night-theme .current-time {
+  animation: timeGlow 2s ease-in-out infinite alternate;
+}
+
+.night-theme .dash-title {
+  animation: timeGlow 2s ease-in-out infinite alternate;
+}
+
+.night-theme .section-title {
+  animation: timeGlow 2s ease-in-out infinite alternate;
+}
+
+.night-theme .current-date {
+  animation: timeGlow 2s ease-in-out infinite alternate;
+}
+
+.night-theme .time-greeting {
   animation: timeGlow 2s ease-in-out infinite alternate;
 }
 
@@ -552,6 +571,11 @@ body.hide-stars::after {
 .time-greeting:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 @keyframes timeGlow {
@@ -825,12 +849,10 @@ html, body, * {
 
 .current-time {
   color: #fff !important;
-  text-shadow: 0 0 20px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.6) !important;
 }
 
 .current-date {
   color: rgba(255,255,255,0.9) !important;
-  text-shadow: 0 0 10px rgba(0,0,0,0.7) !important;
 }
 
 .time-greeting {
@@ -838,7 +860,6 @@ html, body, * {
   background-color: rgba(0,0,0,0.5) !important;
   border: 1px solid rgba(255,255,255,0.3) !important;
   color: #fff !important;
-  text-shadow: 0 0 10px rgba(0,0,0,0.7) !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
 }
 

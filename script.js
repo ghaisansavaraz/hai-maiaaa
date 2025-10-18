@@ -237,6 +237,15 @@
           }
         }
         
+        // Apply night theme class to body for time glow effect
+        if (theme.name === 'night') {
+          document.body.classList.add('night-theme');
+          debugLog('Applied night-theme class for time glow');
+        } else {
+          document.body.classList.remove('night-theme');
+          debugLog('Removed night-theme class');
+        }
+        
         // Control star visibility based on time
         if (theme.name === 'night' || theme.name === 'evening') {
           // Show white stars for night and evening
