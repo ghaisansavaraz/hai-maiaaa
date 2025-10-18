@@ -203,6 +203,16 @@
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
+      // Prevent light mode browser effects
+      document.body.style.setProperty('filter', 'none', 'important');
+      document.body.style.setProperty('backdrop-filter', 'none', 'important');
+      document.body.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+      document.documentElement.style.setProperty('filter', 'none', 'important');
+      
+      // Force override any browser light mode styling
+      document.body.style.setProperty('background-image', 'none', 'important');
+      document.body.style.setProperty('background-attachment', 'fixed', 'important');
+      
       // Update CSS variables
       root.style.setProperty('--bg-primary', theme.bgPrimary);
       root.style.setProperty('--bg-secondary', theme.bgSecondary);

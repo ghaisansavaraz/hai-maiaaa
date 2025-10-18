@@ -733,7 +733,7 @@ body.hide-stars::after {
   .dashboard-section { margin-bottom: 20px; }
 }
 
-/* AGGRESSIVE OVERRIDE - Force dark mode and prevent vignette */
+/* AGGRESSIVE OVERRIDE - Force dark mode and prevent light vignette */
 * {
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
@@ -746,9 +746,40 @@ html, body {
   -webkit-color-scheme: dark !important;
 }
 
-/* Prevent any browser default styling that causes vignette */
+/* Prevent any browser default styling that causes light vignette */
 body {
   background-image: none !important;
   background-attachment: fixed !important;
   box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Override any light mode browser defaults */
+html {
+  background: var(--bg-gradient) !important;
+  filter: none !important;
+}
+
+/* Prevent light mode corner effects */
+body::before,
+body::after {
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Remove any browser light mode vignette effects */
+html, body, * {
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  border-image: none !important;
+}
+
+/* Override any browser light mode defaults */
+:root {
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
 }
