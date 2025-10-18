@@ -11,11 +11,14 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚘</text></svg>">
 
   <!-- SF Pro / system stack (no external download) -->
-  <style>
-    /* minimal font fallback stack */
-    :root { --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, system-ui, sans-serif; }
-    html,body { height:100%; margin:0; }
-  </style>
+        <style>
+          /* Apple system font stack */
+          :root { 
+            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
+            --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+          }
+          html,body { height:100%; margin:0; }
+        </style>
 
   <link rel="stylesheet" href="style.css" />
 </head>

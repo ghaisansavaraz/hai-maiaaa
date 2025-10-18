@@ -184,10 +184,10 @@
         return { name: 'morning', ...this.timeThemes.morning };
       } else if (hour >= 12 && hour < 18) {
         return { name: 'afternoon', ...this.timeThemes.afternoon };
-      } else if (hour >= 18 && hour < 22) {
-        return { name: 'evening', ...this.timeThemes.evening };
-      } else {
+      } else if (hour >= 18 || hour < 6) {
         return { name: 'night', ...this.timeThemes.night };
+      } else {
+        return { name: 'evening', ...this.timeThemes.evening };
       }
     }
 
