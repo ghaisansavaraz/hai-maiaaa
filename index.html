@@ -66,11 +66,22 @@
           <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
         </section>
 
-        <!-- Letters from Gesan -->
-        <section id="lettersSection" class="dashboard-section">
-          <h2 class="section-title">Letters from Gesan</h2>
-          <div id="lettersContainer" class="letters-container"></div>
-        </section>
+               <!-- Letters from Gesan -->
+               <section id="lettersSection" class="dashboard-section">
+                 <h2 class="section-title">Letters from Gesan</h2>
+                 <div id="lettersContainer" class="letters-container envelope-grid"></div>
+               </section>
+               
+               <!-- Smart Task Checklist -->
+               <section id="tasksSection" class="dashboard-section">
+                 <h2 class="section-title">Your Tasks</h2>
+                 <div class="task-controls">
+                   <input id="taskText" class="task-input" type="text" placeholder="Add a new task..." />
+                   <input id="taskDeadline" class="deadline-input" type="datetime-local" />
+                   <button id="addTask" class="btn">Add Task</button>
+                 </div>
+                 <div id="tasksContainer" class="tasks-container"></div>
+               </section>
 
         <!-- Controls -->
         <div class="deck">

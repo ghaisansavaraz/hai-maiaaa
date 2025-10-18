@@ -11,6 +11,7 @@
   const BYPASS_CODE = "maiacantik";
   const STORAGE_KEY = "maiaaa_reminders_v1";
   const MOOD_STORAGE_KEY = "maiaaa_mood_v1";
+  const TASKS_STORAGE_KEY = "maiaaa_tasks_v1";
   const EDITOR_CODE = "gesanlove";
   const DEBUG_MODE = true; // Set to false in production
   
@@ -21,21 +22,24 @@
       title: "Welcome back, beautiful",
       date: "Today",
       preview: "I hope you're having a wonderful day...",
-      content: "Welcome back to your personal space, Maiaaa cantik! I created this little corner of the internet just for you. Take your time, breathe, and remember that you're amazing. Every day is a new opportunity to shine, and I believe in you completely. 💕"
+      content: "Welcome back to your personal space, Maiaaa cantik! I created this little corner of the internet just for you. Take your time, breathe, and remember that you're amazing. Every day is a new opportunity to shine, and I believe in you completely. 💕",
+      icon: "🌅"
     },
     {
       id: "motivation",
       title: "You've got this",
       date: "Always",
       preview: "Remember how strong you are...",
-      content: "Hey beautiful! I know some days feel harder than others, but look at how far you've come. You're stronger than you think, smarter than you know, and more capable than you believe. When things get tough, remember that this too shall pass, and you'll come out even stronger on the other side. I'm cheering for you always! 🌟"
+      content: "Hey beautiful! I know some days feel harder than others, but look at how far you've come. You're stronger than you think, smarter than you know, and more capable than you believe. When things get tough, remember that this too shall pass, and you'll come out even stronger on the other side. I'm cheering for you always! 🌟",
+      icon: "💌"
     },
     {
       id: "love",
       title: "Just because",
       date: "Forever",
       preview: "You deserve all the happiness...",
-      content: "Just wanted to remind you that you're loved, valued, and appreciated. Not just by me, but by everyone whose life you've touched. Your kindness, your smile, your beautiful spirit - they all matter more than you know. Take care of yourself, because you're precious. Sending you all the love and good vibes! ✨"
+      content: "Just wanted to remind you that you're loved, valued, and appreciated. Not just by me, but by everyone whose life you've touched. Your kindness, your smile, your beautiful spirit - they all matter more than you know. Take care of yourself, because you're precious. Sending you all the love and good vibes! ✨",
+      icon: "✨"
     }
   ];
 
@@ -396,24 +400,28 @@
     lettersContainer.innerHTML = "";
     
     LETTERS_DATA.forEach((letter, index) => {
-      const card = document.createElement("div");
-      card.className = "letter-card";
-      card.style.animationDelay = `${index * 0.1}s`;
+      const envelopeCard = document.createElement("div");
+      envelopeCard.className = "envelope-card";
+      envelopeCard.style.animationDelay = `${index * 0.1}s`;
       
-      card.innerHTML = `
-        <div class="letter-header">
-          <h3 class="letter-title">${letter.title}</h3>
-          <span class="letter-date">${letter.date}</span>
+      envelopeCard.innerHTML = `
+        <div class="envelope">
+          <div class="envelope-front">
+            <div class="envelope-icon">${letter.icon}</div>
+            <h3 class="envelope-title">${letter.title}</h3>
+            <div class="envelope-date">${letter.date}</div>
+          </div>
+          <div class="envelope-back">
+            <div class="envelope-content">${letter.content}</div>
+          </div>
         </div>
-        <div class="letter-preview">${letter.preview}</div>
-        <div class="letter-content">${letter.content}</div>
       `;
       
-      card.addEventListener("click", () => {
-        card.classList.toggle("open");
+      envelopeCard.addEventListener("click", () => {
+        envelopeCard.classList.toggle("flipped");
       });
       
-      lettersContainer.appendChild(card);
+      lettersContainer.appendChild(envelopeCard);
     });
   }
 
@@ -673,6 +681,94 @@
     console.log("🕐 Time-based theme active - Background adapts to time of day");
   }
 
+  // ---- Smart Task Checklist ----
+  let tasks = [];
+  
+  function loadTasks() {
+    try {
+      const stored = localStorage.getItem(TASKS_STORAGE_KEY);
+      tasks = stored ? JSON.parse(stored) : [];
+      renderTasks();
+    } catch (e) {
+      console.error("Failed to load tasks:", e);
+      tasks = [];
+    }
+  }
+  
+  function saveTasks() {
+    try {
+      localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks));
+    } catch (e) {
+      console.error("Failed to save tasks:", e);
+    }
+  }
+  
+  function addTask(text, deadline) {
+    if (!text.trim()) return;
+    
+    const task = {
+      id: Date.now().toString(),
+      text: text.trim(),
+      deadline: deadline || null,
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+    
+    tasks.unshift(task);
+    saveTasks();
+    renderTasks();
+  }
+  
+  function toggleTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+      task.completed = !task.completed;
+      saveTasks();
+      renderTasks();
+    }
+  }
+  
+  function deleteTask(id) {
+    tasks = tasks.filter(t => t.id !== id);
+    saveTasks();
+    renderTasks();
+  }
+  
+  function renderTasks() {
+    const tasksContainer = document.getElementById("tasksContainer");
+    if (!tasksContainer) return;
+    
+    tasksContainer.innerHTML = "";
+    
+    tasks.forEach(task => {
+      const taskItem = document.createElement("div");
+      taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+      
+      const isOverdue = task.deadline && new Date(task.deadline) < new Date() && !task.completed;
+      if (isOverdue) {
+        taskItem.classList.add('overdue');
+      }
+      
+      const deadlineText = task.deadline ? 
+        new Date(task.deadline).toLocaleDateString() + ' ' + new Date(task.deadline).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
+        'No deadline';
+      
+      taskItem.innerHTML = `
+        <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
+        <div class="task-text">${task.text}</div>
+        <div class="task-deadline">${deadlineText}</div>
+        <div class="flower-bloom">🌸</div>
+      `;
+      
+      tasksContainer.appendChild(taskItem);
+    });
+  }
+  
+  // Make functions globally accessible
+  window.toggleTask = toggleTask;
+  window.deleteTask = deleteTask;
+  window.addTask = addTask;
+
   // ---- Init ----
   document.addEventListener("DOMContentLoaded", () => {
     try {
@@ -690,6 +786,34 @@
       if (moodTags) loadMoods();
       if (reminderList) renderReminders();
       if (lettersContainer) renderLetters();
+      
+      // Initialize task system
+      loadTasks();
+      
+      // Task event listeners
+      const taskText = document.getElementById("taskText");
+      const taskDeadline = document.getElementById("taskDeadline");
+      const addTaskBtn = document.getElementById("addTask");
+      
+      if (addTaskBtn) {
+        addTaskBtn.addEventListener("click", () => {
+          if (taskText) {
+            addTask(taskText.value, taskDeadline?.value);
+            taskText.value = "";
+            if (taskDeadline) taskDeadline.value = "";
+          }
+        });
+      }
+      
+      if (taskText) {
+        taskText.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            addTask(taskText.value, taskDeadline?.value);
+            taskText.value = "";
+            if (taskDeadline) taskDeadline.value = "";
+          }
+        });
+      }
       
       
       // Start countdown
