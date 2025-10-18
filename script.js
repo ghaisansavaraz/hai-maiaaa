@@ -219,22 +219,36 @@
       root.style.setProperty('--bg-gradient', theme.gradient);
       root.style.setProperty('--accent-color', theme.accentColor);
       
-      // Update body background with !important to override system
-      document.body.style.setProperty('background', theme.gradient, 'important');
-      document.body.style.setProperty('color', '#fff', 'important');
-      
-      // Control star visibility based on time
-      if (theme.name === 'night' || theme.name === 'evening') {
-        // Show white stars for night and evening
-        document.body.classList.add('show-stars');
-        document.body.classList.remove('hide-stars');
-        debugLog(`Stars visible for ${theme.name} theme`);
-      } else {
-        // Hide stars for morning and afternoon
-        document.body.classList.add('hide-stars');
-        document.body.classList.remove('show-stars');
-        debugLog(`Stars hidden for ${theme.name} theme`);
-      }
+        // Update body background with !important to override system
+        document.body.style.setProperty('background', theme.gradient, 'important');
+        document.body.style.setProperty('color', '#fff', 'important');
+        
+        // Apply dashboard theme based on time
+        const dashboard = document.getElementById('dashboard');
+        if (dashboard) {
+          if (theme.name === 'night') {
+            // Dark theme for night
+            dashboard.classList.remove('light-theme');
+            debugLog('Applied dark theme to dashboard for night');
+          } else {
+            // Light theme for morning, afternoon, evening
+            dashboard.classList.add('light-theme');
+            debugLog(`Applied light theme to dashboard for ${theme.name}`);
+          }
+        }
+        
+        // Control star visibility based on time
+        if (theme.name === 'night' || theme.name === 'evening') {
+          // Show white stars for night and evening
+          document.body.classList.add('show-stars');
+          document.body.classList.remove('hide-stars');
+          debugLog(`Stars visible for ${theme.name} theme`);
+        } else {
+          // Hide stars for morning and afternoon
+          document.body.classList.add('hide-stars');
+          document.body.classList.remove('show-stars');
+          debugLog(`Stars hidden for ${theme.name} theme`);
+        }
       
       debugLog(`Background updated: ${theme.name}`, {
         bgPrimary: theme.bgPrimary,
