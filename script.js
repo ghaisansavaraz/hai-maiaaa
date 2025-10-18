@@ -173,20 +173,16 @@
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Set moving gradient background - force it to work
-      const gradientStyle = `${theme.gradient}, ${theme.gradient}`;
-      document.body.style.setProperty('background', gradientStyle, 'important');
+      // Let CSS handle the gradient animation - just set theme-specific gradients
+      if (theme.isLight) {
+        document.body.style.setProperty('background', 'linear-gradient(45deg, #ffffff, #e0e0e0, #f0f0f0, #d0d0d0, #ffffff, #c0c0c0, #f8f8f8)', 'important');
+      } else {
+        document.body.style.setProperty('background', 'linear-gradient(45deg, #000000, #2a2a2a, #1a1a1a, #333333, #000000, #444444, #111111)', 'important');
+      }
       document.body.style.setProperty('background-size', '400% 400%', 'important');
-      document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
-      document.body.style.setProperty('animation', 'testGradient 4s linear infinite', 'important');
-      document.body.style.setProperty('background-attachment', 'fixed', 'important');
+      document.body.style.setProperty('animation', 'gradientMove 6s linear infinite', 'important');
       
-      // Force remove any conflicting styles
-      document.body.style.removeProperty('background-image');
-      document.body.style.removeProperty('background-color');
-      
-      debugLog(`Applied gradient: ${gradientStyle}`);
-      debugLog(`Animation: testGradient 4s linear infinite`);
+      debugLog(`Applied ${theme.name} gradient`);
       console.log('Body background:', document.body.style.background);
       console.log('Body animation:', document.body.style.animation);
       

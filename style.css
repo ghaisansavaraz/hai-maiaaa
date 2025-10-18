@@ -40,9 +40,19 @@ body {
   transition: color 0.5s ease;
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
+  /* Direct gradient animation - dark mode default */
+  background: linear-gradient(45deg, #000000, #2a2a2a, #1a1a1a, #333333, #000000, #444444, #111111);
+  background-size: 400% 400%;
+  animation: gradientMove 6s linear infinite;
   /* Force animation to work */
   animation-play-state: running !important;
   will-change: background-position !important;
+}
+
+/* Light mode gradient */
+body.light-theme {
+  background: linear-gradient(45deg, #ffffff, #e0e0e0, #f0f0f0, #d0d0d0, #ffffff, #c0c0c0, #f8f8f8) !important;
+  color: #000000 !important;
 }
 
 /* Blur layer for depth */
