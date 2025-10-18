@@ -304,6 +304,8 @@ body.hide-stars .shooting-stars-container {
 /* White countdown for dark backgrounds */
 .night-theme .timer {
   color: #fff !important;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  animation: timerGlow 3s ease-in-out infinite alternate;
 }
 
 /* greeting under timer */
@@ -862,7 +864,12 @@ body.hide-stars .shooting-stars-container {
 
 /* small screens */
 @media (max-width:520px) {
-  .timer { font-size: clamp(36px, 20vw, 72px); letter-spacing:0.12em; }
+  .timer { 
+    font-size: clamp(36px, 20vw, 72px); 
+    letter-spacing:0.12em;
+    text-shadow: 0 0 20px rgba(255,255,255,0.3);
+    animation: timerGlow 3s ease-in-out infinite alternate;
+  }
   .reminder-input { width: 56%; }
   .typing-text { font-size: 1rem; }
   .greeting-text { font-size: 1.1rem; padding: 14px 16px; }
@@ -911,8 +918,13 @@ body::after {
 html, body, * {
   background-image: none !important;
   box-shadow: none !important;
-  text-shadow: none !important;
   border-image: none !important;
+}
+
+/* Allow text-shadow for timer specifically */
+.timer {
+  text-shadow: 0 0 20px rgba(255,255,255,0.3) !important;
+  animation: timerGlow 3s ease-in-out infinite alternate !important;
 }
 
 /* Override any browser light mode defaults */
