@@ -31,11 +31,13 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  background: var(--bg-gradient);
-  color: #fff;
+  background: var(--bg-gradient) !important;
+  color: #fff !important;
   position: relative;
   padding: 0;
   transition: background var(--transition-slow) ease;
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
 }
 
 /* Advanced particle background */
@@ -729,4 +731,24 @@ body.hide-stars::after {
   .greeting-text { font-size: 1.1rem; padding: 14px 16px; }
   .letter-card { padding: 16px; }
   .dashboard-section { margin-bottom: 20px; }
+}
+
+/* AGGRESSIVE OVERRIDE - Force dark mode and prevent vignette */
+* {
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+}
+
+html, body {
+  background: var(--bg-gradient) !important;
+  color: #fff !important;
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+}
+
+/* Prevent any browser default styling that causes vignette */
+body {
+  background-image: none !important;
+  background-attachment: fixed !important;
+  box-shadow: none !important;
 }

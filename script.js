@@ -193,9 +193,15 @@
       
       debugLog(`Updating background to ${theme.name} theme`);
       
-      // Force override system theme detection
+      // Force override system theme detection completely
       document.body.style.setProperty('color-scheme', 'dark', 'important');
       document.documentElement.style.setProperty('color-scheme', 'dark', 'important');
+      document.body.style.setProperty('-webkit-color-scheme', 'dark', 'important');
+      document.documentElement.style.setProperty('-webkit-color-scheme', 'dark', 'important');
+      
+      // Remove any system theme classes
+      document.body.classList.remove('light-mode', 'dark-mode');
+      document.documentElement.classList.remove('light-mode', 'dark-mode');
       
       // Update CSS variables
       root.style.setProperty('--bg-primary', theme.bgPrimary);
