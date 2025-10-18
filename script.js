@@ -129,6 +129,106 @@
     } catch (e) { console.error(e); }
   }
 
+  // ---- Dynamic Background System ----
+  class DynamicBackground {
+    constructor() {
+      this.currentHour = new Date().getHours();
+      this.timeThemes = {
+        morning: { // 6 AM - 12 PM
+          bgPrimary: '#ff9a9e',
+          bgSecondary: '#fecfef',
+          accentColor: 'rgba(255,107,107,0.2)',
+          starColor: 'rgba(255,107,107,0.6)',
+          gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)'
+        },
+        afternoon: { // 12 PM - 6 PM
+          bgPrimary: '#a8edea',
+          bgSecondary: '#fed6e3',
+          accentColor: 'rgba(78,205,196,0.2)',
+          starColor: 'rgba(78,205,196,0.6)',
+          gradient: 'linear-gradient(135deg, #a8edea, #fed6e3)'
+        },
+        evening: { // 6 PM - 10 PM
+          bgPrimary: '#ffecd2',
+          bgSecondary: '#fcb69f',
+          accentColor: 'rgba(254,202,87,0.2)',
+          starColor: 'rgba(254,202,87,0.6)',
+          gradient: 'linear-gradient(135deg, #ffecd2, #fcb69f)'
+        },
+        night: { // 10 PM - 6 AM
+          bgPrimary: '#667eea',
+          bgSecondary: '#764ba2',
+          accentColor: 'rgba(69,183,209,0.2)',
+          starColor: 'rgba(69,183,209,0.6)',
+          gradient: 'linear-gradient(135deg, #667eea, #764ba2)'
+        }
+      };
+      
+      this.init();
+    }
+
+    init() {
+      debugLog("Initializing dynamic background system...");
+      this.updateBackground();
+      this.startTimeSync();
+    }
+
+    getCurrentTheme() {
+      const hour = new Date().getHours();
+      
+      if (hour >= 6 && hour < 12) {
+        return { name: 'morning', ...this.timeThemes.morning };
+      } else if (hour >= 12 && hour < 18) {
+        return { name: 'afternoon', ...this.timeThemes.afternoon };
+      } else if (hour >= 18 && hour < 22) {
+        return { name: 'evening', ...this.timeThemes.evening };
+      } else {
+        return { name: 'night', ...this.timeThemes.night };
+      }
+    }
+
+    updateBackground() {
+      const theme = this.getCurrentTheme();
+      const root = document.documentElement;
+      
+      debugLog(`Updating background to ${theme.name} theme`);
+      
+      // Update CSS variables
+      root.style.setProperty('--bg-primary', theme.bgPrimary);
+      root.style.setProperty('--bg-secondary', theme.bgSecondary);
+      root.style.setProperty('--bg-gradient', theme.gradient);
+      root.style.setProperty('--accent-color', theme.accentColor);
+      root.style.setProperty('--star-color', theme.starColor);
+      
+      // Update body background
+      document.body.style.background = theme.gradient;
+      
+      debugLog(`Background updated: ${theme.name}`, {
+        bgPrimary: theme.bgPrimary,
+        bgSecondary: theme.bgSecondary,
+        starColor: theme.starColor
+      });
+    }
+
+    startTimeSync() {
+      // Update every hour
+      const now = new Date();
+      const nextHour = new Date(now);
+      nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+      const timeUntilNextHour = nextHour.getTime() - now.getTime();
+      
+      debugLog(`Next background update in ${Math.round(timeUntilNextHour / 60000)} minutes`);
+      
+      setTimeout(() => {
+        this.updateBackground();
+        this.startTimeSync(); // Schedule next update
+      }, timeUntilNextHour);
+    }
+  }
+
+  // Initialize dynamic background
+  let dynamicBackground = null;
+
   // ---- Dynamic greeting for dashboard ----
   // Time Display Functions
   function updateTime() {
@@ -503,22 +603,41 @@
     debugLog(`Theme detected: ${isLightMode ? 'Light' : 'Dark'} mode`);
     
     if (isLightMode) {
-      // Force light mode styles
-      document.body.style.setProperty('background', '#f8f9fa', 'important');
+      // Light mode - use light backgrounds
       document.body.style.setProperty('color', '#212529', 'important');
-      
-      // Add light mode class for additional styling
       document.body.classList.add('light-mode');
+      
+      // Update dynamic background for light mode
+      if (dynamicBackground) {
+        const theme = dynamicBackground.getCurrentTheme();
+        // Use lighter versions for light mode
+        const lightTheme = {
+          ...theme,
+          bgPrimary: theme.bgPrimary + '40', // Add transparency
+          bgSecondary: theme.bgSecondary + '40',
+          gradient: `linear-gradient(135deg, ${theme.bgPrimary}40, ${theme.bgSecondary}40)`
+        };
+        
+        document.body.style.setProperty('background', lightTheme.gradient, 'important');
+        debugLog("Applied light mode with dynamic background");
+      } else {
+        document.body.style.setProperty('background', '#f8f9fa', 'important');
+      }
       
       debugLog("Applied light mode styles - UI should now be dark on light background");
       console.log("🌞 Light mode active - Dashboard should be dark/visible");
     } else {
-      // Force dark mode styles
-      document.body.style.setProperty('background', '#000', 'important');
+      // Dark mode - use dynamic background
       document.body.style.setProperty('color', '#fff', 'important');
-      
-      // Remove light mode class
       document.body.classList.remove('light-mode');
+      
+      // Let dynamic background handle the background
+      if (dynamicBackground) {
+        dynamicBackground.updateBackground();
+        debugLog("Applied dark mode with dynamic background");
+      } else {
+        document.body.style.setProperty('background', '#000', 'important');
+      }
       
       debugLog("Applied dark mode styles - UI should now be whiteish on dark background");
       console.log("🌙 Dark mode active - Dashboard should be whiteish/visible");
@@ -536,6 +655,9 @@
       
       // Listen for theme changes
       window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', applyTheme);
+      
+      // Initialize dynamic background
+      dynamicBackground = new DynamicBackground();
       
       // Initialize all components
       if (greetingEl) setGreeting();

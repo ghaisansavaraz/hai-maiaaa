@@ -15,6 +15,13 @@
   --transition-slow: 0.6s ease;
   --gradient-primary: linear-gradient(135deg, rgba(255,160,195,0.1), rgba(190,160,255,0.1));
   --gradient-secondary: linear-gradient(135deg, rgba(140,180,255,0.1), rgba(255,200,160,0.1));
+  
+  /* Dynamic background variables */
+  --bg-primary: #000000;
+  --bg-secondary: #111111;
+  --bg-gradient: linear-gradient(135deg, #000000, #111111);
+  --accent-color: rgba(255,255,255,0.1);
+  --star-color: rgba(255,255,255,0.8);
 }
 
 /* body + animated gradient background */
@@ -24,10 +31,11 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #000;
+  background: var(--bg-gradient);
   color: #fff;
   position: relative;
   padding: 0;
+  transition: background var(--transition-slow) ease;
 }
 
 /* Advanced particle background */
@@ -59,11 +67,67 @@ body::before {
       radial-gradient(1px 1px at 90px 40px, rgba(0,0,0,0.05), transparent),
       radial-gradient(1px 1px at 130px 80px, rgba(0,0,0,0.04), transparent);
   }
+  
+  body::after {
+    background: 
+      radial-gradient(1px 1px at 25px 25px, rgba(0,0,0,0.3), transparent),
+      radial-gradient(1px 1px at 50px 75px, rgba(0,0,0,0.2), transparent),
+      radial-gradient(1px 1px at 75px 15px, rgba(0,0,0,0.4), transparent),
+      radial-gradient(1px 1px at 100px 50px, rgba(0,0,0,0.3), transparent),
+      radial-gradient(1px 1px at 125px 25px, rgba(0,0,0,0.2), transparent),
+      radial-gradient(1px 1px at 150px 75px, rgba(0,0,0,0.3), transparent),
+      radial-gradient(1px 1px at 175px 40px, rgba(0,0,0,0.2), transparent),
+      radial-gradient(1px 1px at 200px 10px, rgba(0,0,0,0.4), transparent),
+      radial-gradient(1px 1px at 225px 60px, rgba(0,0,0,0.3), transparent),
+      radial-gradient(1px 1px at 250px 30px, rgba(0,0,0,0.2), transparent),
+      radial-gradient(1px 1px at 275px 80px, rgba(0,0,0,0.3), transparent),
+      radial-gradient(1px 1px at 300px 45px, rgba(0,0,0,0.2), transparent);
+  }
 }
 
 @keyframes particleFloat {
   0% { transform: translate(0, 0); }
   100% { transform: translate(-200px, -200px); }
+}
+
+/* Blinking stars background */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(1px 1px at 25px 25px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 50px 75px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 75px 15px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 100px 50px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 125px 25px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 150px 75px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 175px 40px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 200px 10px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 225px 60px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 250px 30px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 275px 80px, var(--star-color), transparent),
+    radial-gradient(1px 1px at 300px 45px, var(--star-color), transparent);
+  background-repeat: repeat;
+  background-size: 300px 100px;
+  animation: starTwinkle 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+@keyframes starTwinkle {
+  0% { 
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 /* gradient background (faster, more visible) */
