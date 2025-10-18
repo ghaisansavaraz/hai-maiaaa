@@ -30,20 +30,48 @@
     </div>
 
     <main id="dashboard" class="dashboard hidden" aria-hidden="true">
-      <h1 class="dash-title">🌸 Maia’s Reminder Board</h1>
+      <!-- Main dashboard content -->
+      <div id="dashboardContent" class="dashboard-content">
+        <h1 class="dash-title">🌸 Maia's Day</h1>
 
-      <div class="reminder-controls">
-        <input id="reminderText" class="reminder-input" type="text" placeholder="Write a reminder..." />
-        <button id="addReminder" class="btn">Add</button>
-      </div>
+        <!-- Greeting section -->
+        <section id="greetingSection" class="dashboard-section">
+          <h2 class="section-title">Good vibes</h2>
+          <div id="dynamicGreeting" class="greeting-text"></div>
+        </section>
 
-      <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
+        <!-- Mood of the day -->
+        <section id="moodSection" class="dashboard-section">
+          <h2 class="section-title">Mood of the day</h2>
+          <div class="mood-input-container">
+            <input id="moodInput" class="mood-input" type="text" placeholder="How are you feeling?" />
+            <div id="moodTags" class="mood-tags"></div>
+          </div>
+        </section>
 
-      <div class="deck">
-        <button id="exportReminders" class="btn small">Export</button>
-        <button id="importReminders" class="btn small">Import</button>
-        <input id="importFile" type="file" accept=".json" hidden />
-        <button id="clearReminders" class="btn small danger">Clear</button>
+        <!-- Reminders -->
+        <section id="remindersSection" class="dashboard-section">
+          <h2 class="section-title">Your reminders</h2>
+          <div class="reminder-controls">
+            <input id="reminderText" class="reminder-input" type="text" placeholder="Write a reminder..." />
+            <button id="addReminder" class="btn">Add</button>
+          </div>
+          <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
+        </section>
+
+        <!-- Letters from Gesan -->
+        <section id="lettersSection" class="dashboard-section">
+          <h2 class="section-title">Letters from Gesan</h2>
+          <div id="lettersContainer" class="letters-container"></div>
+        </section>
+
+        <!-- Controls -->
+        <div class="deck">
+          <button id="exportReminders" class="btn small">Export</button>
+          <button id="importReminders" class="btn small">Import</button>
+          <input id="importFile" type="file" accept=".json" hidden />
+          <button id="clearReminders" class="btn small danger">Clear</button>
+        </div>
       </div>
     </main>
   </div>

@@ -10,6 +10,33 @@
   const TARGET_ISO = "2025-10-19T00:00:00+07:00"; // Jakarta midnight
   const BYPASS_CODE = "maiacantik";
   const STORAGE_KEY = "maiaaa_reminders_v1";
+  const MOOD_STORAGE_KEY = "maiaaa_mood_v1";
+  const EDITOR_CODE = "gesanlove";
+  
+  // Letters from Gesan (easily editable content)
+  const LETTERS_DATA = [
+    {
+      id: "welcome",
+      title: "Welcome back, beautiful",
+      date: "Today",
+      preview: "I hope you're having a wonderful day...",
+      content: "Welcome back to your personal space, Maiaaa cantik! I created this little corner of the internet just for you. Take your time, breathe, and remember that you're amazing. Every day is a new opportunity to shine, and I believe in you completely. 💕"
+    },
+    {
+      id: "motivation",
+      title: "You've got this",
+      date: "Always",
+      preview: "Remember how strong you are...",
+      content: "Hey beautiful! I know some days feel harder than others, but look at how far you've come. You're stronger than you think, smarter than you know, and more capable than you believe. When things get tough, remember that this too shall pass, and you'll come out even stronger on the other side. I'm cheering for you always! 🌟"
+    },
+    {
+      id: "love",
+      title: "Just because",
+      date: "Forever",
+      preview: "You deserve all the happiness...",
+      content: "Just wanted to remind you that you're loved, valued, and appreciated. Not just by me, but by everyone whose life you've touched. Your kindness, your smile, your beautiful spirit - they all matter more than you know. Take care of yourself, because you're precious. Sending you all the love and good vibes! ✨"
+    }
+  ];
 
   // ---- ELEMENTS ----
   const timerEl = document.getElementById("timer");
@@ -18,6 +45,14 @@
   const countdownContainer = document.getElementById("countdownContainer");
   const dashboard = document.getElementById("dashboard");
 
+  // New dashboard elements
+  const dashboardContent = document.getElementById("dashboardContent");
+  const dynamicGreeting = document.getElementById("dynamicGreeting");
+  const moodInput = document.getElementById("moodInput");
+  const moodTags = document.getElementById("moodTags");
+  const lettersContainer = document.getElementById("lettersContainer");
+
+  // Existing elements
   const reminderText = document.getElementById("reminderText");
   const addReminderBtn = document.getElementById("addReminder");
   const reminderList = document.getElementById("reminderList");
@@ -55,6 +90,71 @@
         setTimeout(() => greetingEl.classList.add("visible"), 500);
       });
     } catch (e) { console.error(e); }
+  }
+
+  // ---- Dynamic greeting for dashboard ----
+  function setDynamicGreeting() {
+    if (!dynamicGreeting) return;
+    try {
+      const hour = new Date().getHours();
+      let greeting = "Good evening, beautiful";
+      if (hour >= 5 && hour < 12) greeting = "Good morning, sunshine";
+      else if (hour >= 12 && hour < 18) greeting = "Good afternoon, lovely";
+      
+      dynamicGreeting.textContent = greeting;
+    } catch (e) { console.error(e); }
+  }
+
+  // ---- Mood system ----
+  function loadMoods() {
+    try {
+      const moods = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY) || "[]");
+      moodTags.innerHTML = "";
+      moods.forEach(mood => {
+        const tag = document.createElement("div");
+        tag.className = "mood-tag";
+        tag.textContent = mood;
+        moodTags.appendChild(tag);
+      });
+    } catch (e) { console.error(e); }
+  }
+
+  function saveMood(mood) {
+    try {
+      const moods = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY) || "[]");
+      if (!moods.includes(mood)) {
+        moods.push(mood);
+        localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moods));
+        loadMoods();
+      }
+    } catch (e) { console.error(e); }
+  }
+
+  // ---- Letters system ----
+  function renderLetters() {
+    if (!lettersContainer) return;
+    lettersContainer.innerHTML = "";
+    
+    LETTERS_DATA.forEach((letter, index) => {
+      const card = document.createElement("div");
+      card.className = "letter-card";
+      card.style.animationDelay = `${index * 0.1}s`;
+      
+      card.innerHTML = `
+        <div class="letter-header">
+          <h3 class="letter-title">${letter.title}</h3>
+          <span class="letter-date">${letter.date}</span>
+        </div>
+        <div class="letter-preview">${letter.preview}</div>
+        <div class="letter-content">${letter.content}</div>
+      `;
+      
+      card.addEventListener("click", () => {
+        card.classList.toggle("open");
+      });
+      
+      lettersContainer.appendChild(card);
+    });
   }
 
   // ---- Countdown compute & render ----
@@ -102,10 +202,26 @@
       countdownContainer.classList.add("hidden");
       if (dashboard) {
         dashboard.classList.remove("hidden");
-        // small delay to allow CSS transition
-        requestAnimationFrame(() => setTimeout(() => dashboard.classList.add("visible"), 40));
+        // Show dashboard content with staggered section reveals
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            if (dashboardContent) {
+              dashboardContent.classList.add("visible");
+              setTimeout(() => revealSections(), 200);
+            }
+          }, 40);
+        });
       }
     }, 600);
+  }
+
+  function revealSections() {
+    const sections = document.querySelectorAll('.dashboard-section');
+    sections.forEach((section, index) => {
+      setTimeout(() => {
+        section.classList.add('visible');
+      }, index * 200);
+    });
   }
 
   // ---- Triple-click bypass ----
@@ -206,12 +322,47 @@
     });
   }
 
+  // ---- Event listeners for new features ----
+  if (moodInput) {
+    moodInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const mood = moodInput.value.trim();
+        if (mood) {
+          saveMood(mood);
+          moodInput.value = "";
+        }
+      }
+    });
+  }
+
+  // Hidden editor key (triple-click on dashboard title)
+  let editorClicks = 0;
+  if (dashboard) {
+    dashboard.addEventListener("click", (e) => {
+      if (e.target.classList.contains("dash-title")) {
+        editorClicks++;
+        if (editorClicks === 3) {
+          const code = prompt("Enter editor code:");
+          if (code === EDITOR_CODE) {
+            alert("Editor mode unlocked! You can now edit letters in the code.");
+            console.log("Editor mode unlocked. Edit LETTERS_DATA in script.js to modify letters.");
+          }
+          editorClicks = 0;
+        }
+        setTimeout(() => (editorClicks = 0), 1000);
+      }
+    });
+  }
+
   // ---- Init ----
   document.addEventListener("DOMContentLoaded", () => {
     try {
       console.log("[init] targetMs:", new Date(targetMs).toString());
       setGreeting();
+      setDynamicGreeting();
+      loadMoods();
       renderReminders();
+      renderLetters();
       start();
     } catch (e) {
       console.error(e);

@@ -146,8 +146,196 @@ body {
 .dash-title { margin:0; font-weight:300; }
 .deck { display:flex; gap:8px; align-items:center; }
 
+/* dashboard content */
+.dashboard-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.dashboard-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* dashboard sections */
+.dashboard-section {
+  width: 100%;
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.dashboard-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* greeting section */
+.greeting-text {
+  font-size: 1.2rem;
+  font-weight: 300;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* mood section */
+.mood-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mood-input {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  color: inherit;
+  font-weight: 300;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.mood-input:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+}
+.mood-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 32px;
+}
+.mood-tag {
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255,160,195,0.15), rgba(190,160,255,0.15));
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.9rem;
+  font-weight: 400;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: tagAppear 0.6s ease forwards;
+}
+@keyframes tagAppear {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* letters section */
+.letters-container {
+  display: grid;
+  gap: 12px;
+}
+.letter-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: cardAppear 0.6s ease forwards;
+}
+.letter-card:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+}
+.letter-card.open {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+}
+.letter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.letter-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+.letter-date {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+.letter-content {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 300;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.letter-card.open .letter-content {
+  max-height: 200px;
+}
+.letter-preview {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+@keyframes cardAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* light mode adjustments */
+@media (prefers-color-scheme: light) {
+  .greeting-text {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.05);
+  }
+  .mood-input {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.08);
+  }
+  .mood-input:focus {
+    border-color: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.04);
+  }
+  .mood-tag {
+    background: linear-gradient(135deg, rgba(255,153,204,0.15), rgba(204,153,255,0.15));
+    border-color: rgba(0,0,0,0.1);
+  }
+  .letter-card {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.05);
+  }
+  .letter-card:hover {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.1);
+  }
+  .letter-card.open {
+    background: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.15);
+  }
+}
+
 /* small screens */
 @media (max-width:520px) {
   .timer { font-size: clamp(36px, 20vw, 72px); letter-spacing:0.12em; }
   .reminder-input { width: 56%; }
+  .typing-text { font-size: 1rem; }
+  .greeting-text { font-size: 1.1rem; padding: 14px 16px; }
+  .letter-card { padding: 16px; }
+  .dashboard-section { margin-bottom: 20px; }
 }
