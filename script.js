@@ -406,11 +406,45 @@
     });
   }
 
+  // ---- Theme detection and application ----
+  function applyTheme() {
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
+    debugLog(`Theme detected: ${isLightMode ? 'Light' : 'Dark'} mode`);
+    
+    if (isLightMode) {
+      // Force light mode styles
+      document.body.style.setProperty('background', '#f8f9fa', 'important');
+      document.body.style.setProperty('color', '#212529', 'important');
+      
+      // Add light mode class for additional styling
+      document.body.classList.add('light-mode');
+      
+      debugLog("Applied light mode styles - UI should now be dark on light background");
+      console.log("🌞 Light mode active - Dashboard should be dark/visible");
+    } else {
+      // Force dark mode styles
+      document.body.style.setProperty('background', '#000', 'important');
+      document.body.style.setProperty('color', '#fff', 'important');
+      
+      // Remove light mode class
+      document.body.classList.remove('light-mode');
+      
+      debugLog("Applied dark mode styles - UI should now be whiteish on dark background");
+      console.log("🌙 Dark mode active - Dashboard should be whiteish/visible");
+    }
+  }
+
   // ---- Init ----
   document.addEventListener("DOMContentLoaded", () => {
     try {
       debugLog("Initializing application...");
       debugLog("Target date:", new Date(targetMs).toString());
+      
+      // Apply theme immediately
+      applyTheme();
+      
+      // Listen for theme changes
+      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', applyTheme);
       
       // Initialize all components
       if (greetingEl) setGreeting();

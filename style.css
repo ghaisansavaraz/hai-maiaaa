@@ -578,86 +578,161 @@ body::before {
   }
 }
 
-/* light mode adjustments */
+/* light mode adjustments - ROBUST VERSION */
 @media (prefers-color-scheme: light) {
-  .dashboard {
+  body { 
+    background: #f8f9fa !important; 
+    color: #212529 !important; 
+  }
+  
+  .gradient-bg {
     background: 
-      linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.08)),
-      linear-gradient(45deg, rgba(20,20,20,0.1), rgba(40,40,40,0.1));
-    background-color: rgba(0,0,0,0.1);
-    border-color: rgba(0,0,0,0.2);
-    box-shadow: 
-      0 24px 96px rgba(0,0,0,0.15),
-      inset 0 1px 0 rgba(255,255,255,0.2),
-      0 0 0 1px rgba(0,0,0,0.1);
+      radial-gradient(1200px 800px at 14% 24%, rgba(0, 0, 0, 0.08), transparent 60%),
+      radial-gradient(1000px 700px at 84% 76%, rgba(0, 0, 0, 0.06), transparent 58%),
+      radial-gradient(900px 900px at 50% 54%, rgba(0, 0, 0, 0.05), transparent 55%),
+      linear-gradient(120deg, #f8f9fa, #e9ecef, #dee2e6) !important;
+    filter: blur(20px) !important;
+  }
+  
+  .dashboard {
+    background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05)) !important;
+    background-color: rgba(0,0,0,0.2) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 2px solid rgba(0,0,0,0.3) !important;
+    box-shadow: 0 24px 96px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3), 0 0 0 1px rgba(0,0,0,0.2) !important;
   }
   
   .dashboard-section {
-    background: 
-      linear-gradient(135deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06)),
-      linear-gradient(45deg, rgba(20,20,20,0.08), rgba(40,40,40,0.08));
-    background-color: rgba(0,0,0,0.08);
-    border-color: rgba(0,0,0,0.15);
-    box-shadow: 
-      var(--shadow-md),
-      inset 0 1px 0 rgba(255,255,255,0.1);
+    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
+    background-color: rgba(0,0,0,0.15) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(0,0,0,0.25) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2) !important;
   }
   
   .greeting-text {
-    background: rgba(0,0,0,0.05);
-    border-color: rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.1) !important;
+    border: 1px solid rgba(0,0,0,0.2) !important;
+    color: #212529 !important;
   }
   
   .mood-input {
-    background: rgba(0,0,0,0.05);
-    border-color: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.08) !important;
+    border: 1px solid rgba(0,0,0,0.25) !important;
+    color: #212529 !important;
   }
   
   .mood-input:focus {
-    border-color: rgba(0,0,0,0.3);
-    background: rgba(0,0,0,0.08);
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+    border-color: rgba(0,0,0,0.5) !important;
+    background: rgba(0,0,0,0.12) !important;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.2) !important;
   }
   
   .btn {
-    background: 
-      linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05)),
-      linear-gradient(45deg, rgba(20,20,20,0.08), rgba(40,40,40,0.08));
-    background-color: rgba(0,0,0,0.05);
-    border-color: rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
+    background-color: rgba(0,0,0,0.1) !important;
+    border: 1px solid rgba(0,0,0,0.25) !important;
+    color: #212529 !important;
+  }
+  
+  .btn:hover {
+    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)) !important;
+    background-color: rgba(0,0,0,0.15) !important;
+    border-color: rgba(0,0,0,0.35) !important;
   }
   
   .mood-tag {
-    background: 
-      linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)),
-      linear-gradient(45deg, rgba(20,20,20,0.1), rgba(40,40,40,0.1));
-    background-color: rgba(0,0,0,0.1);
-    border-color: rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.08)) !important;
+    background-color: rgba(0,0,0,0.15) !important;
+    border: 1px solid rgba(0,0,0,0.3) !important;
+    color: #212529 !important;
   }
   
   .letter-card {
-    background: 
-      linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05)),
-      linear-gradient(45deg, rgba(20,20,20,0.08), rgba(40,40,40,0.08));
-    background-color: rgba(0,0,0,0.05);
-    border-color: rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
+    background-color: rgba(0,0,0,0.1) !important;
+    border: 1px solid rgba(0,0,0,0.2) !important;
+    color: #212529 !important;
   }
   
   .letter-card:hover {
-    background: 
-      linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.08)),
-      linear-gradient(45deg, rgba(20,20,20,0.12), rgba(40,40,40,0.12));
-    background-color: rgba(0,0,0,0.08);
-    border-color: rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08)) !important;
+    background-color: rgba(0,0,0,0.15) !important;
+    border-color: rgba(0,0,0,0.3) !important;
   }
   
   .letter-card.open {
-    background: 
-      linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1)),
-      linear-gradient(45deg, rgba(20,20,20,0.15), rgba(40,40,40,0.15));
-    background-color: rgba(0,0,0,0.1);
-    border-color: rgba(0,0,0,0.25);
+    background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.2)), linear-gradient(45deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)) !important;
+    background-color: rgba(0,0,0,0.2) !important;
+    border-color: rgba(0,0,0,0.4) !important;
   }
+  
+  .reminder-input {
+    background: rgba(0,0,0,0.08) !important;
+    border: 1px solid rgba(0,0,0,0.2) !important;
+    color: #212529 !important;
+  }
+  
+  .reminder-input:focus {
+    border-color: rgba(0,0,0,0.4) !important;
+    background: rgba(0,0,0,0.12) !important;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.15) !important;
+  }
+  
+  .reminder-list li {
+    background: rgba(0,0,0,0.08) !important;
+    border: 1px solid rgba(0,0,0,0.15) !important;
+    color: #212529 !important;
+  }
+  
+  .section-title {
+    color: #495057 !important;
+  }
+  
+  .dash-title {
+    color: #212529 !important;
+  }
+}
+
+/* Additional light mode class-based styles for extra robustness */
+body.light-mode {
+  background: #f8f9fa !important;
+  color: #212529 !important;
+}
+
+body.light-mode .dashboard {
+  background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05)) !important;
+  background-color: rgba(0,0,0,0.2) !important;
+  border: 2px solid rgba(0,0,0,0.3) !important;
+}
+
+body.light-mode .dashboard-section {
+  background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
+  background-color: rgba(0,0,0,0.15) !important;
+  border: 1px solid rgba(0,0,0,0.25) !important;
+}
+
+body.light-mode .btn {
+  background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
+  background-color: rgba(0,0,0,0.1) !important;
+  border: 1px solid rgba(0,0,0,0.25) !important;
+  color: #212529 !important;
+}
+
+body.light-mode .mood-tag {
+  background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15)), linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.08)) !important;
+  background-color: rgba(0,0,0,0.15) !important;
+  border: 1px solid rgba(0,0,0,0.3) !important;
+  color: #212529 !important;
+}
+
+body.light-mode .letter-card {
+  background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.08), rgba(0,0,0,0.05)) !important;
+  background-color: rgba(0,0,0,0.1) !important;
+  border: 1px solid rgba(0,0,0,0.2) !important;
+  color: #212529 !important;
 }
 
 /* small screens */
