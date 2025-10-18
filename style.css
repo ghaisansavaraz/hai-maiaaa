@@ -275,7 +275,7 @@ body.hide-stars .shooting-stars-container {
   z-index: 10;
 }
 
-/* Pulsing underglow behind countdown numbers */
+/* ROBUST Pulsing underglow behind countdown numbers */
 .timer {
   font-size: clamp(44px, 12vw, 120px);
   font-weight: 200;
@@ -286,32 +286,17 @@ body.hide-stars .shooting-stars-container {
   user-select: none;
   color: #fff !important;
   position: relative;
-  z-index: 2;
+  z-index: 10;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  animation: timerGlow 3s ease-in-out infinite alternate;
 }
 
-.timer::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(ellipse, rgba(255,255,255,0.08), rgba(255,255,255,0.04) 60%, transparent 90%);
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  animation: underglowPulse 4s ease-in-out infinite;
-  z-index: -1;
-  pointer-events: none;
-}
-
-@keyframes underglowPulse {
-  0%, 100% {
-    opacity: 0.3;
-    transform: translate(-50%, -50%) scale(1);
+@keyframes timerGlow {
+  0% {
+    text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(255,255,255,0.1);
   }
-  50% {
-    opacity: 0.6;
-    transform: translate(-50%, -50%) scale(1.05);
+  100% {
+    text-shadow: 0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.2);
   }
 }
 
