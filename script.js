@@ -173,10 +173,11 @@
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Set background with moving gradient
+      // Set background with moving gradient (but allow pseudo-elements to show)
       document.body.style.setProperty('background', theme.gradient, 'important');
       document.body.style.setProperty('background-size', '400% 400%', 'important');
       document.body.style.setProperty('animation', 'gradientMove 8s ease-in-out infinite', 'important');
+      document.body.style.setProperty('background-blend-mode', 'normal', 'important');
       
       // Set text color
       if (theme.isLight) {
