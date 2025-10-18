@@ -149,13 +149,13 @@
         return { 
           name: 'light', 
           isLight: true,
-          gradient: 'linear-gradient(135deg, #ffffff, #f0f0f0, #e8e8e8, #f5f5f5)'
+          gradient: 'linear-gradient(135deg, #ffffff, #f8f8f8, #e0e0e0, #f0f0f0, #ffffff)'
         };
       } else {
         return { 
           name: 'dark', 
           isLight: false,
-          gradient: 'linear-gradient(135deg, #000000, #111111, #0a0a0a, #1a1a1a)'
+          gradient: 'linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d, #2a2a2a, #000000)'
         };
       }
     }
@@ -173,10 +173,11 @@
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Set moving gradient background
+      // Set moving gradient background with higher opacity
       document.body.style.setProperty('background', theme.gradient, 'important');
       document.body.style.setProperty('background-size', '400% 400%', 'important');
       document.body.style.setProperty('animation', 'gradientMove 12s linear infinite', 'important');
+      document.body.style.setProperty('background-attachment', 'fixed', 'important');
       
       // Set text color
       if (theme.isLight) {

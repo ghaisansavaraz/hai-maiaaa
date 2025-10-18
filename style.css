@@ -34,12 +34,10 @@ body {
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #000000;
-  background-size: 400% 400%;
   color: #ffffff;
   position: relative;
   padding: 0;
-  transition: background 0.5s ease, color 0.5s ease;
+  transition: color 0.5s ease;
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
 }
