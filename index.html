@@ -84,6 +84,17 @@
       <div class="shooting-star shooting-star-3"></div>
     </div>
 
+  <!-- Time Display - Always Visible -->
+  <section id="timeSection" class="time-display">
+    <div class="time-widget">
+      <div class="time-container">
+        <div id="currentTime" class="current-time">--:--:--</div>
+        <div id="currentDate" class="current-date">Loading...</div>
+      </div>
+      <div id="timeGreeting" class="time-greeting">Good morning</div>
+    </div>
+  </section>
+
   <!-- central area -->
   <div id="center" class="center">
     <div id="countdownContainer" class="countdown-container">
@@ -95,62 +106,97 @@
     <main id="dashboard" class="dashboard hidden" aria-hidden="true">
       <!-- Main dashboard content -->
       <div id="dashboardContent" class="dashboard-content">
-        <h1 class="dash-title">🌸 Maia's Day</h1>
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+          <h1 class="dash-title">Maia's Day</h1>
+          <div class="header-subtitle">Your personal space</div>
+        </header>
 
-        <!-- Live Time Display -->
-        <section id="timeSection" class="dashboard-section time-display">
-          <div class="time-widget">
-            <div class="time-container">
-              <div id="currentTime" class="current-time">--:--:--</div>
-              <div id="currentDate" class="current-date">Loading...</div>
-            </div>
-            <div id="timeGreeting" class="time-greeting">Good morning</div>
+        <!-- Main Grid Layout -->
+        <div class="dashboard-grid">
+          
+          <!-- Left Column -->
+          <div class="dashboard-column">
+            
+            <!-- Mood Section -->
+            <section id="moodSection" class="dashboard-card">
+              <div class="card-header">
+                <h2 class="card-title">Mood</h2>
+                <div class="card-subtitle">How are you feeling today?</div>
+              </div>
+              <div class="card-content">
+                <div class="mood-input-container">
+                  <input id="moodInput" class="mood-input" type="text" placeholder="Enter your mood..." />
+                  <div id="moodTags" class="mood-tags"></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Tasks Section -->
+            <section id="tasksSection" class="dashboard-card">
+              <div class="card-header">
+                <h2 class="card-title">Tasks</h2>
+                <div class="card-subtitle">Stay organized</div>
+              </div>
+              <div class="card-content">
+                <div class="task-controls">
+                  <input id="taskText" class="task-input" type="text" placeholder="Add a new task..." />
+                  <div class="deadline-controls">
+                    <input id="taskDeadlineDate" class="deadline-date" type="text" placeholder="Date (YYYY-MM-DD)" />
+                    <input id="taskDeadlineTime" class="deadline-time" type="text" placeholder="Time (HH:MM)" />
+                  </div>
+                  <button id="addTask" class="btn-primary">Add Task</button>
+                </div>
+                <div id="tasksContainer" class="tasks-container"></div>
+              </div>
+            </section>
+
           </div>
-        </section>
 
-        <!-- Mood of the day -->
-        <section id="moodSection" class="dashboard-section">
-          <h2 class="section-title">Mood of the day</h2>
-          <div class="mood-input-container">
-            <input id="moodInput" class="mood-input" type="text" placeholder="How are you feeling?" />
-            <div id="moodTags" class="mood-tags"></div>
+          <!-- Right Column -->
+          <div class="dashboard-column">
+            
+            <!-- Reminders Section -->
+            <section id="remindersSection" class="dashboard-card">
+              <div class="card-header">
+                <h2 class="card-title">Reminders</h2>
+                <div class="card-subtitle">Important notes</div>
+              </div>
+              <div class="card-content">
+                <div class="reminder-controls">
+                  <input id="reminderText" class="reminder-input" type="text" placeholder="Write a reminder..." />
+                  <button id="addReminder" class="btn-primary">Add</button>
+                </div>
+                <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
+              </div>
+            </section>
+
+            <!-- Letters Section -->
+            <section id="lettersSection" class="dashboard-card">
+              <div class="card-header">
+                <h2 class="card-title">Letters</h2>
+                <div class="card-subtitle">Messages from Gesan</div>
+              </div>
+              <div class="card-content">
+                <div id="lettersContainer" class="letters-container"></div>
+              </div>
+            </section>
+
           </div>
-        </section>
 
-        <!-- Reminders -->
-        <section id="remindersSection" class="dashboard-section">
-          <h2 class="section-title">Your reminders</h2>
-          <div class="reminder-controls">
-            <input id="reminderText" class="reminder-input" type="text" placeholder="Write a reminder..." />
-            <button id="addReminder" class="btn">Add</button>
-          </div>
-          <ul id="reminderList" class="reminder-list" aria-live="polite"></ul>
-        </section>
-
-               <!-- Letters from Gesan -->
-               <section id="lettersSection" class="dashboard-section">
-                 <h2 class="section-title">Letters from Gesan</h2>
-                 <div id="lettersContainer" class="letters-container envelope-grid"></div>
-               </section>
-               
-               <!-- Smart Task Checklist -->
-               <section id="tasksSection" class="dashboard-section">
-                 <h2 class="section-title">Your Tasks</h2>
-                 <div class="task-controls">
-                   <input id="taskText" class="task-input" type="text" placeholder="Add a new task..." />
-                   <input id="taskDeadline" class="deadline-input" type="datetime-local" />
-                   <button id="addTask" class="btn">Add Task</button>
-                 </div>
-                 <div id="tasksContainer" class="tasks-container"></div>
-               </section>
-
-        <!-- Controls -->
-        <div class="deck">
-          <button id="exportReminders" class="btn small">Export</button>
-          <button id="importReminders" class="btn small">Import</button>
-          <input id="importFile" type="file" accept=".json" hidden />
-          <button id="clearReminders" class="btn small danger">Clear</button>
         </div>
+
+        <!-- Footer Controls -->
+        <footer class="dashboard-footer">
+          <div class="footer-controls">
+            <button id="exportReminders" class="btn-secondary">Export Data</button>
+            <button id="importReminders" class="btn-secondary">Import Data</button>
+            <input id="importFile" type="file" accept=".json" hidden />
+            <button id="clearReminders" class="btn-danger">Clear All</button>
+          </div>
+        </footer>
+
       </div>
     </main>
   </div>

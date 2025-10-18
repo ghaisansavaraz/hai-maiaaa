@@ -475,12 +475,6 @@
             setTimeout(() => {
               debugLog("Revealing sections...");
               revealSections();
-              
-              // Start time display after dashboard is fully visible
-              setTimeout(() => {
-                debugLog("Starting time display...");
-                startTimeDisplay();
-              }, 500);
             }, 300);
           } else {
             debugError("dashboardContent element not found!");
@@ -659,6 +653,42 @@
   // ---- Smart Task Checklist ----
   let tasks = [];
   
+  function formatDeadline(dateStr, timeStr) {
+    if (!dateStr && !timeStr) return null;
+    
+    try {
+      let deadline = null;
+      
+      if (dateStr) {
+        // Parse date in YYYY-MM-DD format
+        const date = new Date(dateStr + 'T00:00:00');
+        if (!isNaN(date.getTime())) {
+          deadline = date;
+        }
+      }
+      
+      if (timeStr && deadline) {
+        // Add time to existing date
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        if (!isNaN(hours) && !isNaN(minutes)) {
+          deadline.setHours(hours, minutes, 0, 0);
+        }
+      } else if (timeStr && !deadline) {
+        // Time only - use today's date
+        const today = new Date();
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        if (!isNaN(hours) && !isNaN(minutes)) {
+          deadline = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes, 0, 0);
+        }
+      }
+      
+      return deadline ? deadline.toISOString() : null;
+    } catch (error) {
+      debugError("Failed to format deadline:", error);
+      return null;
+    }
+  }
+  
   function loadTasks() {
     try {
       const stored = localStorage.getItem(TASKS_STORAGE_KEY);
@@ -770,15 +800,18 @@
       
       // Task event listeners
       const taskText = document.getElementById("taskText");
-      const taskDeadline = document.getElementById("taskDeadline");
+      const taskDeadlineDate = document.getElementById("taskDeadlineDate");
+      const taskDeadlineTime = document.getElementById("taskDeadlineTime");
       const addTaskBtn = document.getElementById("addTask");
       
       if (addTaskBtn) {
         addTaskBtn.addEventListener("click", () => {
           if (taskText) {
-            addTask(taskText.value, taskDeadline?.value);
+            const deadline = formatDeadline(taskDeadlineDate?.value, taskDeadlineTime?.value);
+            addTask(taskText.value, deadline);
             taskText.value = "";
-            if (taskDeadline) taskDeadline.value = "";
+            if (taskDeadlineDate) taskDeadlineDate.value = "";
+            if (taskDeadlineTime) taskDeadlineTime.value = "";
           }
         });
       }
@@ -786,9 +819,11 @@
       if (taskText) {
         taskText.addEventListener("keydown", (e) => {
           if (e.key === "Enter") {
-            addTask(taskText.value, taskDeadline?.value);
+            const deadline = formatDeadline(taskDeadlineDate?.value, taskDeadlineTime?.value);
+            addTask(taskText.value, deadline);
             taskText.value = "";
-            if (taskDeadline) taskDeadline.value = "";
+            if (taskDeadlineDate) taskDeadlineDate.value = "";
+            if (taskDeadlineTime) taskDeadlineTime.value = "";
           }
         });
       }
@@ -801,6 +836,9 @@
       } else {
         debugError("Failed to start countdown - missing elements");
       }
+      
+      // Start time display immediately (always visible)
+      startTimeDisplay();
       
       debugLog("Application initialized successfully");
     } catch (e) {
