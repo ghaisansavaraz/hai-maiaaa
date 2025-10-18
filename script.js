@@ -66,9 +66,6 @@
 
   // New dashboard elements
   const dashboardContent = document.getElementById("dashboardContent");
-  const currentTime = document.getElementById("currentTime");
-  const currentDate = document.getElementById("currentDate");
-  const timeGreeting = document.getElementById("timeGreeting");
   const moodInput = document.getElementById("moodInput");
   const moodTags = document.getElementById("moodTags");
   const lettersContainer = document.getElementById("lettersContainer");
@@ -83,9 +80,9 @@
     timerEl: !!timerEl,
     dashboard: !!dashboard,
     dashboardContent: !!dashboardContent,
-    currentTime: !!currentTime,
-    currentDate: !!currentDate,
-    timeGreeting: !!timeGreeting
+    headerCurrentTime: !!headerCurrentTime,
+    headerCurrentDate: !!headerCurrentDate,
+    headerTimeGreeting: !!headerTimeGreeting
   });
 
   // Existing elements
@@ -274,8 +271,8 @@
   function updateTime() {
     debugLog("updateTime called");
     
-    if (!currentTime || !currentDate || !timeGreeting) {
-      debugError("Time elements not available for update");
+    if (!headerCurrentTime || !headerCurrentDate || !headerTimeGreeting) {
+      debugError("Header clock elements not available for update");
       return;
     }
     
@@ -290,9 +287,9 @@
         second: '2-digit'
       });
       
-      if (currentTime) {
-        currentTime.textContent = timeString;
-        debugLog("Time updated:", timeString);
+      if (headerCurrentTime) {
+        headerCurrentTime.textContent = timeString;
+        debugLog("Header time updated:", timeString);
       }
       
       // Update date
@@ -303,9 +300,9 @@
         day: 'numeric'
       });
       
-      if (currentDate) {
-        currentDate.textContent = dateString;
-        debugLog("Date updated:", dateString);
+      if (headerCurrentDate) {
+        headerCurrentDate.textContent = dateString;
+        debugLog("Header date updated:", dateString);
       }
       
       // Update greeting based on time
@@ -314,33 +311,28 @@
       if (hour >= 5 && hour < 12) greeting = "Good morning Maiaaa";
       else if (hour >= 12 && hour < 18) greeting = "Good afternoon Maiaaa";
       
-      if (timeGreeting) {
-        timeGreeting.textContent = greeting;
-        debugLog("Greeting updated:", greeting);
+      if (headerTimeGreeting) {
+        headerTimeGreeting.textContent = greeting;
+        debugLog("Header greeting updated:", greeting);
       }
       
-      // Also update header clock
-      if (headerCurrentTime) headerCurrentTime.textContent = timeString;
-      if (headerCurrentDate) headerCurrentDate.textContent = dateString;
-      if (headerTimeGreeting) headerTimeGreeting.textContent = greeting;
-      
     } catch (error) {
-      debugError("Failed to update time", error);
+      debugError("Failed to update header time", error);
     }
   }
 
   function startTimeDisplay() {
-    debugLog("Starting time display...");
-    debugLog("currentTime element:", currentTime);
-    debugLog("currentDate element:", currentDate);
-    debugLog("timeGreeting element:", timeGreeting);
+    debugLog("Starting header time display...");
+    debugLog("headerCurrentTime element:", headerCurrentTime);
+    debugLog("headerCurrentDate element:", headerCurrentDate);
+    debugLog("headerTimeGreeting element:", headerTimeGreeting);
     
-    if (!currentTime || !currentDate || !timeGreeting) {
-      debugError("Time display elements not found!");
+    if (!headerCurrentTime || !headerCurrentDate || !headerTimeGreeting) {
+      debugError("Header time display elements not found!");
       console.error("Missing elements:", {
-        currentTime: !!currentTime,
-        currentDate: !!currentDate,
-        timeGreeting: !!timeGreeting
+        headerCurrentTime: !!headerCurrentTime,
+        headerCurrentDate: !!headerCurrentDate,
+        headerTimeGreeting: !!headerTimeGreeting
       });
       return;
     }
@@ -351,7 +343,7 @@
     // Update every second
     setInterval(updateTime, 1000);
     
-    debugLog("Time display started successfully");
+    debugLog("Header time display started successfully");
   }
 
   // ---- Mood system ----
