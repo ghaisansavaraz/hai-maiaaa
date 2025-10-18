@@ -12,6 +12,7 @@
   const STORAGE_KEY = "maiaaa_reminders_v1";
   const MOOD_STORAGE_KEY = "maiaaa_mood_v1";
   const EDITOR_CODE = "gesanlove";
+  const DEBUG_MODE = true; // Set to false in production
   
   // Letters from Gesan (easily editable content)
   const LETTERS_DATA = [
@@ -38,6 +39,19 @@
     }
   ];
 
+  // ---- Debug logging ----
+  function debugLog(message, ...args) {
+    if (DEBUG_MODE) {
+      console.log(`[Maiaaa] ${message}`, ...args);
+    }
+  }
+
+  function debugError(message, error) {
+    if (DEBUG_MODE) {
+      console.error(`[Maiaaa] ${message}`, error);
+    }
+  }
+
   // ---- ELEMENTS ----
   const timerEl = document.getElementById("timer");
   const greetingEl = document.getElementById("greeting");
@@ -60,6 +74,16 @@
   const importReminders = document.getElementById("importReminders");
   const importFile = document.getElementById("importFile");
   const clearReminders = document.getElementById("clearReminders");
+
+  // Validate critical elements
+  const criticalElements = { timerEl, countdownContainer, dashboard };
+  Object.entries(criticalElements).forEach(([name, element]) => {
+    if (!element) {
+      debugError(`Critical element ${name} not found!`);
+    } else {
+      debugLog(`✓ ${name} element found`);
+    }
+  });
 
   // ---- Setup target ms robustly ----
   let targetMs = Date.parse(TARGET_ISO);
@@ -196,31 +220,59 @@
 
   // ---- Show dashboard (fade out countdown, fade in dashboard) ----
   function showDashboard() {
-    if (intervalId) { clearInterval(intervalId); intervalId = null; }
+    debugLog("Starting dashboard transition...");
+    
+    if (intervalId) { 
+      clearInterval(intervalId); 
+      intervalId = null; 
+    }
+    
     countdownContainer.style.opacity = "0";
+    
     setTimeout(() => {
       countdownContainer.classList.add("hidden");
+      
       if (dashboard) {
+        debugLog("Showing dashboard element...");
         dashboard.classList.remove("hidden");
+        
+        // Force visibility with immediate styles
+        dashboard.style.opacity = "1";
+        dashboard.style.transform = "translateY(0) scale(1)";
+        
         // Show dashboard content with staggered section reveals
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            if (dashboardContent) {
-              dashboardContent.classList.add("visible");
-              setTimeout(() => revealSections(), 200);
-            }
-          }, 40);
-        });
+        setTimeout(() => {
+          if (dashboardContent) {
+            debugLog("Showing dashboard content...");
+            dashboardContent.classList.add("visible");
+            dashboardContent.style.opacity = "1";
+            dashboardContent.style.transform = "translateY(0)";
+            
+            setTimeout(() => {
+              debugLog("Revealing sections...");
+              revealSections();
+            }, 300);
+          } else {
+            debugError("dashboardContent element not found!");
+          }
+        }, 100);
+      } else {
+        debugError("dashboard element not found!");
       }
     }, 600);
   }
 
   function revealSections() {
     const sections = document.querySelectorAll('.dashboard-section');
+    debugLog(`Found ${sections.length} sections to reveal`);
+    
     sections.forEach((section, index) => {
       setTimeout(() => {
         section.classList.add('visible');
-      }, index * 200);
+        section.style.opacity = "1";
+        section.style.transform = "translateY(0) scale(1)";
+        debugLog(`Revealed section ${index + 1}`);
+      }, index * 150);
     });
   }
 
@@ -357,15 +409,27 @@
   // ---- Init ----
   document.addEventListener("DOMContentLoaded", () => {
     try {
-      console.log("[init] targetMs:", new Date(targetMs).toString());
-      setGreeting();
-      setDynamicGreeting();
-      loadMoods();
-      renderReminders();
-      renderLetters();
-      start();
+      debugLog("Initializing application...");
+      debugLog("Target date:", new Date(targetMs).toString());
+      
+      // Initialize all components
+      if (greetingEl) setGreeting();
+      if (dynamicGreeting) setDynamicGreeting();
+      if (moodTags) loadMoods();
+      if (reminderList) renderReminders();
+      if (lettersContainer) renderLetters();
+      
+      // Start countdown
+      if (timerEl && countdownContainer) {
+        start();
+        debugLog("Countdown started");
+      } else {
+        debugError("Failed to start countdown - missing elements");
+      }
+      
+      debugLog("Application initialized successfully");
     } catch (e) {
-      console.error(e);
+      debugError("Initialization failed:", e);
     }
   });
 })();
