@@ -229,20 +229,25 @@
       document.body.style.setProperty('background-image', 'none', 'important');
       document.body.style.setProperty('background-attachment', 'fixed', 'important');
       
-      // Create smooth gradient based on brightness
-      const lightColor = `rgba(255, 255, 255, ${theme.brightness * 0.1})`;
-      const darkColor = `rgba(0, 0, 0, ${(1 - theme.brightness) * 0.8})`;
+      // Create smooth gradient based on brightness - pure black with subtle shading
+      const baseBrightness = theme.brightness;
+      
+      // Pure black base with very subtle shading
+      const blackBase = 'rgba(0, 0, 0, 1)';
+      const subtleShade = theme.isDay ? 
+        `rgba(255, 255, 255, ${baseBrightness * 0.02})` : 
+        `rgba(0, 0, 0, ${(1 - baseBrightness) * 0.1})`;
       
       // Fast shifting gradients for daytime, slower for nighttime
       const gradientSpeed = theme.isDay ? '2s' : '8s';
       
       const gradient = `
         linear-gradient(135deg, 
-          ${lightColor} 0%, 
-          ${darkColor} 25%, 
-          ${lightColor} 50%, 
-          ${darkColor} 75%, 
-          ${lightColor} 100%
+          ${blackBase} 0%, 
+          ${subtleShade} 25%, 
+          ${blackBase} 50%, 
+          ${subtleShade} 75%, 
+          ${blackBase} 100%
         )
       `;
       
@@ -252,7 +257,7 @@
       
       // Update body background with smooth transition
       document.body.style.setProperty('background', gradient, 'important');
-      document.body.style.setProperty('color', theme.brightness > 0.5 ? '#000' : '#fff', 'important');
+      document.body.style.setProperty('color', theme.brightness > 0.3 ? '#000' : '#fff', 'important');
       
       // Apply dashboard theme based on brightness
       const dashboard = document.getElementById('dashboard');

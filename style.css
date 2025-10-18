@@ -122,31 +122,30 @@ body.hide-stars::after {
   opacity: 0 !important;
 }
 
-/* gradient background (faster, more visible) */
+/* gradient background - pure black with subtle shifting */
 .gradient-bg {
   position: fixed;
   inset: -20%;
-  /* layered, abstract radial shapes over a subtle linear base */
+  /* Pure black base with very subtle shifting gradients */
   background:
-    radial-gradient(1200px 800px at 12% 22%, rgba(255, 160, 195, 0.15), transparent 60%),
-    radial-gradient(1000px 700px at 86% 78%, rgba(140, 180, 255, 0.15), transparent 58%),
-    radial-gradient(900px 900px at 50% 52%, rgba(190, 160, 255, 0.12), transparent 55%),
-    radial-gradient(600px 600px at 30% 80%, rgba(255, 200, 160, 0.08), transparent 50%),
-    linear-gradient(120deg, #000, #0d0d0d, #1a1a1a);
-  background-size: auto auto, auto auto, auto auto, auto auto, 400% 400%;
+    radial-gradient(1200px 800px at 12% 22%, rgba(255, 255, 255, 0.01), transparent 60%),
+    radial-gradient(800px 600px at 88% 78%, rgba(0, 0, 0, 0.05), transparent 60%),
+    radial-gradient(600px 400px at 50% 50%, rgba(255, 255, 255, 0.005), transparent 60%),
+    linear-gradient(135deg, rgba(0,0,0,1), rgba(0,0,0,0.95));
+  background-size: auto auto, auto auto, auto auto, 400% 400%;
   animation: gradientMove var(--gradient-speed, 12s) ease-in-out infinite;
   filter: blur(35px);
   z-index: 0;
   pointer-events: none;
 }
 
-/* Additional glow layer */
+/* Additional glow layer - very subtle */
 .gradient-bg::after {
   content: '';
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(800px 800px at 50% 50%, rgba(255,255,255,0.02), transparent 70%);
+    radial-gradient(800px 800px at 50% 50%, rgba(255,255,255,0.005), transparent 70%);
   animation: glowPulse 8s ease-in-out infinite;
 }
 
@@ -208,10 +207,10 @@ body.hide-stars::after {
   transition: transform .45s ease, opacity .45s ease;
   cursor: pointer;
   user-select: none;
-  color: #000 !important;
+  color: #fff !important;
 }
 
-/* White countdown for dark night background */
+/* White countdown for dark backgrounds */
 .night-theme .timer {
   color: #fff !important;
 }
@@ -224,10 +223,10 @@ body.hide-stars::after {
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .8s ease .6s, transform .8s ease .6s;
-  color: #000 !important;
+  color: #fff !important;
 }
 
-/* White greeting for dark night background */
+/* White greeting for dark backgrounds */
 .night-theme .greeting {
   color: #fff !important;
 }
