@@ -193,20 +193,37 @@
       
       debugLog(`Updating background to ${theme.name} theme`);
       
+      // Force override system theme detection
+      document.body.style.setProperty('color-scheme', 'dark', 'important');
+      document.documentElement.style.setProperty('color-scheme', 'dark', 'important');
+      
       // Update CSS variables
       root.style.setProperty('--bg-primary', theme.bgPrimary);
       root.style.setProperty('--bg-secondary', theme.bgSecondary);
       root.style.setProperty('--bg-gradient', theme.gradient);
       root.style.setProperty('--accent-color', theme.accentColor);
-      root.style.setProperty('--star-color', theme.starColor);
       
-      // Update body background
-      document.body.style.background = theme.gradient;
+      // Update body background with !important to override system
+      document.body.style.setProperty('background', theme.gradient, 'important');
+      document.body.style.setProperty('color', '#fff', 'important');
+      
+      // Control star visibility based on time
+      if (theme.name === 'night' || theme.name === 'evening') {
+        // Show white stars for night and evening
+        document.body.classList.add('show-stars');
+        document.body.classList.remove('hide-stars');
+        debugLog(`Stars visible for ${theme.name} theme`);
+      } else {
+        // Hide stars for morning and afternoon
+        document.body.classList.add('hide-stars');
+        document.body.classList.remove('show-stars');
+        debugLog(`Stars hidden for ${theme.name} theme`);
+      }
       
       debugLog(`Background updated: ${theme.name}`, {
         bgPrimary: theme.bgPrimary,
         bgSecondary: theme.bgSecondary,
-        starColor: theme.starColor
+        starsVisible: theme.name === 'night' || theme.name === 'evening'
       });
     }
 
