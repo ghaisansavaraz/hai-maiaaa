@@ -409,6 +409,102 @@ body::before {
   letter-spacing: 0.1em;
 }
 
+/* Time Display Styles */
+.time-display {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)),
+    linear-gradient(45deg, rgba(255,153,204,0.1), rgba(153,204,255,0.1)) !important;
+  background-color: rgba(255,255,255,0.15) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+  box-shadow: 
+    0 16px 64px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    0 0 0 1px rgba(255,255,255,0.2) !important;
+}
+
+.time-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  position: relative;
+}
+
+.time-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.current-time {
+  font-size: clamp(32px, 8vw, 48px);
+  font-weight: 300;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  letter-spacing: 2px;
+  animation: timeGlow 2s ease-in-out infinite alternate;
+}
+
+.current-date {
+  font-size: clamp(14px, 3vw, 18px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.time-greeting {
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.time-greeting::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.time-greeting:hover::before {
+  left: 100%;
+}
+
+.time-greeting:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+}
+
+@keyframes timeGlow {
+  0% {
+    text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  }
+  100% {
+    text-shadow: 0 0 30px rgba(255,255,255,0.5), 0 0 40px rgba(255,153,204,0.3);
+  }
+}
+
 /* greeting section */
 .greeting-text {
   font-size: 1.2rem;
@@ -629,6 +725,30 @@ body::before {
     box-shadow: 0 8px 32px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6) !important;
   }
   
+  .time-display {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.15), rgba(153,204,255,0.15)) !important;
+    background-color: rgba(255,255,255,0.7) !important;
+    border: 1px solid rgba(255,255,255,0.4) !important;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8) !important;
+  }
+  
+  .current-time {
+    color: #212529 !important;
+    text-shadow: 0 0 20px rgba(0,0,0,0.1) !important;
+  }
+  
+  .current-date {
+    color: #495057 !important;
+  }
+  
+  .time-greeting {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)) !important;
+    background-color: rgba(255,255,255,0.7) !important;
+    border: 1px solid rgba(255,255,255,0.4) !important;
+    color: #212529 !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+  }
+  
   .greeting-text {
     background: rgba(255,255,255,0.7) !important;
     border: 1px solid rgba(255,255,255,0.3) !important;
@@ -729,6 +849,28 @@ body.light-mode .dashboard-section {
   background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4)), linear-gradient(45deg, rgba(255,153,204,0.08), rgba(153,204,255,0.08)) !important;
   background-color: rgba(255,255,255,0.5) !important;
   border: 1px solid rgba(255,255,255,0.2) !important;
+}
+
+body.light-mode .time-display {
+  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)), linear-gradient(45deg, rgba(255,153,204,0.15), rgba(153,204,255,0.15)) !important;
+  background-color: rgba(255,255,255,0.7) !important;
+  border: 1px solid rgba(255,255,255,0.4) !important;
+}
+
+body.light-mode .current-time {
+  color: #212529 !important;
+  text-shadow: 0 0 20px rgba(0,0,0,0.1) !important;
+}
+
+body.light-mode .current-date {
+  color: #495057 !important;
+}
+
+body.light-mode .time-greeting {
+  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)) !important;
+  background-color: rgba(255,255,255,0.7) !important;
+  border: 1px solid rgba(255,255,255,0.4) !important;
+  color: #212529 !important;
 }
 
 body.light-mode .btn {

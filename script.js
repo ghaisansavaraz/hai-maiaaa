@@ -62,7 +62,9 @@
 
   // New dashboard elements
   const dashboardContent = document.getElementById("dashboardContent");
-  const dynamicGreeting = document.getElementById("dynamicGreeting");
+  const currentTime = document.getElementById("currentTime");
+  const currentDate = document.getElementById("currentDate");
+  const timeGreeting = document.getElementById("timeGreeting");
   const moodInput = document.getElementById("moodInput");
   const moodTags = document.getElementById("moodTags");
   const lettersContainer = document.getElementById("lettersContainer");
@@ -118,16 +120,58 @@
   }
 
   // ---- Dynamic greeting for dashboard ----
-  function setDynamicGreeting() {
-    if (!dynamicGreeting) return;
+  // Time Display Functions
+  function updateTime() {
+    if (!currentTime || !currentDate || !timeGreeting) return;
+    
     try {
-      const hour = new Date().getHours();
+      const now = new Date();
+      
+      // Update time (HH:MM:SS)
+      const timeString = now.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      currentTime.textContent = timeString;
+      
+      // Update date
+      const dateString = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      currentDate.textContent = dateString;
+      
+      // Update greeting based on time
+      const hour = now.getHours();
       let greeting = "Good evening, beautiful";
       if (hour >= 5 && hour < 12) greeting = "Good morning, sunshine";
       else if (hour >= 12 && hour < 18) greeting = "Good afternoon, lovely";
       
-      dynamicGreeting.textContent = greeting;
-    } catch (e) { console.error(e); }
+      timeGreeting.textContent = greeting;
+      
+      debugLog(`Time updated: ${timeString}, Greeting: ${greeting}`);
+    } catch (error) {
+      debugError("Failed to update time", error);
+    }
+  }
+
+  function startTimeDisplay() {
+    if (!currentTime || !currentDate || !timeGreeting) {
+      debugError("Time display elements not found");
+      return;
+    }
+    
+    // Update immediately
+    updateTime();
+    
+    // Update every second
+    setInterval(updateTime, 1000);
+    
+    debugLog("Time display started");
   }
 
   // ---- Mood system ----
@@ -454,7 +498,7 @@
       
       // Initialize all components
       if (greetingEl) setGreeting();
-      if (dynamicGreeting) setDynamicGreeting();
+      if (currentTime && currentDate && timeGreeting) startTimeDisplay();
       if (moodTags) loadMoods();
       if (reminderList) renderReminders();
       if (lettersContainer) renderLetters();

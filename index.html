@@ -34,10 +34,15 @@
       <div id="dashboardContent" class="dashboard-content">
         <h1 class="dash-title">🌸 Maia's Day</h1>
 
-        <!-- Greeting section -->
-        <section id="greetingSection" class="dashboard-section">
-          <h2 class="section-title">Good vibes</h2>
-          <div id="dynamicGreeting" class="greeting-text"></div>
+        <!-- Live Time Display -->
+        <section id="timeSection" class="dashboard-section time-display">
+          <div class="time-widget">
+            <div class="time-container">
+              <div id="currentTime" class="current-time">--:--:--</div>
+              <div id="currentDate" class="current-date">Loading...</div>
+            </div>
+            <div id="timeGreeting" class="time-greeting">Good morning</div>
+          </div>
         </section>
 
         <!-- Mood of the day -->
