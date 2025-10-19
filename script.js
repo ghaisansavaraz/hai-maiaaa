@@ -268,6 +268,8 @@
 
   // ---- Dynamic greeting for dashboard ----
   // Time Display Functions
+  let lastMinute = -1; // Track minute changes for flip animation
+  
   function updateTime() {
     debugLog("updateTime called");
     
@@ -278,27 +280,31 @@
     
     try {
       const now = new Date();
+      const currentMinute = now.getMinutes();
       
-          // Update time (HH MM SS) - no colons for minimalist look
-          const timeString = now.toLocaleTimeString('en-US', {
-            hour12: false,
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          }).replace(/:/g, ' ');
+      // Update time (HH MM SS) - no colons for minimalist look
+      const timeString = now.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }).replace(/:/g, ' ');
       
       if (headerCurrentTime) {
-        // Add clicking animation
-        headerCurrentTime.classList.add('clicking');
-        setTimeout(() => {
-          headerCurrentTime.classList.remove('clicking');
-        }, 100);
+        // Only flip animation when minute changes
+        if (currentMinute !== lastMinute) {
+          headerCurrentTime.classList.add('flipping');
+          setTimeout(() => {
+            headerCurrentTime.classList.remove('flipping');
+          }, 300);
+          lastMinute = currentMinute;
+        }
         
         headerCurrentTime.textContent = timeString;
         debugLog("Header time updated:", timeString);
       }
       
-      // Update date
+      // Update date (proper capitalization)
       const dateString = now.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -832,6 +838,9 @@
       
       // Initialize task system
       loadTasks();
+      
+      // Force re-render tasks to remove any old flower elements from cache
+      renderTasks();
       
       // Task event listeners
       const taskText = document.getElementById("taskText");

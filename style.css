@@ -609,11 +609,40 @@ body.hide-stars .shooting-stars-container {
   color: #fff;
   letter-spacing: 0.18em;
   text-shadow: 0 0 20px rgba(255,255,255,0.3);
-  transition: transform 0.1s ease;
+  transition: transform 0.3s ease;
+  position: relative;
 }
 
-.header-current-time.clicking {
-  transform: scale(1.05);
+/* Flip animation for minute changes */
+.header-current-time.flipping {
+  transform: rotateX(90deg);
+}
+
+/* Slow pulsing backlight */
+.header-current-time::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: slowPulse 4s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+@keyframes slowPulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 }
 
 .header-current-date {
@@ -621,7 +650,6 @@ body.hide-stars .shooting-stars-container {
   font-weight: 300;
   font-family: var(--font-stack);
   color: rgba(255,255,255,0.7);
-  text-transform: uppercase;
   letter-spacing: 0.1em;
   opacity: 0.8;
 }
