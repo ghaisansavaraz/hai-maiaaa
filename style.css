@@ -994,7 +994,7 @@ body.hide-stars .shooting-stars-container {
 /* light mode adjustments - ROBUST VERSION */
 
 /* High-End Form Inputs */
-.mood-input, .task-input, .reminder-input, .deadline-date, .deadline-time {
+.mood-input, .task-input, .reminder-input {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.1);
@@ -1010,18 +1010,78 @@ body.hide-stars .shooting-stars-container {
   letter-spacing: 0.02em;
 }
 
-.mood-input::placeholder, .task-input::placeholder, .reminder-input::placeholder, 
-.deadline-date::placeholder, .deadline-time::placeholder {
+.mood-input::placeholder, .task-input::placeholder, .reminder-input::placeholder {
   color: rgba(255,255,255,0.5);
   font-weight: 300;
 }
 
-.mood-input:focus, .task-input:focus, .reminder-input:focus, 
+.mood-input:focus, .task-input:focus, .reminder-input:focus {
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+  transform: translateY(-1px);
+}
+
+/* Date and Time Inputs */
+.deadline-date, .deadline-time {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-family: var(--font-stack);
+  font-size: 14px;
+  font-weight: 300;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  letter-spacing: 0.02em;
+}
+
 .deadline-date:focus, .deadline-time:focus {
   border-color: rgba(255,255,255,0.2);
   background: rgba(255,255,255,0.08);
   box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
   transform: translateY(-1px);
+}
+
+/* Style the date/time input icons and dropdowns */
+.deadline-date::-webkit-calendar-picker-indicator,
+.deadline-time::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.deadline-date::-webkit-calendar-picker-indicator:hover,
+.deadline-time::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.deadline-date::-webkit-datetime-edit-text,
+.deadline-time::-webkit-datetime-edit-text {
+  color: rgba(255,255,255,0.7);
+}
+
+.deadline-date::-webkit-datetime-edit-month-field,
+.deadline-date::-webkit-datetime-edit-day-field,
+.deadline-date::-webkit-datetime-edit-year-field,
+.deadline-time::-webkit-datetime-edit-hour-field,
+.deadline-time::-webkit-datetime-edit-minute-field {
+  color: #fff;
+}
+
+/* Firefox date/time input styling */
+.deadline-date::-moz-placeholder,
+.deadline-time::-moz-placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.deadline-date::-ms-input-placeholder,
+.deadline-time::-ms-input-placeholder {
+  color: rgba(255,255,255,0.5);
 }
 
 /* Task Controls Layout */
