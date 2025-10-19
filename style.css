@@ -609,6 +609,11 @@ body.hide-stars .shooting-stars-container {
   color: #fff;
   letter-spacing: 0.18em;
   text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  transition: transform 0.1s ease;
+}
+
+.header-current-time.clicking {
+  transform: scale(1.05);
 }
 
 .header-current-date {
@@ -1037,6 +1042,10 @@ body.hide-stars .shooting-stars-container {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
   letter-spacing: 0.02em;
+  /* Remove blue highlight and use system accent color */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-focus-ring-color: transparent;
+  accent-color: var(--accent-color, #007AFF);
 }
 
 .deadline-date:focus, .deadline-time:focus {
@@ -1082,6 +1091,37 @@ body.hide-stars .shooting-stars-container {
 .deadline-date::-ms-input-placeholder,
 .deadline-time::-ms-input-placeholder {
   color: rgba(255,255,255,0.5);
+}
+
+/* System accent color detection and application */
+:root {
+  --accent-color: #007AFF; /* Default iOS blue */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --accent-color: #007AFF; /* iOS blue for light mode */
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-color: #0A84FF; /* iOS blue for dark mode */
+  }
+}
+
+/* Additional system color support */
+.deadline-date, .deadline-time {
+  /* Use system accent color for calendar picker */
+  color-scheme: dark;
+  -webkit-color-scheme: dark;
+}
+
+/* Override any remaining blue highlights */
+.deadline-date:focus, .deadline-time:focus {
+  outline: none !important;
+  border-color: var(--accent-color, rgba(255,255,255,0.2)) !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.05) !important;
 }
 
 /* Task Controls Layout */
@@ -1686,32 +1726,3 @@ html, body, * {
   font-weight: 500;
 }
 
-.flower-bloom {
-  position: absolute;
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
-  font-size: 20px;
-  opacity: 0;
-  transition: all 0.8s ease;
-}
-
-.task-item.completed .flower-bloom {
-  opacity: 1;
-  animation: bloomGrow 1s ease-out;
-}
-
-@keyframes bloomGrow {
-  0% {
-    transform: translateY(-50%) scale(0);
-    opacity: 0;
-  }
-  50% {
-    transform: translateY(-50%) scale(1.3);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateY(-50%) scale(1);
-    opacity: 1;
-  }
-}

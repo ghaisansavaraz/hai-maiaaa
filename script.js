@@ -279,15 +279,21 @@
     try {
       const now = new Date();
       
-      // Update time (HH:MM:SS)
-      const timeString = now.toLocaleTimeString('en-US', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
+          // Update time (HH MM SS) - no colons for minimalist look
+          const timeString = now.toLocaleTimeString('en-US', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          }).replace(/:/g, ' ');
       
       if (headerCurrentTime) {
+        // Add clicking animation
+        headerCurrentTime.classList.add('clicking');
+        setTimeout(() => {
+          headerCurrentTime.classList.remove('clicking');
+        }, 100);
+        
         headerCurrentTime.textContent = timeString;
         debugLog("Header time updated:", timeString);
       }
@@ -792,7 +798,6 @@
         <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
         <div class="task-text">${task.text}</div>
         <div class="task-deadline">${deadlineText}</div>
-        <div class="flower-bloom">🌸</div>
       `;
       
       tasksContainer.appendChild(taskItem);
