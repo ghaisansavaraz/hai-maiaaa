@@ -540,15 +540,17 @@ body.hide-stars .shooting-stars-container {
   border-radius: 0;
 }
 
-/* Light theme dashboard - black with white text */
+/* Light theme dashboard - translucent dark glass for visibility */
 body.light-theme .dashboard {
-  background: 
-    linear-gradient(135deg, rgba(0,0,0,0.85), rgba(0,0,0,0.75)),
-    linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.7)) !important;
-  border: 1px solid rgba(0,0,0,0.3) !important;
-  box-shadow: 
-    0 32px 128px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.1) !important;
+  background:
+    linear-gradient(135deg, rgba(0,0,0,0.35), rgba(0,0,0,0.28)),
+    linear-gradient(45deg, rgba(0,0,0,0.22), rgba(0,0,0,0.18)) !important;
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  border: 1px solid rgba(0,0,0,0.18) !important;
+  box-shadow:
+    0 24px 96px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.08) !important;
   color: #ffffff !important;
 }
 
