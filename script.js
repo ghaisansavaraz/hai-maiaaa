@@ -173,7 +173,7 @@
   }
   class DynamicBackground {
     constructor() {
-      debugLog("Initializing original light/dark background system...");
+      debugLog("Initializing reversed light/dark background system with clouds and light rays...");
       this.updateBackground();
       this.startTimeSync();
     }
@@ -202,53 +202,53 @@
       
       debugLog(`Updating background to ${theme.name} mode`);
       
-      // Force override system theme detection
-      document.body.style.setProperty('color-scheme', 'dark', 'important');
-      document.documentElement.style.setProperty('color-scheme', 'dark', 'important');
-      
       // Remove any system theme classes
       document.body.classList.remove('light-mode', 'dark-mode');
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
-      // Robust black background - always black
-      document.body.style.setProperty('background', '#000000', 'important');
-      document.body.style.setProperty('background-color', '#000000', 'important');
-      
-      debugLog(`Applied robust black background`);
-      
-      // Set text color - always white for visibility
-      document.body.style.setProperty('color', '#ffffff', 'important');
-      
-      // Apply dashboard theme
-      const dashboard = document.getElementById('dashboard');
-      if (dashboard) {
-        if (theme.isLight) {
-          dashboard.classList.add('light-theme');
-          debugLog('Applied light theme to dashboard');
-        } else {
-          dashboard.classList.remove('light-theme');
-          debugLog('Applied dark theme to dashboard');
-        }
-      }
-      
-      // Apply night theme class for glow effects
       if (theme.isLight) {
-        document.body.classList.remove('night-theme');
-        debugLog('Removed night-theme class');
-      } else {
-        document.body.classList.add('night-theme');
-        debugLog('Applied night-theme class for time glow');
-      }
-      
-      // Control star visibility
-      if (theme.isLight) {
-        document.body.classList.add('hide-stars');
+        // Light mode: white background with black dashboard
+        document.body.style.setProperty('background', theme.gradient, 'important');
+        document.body.style.setProperty('background-size', '400% 400%', 'important');
+        document.body.style.setProperty('animation', 'gradientMove 6s linear infinite', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('color', '#000000', 'important');
+        document.body.style.setProperty('color-scheme', 'light', 'important');
+        document.documentElement.style.setProperty('color-scheme', 'light', 'important');
+        
+        // Apply light theme classes
+        document.body.classList.add('light-theme');
+        document.body.classList.remove('dark-theme');
+        
+        // Show day particles (clouds and light rays), hide stars
+        document.body.classList.add('show-day-particles');
         document.body.classList.remove('show-stars');
-        debugLog('Stars hidden');
+        document.body.classList.remove('hide-day-particles');
+        
+        debugLog('Applied light theme: white background, black dashboard, day particles');
       } else {
+        // Dark mode: black background with white dashboard
+        document.body.style.setProperty('background', theme.gradient, 'important');
+        document.body.style.setProperty('background-size', '400% 400%', 'important');
+        document.body.style.setProperty('animation', 'gradientMove 6s linear infinite', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('color', '#ffffff', 'important');
+        document.body.style.setProperty('color-scheme', 'dark', 'important');
+        document.documentElement.style.setProperty('color-scheme', 'dark', 'important');
+        
+        // Apply dark theme classes
+        document.body.classList.add('dark-theme');
+        document.body.classList.remove('light-theme');
+        
+        // Show stars, hide day particles
         document.body.classList.add('show-stars');
-        document.body.classList.remove('hide-stars');
-        debugLog('Stars visible');
+        document.body.classList.remove('show-day-particles');
+        document.body.classList.remove('hide-day-particles');
+        
+        // Apply night theme class for glow effects
+        document.body.classList.add('night-theme');
+        
+        debugLog('Applied dark theme: black background, white dashboard, stars');
       }
       
       debugLog(`Background updated: ${theme.name} mode`);
