@@ -1095,95 +1095,87 @@ body.light-theme .deadline-time {
    SPATIAL FLOATING LAYOUT
    ============================================ */
 
-/* Floating Dashboard Header */
+/* Floating Dashboard Header - CENTERED */
 .dashboard-header-floating {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
-  opacity: 0;
-  animation: headerFadeIn 1s ease 0.3s forwards;
   pointer-events: none;
+  text-align: center;
 }
 
 .header-clock {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .header-time-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .header-current-time {
-  font-size: clamp(36px, 8vw, 56px);
+  font-size: clamp(48px, 10vw, 80px);
   font-weight: 200;
-  font-family: var(--font-stack);
-  color: rgba(255, 255, 255, 0.12);
-  letter-spacing: 0.18em;
-  text-shadow: 0 0 20px rgba(255,255,255,0.08);
-  display: flex;
-  gap: 0.1em;
+  font-family: var(--font-mono);
+  color: rgba(255, 255, 255, 0.18);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 30px rgba(255,255,255,0.12);
+  white-space: nowrap;
 }
 
 /* Individual digit containers */
 .time-digit {
   display: inline-block;
   transition: transform 0.3s ease;
-  perspective: 100px;
 }
 
 .time-digit.flipping {
-  transform: rotateX(-90deg);
+  animation: flipDigit 0.3s ease;
+}
+
+@keyframes flipDigit {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(-90deg); opacity: 0.5; }
+  100% { transform: rotateX(0deg); }
 }
 
 .header-current-date {
-  font-size: clamp(14px, 3vw, 18px);
+  font-size: clamp(16px, 3.5vw, 22px);
   font-weight: 300;
   font-family: var(--font-stack);
-  color: rgba(255,255,255,0.09);
-  letter-spacing: 0.1em;
-  opacity: 0.8;
+  color: rgba(255,255,255,0.14);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .header-time-greeting {
-  font-size: clamp(16px, 4vw, 22px);
+  font-size: clamp(18px, 4vw, 26px);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.11);
+  color: rgba(255, 255, 255, 0.16);
   text-align: center;
-  opacity: 0.8;
-  letter-spacing: 0.02em;
-}
-
-@keyframes headerFadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
+  letter-spacing: 0.05em;
+  margin-top: 8px;
 }
 
 /* Light theme header */
 body.light-theme .header-current-time {
-  color: rgba(0, 0, 0, 0.08);
-  text-shadow: 0 0 20px rgba(0,0,0,0.04);
+  color: rgba(0, 0, 0, 0.12);
+  text-shadow: 0 0 30px rgba(0,0,0,0.06);
 }
 
 body.light-theme .header-current-date {
-  color: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.09);
 }
 
 body.light-theme .header-time-greeting {
-  color: rgba(0, 0, 0, 0.07);
+  color: rgba(0, 0, 0, 0.11);
 }
 
 /* Spatial Container */
@@ -1219,68 +1211,171 @@ body.light-theme .header-time-greeting {
   transform: scale(1);
 }
 
-/* Unique Positioning & Shapes */
+/* Unique Positioning & Shapes - BETTER SPACING */
 
-/* 1. MOOD - Top Left (Organic Blob) */
+/* ============================================
+   PANEL PERSONALITIES - VERY VISIBLE
+   ============================================ */
+
+/* 1. MOOD - Soft, Glowing, Organic */
 .floating-section.mood-card {
-  top: 32px;
-  left: 32px;
-  width: clamp(320px, 28vw, 380px);
-  max-height: 45vh;
+  top: 24px;
+  left: 24px;
+  width: clamp(300px, 26vw, 360px);
+  max-height: 40vh;
   overflow-y: auto;
   border-radius: 32px 24px 28px 36px !important;
-  animation: gentleBreathing 4s ease-in-out infinite;
+  border-left: 3px solid rgba(255, 255, 255, 0.35) !important;
+  background: 
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 60%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08)) !important;
+  box-shadow:
+    0 8px 32px rgba(255, 255, 255, 0.12),
+    inset 0 0 60px rgba(255, 255, 255, 0.08) !important;
+  animation: gentleGlow 4s ease-in-out infinite;
   transition-delay: 0.1s;
 }
 
-@keyframes gentleBreathing {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+@keyframes gentleGlow {
+  0%, 100% { 
+    box-shadow:
+      0 8px 32px rgba(255, 255, 255, 0.12),
+      inset 0 0 60px rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 12px 48px rgba(255, 255, 255, 0.18),
+      inset 0 0 80px rgba(255, 255, 255, 0.12);
+  }
 }
 
-/* 2. TASKS - Top Right (Architectural) */
+/* 2. TASKS - Sharp, Structured, Grid */
 .floating-section.tasks-card {
-  top: 32px;
-  right: 32px;
-  width: clamp(340px, 30vw, 420px);
-  max-height: 45vh;
+  top: 24px;
+  right: 24px;
+  width: clamp(320px, 28vw, 400px);
+  max-height: 40vh;
   overflow-y: auto;
-  border-radius: 16px 16px 8px 8px !important;
+  border-radius: 12px 12px 4px 4px !important;
+  border-top: 3px solid rgba(255, 255, 255, 0.32) !important;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 19px,
+      rgba(255, 255, 255, 0.08) 19px,
+      rgba(255, 255, 255, 0.08) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      rgba(255, 255, 255, 0.08) 19px,
+      rgba(255, 255, 255, 0.08) 20px
+    ),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06)) !important;
+  box-shadow:
+    0 8px 32px rgba(255, 255, 255, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
   transition-delay: 0.2s;
 }
 
 .floating-section.tasks-card:hover {
-  transform: translateY(-3px) !important;
+  transform: translateY(-4px) !important;
+  box-shadow:
+    0 16px 48px rgba(255, 255, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
-/* 3. REMINDERS - Bottom Left (Cozy Square) */
+/* 3. REMINDERS - Warm, Cozy, Soft Light */
 .floating-section.reminders-card {
-  bottom: 32px;
-  left: 32px;
-  width: clamp(320px, 27vw, 360px);
-  max-height: 45vh;
+  bottom: 24px;
+  left: 24px;
+  width: clamp(300px, 26vw, 350px);
+  max-height: 40vh;
   overflow-y: auto;
   border-radius: 24px !important;
+  border: 2px solid rgba(255, 255, 255, 0.28) !important;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 50%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.15), transparent 50%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.07)) !important;
+  box-shadow:
+    0 8px 32px rgba(255, 255, 255, 0.10),
+    inset 0 0 40px rgba(255, 255, 255, 0.06) !important;
   transition-delay: 0.3s;
 }
 
 .floating-section.reminders-card:hover {
-  transform: translateY(-3px) rotate(2deg) !important;
+  transform: translateY(-3px) rotate(-1deg) !important;
+  box-shadow:
+    0 16px 48px rgba(255, 255, 255, 0.16),
+    inset 0 0 60px rgba(255, 255, 255, 0.10) !important;
 }
 
-/* 4. LETTERS - Bottom Right (Envelope Shape) */
+/* 4. LETTERS - Elegant, Envelope Fold */
 .floating-section.letters-card {
-  bottom: 32px;
-  right: 32px;
-  width: clamp(320px, 28vw, 380px);
-  max-height: 45vh;
+  bottom: 24px;
+  right: 24px;
+  width: clamp(300px, 26vw, 360px);
+  max-height: 40vh;
   overflow-y: auto;
   border-radius: 20px 20px 4px 4px !important;
+  border-right: 3px solid rgba(255, 255, 255, 0.30) !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.30) !important;
+  background: 
+    linear-gradient(135deg, transparent 48%, rgba(255, 255, 255, 0.20) 49%, rgba(255, 255, 255, 0.20) 51%, transparent 52%),
+    linear-gradient(-135deg, transparent 48%, rgba(255, 255, 255, 0.20) 49%, rgba(255, 255, 255, 0.20) 51%, transparent 52%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.08)) !important;
+  background-size: 100% 100%, 100% 100%, 100% 100%;
+  background-position: center top, center top, 0 0;
+  box-shadow:
+    0 8px 32px rgba(255, 255, 255, 0.12),
+    inset 0 2px 0 rgba(255, 255, 255, 0.18) !important;
   transition-delay: 0.4s;
 }
 
 .floating-section.letters-card:hover {
-  transform: translateY(-4px) scale(1.02) !important;
+  transform: translateY(-5px) !important;
+  box-shadow:
+    0 20px 60px rgba(255, 255, 255, 0.18),
+    inset 0 2px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Light Mode Adjustments */
+body.light-theme .floating-section.mood-card {
+  border-left-color: rgba(0, 0, 0, 0.28) !important;
+  background: 
+    radial-gradient(circle at top left, rgba(0, 0, 0, 0.12), transparent 60%),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.05)) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    inset 0 0 60px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-theme .floating-section.tasks-card {
+  border-top-color: rgba(0, 0, 0, 0.25) !important;
+  background: 
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0, 0, 0, 0.05) 19px, rgba(0, 0, 0, 0.05) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0, 0, 0, 0.05) 19px, rgba(0, 0, 0, 0.05) 20px),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04)) !important;
+}
+
+body.light-theme .floating-section.reminders-card {
+  border-color: rgba(0, 0, 0, 0.22) !important;
+  background:
+    radial-gradient(circle at top left, rgba(0, 0, 0, 0.14), transparent 50%),
+    radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.10), transparent 50%),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04)) !important;
+}
+
+body.light-theme .floating-section.letters-card {
+  border-right-color: rgba(0, 0, 0, 0.24) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.24) !important;
+  background: 
+    linear-gradient(135deg, transparent 48%, rgba(0, 0, 0, 0.15) 49%, rgba(0, 0, 0, 0.15) 51%, transparent 52%),
+    linear-gradient(-135deg, transparent 48%, rgba(0, 0, 0, 0.15) 49%, rgba(0, 0, 0, 0.15) 51%, transparent 52%),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.05)) !important;
 }
 
 /* Scrollbar Styling for Floating Sections */
