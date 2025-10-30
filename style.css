@@ -2978,3 +2978,23 @@ body.light-theme .dashboard-card.letters-card {
   font-weight: 500;
 }
 
+/* ============================================
+   ROBUST SIZE OVERRIDES (high specificity)
+   ============================================ */
+.spatial-container .floating-section.mood-card {
+  width: clamp(360px, 30vw, 440px) !important;
+  max-height: 56vh !important;
+}
+.spatial-container .floating-section.tasks-card {
+  width: clamp(380px, 32vw, 500px) !important;
+  max-height: 56vh !important;
+}
+.spatial-container .floating-section.reminders-card {
+  width: clamp(360px, 30vw, 460px) !important;
+  max-height: 56vh !important;
+}
+.spatial-container .floating-section.letters-card {
+  width: clamp(360px, 30vw, 460px) !important;
+  max-height: 56vh !important;
+}
+
