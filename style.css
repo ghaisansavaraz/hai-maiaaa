@@ -1708,10 +1708,13 @@ body.light-theme .greeting {
 }
 
 .reminders-empty-icon {
-  font-size: 48px;
+  font-size: 64px;
+  font-weight: 200;
   margin-bottom: 16px;
-  opacity: 0.4;
-  filter: grayscale(0.3);
+  opacity: 0.3;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-stack);
+  letter-spacing: 0.1em;
 }
 
 .reminders-empty-text {

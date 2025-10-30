@@ -670,8 +670,8 @@
         const emptyState = document.createElement("div");
         emptyState.className = "reminders-empty-state";
         emptyState.innerHTML = `
-          <div class="reminders-empty-icon">📝</div>
-          <div class="reminders-empty-text">No reminders yet<br>Add one to get started</div>
+          <div class="reminders-empty-icon">∅</div>
+          <div class="reminders-empty-text">No reminders for Maia cantik yet, add one?</div>
         `;
         reminderList.appendChild(emptyState);
         return;
