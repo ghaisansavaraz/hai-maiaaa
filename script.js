@@ -608,6 +608,56 @@
     }, 1500);
   }
 
+  // ---- Edit Reminder Functionality ----
+  function makeEditable(textEl, contentWrapper, index) {
+    const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const originalText = arr[index];
+    
+    // Create input element
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "reminder-text-input";
+    input.value = originalText;
+    
+    // Replace text with input
+    contentWrapper.innerHTML = "";
+    contentWrapper.appendChild(input);
+    input.focus();
+    input.select();
+    
+    // Save function
+    const save = () => {
+      const newText = input.value.trim();
+      if (newText && newText !== originalText) {
+        arr[index] = newText;
+        saveReminders(arr);
+        renderReminders();
+      } else {
+        renderReminders();
+      }
+    };
+    
+    // Cancel function
+    const cancel = () => {
+      renderReminders();
+    };
+    
+    // Event listeners
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        save();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        cancel();
+      }
+    });
+    
+    input.addEventListener("blur", () => {
+      setTimeout(save, 100);
+    });
+  }
+
   // ---- Reminders storage & UI with individual buttons ----
   function loadReminders() {
     try {
@@ -615,10 +665,25 @@
       const arr = raw ? JSON.parse(raw) : [];
       reminderList.innerHTML = "";
       
+      // Show empty state if no reminders
+      if (arr.length === 0) {
+        const emptyState = document.createElement("div");
+        emptyState.className = "reminders-empty-state";
+        emptyState.innerHTML = `
+          <div class="reminders-empty-icon">📝</div>
+          <div class="reminders-empty-text">No reminders yet<br>Add one to get started</div>
+        `;
+        reminderList.appendChild(emptyState);
+        return;
+      }
+      
       arr.forEach((reminderText, index) => {
         // Create card container
         const card = document.createElement("div");
         card.className = "reminder-card";
+        
+        // Staggered animation delay
+        card.style.animationDelay = `${index * 0.05}s`;
         
         // Create content wrapper
         const contentWrapper = document.createElement("div");
@@ -628,6 +693,14 @@
         const textEl = document.createElement("p");
         textEl.className = "reminder-text";
         textEl.textContent = reminderText;
+        textEl.setAttribute("title", "Double-click to edit");
+        
+        // Double-click to edit
+        textEl.addEventListener("dblclick", (e) => {
+          e.stopPropagation();
+          makeEditable(textEl, contentWrapper, index);
+        });
+        
         contentWrapper.appendChild(textEl);
         
         // Create actions container
@@ -653,9 +726,7 @@
         deleteBtn.setAttribute("title", "Delete reminder");
         deleteBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          const updated = arr.filter((_, i) => i !== index);
-          saveReminders(updated);
-          renderReminders();
+          deleteReminder(card, index);
         });
         
         // Assemble the card
@@ -668,6 +739,20 @@
     } catch (e) { 
       debugError("Failed to load reminders:", e);
     }
+  }
+  
+  // ---- Delete with animation ----
+  function deleteReminder(cardEl, index) {
+    // Add removing class for animation
+    cardEl.classList.add("removing");
+    
+    // Wait for animation to complete
+    setTimeout(() => {
+      const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const updated = arr.filter((_, i) => i !== index);
+      saveReminders(updated);
+      renderReminders();
+    }, 400); // Match animation duration
   }
   function saveReminders(arr) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));

@@ -1474,12 +1474,52 @@ body.light-theme .greeting {
   display: flex;
   align-items: center;
   gap: 12px;
+  opacity: 0;
+  animation: slideInFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .reminder-card:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.15);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.reminder-card:hover .reminder-text {
+  color: rgba(255, 255, 255, 1);
+}
+
+.reminder-card.removing {
+  animation: slideOutFade 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Fade-in animation for new cards */
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-out animation for removed cards */
+@keyframes slideOutFade {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 100px;
+    margin-bottom: 12px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
 .reminder-card::before {
@@ -1495,15 +1535,56 @@ body.light-theme .greeting {
 .reminder-card-content {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .reminder-text {
   font-size: 14px;
   font-weight: 300;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.4;
   margin: 0;
   word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
+  transition: color 0.3s ease;
+  cursor: text;
+}
+
+.reminder-text:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Edit mode for reminder text */
+.reminder-text-input {
+  font-size: 14px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.4;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08)),
+    linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: var(--font-stack);
+  width: 100%;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+}
+
+.reminder-text-input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1)),
+    linear-gradient(45deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15);
 }
 
 .reminder-card-actions {
@@ -1589,16 +1670,19 @@ body.light-theme .greeting {
     linear-gradient(45deg, rgba(255, 107, 107, 0.12), rgba(255, 107, 107, 0.08));
   border-color: rgba(255, 107, 107, 0.4);
   color: rgba(255, 107, 107, 1);
-  animation: deletePulse 1.5s ease-in-out infinite;
+  animation: deletePulse 1.5s ease-in-out infinite !important;
+  transform: translateY(-2px);
 }
 
 /* Pulsing animation for delete button */
 @keyframes deletePulse {
   0%, 100% {
-    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.2);
+    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+    transform: translateY(-2px) scale(1);
   }
   50% {
-    box-shadow: 0 4px 24px rgba(255, 107, 107, 0.4);
+    box-shadow: 0 6px 32px rgba(255, 107, 107, 0.6);
+    transform: translateY(-2px) scale(1.05);
   }
 }
 
@@ -1609,6 +1693,44 @@ body.light-theme .greeting {
     linear-gradient(45deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.1));
   border-color: rgba(76, 175, 80, 0.4);
   color: rgba(76, 175, 80, 1);
+}
+
+/* Empty State for Reminders */
+.reminders-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.reminders-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+  filter: grayscale(0.3);
+}
+
+.reminders-empty-text {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Coming Soon Style */
