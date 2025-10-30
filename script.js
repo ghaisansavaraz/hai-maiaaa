@@ -1,14 +1,11 @@
-/* Robust countdown (self-correcting), greeting fade-in, animated bg already handled in CSS.
-   - Targets Jakarta midnight Oct 19 2025
-   - Works across timezones and devices
-   - Triple-click bypass with 'maiacantik'
+/* Maiaaa's Office - Personal dashboard with mood tracking, tasks, reminders, and letters
+   - Dynamic time-based theming (light/dark)
+   - Local storage for persistence
    - Console logs for debugging
 */
 
 (() => {
   // ---- CONFIG ----
-  const TARGET_ISO = "2025-10-19T00:00:00+07:00"; // Jakarta midnight
-  const BYPASS_CODE = "maiacantik";
   const STORAGE_KEY = "maiaaa_reminders_v1";
   const MOOD_STORAGE_KEY = "maiaaa_mood_v1";
   const TASKS_STORAGE_KEY = "maiaaa_tasks_v1";
@@ -55,25 +52,10 @@
   }
 
   // ---- ELEMENTS ----
-  const timerEl = document.getElementById("timer");
-  const greetingEl = document.getElementById("greeting");
-  const secretInput = document.getElementById("secretInput");
-  const countdownContainer = document.getElementById("countdownContainer");
   const spatialContainer = document.getElementById("spatialContainer");
-
-  // Section elements
   const moodInput = document.getElementById("moodInput");
   const moodTags = document.getElementById("moodTags");
   const lettersContainer = document.getElementById("lettersContainer");
-  
-  // Debug element availability
-  debugLog("Element availability check:", {
-    timerEl: !!timerEl,
-    spatialContainer: !!spatialContainer,
-    lettersContainer: !!lettersContainer
-  });
-
-  // Existing elements
   const reminderText = document.getElementById("reminderText");
   const addReminderBtn = document.getElementById("addReminder");
   const reminderList = document.getElementById("reminderList");
@@ -82,46 +64,14 @@
   const importFile = document.getElementById("importFile");
   const clearReminders = document.getElementById("clearReminders");
 
-  // Validate critical elements
-  const criticalElements = { timerEl, countdownContainer, dashboard };
-  Object.entries(criticalElements).forEach(([name, element]) => {
-    if (!element) {
-      debugError(`Critical element ${name} not found!`);
-    } else {
-      debugLog(`✓ ${name} element found`);
-    }
+  // Debug element availability
+  debugLog("Element availability check:", {
+    spatialContainer: !!spatialContainer,
+    lettersContainer: !!lettersContainer,
+    moodTags: !!moodTags,
+    reminderList: !!reminderList
   });
 
-  // ---- Setup target ms robustly ----
-  let targetMs = Date.parse(TARGET_ISO);
-  if (isNaN(targetMs)) {
-    // fallback: manually compute UTC milliseconds for Jakarta midnight
-    try {
-      const parts = TARGET_ISO.slice(0, 10).split("-").map(Number); // YYYY-MM-DD
-      const [y, m, d] = parts;
-      // Jakarta midnight UTC = Date.UTC(y,m-1,d,0,0,0) - (7 hours)
-      targetMs = Date.UTC(y, m - 1, d, 0, 0, 0) - 7 * 3600 * 1000;
-      console.warn("[Countdown] used manual targetMs fallback:", new Date(targetMs).toString());
-    } catch (e) {
-      console.error("[Countdown] failed to build fallback target:", e);
-    }
-  }
-  console.log("[Countdown] target parsed ->", new Date(targetMs).toString());
-
-  // ---- Greeting (with fade-in class) ----
-  function setGreeting() {
-    try {
-      const hour = new Date().getHours();
-      let g = "Good evening";
-      if (hour >= 5 && hour < 12) g = "Good morning";
-      else if (hour >= 12 && hour < 18) g = "Good afternoon";
-      greetingEl.textContent = `${g}, Maiaaa cantik`;
-      // reveal greeting after slight delay
-      requestAnimationFrame(() => {
-        setTimeout(() => greetingEl.classList.add("visible"), 500);
-      });
-    } catch (e) { console.error(e); }
-  }
 
   // ---- Shooting Stars System ----
   class ShootingStars {
@@ -332,91 +282,20 @@
     debugLog(`Rendered ${LETTERS_DATA.length} letters`);
   }
 
-  // ---- Countdown compute & render ----
-  function computeRemaining(msNow = Date.now()) {
-    const diff = targetMs - msNow;
-    if (diff <= 0) return { total: 0, d: 0, h: 0, m: 0, s: 0 };
-    const sec = Math.floor(diff / 1000);
-    const d = Math.floor(sec / 86400);
-    const h = Math.floor((sec % 86400) / 3600);
-    const m = Math.floor((sec % 3600) / 60);
-    const s = sec % 60;
-    return { total: diff, d, h, m, s };
-  }
-
-  let intervalId = null;
-  function renderCountdownOnce() {
-    const r = computeRemaining();
-    if (r.total <= 0) {
-      // ensure it shows 00 ... then show dashboard
-      timerEl.textContent = "00 00 00 00";
-      showDashboard();
-      return;
-    }
-    // animate update
-    timerEl.style.opacity = "0";
-    timerEl.style.transform = "translateY(8px)";
-    setTimeout(() => {
-      timerEl.textContent = `${String(r.d).padStart(2, "0")} ${String(r.h).padStart(2, "0")} ${String(r.m).padStart(2, "0")} ${String(r.s).padStart(2, "0")}`;
-      timerEl.style.opacity = "1";
-      timerEl.style.transform = "translateY(0)";
-    }, 140);
-  }
-
-  function start() {
-    renderCountdownOnce();
-    if (intervalId) clearInterval(intervalId);
-    intervalId = setInterval(renderCountdownOnce, 1000);
-  }
-
-  // ---- Show spatial layout (fade out countdown, fade in sections) ----
+  // ---- Show spatial layout immediately ----
   function showDashboard() {
-    debugLog("Starting spatial layout transition...");
+    debugLog("Showing spatial layout...");
     
-    if (intervalId) { 
-      clearInterval(intervalId); 
-      intervalId = null; 
+    if (spatialContainer) {
+      // Trigger spatial layout appearance with stagger
+      setTimeout(() => {
+        spatialContainer.classList.add("visible");
+        debugLog("Spatial sections revealed");
+      }, 100);
+    } else {
+      debugError("spatialContainer element not found!");
     }
-    
-    countdownContainer.style.opacity = "0";
-    
-    setTimeout(() => {
-      countdownContainer.classList.add("hidden");
-      
-      if (spatialContainer) {
-        debugLog("Showing spatial container...");
-        spatialContainer.classList.remove("hidden");
-        spatialContainer.setAttribute("aria-hidden", "false");
-        
-        // Trigger spatial layout appearance
-        setTimeout(() => {
-          spatialContainer.classList.add("visible");
-          debugLog("Spatial sections revealed");
-        }, 100);
-      } else {
-        debugError("spatialContainer element not found!");
-      }
-    }, 600);
   }
-
-  // ---- Triple-click bypass ----
-  let clicks = 0;
-  timerEl.addEventListener("click", () => {
-    clicks++;
-    if (clicks === 3) {
-      secretInput.style.display = "block";
-      secretInput.focus();
-    }
-    setTimeout(() => (clicks = 0), 700);
-  });
-  secretInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      const v = secretInput.value.trim();
-      secretInput.value = "";
-      secretInput.style.display = "none";
-      if (v === BYPASS_CODE) showDashboard();
-    }
-  });
 
   // ---- Copy to Clipboard with fallback ----
   function copyToClipboard(text, buttonEl) {
@@ -855,7 +734,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     try {
       debugLog("Initializing application...");
-      debugLog("Target date:", new Date(targetMs).toString());
       
       // Initialize dynamic background first
       dynamicBackground = new DynamicBackground();
@@ -867,7 +745,6 @@
       applyTheme();
       
       // Initialize all components
-      if (greetingEl) setGreeting();
       if (moodTags) loadMoods();
       if (reminderList) renderReminders();
       if (lettersContainer) renderLetters();
@@ -908,14 +785,8 @@
         });
       }
       
-      
-      // Start countdown
-      if (timerEl && countdownContainer) {
-        start();
-        debugLog("Countdown started");
-      } else {
-        debugError("Failed to start countdown - missing elements");
-      }
+      // Show dashboard immediately
+      showDashboard();
       
       debugLog("Application initialized successfully");
     } catch (e) {
