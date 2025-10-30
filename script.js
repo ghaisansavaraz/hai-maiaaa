@@ -7,8 +7,7 @@
 
 (() => {
   // ---- CONFIG ----
-  const TARGET_ISO = "2025-10-19T00:00:00+07:00"; // Jakarta midnight
-  const BYPASS_CODE = "maiacantik";
+  // Countdown has ended; remove countdown/bypass
   const STORAGE_KEY = "maiaaa_reminders_v1";
   const MOOD_STORAGE_KEY = "maiaaa_mood_v1";
   const TASKS_STORAGE_KEY = "maiaaa_tasks_v1";
@@ -57,10 +56,11 @@
   }
 
   // ---- ELEMENTS ----
-  const timerEl = document.getElementById("timer");
-  const greetingEl = document.getElementById("greeting");
-  const secretInput = document.getElementById("secretInput");
-  const countdownContainer = document.getElementById("countdownContainer");
+  // Removed countdown elements
+  const timerEl = null;
+  const greetingEl = null;
+  const secretInput = null;
+  const countdownContainer = null;
   const dashboard = document.getElementById("dashboard");
   const centerContainer = document.querySelector(".center");
 
@@ -95,7 +95,7 @@
   const clearReminders = document.getElementById("clearReminders");
 
   // Validate critical elements
-  const criticalElements = { timerEl, countdownContainer, dashboard };
+  const criticalElements = { dashboard };
   Object.entries(criticalElements).forEach(([name, element]) => {
     if (!element) {
       debugError(`Critical element ${name} not found!`);
@@ -104,36 +104,7 @@
     }
   });
 
-  // ---- Setup target ms robustly ----
-  let targetMs = Date.parse(TARGET_ISO);
-  if (isNaN(targetMs)) {
-    // fallback: manually compute UTC milliseconds for Jakarta midnight
-    try {
-      const parts = TARGET_ISO.slice(0, 10).split("-").map(Number); // YYYY-MM-DD
-      const [y, m, d] = parts;
-      // Jakarta midnight UTC = Date.UTC(y,m-1,d,0,0,0) - (7 hours)
-      targetMs = Date.UTC(y, m - 1, d, 0, 0, 0) - 7 * 3600 * 1000;
-      console.warn("[Countdown] used manual targetMs fallback:", new Date(targetMs).toString());
-    } catch (e) {
-      console.error("[Countdown] failed to build fallback target:", e);
-    }
-  }
-  console.log("[Countdown] target parsed ->", new Date(targetMs).toString());
-
-  // ---- Greeting (with fade-in class) ----
-  function setGreeting() {
-    try {
-      const hour = new Date().getHours();
-      let g = "Good evening";
-      if (hour >= 5 && hour < 12) g = "Good morning";
-      else if (hour >= 12 && hour < 18) g = "Good afternoon";
-      greetingEl.textContent = `${g}, Maiaaa cantik`;
-      // reveal greeting after slight delay
-      requestAnimationFrame(() => {
-        setTimeout(() => greetingEl.classList.add("visible"), 500);
-      });
-    } catch (e) { console.error(e); }
-  }
+  // Countdown and its greeting removed
 
   // ---- Shooting Stars System ----
   class ShootingStars {
@@ -443,90 +414,26 @@
     });
   }
 
-  // ---- Countdown compute & render ----
-  function computeRemaining(msNow = Date.now()) {
-    const diff = targetMs - msNow;
-    if (diff <= 0) return { total: 0, d: 0, h: 0, m: 0, s: 0 };
-    const sec = Math.floor(diff / 1000);
-    const d = Math.floor(sec / 86400);
-    const h = Math.floor((sec % 86400) / 3600);
-    const m = Math.floor((sec % 3600) / 60);
-    const s = sec % 60;
-    return { total: diff, d, h, m, s };
-  }
-
-  let intervalId = null;
-  function renderCountdownOnce() {
-    const r = computeRemaining();
-    if (r.total <= 0) {
-      // ensure it shows 00 ... then show dashboard
-      timerEl.textContent = "00 00 00 00";
-      showDashboard();
-      return;
-    }
-    // animate update
-    timerEl.style.opacity = "0";
-    timerEl.style.transform = "translateY(8px)";
-    setTimeout(() => {
-      timerEl.textContent = `${String(r.d).padStart(2, "0")} ${String(r.h).padStart(2, "0")} ${String(r.m).padStart(2, "0")} ${String(r.s).padStart(2, "0")}`;
-      timerEl.style.opacity = "1";
-      timerEl.style.transform = "translateY(0)";
-    }, 140);
-  }
-
-  function start() {
-    renderCountdownOnce();
-    if (intervalId) clearInterval(intervalId);
-    intervalId = setInterval(renderCountdownOnce, 1000);
-  }
+  // Countdown logic removed
 
   // ---- Show dashboard (fade out countdown, fade in dashboard) ----
   function showDashboard() {
-    debugLog("Starting dashboard transition...");
-    
-    if (intervalId) { 
-      clearInterval(intervalId); 
-      intervalId = null; 
-    }
-    
-    countdownContainer.style.opacity = "0";
-    
-    setTimeout(() => {
-      countdownContainer.classList.add("hidden");
-      
-      if (dashboard) {
-        debugLog("Showing dashboard element...");
-        dashboard.classList.remove("hidden");
-        
-        // Add dashboard-active class to center container for proper layout
-        if (centerContainer) {
-          centerContainer.classList.add("dashboard-active");
-        }
-        
-        // Force visibility with immediate styles
-        dashboard.style.opacity = "1";
-        dashboard.style.transform = "translateY(0) scale(1)";
-        
-        // Show dashboard content with staggered section reveals
-        setTimeout(() => {
-          if (dashboardContent) {
-            debugLog("Showing dashboard content...");
-            dashboardContent.classList.add("visible");
-            dashboardContent.style.opacity = "1";
-            dashboardContent.style.transform = "translateY(0)";
-            
-            setTimeout(() => {
-              debugLog("Revealing sections...");
-              revealSections();
-            }, 300);
-          } else {
-            debugError("dashboardContent element not found!");
-          }
-        }, 100);
-      } else {
-        debugError("dashboard element not found!");
+    // Immediate show (countdown removed)
+    if (dashboard) {
+      dashboard.classList.remove("hidden");
+      dashboard.classList.add("visible");
+      if (centerContainer) {
+        centerContainer.classList.add("dashboard-active");
       }
-    }, 600);
+      dashboard.style.opacity = "1";
+      dashboard.style.transform = "translateY(0) scale(1)";
+      if (dashboardContent) {
+        dashboardContent.classList.add("visible");
+        dashboardContent.style.opacity = "1";
+        dashboardContent.style.transform = "translateY(0)";
+        setTimeout(() => revealSections(), 300);
+      }
+    }
   }
 
   function revealSections() {
@@ -543,24 +450,7 @@
     });
   }
 
-  // ---- Triple-click bypass ----
-  let clicks = 0;
-  timerEl.addEventListener("click", () => {
-    clicks++;
-    if (clicks === 3) {
-      secretInput.style.display = "block";
-      secretInput.focus();
-    }
-    setTimeout(() => (clicks = 0), 700);
-  });
-  secretInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      const v = secretInput.value.trim();
-      secretInput.value = "";
-      secretInput.style.display = "none";
-      if (v === BYPASS_CODE) showDashboard();
-    }
-  });
+  // Triple-click bypass removed
 
   // ---- Copy to Clipboard with fallback ----
   function copyToClipboard(text, buttonEl) {
