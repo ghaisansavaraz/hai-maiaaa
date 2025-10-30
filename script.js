@@ -637,7 +637,7 @@
         // Create copy button
         const copyBtn = document.createElement("button");
         copyBtn.className = "btn-icon btn-copy";
-        copyBtn.textContent = "📋";
+        copyBtn.textContent = "⎘";
         copyBtn.setAttribute("aria-label", "Copy reminder");
         copyBtn.setAttribute("title", "Copy to clipboard");
         copyBtn.addEventListener("click", (e) => {

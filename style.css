@@ -1561,30 +1561,45 @@ body.light-theme .greeting {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Copy Button - Blue accent */
+/* Copy Button - Elegant monochrome with subtle hover */
 .btn-copy {
-  color: rgba(100, 200, 255, 0.9);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  font-weight: 300;
 }
 
 .btn-copy:hover {
   background: 
-    linear-gradient(135deg, rgba(100, 200, 255, 0.12), rgba(100, 200, 255, 0.08)),
-    linear-gradient(45deg, rgba(100, 200, 255, 0.1), rgba(100, 200, 255, 0.05));
-  border-color: rgba(100, 200, 255, 0.3);
-  color: rgba(100, 200, 255, 1);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08)),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 1);
 }
 
-/* Delete Button - Red accent */
+/* Delete Button - Monochrome default, red pulsing on hover */
 .btn-delete {
-  color: rgba(255, 107, 107, 0.9);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  font-weight: 300;
 }
 
 .btn-delete:hover {
   background: 
-    linear-gradient(135deg, rgba(255, 107, 107, 0.12), rgba(255, 107, 107, 0.08)),
-    linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
-  border-color: rgba(255, 107, 107, 0.3);
+    linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.1)),
+    linear-gradient(45deg, rgba(255, 107, 107, 0.12), rgba(255, 107, 107, 0.08));
+  border-color: rgba(255, 107, 107, 0.4);
   color: rgba(255, 107, 107, 1);
+  animation: deletePulse 1.5s ease-in-out infinite;
+}
+
+/* Pulsing animation for delete button */
+@keyframes deletePulse {
+  0%, 100% {
+    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(255, 107, 107, 0.4);
+  }
 }
 
 /* Success state for copy button */
