@@ -738,14 +738,13 @@ body.light-theme .deadline-time {
 }
 
 .header-current-time {
-  font-size: clamp(36px, 8vw, 56px);
+  font-size: clamp(48px, 10vw, 80px);
   font-weight: 200;
   font-family: var(--font-stack);
-  color: #fff;
+  color: rgba(255, 255, 255, 0.40);
   letter-spacing: 0.18em;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
-  display: flex;
-  gap: 0.1em;
+  text-shadow: 0 0 40px rgba(255,255,255,0.22);
+  white-space: nowrap;
 }
 
 /* Individual digit containers */
@@ -760,21 +759,21 @@ body.light-theme .deadline-time {
 }
 
 .header-current-date {
-  font-size: clamp(14px, 3vw, 18px);
+  font-size: clamp(16px, 3.5vw, 22px);
   font-weight: 300;
   font-family: var(--font-stack);
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 0.1em;
-  opacity: 0.8;
+  color: rgba(255,255,255,0.30);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .header-time-greeting {
-  font-size: clamp(16px, 4vw, 22px);
+  font-size: clamp(18px, 4vw, 26px);
   font-weight: 300;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.34);
   text-align: center;
-  opacity: 0.8;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  margin-top: 8px;
 }
 
 /* Dashboard Grid Layout */
@@ -1121,12 +1120,12 @@ body.light-theme .deadline-time {
 }
 
 .header-current-time {
-  font-size: clamp(56px, 12vw, 96px);
+  font-size: clamp(48px, 10vw, 80px);
   font-weight: 200;
   font-family: var(--font-mono);
-  color: rgba(255, 255, 255, 0.45);
-  letter-spacing: 0.2em;
-  text-shadow: 0 0 40px rgba(255,255,255,0.25);
+  color: rgba(255, 255, 255, 0.40);
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 40px rgba(255,255,255,0.22);
   white-space: nowrap;
 }
 
@@ -1147,18 +1146,18 @@ body.light-theme .deadline-time {
 }
 
 .header-current-date {
-  font-size: clamp(18px, 4vw, 26px);
+  font-size: clamp(16px, 3.5vw, 22px);
   font-weight: 300;
   font-family: var(--font-stack);
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.30);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .header-time-greeting {
-  font-size: clamp(20px, 4.5vw, 30px);
+  font-size: clamp(18px, 4vw, 26px);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.40);
+  color: rgba(255, 255, 255, 0.34);
   text-align: center;
   letter-spacing: 0.05em;
   margin-top: 8px;
@@ -1166,16 +1165,16 @@ body.light-theme .deadline-time {
 
 /* Light theme header */
 body.light-theme .header-current-time {
-  color: rgba(0, 0, 0, 0.35);
-  text-shadow: 0 0 40px rgba(0,0,0,0.15);
+  color: rgba(0, 0, 0, 0.30);
+  text-shadow: 0 0 40px rgba(0,0,0,0.12);
 }
 
 body.light-theme .header-current-date {
-  color: rgba(0, 0, 0, 0.28);
+  color: rgba(0, 0, 0, 0.24);
 }
 
 body.light-theme .header-time-greeting {
-  color: rgba(0, 0, 0, 0.32);
+  color: rgba(0, 0, 0, 0.28);
 }
 
 /* Spatial Container */
