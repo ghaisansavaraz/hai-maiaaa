@@ -192,7 +192,8 @@
         return { 
           name: 'dark', 
           isLight: false,
-          gradient: 'linear-gradient(45deg, #000000, #2a2a2a, #1a1a1a, #333333, #000000, #444444, #111111)'
+          // Use solid black at night to avoid any glare
+          gradient: '#000000'
         };
       }
     }
@@ -227,10 +228,10 @@
         
         debugLog('Applied light theme: white background, black dashboard, day particles');
       } else {
-        // Dark mode: black background with white dashboard
-        document.body.style.setProperty('background', theme.gradient, 'important');
-        document.body.style.setProperty('background-size', '400% 400%', 'important');
-        document.body.style.setProperty('animation', 'gradientMove 6s linear infinite', 'important');
+        // Dark mode: enforce pure black background with no animation to remove glare
+        document.body.style.setProperty('background', '#000000', 'important');
+        document.body.style.removeProperty('background-size');
+        document.body.style.setProperty('animation', 'none', 'important');
         document.body.style.setProperty('background-attachment', 'fixed', 'important');
         document.body.style.setProperty('color', '#ffffff', 'important');
         document.body.style.setProperty('color-scheme', 'dark', 'important');
