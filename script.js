@@ -561,28 +561,113 @@
     }
   });
 
-  // ---- Reminders storage & simple UI ----
+  // ---- Copy to Clipboard with fallback ----
+  function copyToClipboard(text, buttonEl) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          showCopySuccess(buttonEl);
+          debugLog("Copied to clipboard:", text);
+        })
+        .catch((err) => {
+          debugError("Clipboard API failed, using fallback", err);
+          fallbackCopy(text, buttonEl);
+        });
+    } else {
+      fallbackCopy(text, buttonEl);
+    }
+  }
+
+  function fallbackCopy(text, buttonEl) {
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      textarea.style.pointerEvents = "none";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      showCopySuccess(buttonEl);
+      debugLog("Copied via fallback:", text);
+    } catch (e) {
+      debugError("Failed to copy:", e);
+      alert("Failed to copy to clipboard");
+    }
+  }
+
+  function showCopySuccess(buttonEl) {
+    if (!buttonEl) return;
+    const originalContent = buttonEl.textContent;
+    buttonEl.textContent = "✓";
+    buttonEl.classList.add("success");
+    setTimeout(() => {
+      buttonEl.textContent = originalContent;
+      buttonEl.classList.remove("success");
+    }, 1500);
+  }
+
+  // ---- Reminders storage & UI with individual buttons ----
   function loadReminders() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const arr = raw ? JSON.parse(raw) : [];
       reminderList.innerHTML = "";
-      arr.forEach((t) => {
+      
+      arr.forEach((reminderText, index) => {
+        // Create card container
         const card = document.createElement("div");
         card.className = "reminder-card";
+        
+        // Create content wrapper
+        const contentWrapper = document.createElement("div");
+        contentWrapper.className = "reminder-card-content";
+        
+        // Create text element
         const textEl = document.createElement("p");
         textEl.className = "reminder-text";
-        textEl.textContent = t;
-        card.addEventListener("click", () => {
-          // remove on click
-          const updated = arr.filter(x => x !== t);
+        textEl.textContent = reminderText;
+        contentWrapper.appendChild(textEl);
+        
+        // Create actions container
+        const actionsContainer = document.createElement("div");
+        actionsContainer.className = "reminder-card-actions";
+        
+        // Create copy button
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "btn-icon btn-copy";
+        copyBtn.textContent = "📋";
+        copyBtn.setAttribute("aria-label", "Copy reminder");
+        copyBtn.setAttribute("title", "Copy to clipboard");
+        copyBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          copyToClipboard(reminderText, copyBtn);
+        });
+        
+        // Create delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "btn-icon btn-delete";
+        deleteBtn.textContent = "✕";
+        deleteBtn.setAttribute("aria-label", "Delete reminder");
+        deleteBtn.setAttribute("title", "Delete reminder");
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const updated = arr.filter((_, i) => i !== index);
           saveReminders(updated);
           renderReminders();
         });
-        card.appendChild(textEl);
+        
+        // Assemble the card
+        actionsContainer.appendChild(copyBtn);
+        actionsContainer.appendChild(deleteBtn);
+        card.appendChild(contentWrapper);
+        card.appendChild(actionsContainer);
         reminderList.appendChild(card);
       });
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+      debugError("Failed to load reminders:", e);
+    }
   }
   function saveReminders(arr) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));

@@ -1471,6 +1471,9 @@ body.light-theme .greeting {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .reminder-card:hover {
@@ -1489,12 +1492,108 @@ body.light-theme .greeting {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
 }
 
+.reminder-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
 .reminder-text {
   font-size: 14px;
   font-weight: 300;
   color: #fff;
   line-height: 1.4;
   margin: 0;
+  word-wrap: break-word;
+}
+
+.reminder-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Icon Button Base Style */
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+    linear-gradient(45deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-family: var(--font-stack);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+.btn-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.4s ease;
+}
+
+.btn-icon:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.btn-icon:hover::before {
+  left: 100%;
+}
+
+.btn-icon:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Copy Button - Blue accent */
+.btn-copy {
+  color: rgba(100, 200, 255, 0.9);
+}
+
+.btn-copy:hover {
+  background: 
+    linear-gradient(135deg, rgba(100, 200, 255, 0.12), rgba(100, 200, 255, 0.08)),
+    linear-gradient(45deg, rgba(100, 200, 255, 0.1), rgba(100, 200, 255, 0.05));
+  border-color: rgba(100, 200, 255, 0.3);
+  color: rgba(100, 200, 255, 1);
+}
+
+/* Delete Button - Red accent */
+.btn-delete {
+  color: rgba(255, 107, 107, 0.9);
+}
+
+.btn-delete:hover {
+  background: 
+    linear-gradient(135deg, rgba(255, 107, 107, 0.12), rgba(255, 107, 107, 0.08)),
+    linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+  border-color: rgba(255, 107, 107, 0.3);
+  color: rgba(255, 107, 107, 1);
+}
+
+/* Success state for copy button */
+.btn-icon.success {
+  background: 
+    linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.15)),
+    linear-gradient(45deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.1));
+  border-color: rgba(76, 175, 80, 0.4);
+  color: rgba(76, 175, 80, 1);
 }
 
 /* Coming Soon Style */
