@@ -16,30 +16,28 @@
   const DEBUG_MODE = true; // Set to false in production
   
   // Letters from Gesan (easily editable content)
+  // TO ADD A NEW LETTER: Just add a new object to this array
   const LETTERS_DATA = [
     {
       id: "welcome",
       title: "Welcome back, beautiful",
       date: "Today",
-      preview: "I hope you're having a wonderful day...",
-      content: "Welcome back to your personal space, Maiaaa cantik! I created this little corner of the internet just for you. Take your time, breathe, and remember that you're amazing. Every day is a new opportunity to shine, and I believe in you completely. 💕",
-      icon: "🌅"
+      content: "Welcome back to your personal space, Maiaaa cantik! I created this little corner of the internet just for you. Take your time, breathe, and remember that you're amazing. Every day is a new opportunity to shine, and I believe in you completely.",
+      icon: "✉"
     },
     {
       id: "motivation",
       title: "You've got this",
       date: "Always",
-      preview: "Remember how strong you are...",
-      content: "Hey beautiful! I know some days feel harder than others, but look at how far you've come. You're stronger than you think, smarter than you know, and more capable than you believe. When things get tough, remember that this too shall pass, and you'll come out even stronger on the other side. I'm cheering for you always! 🌟",
-      icon: "💌"
+      content: "Hey beautiful! I know some days feel harder than others, but look at how far you've come. You're stronger than you think, smarter than you know, and more capable than you believe. When things get tough, remember that this too shall pass, and you'll come out even stronger on the other side. I'm cheering for you always!",
+      icon: "✉"
     },
     {
       id: "love",
       title: "Just because",
       date: "Forever",
-      preview: "You deserve all the happiness...",
-      content: "Just wanted to remind you that you're loved, valued, and appreciated. Not just by me, but by everyone whose life you've touched. Your kindness, your smile, your beautiful spirit - they all matter more than you know. Take care of yourself, because you're precious. Sending you all the love and good vibes! ✨",
-      icon: "✨"
+      content: "Just wanted to remind you that you're loved, valued, and appreciated. Not just by me, but by everyone whose life you've touched. Your kindness, your smile, your beautiful spirit - they all matter more than you know. Take care of yourself, because you're precious. Sending you all the love and good vibes!",
+      icon: "✉"
     }
   ];
 
@@ -61,28 +59,18 @@
   const greetingEl = document.getElementById("greeting");
   const secretInput = document.getElementById("secretInput");
   const countdownContainer = document.getElementById("countdownContainer");
-  const dashboard = document.getElementById("dashboard");
-  const centerContainer = document.querySelector(".center");
+  const spatialContainer = document.getElementById("spatialContainer");
 
-  // New dashboard elements
-  const dashboardContent = document.getElementById("dashboardContent");
+  // Section elements
   const moodInput = document.getElementById("moodInput");
   const moodTags = document.getElementById("moodTags");
   const lettersContainer = document.getElementById("lettersContainer");
   
-  // Header clock elements
-  const headerCurrentTime = document.getElementById("headerCurrentTime");
-  const headerCurrentDate = document.getElementById("headerCurrentDate");
-  const headerTimeGreeting = document.getElementById("headerTimeGreeting");
-
   // Debug element availability
   debugLog("Element availability check:", {
     timerEl: !!timerEl,
-    dashboard: !!dashboard,
-    dashboardContent: !!dashboardContent,
-    headerCurrentTime: !!headerCurrentTime,
-    headerCurrentDate: !!headerCurrentDate,
-    headerTimeGreeting: !!headerTimeGreeting
+    spatialContainer: !!spatialContainer,
+    lettersContainer: !!lettersContainer
   });
 
   // Existing elements
@@ -266,125 +254,6 @@
   let dynamicBackground = null;
   let shootingStars = null;
 
-  // ---- Dynamic greeting for dashboard ----
-  // Time Display Functions
-  let lastTime = ''; // Track time changes for individual digit flipping
-  
-  function updateTime() {
-    debugLog("updateTime called");
-    
-    if (!headerCurrentTime || !headerCurrentDate || !headerTimeGreeting) {
-      debugError("Header clock elements not available for update");
-      return;
-    }
-    
-    try {
-      const now = new Date();
-      
-      // Update time (HH MM SS) - no colons for minimalist look
-      const timeString = now.toLocaleTimeString('en-US', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).replace(/:/g, ' ');
-      
-      if (headerCurrentTime) {
-        // Create individual digit containers and flip only changing digits
-        const timeArray = timeString.split(' ');
-        const lastTimeArray = lastTime.split(' ');
-        
-        headerCurrentTime.innerHTML = '';
-        
-        timeArray.forEach((timePart, partIndex) => {
-          const partContainer = document.createElement('div');
-          partContainer.style.display = 'flex';
-          partContainer.style.gap = '0.05em';
-          
-          for (let i = 0; i < timePart.length; i++) {
-            const digitSpan = document.createElement('span');
-            digitSpan.className = 'time-digit';
-            digitSpan.textContent = timePart[i];
-            
-            // Check if this digit changed
-            if (lastTime && lastTimeArray[partIndex] && lastTimeArray[partIndex][i] !== timePart[i]) {
-              digitSpan.classList.add('flipping');
-              setTimeout(() => {
-                digitSpan.classList.remove('flipping');
-              }, 300);
-            }
-            
-            partContainer.appendChild(digitSpan);
-          }
-          
-          headerCurrentTime.appendChild(partContainer);
-          
-          // Add space between time parts (except last)
-          if (partIndex < timeArray.length - 1) {
-            const spaceSpan = document.createElement('span');
-            spaceSpan.textContent = ' ';
-            spaceSpan.style.margin = '0 0.1em';
-            headerCurrentTime.appendChild(spaceSpan);
-          }
-        });
-        
-        lastTime = timeString;
-        debugLog("Header time updated:", timeString);
-      }
-      
-      // Update date (proper capitalization)
-      const dateString = now.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-      
-      if (headerCurrentDate) {
-        headerCurrentDate.textContent = dateString;
-        debugLog("Header date updated:", dateString);
-      }
-      
-      // Update greeting based on time
-      const hour = now.getHours();
-      let greeting = "Good evening Maiaaa";
-      if (hour >= 5 && hour < 12) greeting = "Good morning Maiaaa";
-      else if (hour >= 12 && hour < 18) greeting = "Good afternoon Maiaaa";
-      
-      if (headerTimeGreeting) {
-        headerTimeGreeting.textContent = greeting;
-        debugLog("Header greeting updated:", greeting);
-      }
-      
-    } catch (error) {
-      debugError("Failed to update header time", error);
-    }
-  }
-
-  function startTimeDisplay() {
-    debugLog("Starting header time display...");
-    debugLog("headerCurrentTime element:", headerCurrentTime);
-    debugLog("headerCurrentDate element:", headerCurrentDate);
-    debugLog("headerTimeGreeting element:", headerTimeGreeting);
-    
-    if (!headerCurrentTime || !headerCurrentDate || !headerTimeGreeting) {
-      debugError("Header time display elements not found!");
-      console.error("Missing elements:", {
-        headerCurrentTime: !!headerCurrentTime,
-        headerCurrentDate: !!headerCurrentDate,
-        headerTimeGreeting: !!headerTimeGreeting
-      });
-      return;
-    }
-    
-    // Update immediately
-    updateTime();
-    
-    // Update every second
-    setInterval(updateTime, 1000);
-    
-    debugLog("Header time display started successfully");
-  }
 
   // ---- Mood system ----
   function loadMoods() {
@@ -411,35 +280,56 @@
     } catch (e) { console.error(e); }
   }
 
-  // ---- Letters system ----
+  // ---- Letters system (read-only, from Gesan) ----
   function renderLetters() {
-    if (!lettersContainer) return;
+    if (!lettersContainer) {
+      debugError("Letters container not found");
+      return;
+    }
+    
     lettersContainer.innerHTML = "";
     
-    LETTERS_DATA.forEach((letter, index) => {
-      const envelopeCard = document.createElement("div");
-      envelopeCard.className = "envelope-card";
-      envelopeCard.style.animationDelay = `${index * 0.1}s`;
+    // Show empty state if no letters
+    if (LETTERS_DATA.length === 0) {
+      const emptyState = document.createElement("div");
+      emptyState.className = "letters-empty-state";
+      emptyState.innerHTML = `
+        <div class="letters-empty-icon">∅</div>
+        <div class="letters-empty-text">No letters from Gesan yet</div>
+      `;
+      lettersContainer.appendChild(emptyState);
+      return;
+    }
+    
+    // Render letters (most recent first)
+    LETTERS_DATA.slice().reverse().forEach((letter, index) => {
+      const envelope = document.createElement("div");
+      envelope.className = "letter-envelope";
+      envelope.style.animationDelay = `${index * 0.1}s`;
       
-      envelopeCard.innerHTML = `
-        <div class="envelope">
-          <div class="envelope-front">
-            <div class="envelope-icon">${letter.icon}</div>
-            <h3 class="envelope-title">${letter.title}</h3>
-            <div class="envelope-date">${letter.date}</div>
+      envelope.innerHTML = `
+        <div class="letter-inner">
+          <div class="letter-front">
+            <div class="letter-icon">${letter.icon}</div>
+            <h3 class="letter-title">${letter.title}</h3>
+            <div class="letter-date">${letter.date}</div>
           </div>
-          <div class="envelope-back">
-            <div class="envelope-content">${letter.content}</div>
+          <div class="letter-back">
+            <div class="letter-content">${letter.content}</div>
+            <div class="letter-signature">— Gesan</div>
           </div>
         </div>
       `;
       
-      envelopeCard.addEventListener("click", () => {
-        envelopeCard.classList.toggle("flipped");
+      // Click to flip
+      envelope.addEventListener("click", () => {
+        envelope.classList.toggle("flipped");
       });
       
-      lettersContainer.appendChild(envelopeCard);
+      lettersContainer.appendChild(envelope);
     });
+    
+    debugLog(`Rendered ${LETTERS_DATA.length} letters`);
   }
 
   // ---- Countdown compute & render ----
@@ -479,9 +369,9 @@
     intervalId = setInterval(renderCountdownOnce, 1000);
   }
 
-  // ---- Show dashboard (fade out countdown, fade in dashboard) ----
+  // ---- Show spatial layout (fade out countdown, fade in sections) ----
   function showDashboard() {
-    debugLog("Starting dashboard transition...");
+    debugLog("Starting spatial layout transition...");
     
     if (intervalId) { 
       clearInterval(intervalId); 
@@ -493,53 +383,20 @@
     setTimeout(() => {
       countdownContainer.classList.add("hidden");
       
-      if (dashboard) {
-        debugLog("Showing dashboard element...");
-        dashboard.classList.remove("hidden");
+      if (spatialContainer) {
+        debugLog("Showing spatial container...");
+        spatialContainer.classList.remove("hidden");
+        spatialContainer.setAttribute("aria-hidden", "false");
         
-        // Add dashboard-active class to center container for proper layout
-        if (centerContainer) {
-          centerContainer.classList.add("dashboard-active");
-        }
-        
-        // Force visibility with immediate styles
-        dashboard.style.opacity = "1";
-        dashboard.style.transform = "translateY(0) scale(1)";
-        
-        // Show dashboard content with staggered section reveals
+        // Trigger spatial layout appearance
         setTimeout(() => {
-          if (dashboardContent) {
-            debugLog("Showing dashboard content...");
-            dashboardContent.classList.add("visible");
-            dashboardContent.style.opacity = "1";
-            dashboardContent.style.transform = "translateY(0)";
-            
-            setTimeout(() => {
-              debugLog("Revealing sections...");
-              revealSections();
-            }, 300);
-          } else {
-            debugError("dashboardContent element not found!");
-          }
+          spatialContainer.classList.add("visible");
+          debugLog("Spatial sections revealed");
         }, 100);
       } else {
-        debugError("dashboard element not found!");
+        debugError("spatialContainer element not found!");
       }
     }, 600);
-  }
-
-  function revealSections() {
-    const sections = document.querySelectorAll('.dashboard-section');
-    debugLog(`Found ${sections.length} sections to reveal`);
-    
-    sections.forEach((section, index) => {
-      setTimeout(() => {
-        section.classList.add('visible');
-        section.style.opacity = "1";
-        section.style.transform = "translateY(0) scale(1)";
-        debugLog(`Revealed section ${index + 1}`);
-      }, index * 150);
-    });
   }
 
   // ---- Triple-click bypass ----
@@ -838,7 +695,7 @@
     });
   }
 
-  // ---- Event listeners for new features ----
+  // ---- Event listeners for features ----
   if (moodInput) {
     moodInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -847,25 +704,6 @@
           saveMood(mood);
           moodInput.value = "";
         }
-      }
-    });
-  }
-
-  // Hidden editor key (triple-click on dashboard title)
-  let editorClicks = 0;
-  if (dashboard) {
-    dashboard.addEventListener("click", (e) => {
-      if (e.target.classList.contains("dash-title")) {
-        editorClicks++;
-        if (editorClicks === 3) {
-          const code = prompt("Enter editor code:");
-          if (code === EDITOR_CODE) {
-            alert("Editor mode unlocked! You can now edit letters in the code.");
-            console.log("Editor mode unlocked. Edit LETTERS_DATA in script.js to modify letters.");
-          }
-          editorClicks = 0;
-        }
-        setTimeout(() => (editorClicks = 0), 1000);
       }
     });
   }
@@ -1078,9 +916,6 @@
       } else {
         debugError("Failed to start countdown - missing elements");
       }
-      
-      // Start time display immediately (always visible)
-      startTimeDisplay();
       
       debugLog("Application initialized successfully");
     } catch (e) {

@@ -102,37 +102,18 @@
     </div>
 
 
-  <!-- central area -->
-  <div id="center" class="center">
-    <div id="countdownContainer" class="countdown-container">
-      <div id="timer" class="timer" aria-live="polite">-- -- -- --</div>
-      <div id="greeting" class="greeting" aria-hidden="false"></div>
-      <input id="secretInput" class="secret-input" type="password" placeholder="Enter code" aria-label="secret code" />
-    </div>
+  <!-- Countdown Timer - Centered -->
+  <div id="countdownContainer" class="countdown-container">
+    <div id="timer" class="timer" aria-live="polite">-- -- -- --</div>
+    <div id="greeting" class="greeting" aria-hidden="false"></div>
+    <input id="secretInput" class="secret-input" type="password" placeholder="Enter code" aria-label="secret code" />
+  </div>
 
-    <main id="dashboard" class="dashboard hidden" aria-hidden="true">
-      <!-- Main dashboard content -->
-      <div id="dashboardContent" class="dashboard-content">
-        
-        <!-- Header with Clock -->
-        <header class="dashboard-header">
-          <div class="header-clock">
-            <div class="header-time-container">
-              <div id="headerCurrentTime" class="header-current-time">--:--:--</div>
-              <div id="headerCurrentDate" class="header-current-date">Loading...</div>
-            </div>
-            <div id="headerTimeGreeting" class="header-time-greeting">Good morning Maiaaa</div>
-          </div>
-        </header>
-
-        <!-- Main Grid Layout -->
-        <div class="dashboard-grid">
-          
-          <!-- Left Column -->
-          <div class="dashboard-column">
-            
-            <!-- Mood Section -->
-            <section id="moodSection" class="dashboard-card mood-card">
+  <!-- Spatial Floating Sections -->
+  <div id="spatialContainer" class="spatial-container hidden" aria-hidden="true">
+    
+    <!-- Mood Section - Top Left -->
+    <section id="moodSection" class="floating-section mood-card">
               <div class="card-header">
                 <div class="card-header-content">
                   <div class="card-title-row">
@@ -151,8 +132,8 @@
               </div>
             </section>
 
-            <!-- Tasks Section -->
-            <section id="tasksSection" class="dashboard-card tasks-card">
+    <!-- Tasks Section - Top Right -->
+    <section id="tasksSection" class="floating-section tasks-card">
               <div class="card-header">
                 <div class="card-header-content">
                   <div class="card-title-row">
@@ -176,13 +157,8 @@
               </div>
             </section>
 
-          </div>
-
-          <!-- Right Column -->
-          <div class="dashboard-column">
-            
-            <!-- Reminders Section -->
-            <section id="remindersSection" class="dashboard-card reminders-card">
+    <!-- Reminders Section - Bottom Left -->
+    <section id="remindersSection" class="floating-section reminders-card">
               <div class="card-header">
                 <div class="card-header-content">
                   <div class="card-title-row">
@@ -202,33 +178,22 @@
               </div>
             </section>
 
-            <!-- Letters Section -->
-            <section id="lettersSection" class="dashboard-card letters-card">
-              <div class="card-header">
-                <div class="card-header-content">
-                  <div class="card-title-row">
-                    <span class="card-icon">✉</span>
-                    <h2 class="card-title">Letters</h2>
-                  </div>
-                  <div class="card-subtitle">Messages from Gesan</div>
-                </div>
-                <button id="clearLetters" class="btn-clear">Clear</button>
-              </div>
-              <div class="card-content">
-                <div class="coming-soon">
-                  <div class="coming-soon-icon">?</div>
-                  <div class="coming-soon-text">Coming Soon</div>
-                </div>
-              </div>
-            </section>
-
+    <!-- Letters Section - Bottom Right -->
+    <section id="lettersSection" class="floating-section letters-card">
+      <div class="card-header">
+        <div class="card-header-content">
+          <div class="card-title-row">
+            <span class="card-icon">✉</span>
+            <h2 class="card-title">Letters</h2>
           </div>
-
+          <div class="card-subtitle">Messages from Gesan</div>
         </div>
-
-
       </div>
-    </main>
+      <div class="card-content">
+        <div id="lettersContainer" class="letters-container"></div>
+      </div>
+    </section>
+
   </div>
 
   <script src="script.js?v=3"></script>
