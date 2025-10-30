@@ -445,75 +445,6 @@ body.hide-stars .shooting-stars-container {
   justify-content: center;
 }
 
-/* countdown timer */
-.countdown-container { 
-  text-align:center; 
-  position: relative;
-  z-index: 10;
-}
-
-/* ROBUST Pulsing underglow behind countdown numbers */
-.timer {
-  font-size: clamp(44px, 12vw, 120px);
-  font-weight: 200;
-  letter-spacing: 0.18em;
-  opacity: 1 !important;
-  transition: transform .45s ease, opacity .45s ease;
-  cursor: pointer;
-  user-select: none;
-  color: #fff !important;
-  position: relative;
-  z-index: 10;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3) !important;
-  animation: timerGlow 3s ease-in-out infinite alternate !important;
-}
-
-@keyframes timerGlow {
-  0% {
-    text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2);
-  }
-  100% {
-    text-shadow: 0 0 40px rgba(255,255,255,0.8), 0 0 80px rgba(255,255,255,0.4);
-  }
-}
-
-
-/* White countdown for dark backgrounds */
-.night-theme .timer {
-  color: #fff !important;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
-  animation: timerGlow 3s ease-in-out infinite alternate;
-}
-
-/* greeting under timer */
-.greeting {
-  margin-top: 12px;
-  font-size: 1.05rem;
-  font-weight: 300;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity .8s ease .6s, transform .8s ease .6s;
-  color: #fff !important;
-}
-
-/* White greeting for dark backgrounds */
-.night-theme .greeting {
-  color: #fff !important;
-}
-
-/* reveal greeting (class added by JS) */
-.greeting.visible { opacity: 0.86; transform: translateY(0); }
-
-/* secret input (hidden by default) */
-.secret-input {
-  display:none;
-  margin-top: 12px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.02);
-  color: inherit;
-}
 
 /* High-End Dashboard Design */
 .dashboard {
@@ -555,9 +486,6 @@ body.light-theme .dashboard {
 }
 
 /* Light theme text colors */
-body.light-theme .header-current-time,
-body.light-theme .header-current-date,
-body.light-theme .header-time-greeting,
 body.light-theme .card-title,
 body.light-theme .card-subtitle,
 body.light-theme .dashboard-card,
@@ -569,11 +497,6 @@ body.light-theme .deadline-time {
   color: #ffffff !important;
 }
 
-/* Light theme countdown */
-body.light-theme .timer,
-body.light-theme .greeting {
-  color: #000000 !important;
-}
 
 .dashboard.visible { 
   opacity: 1; 
@@ -1172,6 +1095,98 @@ body.light-theme .greeting {
    SPATIAL FLOATING LAYOUT
    ============================================ */
 
+/* Floating Dashboard Header */
+.dashboard-header-floating {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  opacity: 0;
+  animation: headerFadeIn 1s ease 0.3s forwards;
+  pointer-events: none;
+}
+
+.header-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-time-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-current-time {
+  font-size: clamp(36px, 8vw, 56px);
+  font-weight: 200;
+  font-family: var(--font-stack);
+  color: rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 20px rgba(255,255,255,0.08);
+  display: flex;
+  gap: 0.1em;
+}
+
+/* Individual digit containers */
+.time-digit {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  perspective: 100px;
+}
+
+.time-digit.flipping {
+  transform: rotateX(-90deg);
+}
+
+.header-current-date {
+  font-size: clamp(14px, 3vw, 18px);
+  font-weight: 300;
+  font-family: var(--font-stack);
+  color: rgba(255,255,255,0.09);
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.header-time-greeting {
+  font-size: clamp(16px, 4vw, 22px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.11);
+  text-align: center;
+  opacity: 0.8;
+  letter-spacing: 0.02em;
+}
+
+@keyframes headerFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Light theme header */
+body.light-theme .header-current-time {
+  color: rgba(0, 0, 0, 0.08);
+  text-shadow: 0 0 20px rgba(0,0,0,0.04);
+}
+
+body.light-theme .header-current-date {
+  color: rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .header-time-greeting {
+  color: rgba(0, 0, 0, 0.07);
+}
+
+/* Spatial Container */
 .spatial-container {
   position: fixed;
   top: 0;
