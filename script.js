@@ -908,7 +908,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     try {
       debugLog("Initializing application...");
-      debugLog("Target date:", new Date(targetMs).toString());
       
       // Initialize dynamic background first
       dynamicBackground = new DynamicBackground();
@@ -960,15 +959,7 @@
           }
         });
       }
-      
-      
-      // Start countdown
-      if (timerEl && countdownContainer) {
-        start();
-        debugLog("Countdown started");
-      } else {
-        debugError("Failed to start countdown - missing elements");
-      }
+      // Countdown removed
       
       // Start time display immediately (always visible)
       startTimeDisplay();
