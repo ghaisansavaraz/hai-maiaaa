@@ -922,6 +922,13 @@ body.light-theme .greeting {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.card-header {
+  position: relative;
+  z-index: 2;
 }
 
 /* ============================================
@@ -929,63 +936,68 @@ body.light-theme .greeting {
    ============================================ */
 
 /* 1. MOOD CARD - Creative & Emotional (Pink/Purple) */
-.mood-card {
+.dashboard-card.mood-card {
   background: 
     linear-gradient(135deg, rgba(255, 160, 195, 0.12), rgba(190, 160, 255, 0.08)),
     linear-gradient(45deg, rgba(255, 160, 195, 0.06), rgba(190, 160, 255, 0.04)) !important;
   border-left: 2px solid rgba(255, 160, 195, 0.3) !important;
 }
 
-.mood-card::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 160, 195, 0.15), transparent);
+.dashboard-card.mood-card::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 160, 195, 0.15), transparent) !important;
+  z-index: 1;
 }
 
-.mood-card::after {
+.dashboard-card.mood-card::after {
   content: '';
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: linear-gradient(135deg, rgba(255, 160, 195, 0.03), transparent 50%, rgba(190, 160, 255, 0.03));
+  background: linear-gradient(135deg, rgba(255, 160, 195, 0.05), transparent 50%, rgba(190, 160, 255, 0.05));
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
+  z-index: 0;
 }
 
-.mood-card:hover {
+.dashboard-card.mood-card:hover {
   border-left-color: rgba(255, 160, 195, 0.5) !important;
   box-shadow: 
-    0 16px 64px rgba(255, 160, 195, 0.15),
-    0 0 0 1px rgba(255, 160, 195, 0.1) !important;
+    0 16px 64px rgba(255, 160, 195, 0.2),
+    0 0 20px rgba(255, 160, 195, 0.1),
+    0 0 0 1px rgba(255, 160, 195, 0.15) !important;
+  transform: translateY(-3px);
 }
 
-.mood-card:hover::after {
+.dashboard-card.mood-card:hover::after {
   opacity: 1;
 }
 
-.mood-card .card-icon {
+.dashboard-card.mood-card .card-icon {
   color: rgba(255, 160, 195, 0.9);
 }
 
-.mood-card:hover .card-icon {
+.dashboard-card.mood-card:hover .card-icon {
   opacity: 1;
   transform: rotate(180deg);
 }
 
 /* 2. TASKS CARD - Productive & Structured (Blue/Cyan) */
-.tasks-card {
+.dashboard-card.tasks-card {
   background: 
     linear-gradient(135deg, rgba(100, 180, 255, 0.12), rgba(80, 200, 255, 0.08)),
     linear-gradient(45deg, rgba(100, 180, 255, 0.06), rgba(80, 200, 255, 0.04)) !important;
   border-top: 2px solid rgba(100, 180, 255, 0.3) !important;
 }
 
-.tasks-card::before {
-  background: linear-gradient(90deg, transparent, rgba(100, 180, 255, 0.15), transparent);
+.dashboard-card.tasks-card::before {
+  background: linear-gradient(90deg, transparent, rgba(100, 180, 255, 0.15), transparent) !important;
+  z-index: 1;
 }
 
-.tasks-card::after {
+.dashboard-card.tasks-card::after {
   content: '';
   position: absolute;
   top: 0;
@@ -997,149 +1009,163 @@ body.light-theme .greeting {
       0deg,
       transparent,
       transparent 19px,
-      rgba(100, 180, 255, 0.02) 19px,
-      rgba(100, 180, 255, 0.02) 20px
+      rgba(100, 180, 255, 0.05) 19px,
+      rgba(100, 180, 255, 0.05) 20px
     ),
     repeating-linear-gradient(
       90deg,
       transparent,
       transparent 19px,
-      rgba(100, 180, 255, 0.02) 19px,
-      rgba(100, 180, 255, 0.02) 20px
+      rgba(100, 180, 255, 0.05) 19px,
+      rgba(100, 180, 255, 0.05) 20px
     );
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
+  z-index: 0;
 }
 
-.tasks-card:hover {
+.dashboard-card.tasks-card:hover {
   border-top-color: rgba(100, 180, 255, 0.5) !important;
   box-shadow: 
-    0 16px 64px rgba(100, 180, 255, 0.15),
-    0 0 0 1px rgba(100, 180, 255, 0.1) !important;
+    0 16px 64px rgba(100, 180, 255, 0.2),
+    0 0 20px rgba(100, 180, 255, 0.1),
+    0 0 0 1px rgba(100, 180, 255, 0.15) !important;
+  transform: translateY(-3px);
 }
 
-.tasks-card:hover::after {
+.dashboard-card.tasks-card:hover::after {
   opacity: 1;
 }
 
-.tasks-card .card-icon {
+.dashboard-card.tasks-card .card-icon {
   color: rgba(100, 180, 255, 0.9);
 }
 
-.tasks-card:hover .card-icon {
+.dashboard-card.tasks-card:hover .card-icon {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 /* 3. REMINDERS CARD - Warm & Thoughtful (Amber/Golden) */
-.reminders-card {
+.dashboard-card.reminders-card {
   background: 
     linear-gradient(135deg, rgba(255, 200, 120, 0.12), rgba(255, 220, 150, 0.08)),
     linear-gradient(45deg, rgba(255, 200, 120, 0.06), rgba(255, 220, 150, 0.04)) !important;
-  border-image: linear-gradient(
-    135deg,
-    rgba(255, 200, 120, 0.3),
-    rgba(255, 220, 150, 0.3)
-  ) 1 !important;
-  border-width: 1px !important;
-  border-style: solid !important;
+  border: 2px solid rgba(255, 200, 120, 0.25) !important;
 }
 
-.reminders-card::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 200, 120, 0.15), transparent);
+.dashboard-card.reminders-card::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 200, 120, 0.15), transparent) !important;
+  z-index: 1;
 }
 
-.reminders-card::after {
+.dashboard-card.reminders-card::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   background: radial-gradient(
     circle at top left,
-    rgba(255, 200, 120, 0.08),
+    rgba(255, 200, 120, 0.15),
     transparent 70%
   );
   pointer-events: none;
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
+  z-index: 0;
 }
 
-.reminders-card:hover {
+.dashboard-card.reminders-card:hover {
+  border-color: rgba(255, 200, 120, 0.4) !important;
   box-shadow: 
-    0 16px 64px rgba(255, 200, 120, 0.15),
+    0 16px 64px rgba(255, 200, 120, 0.2),
+    0 0 20px rgba(255, 200, 120, 0.12),
     0 0 0 1px rgba(255, 200, 120, 0.2) !important;
+  transform: translateY(-3px);
 }
 
-.reminders-card .card-icon {
+.dashboard-card.reminders-card:hover::after {
+  opacity: 1;
+}
+
+.dashboard-card.reminders-card .card-icon {
   color: rgba(255, 200, 120, 0.9);
 }
 
-.reminders-card:hover .card-icon {
+.dashboard-card.reminders-card:hover .card-icon {
   opacity: 1;
   transform: rotate(45deg);
 }
 
 /* 4. LETTERS CARD - Romantic & Elegant (Rose/Lavender) */
-.letters-card {
+.dashboard-card.letters-card {
   background: 
     linear-gradient(135deg, rgba(255, 180, 200, 0.12), rgba(220, 180, 255, 0.08)),
     linear-gradient(45deg, rgba(255, 180, 200, 0.06), rgba(220, 180, 255, 0.04)) !important;
-  border: 1px solid rgba(255, 180, 200, 0.2) !important;
+  border: 2px solid rgba(255, 180, 200, 0.25) !important;
   box-shadow: 
     0 16px 64px rgba(255, 180, 200, 0.1),
     inset 0 1px 0 rgba(255, 180, 200, 0.1) !important;
 }
 
-.letters-card::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 180, 200, 0.15), transparent);
+.dashboard-card.letters-card::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 180, 200, 0.15), transparent) !important;
+  z-index: 1;
 }
 
-.letters-card::after {
+.dashboard-card.letters-card::after {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 50px;
   background: 
     linear-gradient(135deg, 
-      transparent 49.5%,
-      rgba(255, 180, 200, 0.1) 50%,
-      transparent 50.5%
+      transparent 48%,
+      rgba(255, 180, 200, 0.2) 49%,
+      rgba(255, 180, 200, 0.2) 51%,
+      transparent 52%
     ),
     linear-gradient(-135deg, 
-      transparent 49.5%,
-      rgba(255, 180, 200, 0.1) 50%,
-      transparent 50.5%
+      transparent 48%,
+      rgba(255, 180, 200, 0.2) 49%,
+      rgba(255, 180, 200, 0.2) 51%,
+      transparent 52%
     );
-  background-size: 40px 40px;
+  background-size: 100% 100%;
   background-position: center top;
   background-repeat: no-repeat;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
+  z-index: 0;
 }
 
-.letters-card:hover {
-  border-color: rgba(255, 180, 200, 0.35) !important;
+.dashboard-card.letters-card:hover {
+  border-color: rgba(255, 180, 200, 0.4) !important;
   box-shadow: 
-    0 16px 64px rgba(255, 180, 200, 0.2),
-    0 0 40px rgba(220, 180, 255, 0.15),
-    inset 0 1px 0 rgba(255, 180, 200, 0.15) !important;
+    0 16px 64px rgba(255, 180, 200, 0.25),
+    0 0 30px rgba(220, 180, 255, 0.2),
+    inset 0 1px 0 rgba(255, 180, 200, 0.2) !important;
+  transform: translateY(-3px);
 }
 
-.letters-card:hover::after {
+.dashboard-card.letters-card:hover::after {
   opacity: 1;
 }
 
-.letters-card .card-icon {
+.dashboard-card.letters-card .card-icon {
   color: rgba(255, 180, 200, 0.9);
 }
 
-.letters-card:hover .card-icon {
+.dashboard-card.letters-card:hover .card-icon {
   opacity: 1;
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.05);
 }
 
 /* Dashboard Footer */
