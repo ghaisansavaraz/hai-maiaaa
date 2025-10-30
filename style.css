@@ -1121,12 +1121,12 @@ body.light-theme .deadline-time {
 }
 
 .header-current-time {
-  font-size: clamp(48px, 10vw, 80px);
+  font-size: clamp(56px, 12vw, 96px);
   font-weight: 200;
   font-family: var(--font-mono);
-  color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.45);
   letter-spacing: 0.2em;
-  text-shadow: 0 0 30px rgba(255,255,255,0.12);
+  text-shadow: 0 0 40px rgba(255,255,255,0.25);
   white-space: nowrap;
 }
 
@@ -1147,18 +1147,18 @@ body.light-theme .deadline-time {
 }
 
 .header-current-date {
-  font-size: clamp(16px, 3.5vw, 22px);
+  font-size: clamp(18px, 4vw, 26px);
   font-weight: 300;
   font-family: var(--font-stack);
-  color: rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.35);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .header-time-greeting {
-  font-size: clamp(18px, 4vw, 26px);
+  font-size: clamp(20px, 4.5vw, 30px);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.40);
   text-align: center;
   letter-spacing: 0.05em;
   margin-top: 8px;
@@ -1166,16 +1166,16 @@ body.light-theme .deadline-time {
 
 /* Light theme header */
 body.light-theme .header-current-time {
-  color: rgba(0, 0, 0, 0.12);
-  text-shadow: 0 0 30px rgba(0,0,0,0.06);
+  color: rgba(0, 0, 0, 0.35);
+  text-shadow: 0 0 40px rgba(0,0,0,0.15);
 }
 
 body.light-theme .header-current-date {
-  color: rgba(0, 0, 0, 0.09);
+  color: rgba(0, 0, 0, 0.28);
 }
 
 body.light-theme .header-time-greeting {
-  color: rgba(0, 0, 0, 0.11);
+  color: rgba(0, 0, 0, 0.32);
 }
 
 /* Spatial Container */
@@ -1219,10 +1219,10 @@ body.light-theme .header-time-greeting {
 
 /* 1. MOOD - Soft, Glowing, Organic */
 .floating-section.mood-card {
-  top: 24px;
-  left: 24px;
-  width: clamp(300px, 26vw, 360px);
-  max-height: 40vh;
+  top: 20px;
+  left: 20px;
+  width: clamp(320px, 28vw, 400px);
+  max-height: 48vh;
   overflow-y: auto;
   border-radius: 32px 24px 28px 36px !important;
   border-left: 3px solid rgba(255, 255, 255, 0.35) !important;
@@ -1251,10 +1251,10 @@ body.light-theme .header-time-greeting {
 
 /* 2. TASKS - Sharp, Structured, Grid */
 .floating-section.tasks-card {
-  top: 24px;
-  right: 24px;
-  width: clamp(320px, 28vw, 400px);
-  max-height: 40vh;
+  top: 20px;
+  right: 20px;
+  width: clamp(340px, 30vw, 450px);
+  max-height: 48vh;
   overflow-y: auto;
   border-radius: 12px 12px 4px 4px !important;
   border-top: 3px solid rgba(255, 255, 255, 0.32) !important;
@@ -1289,10 +1289,10 @@ body.light-theme .header-time-greeting {
 
 /* 3. REMINDERS - Warm, Cozy, Soft Light */
 .floating-section.reminders-card {
-  bottom: 24px;
-  left: 24px;
-  width: clamp(300px, 26vw, 350px);
-  max-height: 40vh;
+  bottom: 20px;
+  left: 20px;
+  width: clamp(320px, 28vw, 400px);
+  max-height: 48vh;
   overflow-y: auto;
   border-radius: 24px !important;
   border: 2px solid rgba(255, 255, 255, 0.28) !important;
@@ -1315,10 +1315,10 @@ body.light-theme .header-time-greeting {
 
 /* 4. LETTERS - Elegant, Envelope Fold */
 .floating-section.letters-card {
-  bottom: 24px;
-  right: 24px;
-  width: clamp(300px, 26vw, 360px);
-  max-height: 40vh;
+  bottom: 20px;
+  right: 20px;
+  width: clamp(320px, 28vw, 400px);
+  max-height: 48vh;
   overflow-y: auto;
   border-radius: 20px 20px 4px 4px !important;
   border-right: 3px solid rgba(255, 255, 255, 0.30) !important;
@@ -1964,56 +1964,56 @@ body.light-theme .floating-section.letters-card {
 }
 
 /* Responsive - Spatial Layout */
-/* Tablet Responsive - Tighter spacing */
+/* Tablet Responsive - More spacious */
 @media (max-width: 1600px) {
   .floating-section.mood-card {
-    width: 340px;
-    max-height: 42vh;
+    width: 360px;
+    max-height: 46vh;
   }
   
   .floating-section.tasks-card {
-    width: 380px;
-    max-height: 42vh;
+    width: 400px;
+    max-height: 46vh;
   }
   
   .floating-section.reminders-card {
-    width: 320px;
-    max-height: 42vh;
+    width: 350px;
+    max-height: 46vh;
   }
   
   .floating-section.letters-card {
-    width: 340px;
-    max-height: 42vh;
+    width: 360px;
+    max-height: 46vh;
   }
 }
 
 @media (max-width: 1200px) {
   .floating-section.mood-card {
-    left: 24px;
-    top: 24px;
-    width: 300px;
-    max-height: 40vh;
+    left: 16px;
+    top: 16px;
+    width: 320px;
+    max-height: 44vh;
   }
   
   .floating-section.tasks-card {
-    right: 24px;
-    top: 24px;
-    width: 320px;
-    max-height: 40vh;
+    right: 16px;
+    top: 16px;
+    width: 340px;
+    max-height: 44vh;
   }
   
   .floating-section.reminders-card {
-    left: 24px;
-    bottom: 24px;
-    width: 300px;
-    max-height: 40vh;
+    left: 16px;
+    bottom: 16px;
+    width: 320px;
+    max-height: 44vh;
   }
   
   .floating-section.letters-card {
-    right: 24px;
-    bottom: 24px;
-    width: 300px;
-    max-height: 40vh;
+    right: 16px;
+    bottom: 16px;
+    width: 320px;
+    max-height: 44vh;
   }
 }
 
