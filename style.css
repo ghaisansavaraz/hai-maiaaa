@@ -738,13 +738,14 @@ body.light-theme .deadline-time {
 }
 
 .header-current-time {
-  font-size: clamp(48px, 10vw, 80px);
+  font-size: clamp(36px, 8vw, 56px);
   font-weight: 200;
   font-family: var(--font-stack);
-  color: rgba(255, 255, 255, 0.40);
+  color: #fff;
   letter-spacing: 0.18em;
-  text-shadow: 0 0 40px rgba(255,255,255,0.22);
-  white-space: nowrap;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  display: flex;
+  gap: 0.1em;
 }
 
 /* Individual digit containers */
@@ -759,21 +760,21 @@ body.light-theme .deadline-time {
 }
 
 .header-current-date {
-  font-size: clamp(16px, 3.5vw, 22px);
+  font-size: clamp(14px, 3vw, 18px);
   font-weight: 300;
   font-family: var(--font-stack);
-  color: rgba(255,255,255,0.30);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.1em;
+  opacity: 0.8;
 }
 
 .header-time-greeting {
-  font-size: clamp(18px, 4vw, 26px);
+  font-size: clamp(16px, 4vw, 22px);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.34);
+  color: #fff;
   text-align: center;
-  letter-spacing: 0.05em;
-  margin-top: 8px;
+  opacity: 0.8;
+  letter-spacing: 0.02em;
 }
 
 /* Dashboard Grid Layout */
@@ -1220,8 +1221,8 @@ body.light-theme .header-time-greeting {
 .floating-section.mood-card {
   top: 20px;
   left: 20px;
-  width: clamp(320px, 28vw, 400px);
-  max-height: 48vh;
+  width: clamp(360px, 30vw, 440px);
+  max-height: 56vh;
   overflow-y: auto;
   border-radius: 32px 24px 28px 36px !important;
   border-left: 3px solid rgba(255, 255, 255, 0.35) !important;
@@ -1252,8 +1253,8 @@ body.light-theme .header-time-greeting {
 .floating-section.tasks-card {
   top: 20px;
   right: 20px;
-  width: clamp(340px, 30vw, 450px);
-  max-height: 48vh;
+  width: clamp(380px, 32vw, 500px);
+  max-height: 56vh;
   overflow-y: auto;
   border-radius: 12px 12px 4px 4px !important;
   border-top: 3px solid rgba(255, 255, 255, 0.32) !important;
@@ -1290,8 +1291,8 @@ body.light-theme .header-time-greeting {
 .floating-section.reminders-card {
   bottom: 20px;
   left: 20px;
-  width: clamp(320px, 28vw, 400px);
-  max-height: 48vh;
+  width: clamp(360px, 30vw, 460px);
+  max-height: 56vh;
   overflow-y: auto;
   border-radius: 24px !important;
   border: 2px solid rgba(255, 255, 255, 0.28) !important;
@@ -1316,8 +1317,8 @@ body.light-theme .header-time-greeting {
 .floating-section.letters-card {
   bottom: 20px;
   right: 20px;
-  width: clamp(320px, 28vw, 400px);
-  max-height: 48vh;
+  width: clamp(360px, 30vw, 460px);
+  max-height: 56vh;
   overflow-y: auto;
   border-radius: 20px 20px 4px 4px !important;
   border-right: 3px solid rgba(255, 255, 255, 0.30) !important;
