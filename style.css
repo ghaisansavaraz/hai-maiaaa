@@ -1208,10 +1208,10 @@ body.light-theme .greeting {
 
 /* 1. MOOD - Top Left (Organic Blob) */
 .floating-section.mood-card {
-  top: 60px;
-  left: 40px;
-  width: 380px;
-  max-height: calc(100vh - 140px);
+  top: 32px;
+  left: 32px;
+  width: clamp(320px, 28vw, 380px);
+  max-height: 45vh;
   overflow-y: auto;
   border-radius: 32px 24px 28px 36px !important;
   animation: gentleBreathing 4s ease-in-out infinite;
@@ -1225,10 +1225,10 @@ body.light-theme .greeting {
 
 /* 2. TASKS - Top Right (Architectural) */
 .floating-section.tasks-card {
-  top: 60px;
-  right: 40px;
-  width: 420px;
-  max-height: calc(100vh - 140px);
+  top: 32px;
+  right: 32px;
+  width: clamp(340px, 30vw, 420px);
+  max-height: 45vh;
   overflow-y: auto;
   border-radius: 16px 16px 8px 8px !important;
   transition-delay: 0.2s;
@@ -1240,10 +1240,10 @@ body.light-theme .greeting {
 
 /* 3. REMINDERS - Bottom Left (Cozy Square) */
 .floating-section.reminders-card {
-  bottom: 60px;
-  left: 40px;
-  width: 360px;
-  max-height: calc(100vh - 140px);
+  bottom: 32px;
+  left: 32px;
+  width: clamp(320px, 27vw, 360px);
+  max-height: 45vh;
   overflow-y: auto;
   border-radius: 24px !important;
   transition-delay: 0.3s;
@@ -1255,10 +1255,10 @@ body.light-theme .greeting {
 
 /* 4. LETTERS - Bottom Right (Envelope Shape) */
 .floating-section.letters-card {
-  bottom: 60px;
-  right: 40px;
-  width: 380px;
-  max-height: calc(100vh - 140px);
+  bottom: 32px;
+  right: 32px;
+  width: clamp(320px, 28vw, 380px);
+  max-height: 45vh;
   overflow-y: auto;
   border-radius: 20px 20px 4px 4px !important;
   transition-delay: 0.4s;
@@ -1854,29 +1854,56 @@ body.light-theme .greeting {
 }
 
 /* Responsive - Spatial Layout */
-@media (max-width: 1400px) {
+/* Tablet Responsive - Tighter spacing */
+@media (max-width: 1600px) {
   .floating-section.mood-card {
-    left: 20px;
-    top: 20px;
     width: 340px;
+    max-height: 42vh;
   }
   
   .floating-section.tasks-card {
-    right: 20px;
-    top: 20px;
     width: 380px;
+    max-height: 42vh;
   }
   
   .floating-section.reminders-card {
-    left: 20px;
-    bottom: 20px;
     width: 320px;
+    max-height: 42vh;
   }
   
   .floating-section.letters-card {
-    right: 20px;
-    bottom: 20px;
     width: 340px;
+    max-height: 42vh;
+  }
+}
+
+@media (max-width: 1200px) {
+  .floating-section.mood-card {
+    left: 24px;
+    top: 24px;
+    width: 300px;
+    max-height: 40vh;
+  }
+  
+  .floating-section.tasks-card {
+    right: 24px;
+    top: 24px;
+    width: 320px;
+    max-height: 40vh;
+  }
+  
+  .floating-section.reminders-card {
+    left: 24px;
+    bottom: 24px;
+    width: 300px;
+    max-height: 40vh;
+  }
+  
+  .floating-section.letters-card {
+    right: 24px;
+    bottom: 24px;
+    width: 300px;
+    max-height: 40vh;
   }
 }
 
@@ -1897,6 +1924,7 @@ body.light-theme .greeting {
     position: relative;
     width: 100%;
     height: auto;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 16px 0;
@@ -2372,32 +2400,127 @@ html {
   filter: none !important;
 }
 
-/* Prevent light mode corner effects */
-body::before,
-body::after {
-  filter: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+/* Light Theme - Day Mode Optimization */
+body.light-theme .floating-section {
+  background: 
+    linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.08)),
+    linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.06)) !important;
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Remove any browser light mode vignette effects */
-html, body, * {
-  background-image: none !important;
-  box-shadow: none !important;
-  border-image: none !important;
+body.light-theme .card-title,
+body.light-theme .card-subtitle,
+body.light-theme .card-icon {
+  color: rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Allow text-shadow for timer specifically */
-.timer {
-  text-shadow: 0 0 20px rgba(255,255,255,0.3) !important;
-  animation: timerGlow 3s ease-in-out infinite alternate !important;
+body.light-theme .mood-input,
+body.light-theme .task-input,
+body.light-theme .reminder-input,
+body.light-theme .deadline-date,
+body.light-theme .deadline-time {
+  color: rgba(0, 0, 0, 0.9) !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Override any browser light mode defaults */
-:root {
-  color-scheme: dark !important;
-  -webkit-color-scheme: dark !important;
+body.light-theme .mood-input::placeholder,
+body.light-theme .task-input::placeholder,
+body.light-theme .reminder-input::placeholder {
+  color: rgba(0, 0, 0, 0.4) !important;
 }
+
+body.light-theme .btn-primary,
+body.light-theme .btn-clear {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+body.light-theme .btn-primary:hover,
+body.light-theme .btn-clear:hover {
+  background: rgba(0, 0, 0, 0.15) !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+body.light-theme .reminder-text,
+body.light-theme .task-text,
+body.light-theme .mood-tag {
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+body.light-theme .btn-icon {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+body.light-theme .btn-copy:hover {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  color: rgba(0, 0, 0, 1) !important;
+}
+
+body.light-theme .reminder-card {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .reminders-empty-icon,
+body.light-theme .reminders-empty-text,
+body.light-theme .letters-empty-icon,
+body.light-theme .letters-empty-text {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+body.light-theme .letter-envelope {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .letter-icon,
+body.light-theme .letter-title,
+body.light-theme .letter-date,
+body.light-theme .letter-content,
+body.light-theme .letter-signature {
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Light Theme Panel Personalities */
+body.light-theme .dashboard-card.mood-card {
+  background: 
+    linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.08)),
+    linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.06)) !important;
+  border-left: 2px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+body.light-theme .dashboard-card.tasks-card {
+  background: 
+    linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.06)),
+    linear-gradient(45deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.05)) !important;
+  border-top: 2px solid rgba(0, 0, 0, 0.18) !important;
+}
+
+body.light-theme .dashboard-card.reminders-card {
+  background: 
+    linear-gradient(135deg, rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0.07)),
+    linear-gradient(45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.05)) !important;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.19) !important;
+}
+
+body.light-theme .dashboard-card.letters-card {
+  background: 
+    linear-gradient(135deg, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0.09)),
+    linear-gradient(45deg, rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0.07)) !important;
+  border-right: 2px solid rgba(0, 0, 0, 0.21) !important;
+}
+
+/* Dark Theme Default (Night Mode) - Keep existing styles */
 
 /* Enhanced visibility for light backgrounds */
 .time-display {

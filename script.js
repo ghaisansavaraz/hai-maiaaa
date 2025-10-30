@@ -14,29 +14,15 @@
   
   // Letters from Gesan (easily editable content)
   // TO ADD A NEW LETTER: Just add a new object to this array
-  const LETTERS_DATA = [
-    {
-      id: "welcome",
-      title: "Welcome back, beautiful",
-      date: "Today",
-      content: "Welcome back to your personal space, Maiaaa cantik! I created this little corner of the internet just for you. Take your time, breathe, and remember that you're amazing. Every day is a new opportunity to shine, and I believe in you completely.",
-      icon: "✉"
-    },
-    {
-      id: "motivation",
-      title: "You've got this",
-      date: "Always",
-      content: "Hey beautiful! I know some days feel harder than others, but look at how far you've come. You're stronger than you think, smarter than you know, and more capable than you believe. When things get tough, remember that this too shall pass, and you'll come out even stronger on the other side. I'm cheering for you always!",
-      icon: "✉"
-    },
-    {
-      id: "love",
-      title: "Just because",
-      date: "Forever",
-      content: "Just wanted to remind you that you're loved, valued, and appreciated. Not just by me, but by everyone whose life you've touched. Your kindness, your smile, your beautiful spirit - they all matter more than you know. Take care of yourself, because you're precious. Sending you all the love and good vibes!",
-      icon: "✉"
-    }
-  ];
+  // Example format:
+  // {
+  //   id: "unique-id",
+  //   title: "Letter title",
+  //   date: "Date/timestamp",
+  //   content: "Letter content here...",
+  //   icon: "✉"
+  // }
+  const LETTERS_DATA = [];
 
   // ---- Debug logging ----
   function debugLog(message, ...args) {
