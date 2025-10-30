@@ -445,6 +445,75 @@ body.hide-stars .shooting-stars-container {
   justify-content: center;
 }
 
+/* countdown timer */
+.countdown-container { 
+  text-align:center; 
+  position: relative;
+  z-index: 10;
+}
+
+/* ROBUST Pulsing underglow behind countdown numbers */
+.timer {
+  font-size: clamp(44px, 12vw, 120px);
+  font-weight: 200;
+  letter-spacing: 0.18em;
+  opacity: 1 !important;
+  transition: transform .45s ease, opacity .45s ease;
+  cursor: pointer;
+  user-select: none;
+  color: #fff !important;
+  position: relative;
+  z-index: 10;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3) !important;
+  animation: timerGlow 3s ease-in-out infinite alternate !important;
+}
+
+@keyframes timerGlow {
+  0% {
+    text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2);
+  }
+  100% {
+    text-shadow: 0 0 40px rgba(255,255,255,0.8), 0 0 80px rgba(255,255,255,0.4);
+  }
+}
+
+
+/* White countdown for dark backgrounds */
+.night-theme .timer {
+  color: #fff !important;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  animation: timerGlow 3s ease-in-out infinite alternate;
+}
+
+/* greeting under timer */
+.greeting {
+  margin-top: 12px;
+  font-size: 1.05rem;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .8s ease .6s, transform .8s ease .6s;
+  color: #fff !important;
+}
+
+/* White greeting for dark backgrounds */
+.night-theme .greeting {
+  color: #fff !important;
+}
+
+/* reveal greeting (class added by JS) */
+.greeting.visible { opacity: 0.86; transform: translateY(0); }
+
+/* secret input (hidden by default) */
+.secret-input {
+  display:none;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  color: inherit;
+}
 
 /* High-End Dashboard Design */
 .dashboard {
@@ -486,6 +555,9 @@ body.light-theme .dashboard {
 }
 
 /* Light theme text colors */
+body.light-theme .header-current-time,
+body.light-theme .header-current-date,
+body.light-theme .header-time-greeting,
 body.light-theme .card-title,
 body.light-theme .card-subtitle,
 body.light-theme .dashboard-card,
@@ -497,6 +569,11 @@ body.light-theme .deadline-time {
   color: #ffffff !important;
 }
 
+/* Light theme countdown */
+body.light-theme .timer,
+body.light-theme .greeting {
+  color: #000000 !important;
+}
 
 .dashboard.visible { 
   opacity: 1; 
@@ -845,556 +922,6 @@ body.light-theme .deadline-time {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  position: relative;
-  z-index: 2;
-}
-
-.card-header {
-  position: relative;
-  z-index: 2;
-}
-
-/* ============================================
-   PANEL PERSONALITIES - MONOCHROMATIC
-   ============================================ */
-
-/* 1. MOOD CARD - Bright & Luminous */
-.dashboard-card.mood-card {
-  background: 
-    linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.10)),
-    linear-gradient(45deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.05)) !important;
-  border-left: 2px solid rgba(255, 255, 255, 0.25) !important;
-}
-
-.dashboard-card.mood-card::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
-  z-index: 1;
-}
-
-.dashboard-card.mood-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 50%, rgba(255, 255, 255, 0.04));
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 0;
-}
-
-.dashboard-card.mood-card:hover {
-  border-left-color: rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 
-    0 16px 64px rgba(255, 255, 255, 0.12),
-    0 0 30px rgba(255, 255, 255, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.2) !important;
-  transform: translateY(-3px);
-}
-
-.dashboard-card.mood-card:hover::after {
-  opacity: 1;
-}
-
-.dashboard-card.mood-card .card-icon {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.dashboard-card.mood-card:hover .card-icon {
-  opacity: 1;
-  transform: rotate(180deg);
-}
-
-/* 2. TASKS CARD - Crisp & Structured */
-.dashboard-card.tasks-card {
-  background: 
-    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(240, 240, 240, 0.08)),
-    linear-gradient(45deg, rgba(255, 255, 255, 0.06), rgba(240, 240, 240, 0.04)) !important;
-  border-top: 2px solid rgba(255, 255, 255, 0.22) !important;
-}
-
-.dashboard-card.tasks-card::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent) !important;
-  z-index: 1;
-}
-
-.dashboard-card.tasks-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 19px,
-      rgba(255, 255, 255, 0.06) 19px,
-      rgba(255, 255, 255, 0.06) 20px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 19px,
-      rgba(255, 255, 255, 0.06) 19px,
-      rgba(255, 255, 255, 0.06) 20px
-    );
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 0;
-}
-
-.dashboard-card.tasks-card:hover {
-  border-top-color: rgba(255, 255, 255, 0.35) !important;
-  box-shadow: 
-    0 16px 64px rgba(0, 0, 0, 0.15),
-    0 0 25px rgba(255, 255, 255, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.18) !important;
-  transform: translateY(-3px);
-}
-
-.dashboard-card.tasks-card:hover::after {
-  opacity: 1;
-}
-
-.dashboard-card.tasks-card .card-icon {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.dashboard-card.tasks-card:hover .card-icon {
-  opacity: 1;
-  transform: scale(1.15);
-}
-
-/* 3. REMINDERS CARD - Soft & Subtle */
-.dashboard-card.reminders-card {
-  background: 
-    linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(230, 230, 230, 0.08)),
-    linear-gradient(45deg, rgba(250, 250, 250, 0.06), rgba(235, 235, 235, 0.04)) !important;
-  border: 2px solid rgba(255, 255, 255, 0.18) !important;
-}
-
-.dashboard-card.reminders-card::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent) !important;
-  z-index: 1;
-}
-
-.dashboard-card.reminders-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 120px;
-  height: 120px;
-  background: radial-gradient(
-    circle at top left,
-    rgba(255, 255, 255, 0.18),
-    transparent 70%
-  );
-  pointer-events: none;
-  opacity: 0.5;
-  transition: opacity 0.5s ease;
-  z-index: 0;
-}
-
-.dashboard-card.reminders-card:hover {
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  box-shadow: 
-    0 16px 64px rgba(0, 0, 0, 0.12),
-    0 0 25px rgba(255, 255, 255, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.2) !important;
-  transform: translateY(-3px);
-}
-
-.dashboard-card.reminders-card:hover::after {
-  opacity: 1;
-}
-
-.dashboard-card.reminders-card .card-icon {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.dashboard-card.reminders-card:hover .card-icon {
-  opacity: 1;
-  transform: rotate(45deg);
-}
-
-/* 4. LETTERS CARD - Elegant & Refined */
-.dashboard-card.letters-card {
-  background: 
-    linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(245, 245, 245, 0.10)),
-    linear-gradient(45deg, rgba(255, 255, 255, 0.08), rgba(240, 240, 240, 0.06)) !important;
-  border: 2px solid rgba(255, 255, 255, 0.20) !important;
-  box-shadow: 
-    0 16px 64px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-}
-
-.dashboard-card.letters-card::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent) !important;
-  z-index: 1;
-}
-
-.dashboard-card.letters-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 50px;
-  background: 
-    linear-gradient(135deg, 
-      transparent 48%,
-      rgba(255, 255, 255, 0.22) 49%,
-      rgba(255, 255, 255, 0.22) 51%,
-      transparent 52%
-    ),
-    linear-gradient(-135deg, 
-      transparent 48%,
-      rgba(255, 255, 255, 0.22) 49%,
-      rgba(255, 255, 255, 0.22) 51%,
-      transparent 52%
-    );
-  background-size: 100% 100%;
-  background-position: center top;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 0;
-}
-
-.dashboard-card.letters-card:hover {
-  border-color: rgba(255, 255, 255, 0.32) !important;
-  box-shadow: 
-    0 16px 64px rgba(0, 0, 0, 0.14),
-    0 0 35px rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
-  transform: translateY(-3px);
-}
-
-.dashboard-card.letters-card:hover::after {
-  opacity: 1;
-}
-
-.dashboard-card.letters-card .card-icon {
-  color: rgba(255, 255, 255, 0.88);
-}
-
-.dashboard-card.letters-card:hover .card-icon {
-  opacity: 1;
-  transform: translateY(-2px) scale(1.05);
-}
-
-/* ============================================
-   SPATIAL FLOATING LAYOUT
-   ============================================ */
-
-/* Floating Dashboard Header - CENTERED */
-.dashboard-header-floating {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  pointer-events: none;
-  text-align: center;
-}
-
-.header-clock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.header-time-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.header-current-time {
-  font-size: clamp(48px, 10vw, 80px);
-  font-weight: 200;
-  font-family: var(--font-mono);
-  color: rgba(255, 255, 255, 0.40);
-  letter-spacing: 0.18em;
-  text-shadow: 0 0 40px rgba(255,255,255,0.22);
-  white-space: nowrap;
-}
-
-/* Individual digit containers */
-.time-digit {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.time-digit.flipping {
-  animation: flipDigit 0.3s ease;
-}
-
-@keyframes flipDigit {
-  0% { transform: rotateX(0deg); }
-  50% { transform: rotateX(-90deg); opacity: 0.5; }
-  100% { transform: rotateX(0deg); }
-}
-
-.header-current-date {
-  font-size: clamp(16px, 3.5vw, 22px);
-  font-weight: 300;
-  font-family: var(--font-stack);
-  color: rgba(255,255,255,0.30);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.header-time-greeting {
-  font-size: clamp(18px, 4vw, 26px);
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.34);
-  text-align: center;
-  letter-spacing: 0.05em;
-  margin-top: 8px;
-}
-
-/* Light theme header */
-body.light-theme .header-current-time {
-  color: rgba(0, 0, 0, 0.30);
-  text-shadow: 0 0 40px rgba(0,0,0,0.12);
-}
-
-body.light-theme .header-current-date {
-  color: rgba(0, 0, 0, 0.24);
-}
-
-body.light-theme .header-time-greeting {
-  color: rgba(0, 0, 0, 0.28);
-}
-
-/* Spatial Container */
-.spatial-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  opacity: 0;
-  transition: opacity 1s ease;
-  pointer-events: none;
-}
-
-.spatial-container.visible {
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* Floating Section Base */
-.floating-section {
-  position: fixed;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10;
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.spatial-container.visible .floating-section {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Unique Positioning & Shapes - BETTER SPACING */
-
-/* ============================================
-   PANEL PERSONALITIES - VERY VISIBLE
-   ============================================ */
-
-/* 1. MOOD - Soft, Glowing, Organic */
-.floating-section.mood-card {
-  top: 20px;
-  left: 20px;
-  width: clamp(360px, 30vw, 440px);
-  max-height: 56vh;
-  overflow-y: auto;
-  border-radius: 32px 24px 28px 36px !important;
-  border-left: 3px solid rgba(255, 255, 255, 0.35) !important;
-  background: 
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 60%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08)) !important;
-  box-shadow:
-    0 8px 32px rgba(255, 255, 255, 0.12),
-    inset 0 0 60px rgba(255, 255, 255, 0.08) !important;
-  animation: gentleGlow 4s ease-in-out infinite;
-  transition-delay: 0.1s;
-}
-
-@keyframes gentleGlow {
-  0%, 100% { 
-    box-shadow:
-      0 8px 32px rgba(255, 255, 255, 0.12),
-      inset 0 0 60px rgba(255, 255, 255, 0.08);
-  }
-  50% {
-    box-shadow:
-      0 12px 48px rgba(255, 255, 255, 0.18),
-      inset 0 0 80px rgba(255, 255, 255, 0.12);
-  }
-}
-
-/* 2. TASKS - Sharp, Structured, Grid */
-.floating-section.tasks-card {
-  top: 20px;
-  right: 20px;
-  width: clamp(380px, 32vw, 500px);
-  max-height: 56vh;
-  overflow-y: auto;
-  border-radius: 12px 12px 4px 4px !important;
-  border-top: 3px solid rgba(255, 255, 255, 0.32) !important;
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 19px,
-      rgba(255, 255, 255, 0.08) 19px,
-      rgba(255, 255, 255, 0.08) 20px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 19px,
-      rgba(255, 255, 255, 0.08) 19px,
-      rgba(255, 255, 255, 0.08) 20px
-    ),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06)) !important;
-  box-shadow:
-    0 8px 32px rgba(255, 255, 255, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-  transition-delay: 0.2s;
-}
-
-.floating-section.tasks-card:hover {
-  transform: translateY(-4px) !important;
-  box-shadow:
-    0 16px 48px rgba(255, 255, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-}
-
-/* 3. REMINDERS - Warm, Cozy, Soft Light */
-.floating-section.reminders-card {
-  bottom: 20px;
-  left: 20px;
-  width: clamp(360px, 30vw, 460px);
-  max-height: 56vh;
-  overflow-y: auto;
-  border-radius: 24px !important;
-  border: 2px solid rgba(255, 255, 255, 0.28) !important;
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.15), transparent 50%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.07)) !important;
-  box-shadow:
-    0 8px 32px rgba(255, 255, 255, 0.10),
-    inset 0 0 40px rgba(255, 255, 255, 0.06) !important;
-  transition-delay: 0.3s;
-}
-
-.floating-section.reminders-card:hover {
-  transform: translateY(-3px) rotate(-1deg) !important;
-  box-shadow:
-    0 16px 48px rgba(255, 255, 255, 0.16),
-    inset 0 0 60px rgba(255, 255, 255, 0.10) !important;
-}
-
-/* 4. LETTERS - Elegant, Envelope Fold */
-.floating-section.letters-card {
-  bottom: 20px;
-  right: 20px;
-  width: clamp(360px, 30vw, 460px);
-  max-height: 56vh;
-  overflow-y: auto;
-  border-radius: 20px 20px 4px 4px !important;
-  border-right: 3px solid rgba(255, 255, 255, 0.30) !important;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.30) !important;
-  background: 
-    linear-gradient(135deg, transparent 48%, rgba(255, 255, 255, 0.20) 49%, rgba(255, 255, 255, 0.20) 51%, transparent 52%),
-    linear-gradient(-135deg, transparent 48%, rgba(255, 255, 255, 0.20) 49%, rgba(255, 255, 255, 0.20) 51%, transparent 52%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.08)) !important;
-  background-size: 100% 100%, 100% 100%, 100% 100%;
-  background-position: center top, center top, 0 0;
-  box-shadow:
-    0 8px 32px rgba(255, 255, 255, 0.12),
-    inset 0 2px 0 rgba(255, 255, 255, 0.18) !important;
-  transition-delay: 0.4s;
-}
-
-.floating-section.letters-card:hover {
-  transform: translateY(-5px) !important;
-  box-shadow:
-    0 20px 60px rgba(255, 255, 255, 0.18),
-    inset 0 2px 0 rgba(255, 255, 255, 0.28) !important;
-}
-
-/* Light Mode Adjustments */
-body.light-theme .floating-section.mood-card {
-  border-left-color: rgba(0, 0, 0, 0.28) !important;
-  background: 
-    radial-gradient(circle at top left, rgba(0, 0, 0, 0.12), transparent 60%),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.05)) !important;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    inset 0 0 60px rgba(0, 0, 0, 0.04) !important;
-}
-
-body.light-theme .floating-section.tasks-card {
-  border-top-color: rgba(0, 0, 0, 0.25) !important;
-  background: 
-    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0, 0, 0, 0.05) 19px, rgba(0, 0, 0, 0.05) 20px),
-    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0, 0, 0, 0.05) 19px, rgba(0, 0, 0, 0.05) 20px),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04)) !important;
-}
-
-body.light-theme .floating-section.reminders-card {
-  border-color: rgba(0, 0, 0, 0.22) !important;
-  background:
-    radial-gradient(circle at top left, rgba(0, 0, 0, 0.14), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.10), transparent 50%),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04)) !important;
-}
-
-body.light-theme .floating-section.letters-card {
-  border-right-color: rgba(0, 0, 0, 0.24) !important;
-  border-bottom-color: rgba(0, 0, 0, 0.24) !important;
-  background: 
-    linear-gradient(135deg, transparent 48%, rgba(0, 0, 0, 0.15) 49%, rgba(0, 0, 0, 0.15) 51%, transparent 52%),
-    linear-gradient(-135deg, transparent 48%, rgba(0, 0, 0, 0.15) 49%, rgba(0, 0, 0, 0.15) 51%, transparent 52%),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.05)) !important;
-}
-
-/* Scrollbar Styling for Floating Sections */
-.floating-section::-webkit-scrollbar {
-  width: 6px;
-}
-
-.floating-section::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-.floating-section::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-}
-
-.floating-section::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
 }
 
 /* Dashboard Footer */
@@ -1829,241 +1356,29 @@ body.light-theme .floating-section.letters-card {
   gap: 8px;
 }
 
-/* Letters Container */
-.letters-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Letter Empty State */
-.letters-empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 20px;
-  text-align: center;
-  opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-}
-
-.letters-empty-icon {
-  font-size: 48px;
-  font-weight: 200;
-  margin-bottom: 16px;
-  opacity: 0.3;
-  color: rgba(255, 255, 255, 0.4);
-  font-family: var(--font-stack);
-  letter-spacing: 0.1em;
-}
-
-.letters-empty-text {
-  font-size: 15px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 0.05em;
-  line-height: 1.5;
-}
-
-/* Letter Card (Envelope Style) */
-.letter-envelope {
-  position: relative;
-  width: 100%;
-  min-height: 120px;
-  cursor: pointer;
-  perspective: 1000px;
-  margin-bottom: 12px;
-  opacity: 0;
-  animation: slideInFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.letter-inner {
-  position: relative;
-  width: 100%;
-  min-height: 120px;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
-}
-
-.letter-envelope.flipped .letter-inner {
-  transform: rotateY(180deg);
-}
-
-.letter-front, .letter-back {
-  position: absolute;
-  width: 100%;
-  backface-visibility: hidden;
-  padding: 20px;
-  border-radius: 12px;
-  background: 
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04)),
-    linear-gradient(45deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.letter-front {
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 120px;
-}
-
-.letter-back {
-  transform: rotateY(180deg);
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.letter-icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-  opacity: 0.8;
-}
-
-.letter-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0;
-  letter-spacing: 0.02em;
-}
-
-.letter-date {
-  font-size: 12px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 4px;
-  letter-spacing: 0.05em;
-}
-
-.letter-content {
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.letter-signature {
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.7);
-  font-style: italic;
-  margin-top: auto;
-  text-align: right;
-}
-
-/* Responsive - Spatial Layout */
-/* Tablet Responsive - More spacious */
-@media (max-width: 1600px) {
-  .floating-section.mood-card {
-    width: 360px;
-    max-height: 46vh;
-  }
-  
-  .floating-section.tasks-card {
-    width: 400px;
-    max-height: 46vh;
-  }
-  
-  .floating-section.reminders-card {
-    width: 350px;
-    max-height: 46vh;
-  }
-  
-  .floating-section.letters-card {
-    width: 360px;
-    max-height: 46vh;
-  }
-}
-
-@media (max-width: 1200px) {
-  .floating-section.mood-card {
-    left: 16px;
-    top: 16px;
-    width: 320px;
-    max-height: 44vh;
-  }
-  
-  .floating-section.tasks-card {
-    right: 16px;
-    top: 16px;
-    width: 340px;
-    max-height: 44vh;
-  }
-  
-  .floating-section.reminders-card {
-    left: 16px;
-    bottom: 16px;
-    width: 320px;
-    max-height: 44vh;
-  }
-  
-  .floating-section.letters-card {
-    right: 16px;
-    bottom: 16px;
-    width: 320px;
-    max-height: 44vh;
-  }
-}
-
-/* Mobile Responsive - Vertical Stack */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .floating-section {
-    position: relative !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: calc(100% - 32px) !important;
-    max-height: none !important;
-    margin: 16px;
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
   
-  .spatial-container {
-    position: relative;
-    width: 100%;
-    height: auto;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 16px 0;
+  .dashboard-content {
+    padding: 24px;
   }
   
-  .floating-section.mood-card {
-    animation: none;
-    border-radius: 24px !important;
-  }
-  
-  .floating-section.tasks-card {
-    border-radius: 24px !important;
-  }
-  
-  .floating-section.reminders-card {
-    border-radius: 24px !important;
-  }
-  
-  .floating-section.letters-card {
-    border-radius: 24px !important;
-  }
-  
-  .floating-section.reminders-card:hover {
-    transform: translateY(-2px) !important;
-    rotate: 0deg !important;
+  .dashboard-header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
   }
   
   .deadline-controls {
     grid-template-columns: 1fr;
+  }
+  
+  .footer-controls {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -2100,24 +1415,10 @@ body.light-theme .floating-section.letters-card {
   flex: 1;
 }
 
-.card-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.card-icon {
-  font-size: 20px;
-  font-weight: 300;
-  opacity: 0.7;
-  transition: all 0.3s ease;
-}
-
 .card-title {
   font-size: 18px;
   font-weight: 500;
-  margin: 0;
+  margin: 0 0 4px 0;
   color: #fff;
   letter-spacing: 0.02em;
 }
@@ -2510,127 +1811,32 @@ html {
   filter: none !important;
 }
 
-/* Light Theme - Day Mode Optimization */
-body.light-theme .floating-section {
-  background: 
-    linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.08)),
-    linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.06)) !important;
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
-  border: 1px solid rgba(0, 0, 0, 0.15) !important;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+/* Prevent light mode corner effects */
+body::before,
+body::after {
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
-body.light-theme .card-title,
-body.light-theme .card-subtitle,
-body.light-theme .card-icon {
-  color: rgba(0, 0, 0, 0.9) !important;
+/* Remove any browser light mode vignette effects */
+html, body, * {
+  background-image: none !important;
+  box-shadow: none !important;
+  border-image: none !important;
 }
 
-body.light-theme .mood-input,
-body.light-theme .task-input,
-body.light-theme .reminder-input,
-body.light-theme .deadline-date,
-body.light-theme .deadline-time {
-  color: rgba(0, 0, 0, 0.9) !important;
-  background: rgba(255, 255, 255, 0.4) !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
+/* Allow text-shadow for timer specifically */
+.timer {
+  text-shadow: 0 0 20px rgba(255,255,255,0.3) !important;
+  animation: timerGlow 3s ease-in-out infinite alternate !important;
 }
 
-body.light-theme .mood-input::placeholder,
-body.light-theme .task-input::placeholder,
-body.light-theme .reminder-input::placeholder {
-  color: rgba(0, 0, 0, 0.4) !important;
+/* Override any browser light mode defaults */
+:root {
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
 }
-
-body.light-theme .btn-primary,
-body.light-theme .btn-clear {
-  background: rgba(0, 0, 0, 0.1) !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
-  color: rgba(0, 0, 0, 0.9) !important;
-}
-
-body.light-theme .btn-primary:hover,
-body.light-theme .btn-clear:hover {
-  background: rgba(0, 0, 0, 0.15) !important;
-  border-color: rgba(0, 0, 0, 0.3) !important;
-}
-
-body.light-theme .reminder-text,
-body.light-theme .task-text,
-body.light-theme .mood-tag {
-  color: rgba(0, 0, 0, 0.9) !important;
-}
-
-body.light-theme .btn-icon {
-  background: rgba(255, 255, 255, 0.4) !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
-  color: rgba(0, 0, 0, 0.7) !important;
-}
-
-body.light-theme .btn-copy:hover {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border-color: rgba(0, 0, 0, 0.25) !important;
-  color: rgba(0, 0, 0, 1) !important;
-}
-
-body.light-theme .reminder-card {
-  background: rgba(255, 255, 255, 0.3) !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
-
-body.light-theme .reminders-empty-icon,
-body.light-theme .reminders-empty-text,
-body.light-theme .letters-empty-icon,
-body.light-theme .letters-empty-text {
-  color: rgba(0, 0, 0, 0.4) !important;
-}
-
-body.light-theme .letter-envelope {
-  background: rgba(255, 255, 255, 0.3) !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
-
-body.light-theme .letter-icon,
-body.light-theme .letter-title,
-body.light-theme .letter-date,
-body.light-theme .letter-content,
-body.light-theme .letter-signature {
-  color: rgba(0, 0, 0, 0.9) !important;
-}
-
-/* Light Theme Panel Personalities */
-body.light-theme .dashboard-card.mood-card {
-  background: 
-    linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.08)),
-    linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.06)) !important;
-  border-left: 2px solid rgba(0, 0, 0, 0.2) !important;
-}
-
-body.light-theme .dashboard-card.tasks-card {
-  background: 
-    linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.06)),
-    linear-gradient(45deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.05)) !important;
-  border-top: 2px solid rgba(0, 0, 0, 0.18) !important;
-}
-
-body.light-theme .dashboard-card.reminders-card {
-  background: 
-    linear-gradient(135deg, rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0.07)),
-    linear-gradient(45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.05)) !important;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.19) !important;
-}
-
-body.light-theme .dashboard-card.letters-card {
-  background: 
-    linear-gradient(135deg, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0.09)),
-    linear-gradient(45deg, rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0.07)) !important;
-  border-right: 2px solid rgba(0, 0, 0, 0.21) !important;
-}
-
-/* Dark Theme Default (Night Mode) - Keep existing styles */
 
 /* Enhanced visibility for light backgrounds */
 .time-display {
@@ -2976,25 +2182,5 @@ body.light-theme .dashboard-card.letters-card {
   color: #ff6b6b;
   opacity: 1;
   font-weight: 500;
-}
-
-/* ============================================
-   ROBUST SIZE OVERRIDES (high specificity)
-   ============================================ */
-.spatial-container .floating-section.mood-card {
-  width: clamp(360px, 30vw, 440px) !important;
-  max-height: 56vh !important;
-}
-.spatial-container .floating-section.tasks-card {
-  width: clamp(380px, 32vw, 500px) !important;
-  max-height: 56vh !important;
-}
-.spatial-container .floating-section.reminders-card {
-  width: clamp(360px, 30vw, 460px) !important;
-  max-height: 56vh !important;
-}
-.spatial-container .floating-section.letters-card {
-  width: clamp(360px, 30vw, 460px) !important;
-  max-height: 56vh !important;
 }
 
