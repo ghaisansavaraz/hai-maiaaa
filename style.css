@@ -920,68 +920,68 @@ body.light-theme .greeting {
 /* Radical Card Personalities - Extreme Monochrome Differentiation */
 
 /* 1. Mood Card - Ultra Soft Cloud */
-#moodSection.dashboard-card {
+.dashboard-card#moodSection {
   background: 
     linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)),
     linear-gradient(45deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05)) !important;
-  backdrop-filter: blur(32px) saturate(150%);
-  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  backdrop-filter: blur(32px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(150%) !important;
   border: 0.5px solid rgba(255,255,255,0.2) !important;
-  border-radius: 32px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.04);
-  padding: 32px;
-  transform: scale(1.02);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 32px !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.04) !important;
+  padding: 32px !important;
+  transform: scale(1.02) !important;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-#moodSection.dashboard-card:hover {
-  box-shadow: 0 12px 48px rgba(0,0,0,0.06);
-  border-color: rgba(255,255,255,0.25);
-  transform: scale(1.03);
+.dashboard-card#moodSection:hover {
+  box-shadow: 0 12px 48px rgba(0,0,0,0.06) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  transform: scale(1.03) translateY(-2px) !important;
 }
 
 /* 2. Tasks Card - Sharp Geometric */
-#tasksSection.dashboard-card {
+.dashboard-card#tasksSection {
   background: 
     repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 20px),
     repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 20px),
     linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
   border: 2px solid rgba(255,255,255,0.2) !important;
-  border-radius: 4px;
+  border-radius: 4px !important;
   box-shadow: 
     0 2px 8px rgba(0,0,0,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.1);
-  padding: 20px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    inset 0 1px 0 rgba(255,255,255,0.1) !important;
+  padding: 20px !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-#tasksSection.dashboard-card:hover {
+.dashboard-card#tasksSection:hover {
   box-shadow: 
     0 4px 12px rgba(0,0,0,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.15);
-  border-color: rgba(255,255,255,0.3);
-  transform: translateY(-1px);
+    inset 0 1px 0 rgba(255,255,255,0.15) !important;
+  border-color: rgba(255,255,255,0.3) !important;
+  transform: translateY(-1px) !important;
 }
 
 /* 3. Reminders Card - Floating Glass */
-#remindersSection.dashboard-card {
+.dashboard-card#remindersSection {
   background: 
     linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
     linear-gradient(45deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
-  backdrop-filter: blur(24px) brightness(1.1);
-  -webkit-backdrop-filter: blur(24px) brightness(1.1);
+  backdrop-filter: blur(24px) brightness(1.1) !important;
+  -webkit-backdrop-filter: blur(24px) brightness(1.1) !important;
   border: 1px solid rgba(255,255,255,0.25) !important;
-  border-radius: 20px;
+  border-radius: 20px !important;
   box-shadow: 
     0 24px 80px rgba(0,0,0,0.2),
-    0 0 40px rgba(255,255,255,0.08);
-  padding: 28px 24px 20px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    0 0 40px rgba(255,255,255,0.08) !important;
+  padding: 28px 24px 20px !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-#remindersSection.dashboard-card::before {
+.dashboard-card#remindersSection::before {
   content: '';
   position: absolute;
   inset: -20px;
@@ -993,36 +993,36 @@ body.light-theme .greeting {
   z-index: -1;
 }
 
-#remindersSection.dashboard-card:hover {
+.dashboard-card#remindersSection:hover {
   box-shadow: 
     0 32px 96px rgba(0,0,0,0.25),
-    0 0 60px rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.3);
-  transform: translateY(-4px);
+    0 0 60px rgba(255,255,255,0.12) !important;
+  border-color: rgba(255,255,255,0.3) !important;
+  transform: translateY(-4px) !important;
 }
 
-#remindersSection.dashboard-card:hover::before {
+.dashboard-card#remindersSection:hover::before {
   opacity: 1;
 }
 
 /* 4. Letters Card - Frosted Frame */
-#lettersSection.dashboard-card {
+.dashboard-card#lettersSection {
   background: 
     linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)),
     linear-gradient(45deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
   border: 2px solid rgba(255,255,255,0.15) !important;
-  border-radius: 24px 8px 24px 8px;
+  border-radius: 24px 8px 24px 8px !important;
   box-shadow: 
     0 8px 32px rgba(0,0,0,0.12),
-    inset 0 2px 4px rgba(0,0,0,0.05);
-  padding: 24px;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    inset 0 2px 4px rgba(0,0,0,0.05) !important;
+  padding: 24px !important;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* Inner border effect */
-#lettersSection.dashboard-card::before {
+.dashboard-card#lettersSection::before {
   content: '';
   position: absolute;
   inset: 4px;
@@ -1032,7 +1032,7 @@ body.light-theme .greeting {
 }
 
 /* Decorative corner accents */
-#lettersSection.dashboard-card::after {
+.dashboard-card#lettersSection::after {
   content: '';
   position: absolute;
   top: 12px;
@@ -1043,14 +1043,15 @@ body.light-theme .greeting {
   border-left: 2px solid rgba(255,255,255,0.3);
   border-radius: 4px 0 0 0;
   pointer-events: none;
+  z-index: 1;
 }
 
-#lettersSection.dashboard-card:hover {
+.dashboard-card#lettersSection:hover {
   box-shadow: 
     0 12px 40px rgba(0,0,0,0.15),
-    inset 0 2px 4px rgba(0,0,0,0.08);
-  border-color: rgba(255,255,255,0.25);
-  transform: scale(1.01);
+    inset 0 2px 4px rgba(0,0,0,0.08) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  transform: scale(1.01) !important;
 }
 
 /* Card-Specific Button & Layout Styling */
