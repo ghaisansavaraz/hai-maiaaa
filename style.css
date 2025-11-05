@@ -917,6 +917,100 @@ body.light-theme .greeting {
   box-shadow: 0 16px 64px rgba(0,0,0,0.1);
 }
 
+/* Unique Card Personalities - Monochrome Differentiation */
+
+/* 1. Mood Card - Light & Airy */
+#moodSection.dashboard-card {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)),
+    linear-gradient(45deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+#moodSection.dashboard-card:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* 2. Tasks Card - Structured & Crisp */
+#tasksSection.dashboard-card {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+    linear-gradient(45deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+#tasksSection.dashboard-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* 3. Reminders Card - Elevated & Floating */
+#remindersSection.dashboard-card {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025)),
+    linear-gradient(45deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 18px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+}
+
+#remindersSection.dashboard-card:hover {
+  box-shadow: 
+    0 20px 64px rgba(0,0,0,0.18),
+    0 0 32px rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.15);
+}
+
+/* 4. Letters Card - Delicate & Precious */
+#lettersSection.dashboard-card {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.035)),
+    linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025)) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.11) !important;
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0,0,0,0.08),
+    0 0 16px rgba(255,255,255,0.03);
+}
+
+#lettersSection.dashboard-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.1), 
+    transparent 50%, 
+    rgba(255,255,255,0.05));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+#lettersSection.dashboard-card:hover {
+  box-shadow: 
+    0 12px 40px rgba(0,0,0,0.1),
+    0 0 24px rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.16);
+}
+
 .card-header {
   margin-bottom: 20px;
 }
