@@ -358,29 +358,250 @@
     debugLog("Header time display started successfully");
   }
 
-  // ---- Mood system ----
-  function loadMoods() {
+  // ---- Enhanced Mood System with Migration ----
+  
+  // Data migration: Convert old string array to new object format
+  function migrateMoodData() {
     try {
-      const moods = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY) || "[]");
-      moodTags.innerHTML = "";
-      moods.forEach(mood => {
-        const tag = document.createElement("div");
-        tag.className = "mood-tag";
-        tag.textContent = mood;
-        moodTags.appendChild(tag);
-      });
-    } catch (e) { console.error(e); }
+      const stored = localStorage.getItem(MOOD_STORAGE_KEY);
+      if (!stored) return [];
+      
+      const data = JSON.parse(stored);
+      
+      // Check if already migrated (first item is object with timestamp)
+      if (data.length > 0 && typeof data[0] === 'object' && data[0].timestamp) {
+        debugLog("Mood data already in new format");
+        return data;
+      }
+      
+      // Migrate old string array to new object format
+      debugLog("Migrating mood data from old format...");
+      const migratedData = data.map((mood, index) => ({
+        id: Date.now() + index,
+        mood: mood,
+        intensity: "medium",
+        note: "",
+        timestamp: new Date(Date.now() - (data.length - index) * 3600000).toISOString()
+      }));
+      
+      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(migratedData));
+      debugLog("✓ Mood data migrated successfully:", migratedData.length, "moods");
+      return migratedData;
+      
+    } catch (e) {
+      debugError("Mood migration failed:", e);
+      return [];
+    }
   }
 
-  function saveMood(mood) {
+  // Format timestamp to relative time
+  function formatTimeAgo(timestamp) {
+    const now = new Date();
+    const then = new Date(timestamp);
+    const seconds = Math.floor((now - then) / 1000);
+    
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    if (seconds < 172800) return 'Yesterday';
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+    return then.toLocaleDateString();
+  }
+
+  // Calculate mood analytics
+  function calculateMoodAnalytics(moods) {
+    if (moods.length === 0) return null;
+    
+    const today = new Date().toDateString();
+    const todayMoods = moods.filter(m => new Date(m.timestamp).toDateString() === today);
+    
+    // Most felt today
+    const moodCounts = {};
+    todayMoods.forEach(m => {
+      moodCounts[m.mood] = (moodCounts[m.mood] || 0) + 1;
+    });
+    const mostFelt = Object.keys(moodCounts).length > 0 
+      ? Object.entries(moodCounts).sort((a, b) => b[1] - a[1])[0][0]
+      : null;
+    
+    return {
+      mostFelt,
+      rangeToday: todayMoods.length,
+      totalMoods: moods.length
+    };
+  }
+
+  // Load and render moods
+  function loadMoods() {
     try {
-      const moods = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY) || "[]");
-      if (!moods.includes(mood)) {
-        moods.push(mood);
+      const moods = migrateMoodData();
+      if (!moodTags) return;
+      
+      moodTags.innerHTML = "";
+      
+      if (moods.length === 0) {
+        // Empty state
+        const emptyState = document.createElement("div");
+        emptyState.className = "mood-empty-state";
+        emptyState.innerHTML = `
+          <div class="mood-empty-icon">∅</div>
+          <div class="mood-empty-text">How is Maia feeling?</div>
+        `;
+        moodTags.appendChild(emptyState);
+        
+        // Hide analytics
+        const analytics = document.getElementById("moodAnalytics");
+        if (analytics) analytics.style.display = "none";
+        return;
+      }
+      
+      // Sort by timestamp (newest first)
+      const sortedMoods = [...moods].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      sortedMoods.forEach((moodData, index) => {
+        const tag = document.createElement("div");
+        tag.className = `mood-tag intensity-${moodData.intensity}`;
+        tag.setAttribute("data-id", moodData.id);
+        tag.style.animationDelay = `${index * 0.05}s`;
+        
+        // Mood text
+        const moodText = document.createElement("span");
+        moodText.className = "mood-tag-text";
+        moodText.textContent = moodData.mood;
+        tag.appendChild(moodText);
+        
+        // Timestamp
+        const timestamp = document.createElement("div");
+        timestamp.className = "mood-timestamp";
+        timestamp.textContent = formatTimeAgo(moodData.timestamp);
+        tag.appendChild(timestamp);
+        
+        // Note indicator
+        if (moodData.note) {
+          const noteIndicator = document.createElement("div");
+          noteIndicator.className = "mood-note-indicator";
+          tag.appendChild(noteIndicator);
+          
+          // Tooltip on hover
+          tag.setAttribute("title", moodData.note);
+        }
+        
+        // Click to cycle intensity
+        tag.addEventListener("click", (e) => {
+          if (e.detail === 1) { // Single click
+            cycleMoodIntensity(moodData.id);
+          }
+        });
+        
+        // Double-click to edit note
+        tag.addEventListener("dblclick", (e) => {
+          e.preventDefault();
+          editMoodNote(moodData.id);
+        });
+        
+        moodTags.appendChild(tag);
+      });
+      
+      // Update analytics
+      updateMoodAnalytics(moods);
+      
+    } catch (e) { 
+      debugError("Failed to load moods:", e);
+    }
+  }
+
+  // Cycle mood intensity
+  function cycleMoodIntensity(id) {
+    try {
+      const moods = migrateMoodData();
+      const mood = moods.find(m => m.id === id);
+      if (!mood) return;
+      
+      const intensities = ["light", "medium", "strong"];
+      const currentIndex = intensities.indexOf(mood.intensity);
+      const nextIndex = (currentIndex + 1) % intensities.length;
+      
+      mood.intensity = intensities[nextIndex];
+      
+      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moods));
+      loadMoods();
+      
+      debugLog(`Mood intensity changed to: ${mood.intensity}`);
+    } catch (e) {
+      debugError("Failed to cycle intensity:", e);
+    }
+  }
+
+  // Edit mood note
+  function editMoodNote(id) {
+    try {
+      const moods = migrateMoodData();
+      const mood = moods.find(m => m.id === id);
+      if (!mood) return;
+      
+      const note = prompt(`Add a note for "${mood.mood}":`, mood.note || "");
+      if (note !== null) {
+        mood.note = note.trim();
         localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moods));
         loadMoods();
+        debugLog(`Note ${note ? 'added' : 'removed'} for mood: ${mood.mood}`);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      debugError("Failed to edit note:", e);
+    }
+  }
+
+  // Update mood analytics display
+  function updateMoodAnalytics(moods) {
+    const analytics = document.getElementById("moodAnalytics");
+    if (!analytics) return;
+    
+    const stats = calculateMoodAnalytics(moods);
+    if (!stats) {
+      analytics.style.display = "none";
+      return;
+    }
+    
+    analytics.style.display = "flex";
+    
+    const mostFeltEl = analytics.querySelector(".mood-stat-most");
+    const rangeEl = analytics.querySelector(".mood-stat-range");
+    
+    if (mostFeltEl && stats.mostFelt) {
+      mostFeltEl.innerHTML = `Most felt today: <span>${stats.mostFelt}</span>`;
+    }
+    
+    if (rangeEl) {
+      rangeEl.innerHTML = `Today's range: <span>${stats.rangeToday} ${stats.rangeToday === 1 ? 'mood' : 'moods'}</span>`;
+    }
+  }
+
+  // Save new mood
+  function saveMood(moodText, intensity = "medium") {
+    try {
+      const moods = migrateMoodData();
+      
+      const newMood = {
+        id: Date.now(),
+        mood: moodText.trim(),
+        intensity: intensity,
+        note: "",
+        timestamp: new Date().toISOString()
+      };
+      
+      moods.unshift(newMood); // Add to beginning (newest first)
+      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moods));
+      loadMoods();
+      
+      debugLog("New mood added:", newMood);
+    } catch (e) { 
+      debugError("Failed to save mood:", e);
+    }
+  }
+
+  // Quick preset mood buttons
+  function addPresetMood(moodText) {
+    saveMood(moodText, "medium");
   }
 
   // ---- Letters system ----
@@ -677,9 +898,9 @@
   const clearMoodBtn = document.getElementById("clearMood");
   if (clearMoodBtn) {
     clearMoodBtn.addEventListener("click", () => {
-      if (confirm("Clear mood tags?")) {
+      if (confirm("Clear all moods?")) {
         localStorage.removeItem(MOOD_STORAGE_KEY);
-        if (moodTags) moodTags.innerHTML = "";
+        loadMoods();
       }
     });
   }
@@ -730,16 +951,35 @@
   }
 
   // ---- Event listeners for new features ----
-  if (moodInput) {
-    moodInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const mood = moodInput.value.trim();
+  function initMoodEventListeners() {
+    // Mood preset buttons
+    const moodPresets = document.querySelectorAll(".mood-preset");
+    moodPresets.forEach(button => {
+      button.addEventListener("click", () => {
+        const mood = button.getAttribute("data-mood");
         if (mood) {
-          saveMood(mood);
-          moodInput.value = "";
+          addPresetMood(mood);
+          // Visual feedback
+          button.style.transform = "scale(0.9)";
+          setTimeout(() => {
+            button.style.transform = "";
+          }, 150);
         }
-      }
+      });
     });
+    
+    // Mood input
+    if (moodInput) {
+      moodInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const mood = moodInput.value.trim();
+          if (mood) {
+            saveMood(mood);
+            moodInput.value = "";
+          }
+        }
+      });
+    }
   }
 
   // Hidden editor key (triple-click on dashboard title)
@@ -923,6 +1163,9 @@
       if (moodTags) loadMoods();
       if (reminderList) renderReminders();
       if (lettersContainer) renderLetters();
+      
+      // Initialize mood event listeners
+      initMoodEventListeners();
       
       // Initialize task system
       loadTasks();

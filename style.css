@@ -917,6 +917,308 @@ body.light-theme .greeting {
   box-shadow: 0 16px 64px rgba(0,0,0,0.1);
 }
 
+/* Radical Card Personalities - Extreme Monochrome Differentiation */
+
+/* 1. Mood Card - Ultra Soft Cloud */
+#moodSection.dashboard-card {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)),
+    linear-gradient(45deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05)) !important;
+  backdrop-filter: blur(32px) saturate(150%);
+  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  border: 0.5px solid rgba(255,255,255,0.2) !important;
+  border-radius: 32px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.04);
+  padding: 32px;
+  transform: scale(1.02);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#moodSection.dashboard-card:hover {
+  box-shadow: 0 12px 48px rgba(0,0,0,0.06);
+  border-color: rgba(255,255,255,0.25);
+  transform: scale(1.03);
+}
+
+/* 2. Tasks Card - Sharp Geometric */
+#tasksSection.dashboard-card {
+  background: 
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 20px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 20px),
+    linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 2px solid rgba(255,255,255,0.2) !important;
+  border-radius: 4px;
+  box-shadow: 
+    0 2px 8px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  padding: 20px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#tasksSection.dashboard-card:hover {
+  box-shadow: 
+    0 4px 12px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+/* 3. Reminders Card - Floating Glass */
+#remindersSection.dashboard-card {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
+    linear-gradient(45deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  backdrop-filter: blur(24px) brightness(1.1);
+  -webkit-backdrop-filter: blur(24px) brightness(1.1);
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  border-radius: 20px;
+  box-shadow: 
+    0 24px 80px rgba(0,0,0,0.2),
+    0 0 40px rgba(255,255,255,0.08);
+  padding: 28px 24px 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#remindersSection.dashboard-card::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 30px;
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.15), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#remindersSection.dashboard-card:hover {
+  box-shadow: 
+    0 32px 96px rgba(0,0,0,0.25),
+    0 0 60px rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-4px);
+}
+
+#remindersSection.dashboard-card:hover::before {
+  opacity: 1;
+}
+
+/* 4. Letters Card - Frosted Frame */
+#lettersSection.dashboard-card {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)),
+    linear-gradient(45deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid rgba(255,255,255,0.15) !important;
+  border-radius: 24px 8px 24px 8px;
+  box-shadow: 
+    0 8px 32px rgba(0,0,0,0.12),
+    inset 0 2px 4px rgba(0,0,0,0.05);
+  padding: 24px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Inner border effect */
+#lettersSection.dashboard-card::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 20px 6px 20px 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  pointer-events: none;
+}
+
+/* Decorative corner accents */
+#lettersSection.dashboard-card::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid rgba(255,255,255,0.3);
+  border-left: 2px solid rgba(255,255,255,0.3);
+  border-radius: 4px 0 0 0;
+  pointer-events: none;
+}
+
+#lettersSection.dashboard-card:hover {
+  box-shadow: 
+    0 12px 40px rgba(0,0,0,0.15),
+    inset 0 2px 4px rgba(0,0,0,0.08);
+  border-color: rgba(255,255,255,0.25);
+  transform: scale(1.01);
+}
+
+/* Card-Specific Button & Layout Styling */
+
+/* Mood Section - Soft & Spacious */
+#moodSection .card-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+#moodSection .mood-input {
+  text-align: center;
+  border-radius: 20px;
+  border: none;
+  padding: 16px 24px;
+  font-size: 15px;
+  background: rgba(255,255,255,0.08);
+  transition: all 0.4s ease;
+}
+
+#moodSection .mood-input:focus {
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
+}
+
+#moodSection .mood-tags {
+  justify-content: center;
+  gap: 12px;
+}
+
+#moodSection .btn-clear {
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0.6;
+  transition: all 0.4s ease;
+}
+
+#moodSection .btn-clear:hover {
+  opacity: 1;
+  background: rgba(255,255,255,0.1);
+}
+
+/* Tasks Section - Grid & Precision */
+#tasksSection .task-controls {
+  display: grid;
+  gap: 8px;
+}
+
+#tasksSection .task-input,
+#tasksSection .deadline-date,
+#tasksSection .deadline-time {
+  border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: rgba(255,255,255,0.03);
+}
+
+#tasksSection .deadline-controls {
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+#tasksSection .btn-primary {
+  border-radius: 4px;
+  padding: 10px 18px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+#tasksSection .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+#tasksSection .btn-primary:active {
+  transform: translateY(0);
+}
+
+#tasksSection .btn-clear {
+  border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,0.12);
+}
+
+/* Reminders Section - Elevated Controls */
+#remindersSection .reminder-controls {
+  gap: 12px;
+}
+
+#remindersSection .reminder-input {
+  border-radius: 16px;
+  padding: 14px 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06);
+}
+
+#remindersSection .btn-primary {
+  border-radius: 16px;
+  padding: 14px 24px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+#remindersSection .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+#remindersSection .btn-icon {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#remindersSection .btn-icon:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+#remindersSection .btn-clear {
+  border-radius: 16px;
+}
+
+/* Letters Section - Minimal & Refined */
+#lettersSection .card-title {
+  font-weight: 200;
+  font-size: 20px;
+  letter-spacing: 0.08em;
+}
+
+#lettersSection .card-subtitle {
+  font-weight: 200;
+  letter-spacing: 0.12em;
+}
+
+#lettersSection .btn-clear {
+  border: none;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  padding: 4px 8px;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+#lettersSection .btn-clear:hover {
+  background: transparent;
+  letter-spacing: 0.15em;
+  text-decoration-thickness: 2px;
+}
+
+#lettersSection .coming-soon {
+  padding: 60px 20px;
+}
+
+#lettersSection .coming-soon-text {
+  font-weight: 200;
+  letter-spacing: 0.15em;
+}
+
 .card-header {
   margin-bottom: 20px;
 }
@@ -1058,12 +1360,100 @@ body.light-theme .greeting {
   border: 1px solid rgba(255,255,255,0.05);
 }
 
-/* mood section */
+/* Enhanced Mood Section */
+
+/* Mood Presets */
+.mood-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.mood-preset {
+  padding: 10px 18px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)),
+    linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+}
+
+/* Unique shapes for each mood */
+.mood-preset.mood-happy {
+  border-radius: 16px;
+  transform: rotate(-1deg);
+}
+
+.mood-preset.mood-calm {
+  border-radius: 50%;
+  padding: 12px 20px;
+}
+
+.mood-preset.mood-energetic {
+  border-radius: 4px;
+  transform: rotate(2deg);
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+  padding: 12px 24px;
+}
+
+.mood-preset.mood-loved {
+  border-radius: 20px 20px 4px 20px;
+}
+
+.mood-preset.mood-grateful {
+  border-radius: 8px;
+  transform: rotate(-2deg);
+}
+
+.mood-preset.mood-tired {
+  border-radius: 30px;
+  padding: 10px 22px;
+}
+
+.mood-preset.mood-anxious {
+  border-radius: 6px 18px 6px 18px;
+  transform: rotate(1deg);
+}
+
+.mood-preset.mood-sad {
+  border-radius: 4px 4px 20px 20px;
+}
+
+.mood-preset:hover {
+  transform: translateY(-2px) scale(1.05) rotate(0deg);
+  border-color: rgba(255,255,255,0.25);
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08)),
+    linear-gradient(45deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.mood-preset:active {
+  transform: scale(0.95);
+}
+
+/* Mood input container */
 .mood-input-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
+
 .mood-input {
   padding: 12px 16px;
   border-radius: 12px;
@@ -1074,54 +1464,174 @@ body.light-theme .greeting {
   font-size: 1rem;
   transition: border-color 0.3s ease, background 0.3s ease;
 }
+
 .mood-input:focus {
   outline: none;
   border-color: rgba(255,255,255,0.15);
   background: rgba(255,255,255,0.04);
 }
+
+/* Mood tags container */
 .mood-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
   min-height: 32px;
+  position: relative;
 }
 .mood-tag {
-  padding: 8px 16px;
+  padding: 12px 20px 8px;
   border-radius: 20px;
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)),
-    linear-gradient(45deg, rgba(240,240,240,0.15), rgba(250,250,250,0.15));
-  backdrop-filter: var(--blur-sm);
-  border: 1px solid rgba(255,255,255,0.25);
+    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)),
+    linear-gradient(45deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.2);
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 400;
   opacity: 0;
   transform: scale(0.8) translateY(10px);
   animation: tagAppear 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  overflow: visible;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
 }
 
-.mood-tag::before {
-  content: '';
+/* Mood tag text */
+.mood-tag-text {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* Timestamp styling */
+.mood-timestamp {
+  font-size: 10px;
+  font-weight: 200;
+  opacity: 0.4;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+/* Note indicator (small dot) */
+.mood-note-indicator {
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: left var(--transition-normal);
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+
+/* Intensity levels */
+.mood-tag.intensity-light {
+  transform: scale(0.9);
+  opacity: 0.7;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-width: 0.5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.mood-tag.intensity-medium {
+  transform: scale(1);
+  opacity: 0.9;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-width: 1px;
+}
+
+.mood-tag.intensity-strong {
+  transform: scale(1.1);
+  opacity: 1;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-width: 1.5px;
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  font-weight: 500;
+}
+
+/* Mood Section - Enhanced hover effects */
+#moodSection .mood-tag:hover {
+  transform: scale(1.05) translateY(-3px) rotate(-1deg);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.1)),
+    linear-gradient(45deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* Mood Analytics */
+.mood-analytics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.mood-stat {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.mood-stat span {
+  color: rgba(255,255,255,0.9);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* Mood Empty State */
+.mood-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.mood-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+  animation: floatGentle 3s ease-in-out infinite;
+}
+
+.mood-empty-text {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
 
 .mood-tag:hover {
   transform: scale(1.05) translateY(-2px);
   box-shadow: var(--shadow-md);
   border-color: rgba(255,255,255,0.25);
-}
-
-.mood-tag:hover::before {
-  left: 100%;
 }
 @keyframes tagAppear {
   to {
@@ -1496,6 +2006,37 @@ body.light-theme .greeting {
   animation: slideInFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* Reminders Section - Floating Card Variations */
+#remindersSection .reminder-card {
+  border-radius: 16px;
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+    linear-gradient(45deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 18px 20px;
+}
+
+#remindersSection .reminder-card:nth-child(odd) {
+  transform: translateX(-4px);
+}
+
+#remindersSection .reminder-card:nth-child(even) {
+  transform: translateX(4px);
+}
+
+#remindersSection .reminder-card:nth-child(3n) {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+
+#remindersSection .reminder-card:hover {
+  transform: translateY(-4px) rotate(0.5deg) scale(1.01);
+  border-color: rgba(255,255,255,0.25);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+}
+
 .reminder-card:hover {
   transform: translateY(-2px);
   border-color: rgba(255,255,255,0.18);
@@ -1776,6 +2317,32 @@ body.light-theme .greeting {
   font-weight: 300;
   color: rgba(255,255,255,0.6);
   letter-spacing: 0.05em;
+}
+
+/* Task Items - Sharp & Structured */
+#tasksSection .task-item {
+  border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.03);
+  padding: 12px 16px;
+}
+
+#tasksSection .task-item:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.2);
+}
+
+#tasksSection .task-checkbox {
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+#tasksSection .task-deadline {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 10px;
 }
 
 /* Task Completion Styling */
