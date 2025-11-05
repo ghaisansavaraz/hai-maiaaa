@@ -144,7 +144,7 @@
   }
   class DynamicBackground {
     constructor() {
-      debugLog("Initializing reversed light/dark background system with clouds and light rays...");
+      debugLog("Initializing time-based background system (pure white/black)...");
       this.updateBackground();
       this.startTimeSync();
     }
@@ -157,7 +157,7 @@
         return { 
           name: 'light', 
           isLight: true,
-          gradient: 'linear-gradient(45deg, #ffffff, #e0e0e0, #f0f0f0, #d0d0d0, #ffffff, #c0c0c0, #f8f8f8)'
+          gradient: '#ffffff'
         };
       } else {
         return { 
@@ -179,10 +179,10 @@
       document.documentElement.classList.remove('light-mode', 'dark-mode');
       
       if (theme.isLight) {
-        // Light mode: white background with black dashboard
+        // Light mode: pure white background with black dashboard
         document.body.style.setProperty('background', theme.gradient, 'important');
-        document.body.style.setProperty('background-size', '400% 400%', 'important');
-        document.body.style.setProperty('animation', 'gradientMove 6s linear infinite', 'important');
+        document.body.style.removeProperty('background-size');
+        document.body.style.setProperty('animation', 'none', 'important');
         document.body.style.setProperty('background-attachment', 'fixed', 'important');
         document.body.style.setProperty('color', '#000000', 'important');
         document.body.style.setProperty('color-scheme', 'light', 'important');
@@ -192,12 +192,12 @@
         document.body.classList.add('light-theme');
         document.body.classList.remove('dark-theme');
         
-        // Show day particles (clouds and light rays), hide stars
-        document.body.classList.add('show-day-particles');
+        // Hide day particles (no clouds/light rays), hide stars
+        document.body.classList.remove('show-day-particles');
         document.body.classList.remove('show-stars');
-        document.body.classList.remove('hide-day-particles');
+        document.body.classList.add('hide-day-particles');
         
-        debugLog('Applied light theme: white background, black dashboard, day particles');
+        debugLog('Applied light theme: pure white background, black dashboard, no particles');
       } else {
         // Dark mode: enforce pure black background with no animation to remove glare
         document.body.style.setProperty('background', '#000000', 'important');
