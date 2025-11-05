@@ -829,12 +829,11 @@ body.light-theme .greeting {
 /* Individual digit containers */
 .time-digit {
   display: inline-block;
-  transition: transform 0.3s ease;
-  perspective: 100px;
+  transition: opacity 0.3s ease;
 }
 
 .time-digit.flipping {
-  transform: rotateX(-90deg);
+  opacity: 0.3;
 }
 
 .header-current-date {
