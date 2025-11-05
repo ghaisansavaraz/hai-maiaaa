@@ -1061,6 +1061,27 @@ body.light-theme .greeting {
   margin-bottom: 28px;
 }
 
+#moodSection .mood-presets {
+  margin-bottom: 28px;
+}
+
+#moodSection .mood-preset {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)),
+    linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15);
+  font-weight: 300;
+}
+
+#moodSection .mood-preset:hover {
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08)),
+    linear-gradient(45deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+  border-color: rgba(255,255,255,0.25);
+}
+
 #moodSection .mood-input {
   text-align: center;
   border-radius: 20px;
@@ -1362,89 +1383,99 @@ body.light-theme .greeting {
 
 /* Enhanced Mood Section */
 
-/* Mood Presets */
+/* Mood Presets - Stylish Minimal Design */
 .mood-presets {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
-  margin-bottom: 20px;
-  padding: 16px;
-  background: rgba(255,255,255,0.03);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .mood-preset {
-  padding: 10px 18px;
-  border: 1px solid rgba(255,255,255,0.15);
+  padding: 10px 20px;
+  border: 1px solid rgba(255,255,255,0.12);
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)),
-    linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #fff;
+    linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)),
+    linear-gradient(45deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255,255,255,0.8);
   cursor: pointer;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 300;
+  font-family: var(--font-stack);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-/* Unique shapes for each mood */
+.mood-preset::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Unique shapes for each mood - subtle variations */
 .mood-preset.mood-happy {
-  border-radius: 16px;
-  transform: rotate(-1deg);
+  border-radius: 14px;
 }
 
 .mood-preset.mood-calm {
-  border-radius: 50%;
-  padding: 12px 20px;
+  border-radius: 20px;
 }
 
 .mood-preset.mood-energetic {
-  border-radius: 4px;
-  transform: rotate(2deg);
-  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
-  padding: 12px 24px;
+  border-radius: 6px;
 }
 
 .mood-preset.mood-loved {
-  border-radius: 20px 20px 4px 20px;
+  border-radius: 16px 16px 6px 16px;
 }
 
 .mood-preset.mood-grateful {
-  border-radius: 8px;
-  transform: rotate(-2deg);
+  border-radius: 10px;
 }
 
 .mood-preset.mood-tired {
-  border-radius: 30px;
-  padding: 10px 22px;
+  border-radius: 18px;
 }
 
 .mood-preset.mood-anxious {
-  border-radius: 6px 18px 6px 18px;
-  transform: rotate(1deg);
+  border-radius: 8px 14px 8px 14px;
 }
 
 .mood-preset.mood-sad {
-  border-radius: 4px 4px 20px 20px;
+  border-radius: 6px 6px 16px 16px;
 }
 
 .mood-preset:hover {
-  transform: translateY(-2px) scale(1.05) rotate(0deg);
-  border-color: rgba(255,255,255,0.25);
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,1);
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08)),
-    linear-gradient(45deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)),
+    linear-gradient(45deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.mood-preset:hover::before {
+  opacity: 1;
 }
 
 .mood-preset:active {
-  transform: scale(0.95);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 /* Mood input container */

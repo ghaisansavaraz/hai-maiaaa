@@ -954,9 +954,16 @@
   function initMoodEventListeners() {
     // Mood preset buttons
     const moodPresets = document.querySelectorAll(".mood-preset");
-    moodPresets.forEach(button => {
-      button.addEventListener("click", () => {
-        const mood = button.getAttribute("data-mood");
+    debugLog(`Found ${moodPresets.length} mood preset buttons`);
+    
+    moodPresets.forEach((button, index) => {
+      const mood = button.getAttribute("data-mood");
+      debugLog(`Setting up preset button ${index}: ${mood}`);
+      
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        debugLog(`Preset button clicked: ${mood}`);
+        
         if (mood) {
           addPresetMood(mood);
           // Visual feedback
