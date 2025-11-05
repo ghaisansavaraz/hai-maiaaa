@@ -829,11 +829,29 @@ body.light-theme .greeting {
 /* Individual digit containers */
 .time-digit {
   display: inline-block;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .time-digit.flipping {
-  opacity: 0.3;
+  animation: particleFade 0.6s ease-out;
+}
+
+@keyframes particleFade {
+  0% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.2;
+    filter: blur(8px);
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
 }
 
 .header-current-date {

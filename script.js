@@ -283,7 +283,7 @@
               digitSpan.classList.add('flipping');
               setTimeout(() => {
                 digitSpan.classList.remove('flipping');
-              }, 300);
+              }, 600);
             }
             
             partContainer.appendChild(digitSpan);
