@@ -1245,6 +1245,39 @@
   window.deleteTask = deleteTask;
   window.addTask = addTask;
 
+  // ---- Card Activation System (Show/Hide Controls) ----
+  function initCardActivation() {
+    const cards = document.querySelectorAll('.dashboard-card');
+    
+    cards.forEach(card => {
+      // Click card to toggle active state
+      card.addEventListener('click', (e) => {
+        // Don't toggle if clicking on inputs, buttons, or interactive elements
+        if (e.target.matches('input, button, .mood-tag, .task-checkbox, .reminder-card, .btn-icon')) {
+          return;
+        }
+        
+        card.classList.toggle('active');
+        debugLog(`Card ${card.id} toggled to: ${card.classList.contains('active') ? 'active' : 'inactive'}`);
+      });
+    });
+    
+    // Click outside any card to close all
+    document.addEventListener('click', (e) => {
+      const clickedCard = e.target.closest('.dashboard-card');
+      
+      if (!clickedCard) {
+        // Clicked outside all cards - deactivate all
+        cards.forEach(card => {
+          if (card.classList.contains('active')) {
+            card.classList.remove('active');
+            debugLog(`Card ${card.id} deactivated (clicked outside)`);
+          }
+        });
+      }
+    });
+  }
+
   // ---- Init ----
   document.addEventListener("DOMContentLoaded", () => {
     try {
@@ -1258,6 +1291,9 @@
       
       // Apply time-based theme
       applyTheme();
+      
+      // Initialize card activation system
+      initCardActivation();
       
       // Initialize all components
       if (greetingEl) setGreeting();

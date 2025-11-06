@@ -944,6 +944,56 @@ body.light-theme .greeting {
   justify-content: center;
 }
 
+/* Hide controls by default, show on hover or when active */
+.dashboard-card .mood-input-container,
+.dashboard-card .task-controls,
+.dashboard-card .reminder-controls,
+.dashboard-card .btn-clear {
+  opacity: 0;
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+              max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show on card hover */
+.dashboard-card:hover .mood-input-container,
+.dashboard-card:hover .task-controls,
+.dashboard-card:hover .reminder-controls,
+.dashboard-card:hover .btn-clear {
+  opacity: 1;
+  pointer-events: auto;
+  max-height: 500px;
+}
+
+/* Show when card is active (clicked) */
+.dashboard-card.active .mood-input-container,
+.dashboard-card.active .task-controls,
+.dashboard-card.active .reminder-controls,
+.dashboard-card.active .btn-clear {
+  opacity: 1;
+  pointer-events: auto;
+  max-height: 500px;
+}
+
+/* Always show mood tags, tasks, and reminders */
+.dashboard-card .mood-tags,
+.dashboard-card .tasks-container,
+.dashboard-card .reminder-cards,
+.dashboard-card .mood-analytics,
+.dashboard-card .coming-soon {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Card titles and subtitles always visible */
+.dashboard-card .card-title,
+.dashboard-card .card-subtitle {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
 .card-header {
   margin-bottom: 20px;
 }
@@ -1113,20 +1163,6 @@ body.light-theme .greeting {
   border-radius: 14px;
 }
 
-/* Inner lining effect for all categories */
-.mood-category::after {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
-  pointer-events: none;
-  transition: border-color 0.3s ease;
-}
-
-.mood-category:not(:disabled):hover::after {
-  border-color: rgba(255,255,255,0.15);
-}
 
 .mood-category:disabled {
   cursor: not-allowed;
@@ -1238,6 +1274,7 @@ body.light-theme .greeting {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow: visible;
 }
 
 .mood-input {
@@ -1269,10 +1306,10 @@ body.light-theme .greeting {
 
 /* Hide mood tags during input */
 .mood-tags.hidden {
-  opacity: 0;
+  opacity: 0 !important;
   max-height: 0;
   overflow: hidden;
-  pointer-events: none;
+  pointer-events: none !important;
 }
 
 /* Category buttons hidden by default, shown during input */
@@ -1296,11 +1333,11 @@ body.light-theme .greeting {
 
 .mood-categories.visible {
   max-height: 200px;
-  opacity: 1;
+  opacity: 1 !important;
   transform: scale(1) translateY(0);
   margin-top: 16px;
   margin-bottom: 20px;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 .mood-tag {
   padding: 16px 24px 12px;
