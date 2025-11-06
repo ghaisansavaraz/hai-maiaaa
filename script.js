@@ -1008,13 +1008,9 @@
           if (moodTagsContainer) moodTagsContainer.classList.add("hidden");
           if (analyticsContainer) analyticsContainer.classList.add("hidden");
           
-          // Enable category buttons with animation restart
-          categoryButtons.forEach((btn, index) => {
+          // Enable category buttons
+          categoryButtons.forEach((btn) => {
             btn.disabled = false;
-            // Force animation restart
-            btn.style.animation = 'none';
-            btn.offsetHeight; // Trigger reflow
-            btn.style.animation = '';
           });
           
           debugLog("Category buttons enabled and shown with glows");
