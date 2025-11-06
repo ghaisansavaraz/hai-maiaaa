@@ -492,6 +492,12 @@
         moodText.textContent = moodData.mood;
         tag.appendChild(moodText);
         
+        // Category label (visible)
+        const categoryLabel = document.createElement("div");
+        categoryLabel.className = "mood-category-label";
+        categoryLabel.textContent = moodData.category || "Calm";
+        tag.appendChild(categoryLabel);
+        
         // Timestamp
         const timestamp = document.createElement("div");
         timestamp.className = "mood-timestamp";
@@ -977,18 +983,32 @@
   // ---- Event listeners for category-based mood system ----
   function initMoodEventListeners() {
     const categoryButtons = document.querySelectorAll(".mood-category");
+    const categoryContainer = document.querySelector(".mood-categories");
+    const moodTagsContainer = document.getElementById("moodTags");
+    
     debugLog(`Found ${categoryButtons.length} category buttons`);
     
-    // Enable/disable category buttons based on input
+    // Show/hide category buttons and mood tags based on input
     if (moodInput) {
       moodInput.addEventListener("input", (e) => {
         const hasText = e.target.value.trim().length > 0;
+        
+        // Enable/disable category buttons
         categoryButtons.forEach(btn => {
           btn.disabled = !hasText;
         });
+        
+        // Show category buttons, hide mood tags during input
+        if (hasText) {
+          if (categoryContainer) categoryContainer.classList.add("visible");
+          if (moodTagsContainer) moodTagsContainer.classList.add("hidden");
+        } else {
+          if (categoryContainer) categoryContainer.classList.remove("visible");
+          if (moodTagsContainer) moodTagsContainer.classList.remove("hidden");
+        }
       });
       
-      // Clear input doesn't trigger when Enter is pressed
+      // Prevent Enter key from doing anything
       moodInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault(); // Prevent form submission
@@ -1018,10 +1038,14 @@
         // Clear input
         moodInput.value = "";
         
-        // Disable buttons again
+        // Disable buttons and hide categories
         categoryButtons.forEach(btn => {
           btn.disabled = true;
         });
+        
+        // Hide category buttons, show mood tags
+        if (categoryContainer) categoryContainer.classList.remove("visible");
+        if (moodTagsContainer) moodTagsContainer.classList.remove("hidden");
         
         // Visual feedback
         button.style.transform = "scale(0.95)";
