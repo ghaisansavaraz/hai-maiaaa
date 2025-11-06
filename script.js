@@ -360,7 +360,7 @@
 
   // ---- Enhanced Mood System with Migration ----
   
-  // Data migration: Convert old string array to new object format
+  // Data migration: Convert old string array to new object format with categories
   function migrateMoodData() {
     try {
       const stored = localStorage.getItem(MOOD_STORAGE_KEY);
@@ -368,25 +368,42 @@
       
       const data = JSON.parse(stored);
       
-      // Check if already migrated (first item is object with timestamp)
-      if (data.length > 0 && typeof data[0] === 'object' && data[0].timestamp) {
-        debugLog("Mood data already in new format");
-        return data;
+      // Check if data needs category migration
+      let needsCategoryMigration = false;
+      if (data.length > 0 && typeof data[0] === 'object') {
+        needsCategoryMigration = !data[0].hasOwnProperty('category');
       }
       
       // Migrate old string array to new object format
-      debugLog("Migrating mood data from old format...");
-      const migratedData = data.map((mood, index) => ({
-        id: Date.now() + index,
-        mood: mood,
-        intensity: "medium",
-        note: "",
-        timestamp: new Date(Date.now() - (data.length - index) * 3600000).toISOString()
-      }));
+      if (data.length > 0 && typeof data[0] === 'string') {
+        debugLog("Migrating mood data from old string format...");
+        const migratedData = data.map((mood, index) => ({
+          id: Date.now() + index,
+          mood: mood,
+          category: "Calm", // Default category for old moods
+          intensity: "medium",
+          note: "",
+          timestamp: new Date(Date.now() - (data.length - index) * 3600000).toISOString()
+        }));
+        
+        localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(migratedData));
+        debugLog("✓ Mood data migrated to object format:", migratedData.length, "moods");
+        return migratedData;
+      }
       
-      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(migratedData));
-      debugLog("✓ Mood data migrated successfully:", migratedData.length, "moods");
-      return migratedData;
+      // Add category to existing object-format moods
+      if (needsCategoryMigration) {
+        debugLog("Adding category field to existing moods...");
+        data.forEach(mood => {
+          if (!mood.category) {
+            mood.category = "Calm"; // Default category
+          }
+        });
+        localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(data));
+        debugLog("✓ Category field added to", data.length, "moods");
+      }
+      
+      return data;
       
     } catch (e) {
       debugError("Mood migration failed:", e);
@@ -408,26 +425,30 @@
     return then.toLocaleDateString();
   }
 
-  // Calculate mood analytics
+  // Calculate mood analytics with category breakdown
   function calculateMoodAnalytics(moods) {
     if (moods.length === 0) return null;
     
     const today = new Date().toDateString();
     const todayMoods = moods.filter(m => new Date(m.timestamp).toDateString() === today);
     
-    // Most felt today
-    const moodCounts = {};
+    // Category counts
+    const categoryCounts = {};
     todayMoods.forEach(m => {
-      moodCounts[m.mood] = (moodCounts[m.mood] || 0) + 1;
+      categoryCounts[m.category] = (categoryCounts[m.category] || 0) + 1;
     });
-    const mostFelt = Object.keys(moodCounts).length > 0 
-      ? Object.entries(moodCounts).sort((a, b) => b[1] - a[1])[0][0]
+    
+    // Most felt category
+    const mostFeltCategory = Object.keys(categoryCounts).length > 0 
+      ? Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])[0]
       : null;
     
     return {
-      mostFelt,
+      mostFeltCategory: mostFeltCategory ? mostFeltCategory[0] : null,
+      mostFeltCount: mostFeltCategory ? mostFeltCategory[1] : 0,
       rangeToday: todayMoods.length,
-      totalMoods: moods.length
+      totalMoods: moods.length,
+      categoryCounts
     };
   }
 
@@ -462,6 +483,7 @@
         const tag = document.createElement("div");
         tag.className = `mood-tag intensity-${moodData.intensity}`;
         tag.setAttribute("data-id", moodData.id);
+        tag.setAttribute("data-category", moodData.category || "Calm");
         tag.style.animationDelay = `${index * 0.05}s`;
         
         // Mood text
@@ -482,8 +504,11 @@
           noteIndicator.className = "mood-note-indicator";
           tag.appendChild(noteIndicator);
           
-          // Tooltip on hover
-          tag.setAttribute("title", moodData.note);
+          // Tooltip with note and category
+          tag.setAttribute("title", `${moodData.category}: ${moodData.note}`);
+        } else {
+          // Just category tooltip
+          tag.setAttribute("title", moodData.category);
         }
         
         // Click to cycle intensity
@@ -523,8 +548,8 @@
       
       mood.intensity = intensities[nextIndex];
       
-      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moods));
-      loadMoods();
+        localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moods));
+        loadMoods();
       
       debugLog(`Mood intensity changed to: ${mood.intensity}`);
     } catch (e) {
@@ -551,7 +576,7 @@
     }
   }
 
-  // Update mood analytics display
+  // Update mood analytics display with category breakdown
   function updateMoodAnalytics(moods) {
     const analytics = document.getElementById("moodAnalytics");
     if (!analytics) return;
@@ -567,23 +592,27 @@
     const mostFeltEl = analytics.querySelector(".mood-stat-most");
     const rangeEl = analytics.querySelector(".mood-stat-range");
     
-    if (mostFeltEl && stats.mostFelt) {
-      mostFeltEl.innerHTML = `Most felt today: <span>${stats.mostFelt}</span>`;
+    if (mostFeltEl && stats.mostFeltCategory) {
+      mostFeltEl.innerHTML = `Most felt: <span>${stats.mostFeltCategory} (${stats.mostFeltCount})</span>`;
     }
     
     if (rangeEl) {
-      rangeEl.innerHTML = `Today's range: <span>${stats.rangeToday} ${stats.rangeToday === 1 ? 'mood' : 'moods'}</span>`;
+      const categoryText = Object.entries(stats.categoryCounts)
+        .map(([cat, count]) => `${count} ${cat}`)
+        .join(', ');
+      rangeEl.innerHTML = `Today: <span>${categoryText || 'No moods yet'}</span>`;
     }
   }
 
-  // Save new mood
-  function saveMood(moodText, intensity = "medium") {
+  // Save new mood with category
+  function saveMood(moodText, category, intensity = "medium") {
     try {
       const moods = migrateMoodData();
       
       const newMood = {
         id: Date.now(),
         mood: moodText.trim(),
+        category: category,
         intensity: intensity,
         note: "",
         timestamp: new Date().toISOString()
@@ -597,11 +626,6 @@
     } catch (e) { 
       debugError("Failed to save mood:", e);
     }
-  }
-
-  // Quick preset mood buttons
-  function addPresetMood(moodText) {
-    saveMood(moodText, "medium");
   }
 
   // ---- Letters system ----
@@ -950,43 +974,62 @@
     });
   }
 
-  // ---- Event listeners for new features ----
+  // ---- Event listeners for category-based mood system ----
   function initMoodEventListeners() {
-    // Mood preset buttons
-    const moodPresets = document.querySelectorAll(".mood-preset");
-    debugLog(`Found ${moodPresets.length} mood preset buttons`);
+    const categoryButtons = document.querySelectorAll(".mood-category");
+    debugLog(`Found ${categoryButtons.length} category buttons`);
     
-    moodPresets.forEach((button, index) => {
-      const mood = button.getAttribute("data-mood");
-      debugLog(`Setting up preset button ${index}: ${mood}`);
-      
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        debugLog(`Preset button clicked: ${mood}`);
-        
-        if (mood) {
-          addPresetMood(mood);
-          // Visual feedback
-          button.style.transform = "scale(0.9)";
-          setTimeout(() => {
-            button.style.transform = "";
-          }, 150);
-        }
-      });
-    });
-    
-    // Mood input
+    // Enable/disable category buttons based on input
     if (moodInput) {
+      moodInput.addEventListener("input", (e) => {
+        const hasText = e.target.value.trim().length > 0;
+        categoryButtons.forEach(btn => {
+          btn.disabled = !hasText;
+        });
+      });
+      
+      // Clear input doesn't trigger when Enter is pressed
       moodInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
-          const mood = moodInput.value.trim();
-          if (mood) {
-            saveMood(mood);
-            moodInput.value = "";
-          }
+          e.preventDefault(); // Prevent form submission
+          // Do nothing - user must click a category
         }
       });
     }
+    
+    // Category button clicks
+    categoryButtons.forEach((button) => {
+      const category = button.getAttribute("data-category");
+      debugLog(`Setting up category button: ${category}`);
+      
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        
+        if (!moodInput || button.disabled) return;
+        
+        const mood = moodInput.value.trim();
+        if (!mood) return;
+        
+        debugLog(`Category button clicked: ${category} for mood: ${mood}`);
+        
+        // Save mood with category
+        saveMood(mood, category);
+        
+        // Clear input
+        moodInput.value = "";
+        
+        // Disable buttons again
+        categoryButtons.forEach(btn => {
+          btn.disabled = true;
+        });
+        
+        // Visual feedback
+        button.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          button.style.transform = "";
+        }, 200);
+      });
+    });
   }
 
   // Hidden editor key (triple-click on dashboard title)
@@ -1220,3 +1263,4 @@
     }
   });
 })();
+

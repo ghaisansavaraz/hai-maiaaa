@@ -134,21 +134,18 @@
               </div>
               <div class="card-content">
                 
-                <!-- Quick Mood Presets -->
-                <div class="mood-presets">
-                  <button class="mood-preset mood-happy" data-mood="Happy">Happy</button>
-                  <button class="mood-preset mood-calm" data-mood="Calm">Calm</button>
-                  <button class="mood-preset mood-energetic" data-mood="Energetic">Energetic</button>
-                  <button class="mood-preset mood-loved" data-mood="Loved">Loved</button>
-                  <button class="mood-preset mood-grateful" data-mood="Grateful">Grateful</button>
-                  <button class="mood-preset mood-tired" data-mood="Tired">Tired</button>
-                  <button class="mood-preset mood-anxious" data-mood="Anxious">Anxious</button>
-                  <button class="mood-preset mood-sad" data-mood="Sad">Sad</button>
-                </div>
-                
-                <!-- Custom Mood Input -->
+                <!-- Mood Input -->
                 <div class="mood-input-container">
-                  <input id="moodInput" class="mood-input" type="text" placeholder="Or type your own..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                  <input id="moodInput" class="mood-input" type="text" placeholder="How are you feeling?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                  
+                  <!-- Category Buttons -->
+                  <div class="mood-categories">
+                    <button class="mood-category happy" data-category="Happy" disabled>Happy</button>
+                    <button class="mood-category calm" data-category="Calm" disabled>Calm</button>
+                    <button class="mood-category tired" data-category="Tired" disabled>Tired</button>
+                    <button class="mood-category sad" data-category="Sad" disabled>Sad</button>
+                  </div>
+                  
                   <div id="moodTags" class="mood-tags"></div>
                 </div>
                 
