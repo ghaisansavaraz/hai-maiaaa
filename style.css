@@ -947,51 +947,111 @@ body.light-theme .greeting {
 /* Hide controls by default, show on hover or when active */
 .dashboard-card .mood-input-container,
 .dashboard-card .task-controls,
-.dashboard-card .reminder-controls,
-.dashboard-card .btn-clear {
+.dashboard-card .reminder-controls {
   opacity: 0;
   pointer-events: none;
   max-height: 0;
+  transform: translateY(-10px) scale(0.98);
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), 
+              max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
-              max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: blur(4px);
 }
 
-/* Show on card hover */
+.dashboard-card .btn-clear {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85) translateY(-4px);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: blur(2px);
+}
+
+/* Show on card hover - smooth fade and slide with stagger */
 .dashboard-card:hover .mood-input-container,
 .dashboard-card:hover .task-controls,
-.dashboard-card:hover .reminder-controls,
-.dashboard-card:hover .btn-clear {
+.dashboard-card:hover .reminder-controls {
   opacity: 1;
   pointer-events: auto;
   max-height: 500px;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.05s, 
+              max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              transform 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              filter 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.05s;
 }
 
-/* Show when card is active (clicked) */
+.dashboard-card:hover .btn-clear {
+  opacity: 0.7;
+  pointer-events: auto;
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, 
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
+              filter 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+}
+
+.dashboard-card:hover .btn-clear:hover {
+  opacity: 1;
+}
+
+/* Show when card is active (clicked) - stays visible */
 .dashboard-card.active .mood-input-container,
 .dashboard-card.active .task-controls,
-.dashboard-card.active .reminder-controls,
-.dashboard-card.active .btn-clear {
+.dashboard-card.active .reminder-controls {
   opacity: 1;
   pointer-events: auto;
   max-height: 500px;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
-/* Always show mood tags, tasks, and reminders */
+.dashboard-card.active .btn-clear {
+  opacity: 0.7;
+  pointer-events: auto;
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+}
+
+.dashboard-card.active .btn-clear:hover {
+  opacity: 1;
+}
+
+/* Always show content - never hide these */
 .dashboard-card .mood-tags,
 .dashboard-card .tasks-container,
 .dashboard-card .reminder-cards,
 .dashboard-card .mood-analytics,
-.dashboard-card .coming-soon {
+.dashboard-card .coming-soon,
+.dashboard-card .card-title,
+.dashboard-card .card-subtitle,
+.dashboard-card .card-header {
   opacity: 1 !important;
   pointer-events: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
-/* Card titles and subtitles always visible */
-.dashboard-card .card-title,
-.dashboard-card .card-subtitle {
-  opacity: 1 !important;
-  pointer-events: auto !important;
+/* Override for mood tags when explicitly hidden during input */
+.mood-tags.hidden {
+  opacity: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  transform: scale(0.98);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth reappearance of mood tags */
+.mood-tags:not(.hidden) {
+  transform: scale(1);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
+              max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
+              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
 }
 
 .card-header {
@@ -1161,6 +1221,33 @@ body.light-theme .greeting {
   user-select: none;
   -webkit-user-select: none;
   border-radius: 14px;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.95);
+  animation: categorySlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Staggered category button appearance */
+.mood-categories.visible .mood-category:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.mood-categories.visible .mood-category:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.mood-categories.visible .mood-category:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.mood-categories.visible .mood-category:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+@keyframes categorySlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 
@@ -1285,13 +1372,15 @@ body.light-theme .greeting {
   color: inherit;
   font-weight: 300;
   font-size: 1rem;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mood-input:focus {
   outline: none;
-  border-color: rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 /* Mood tags container */
@@ -1302,14 +1391,6 @@ body.light-theme .greeting {
   min-height: 32px;
   position: relative;
   transition: opacity 0.3s ease, max-height 0.3s ease;
-}
-
-/* Hide mood tags during input */
-.mood-tags.hidden {
-  opacity: 0 !important;
-  max-height: 0;
-  overflow: hidden;
-  pointer-events: none !important;
 }
 
 /* Category buttons hidden by default, shown during input */
@@ -1325,8 +1406,11 @@ body.light-theme .greeting {
   z-index: 1;
   max-height: 0;
   opacity: 0;
-  transform: scale(0.95) translateY(-10px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-12px) scale(0.96);
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), 
+              max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              margin 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: visible;
   pointer-events: none;
 }
@@ -1334,7 +1418,7 @@ body.light-theme .greeting {
 .mood-categories.visible {
   max-height: 200px;
   opacity: 1 !important;
-  transform: scale(1) translateY(0);
+  transform: translateY(0) scale(1);
   margin-top: 16px;
   margin-bottom: 20px;
   pointer-events: auto !important;
