@@ -958,17 +958,36 @@ body.light-theme .greeting {
   filter: blur(4px);
 }
 
-/* Mood input container - special handling */
+/* Mood section - input ALWAYS visible, only hide specific elements */
 #moodSection .mood-input-container {
-  opacity: 0;
-  pointer-events: none;
-  max-height: 0;
-  transform: translateY(-10px) scale(0.98);
-  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), 
-              max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  max-height: none !important;
+  transform: none !important;
   overflow: visible !important;
-  filter: blur(4px);
+  filter: none !important;
+  display: flex !important;
+}
+
+/* Hide only the input field itself initially */
+#moodSection .mood-input {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* REINFORCED: Show input on hover, active, focus, or when has content */
+#moodSection:hover .mood-input,
+#moodSection.active .mood-input,
+#moodSection .mood-input:focus,
+#moodSection .mood-input:active,
+#moodSection .mood-input-container:focus-within .mood-input {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+  display: block !important;
 }
 
 .dashboard-card .btn-clear {
@@ -981,7 +1000,6 @@ body.light-theme .greeting {
 }
 
 /* Show on card hover - smooth fade and slide with stagger */
-#moodSection:hover .mood-input-container,
 .dashboard-card:hover .task-controls,
 .dashboard-card:hover .reminder-controls {
   opacity: 1;
@@ -1010,7 +1028,6 @@ body.light-theme .greeting {
 }
 
 /* Show when card is active (clicked) - stays visible */
-#moodSection.active .mood-input-container,
 .dashboard-card.active .task-controls,
 .dashboard-card.active .reminder-controls {
   opacity: 1;
@@ -1031,30 +1048,6 @@ body.light-theme .greeting {
   opacity: 1;
 }
 
-/* REINFORCED: Mood input always visible when focused or has value */
-#moodSection .mood-input-container:has(.mood-input:focus),
-#moodSection .mood-input-container:focus-within {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  max-height: 1000px !important;
-  transform: translateY(0) scale(1) !important;
-  filter: blur(0) !important;
-  overflow: visible !important;
-}
-
-/* REINFORCED: Category buttons visible when .visible class is active */
-.mood-categories.visible {
-  display: flex !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-/* REINFORCED: Category buttons themselves when enabled */
-.mood-category:not(:disabled) {
-  opacity: 1 !important;
-  display: inline-flex !important;
-}
 
 /* Always show content - never hide these */
 .dashboard-card .mood-tags,
@@ -1071,19 +1064,32 @@ body.light-theme .greeting {
   overflow: visible !important;
 }
 
-/* REINFORCED: Mood input field always visible and accessible */
-#moodSection .mood-input {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  display: block !important;
-}
-
-/* REINFORCED: Mood categories container when visible */
-#moodSection .mood-categories.visible {
+/* MAXIMUM REINFORCEMENT: Category buttons ALWAYS visible when typing */
+#moodSection .mood-categories.visible,
+body #moodSection .mood-categories.visible,
+body.light-theme #moodSection .mood-categories.visible,
+body.dark-theme #moodSection .mood-categories.visible {
   opacity: 1 !important;
   display: flex !important;
+  visibility: visible !important;
   pointer-events: auto !important;
   overflow: visible !important;
+  max-height: 1000px !important;
+  margin-top: 16px !important;
+  margin-bottom: 20px !important;
+  transform: translateY(0) scale(1) !important;
+  filter: none !important;
+  z-index: 100 !important;
+}
+
+/* MAXIMUM REINFORCEMENT: Individual category buttons when enabled */
+#moodSection .mood-categories.visible .mood-category,
+#moodSection .mood-categories.visible .mood-category:not(:disabled),
+body #moodSection .mood-categories.visible .mood-category:not(:disabled) {
+  opacity: 1 !important;
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 /* Override for mood tags when explicitly hidden during input */

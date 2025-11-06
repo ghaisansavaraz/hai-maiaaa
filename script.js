@@ -1002,15 +1002,24 @@
           // Show categories
           if (categoryContainer) {
             categoryContainer.classList.add("visible");
+            debugLog("✓ Added .visible class to category container");
+            debugLog("Category container classes:", categoryContainer.className);
           }
           
           // Hide mood tags and analytics
-          if (moodTagsContainer) moodTagsContainer.classList.add("hidden");
-          if (analyticsContainer) analyticsContainer.classList.add("hidden");
+          if (moodTagsContainer) {
+            moodTagsContainer.classList.add("hidden");
+            debugLog("✓ Hidden mood tags");
+          }
+          if (analyticsContainer) {
+            analyticsContainer.classList.add("hidden");
+            debugLog("✓ Hidden analytics");
+          }
           
           // Enable category buttons with animation restart
-          categoryButtons.forEach((btn) => {
+          categoryButtons.forEach((btn, i) => {
             btn.disabled = false;
+            debugLog(`✓ Enabled button ${i}: ${btn.getAttribute('data-category')}`);
             // Restart animation for smooth appearance
             btn.style.animation = 'none';
             requestAnimationFrame(() => {
@@ -1018,7 +1027,8 @@
             });
           });
           
-          debugLog("Category buttons enabled and shown with glows");
+          debugLog("✅ Category buttons enabled and shown with glows");
+          debugLog("Button count:", categoryButtons.length);
         } else {
           // Hide categories
           if (categoryContainer) {
