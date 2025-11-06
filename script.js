@@ -993,22 +993,47 @@
       moodInput.addEventListener("input", (e) => {
         const hasText = e.target.value.trim().length > 0;
         
-        // Enable/disable category buttons
-        categoryButtons.forEach(btn => {
-          btn.disabled = !hasText;
-        });
+        debugLog(`Input changed, hasText: ${hasText}`);
         
         // Show category buttons, hide mood tags and analytics during input
         const analyticsContainer = document.getElementById("moodAnalytics");
         
         if (hasText) {
-          if (categoryContainer) categoryContainer.classList.add("visible");
+          // Show categories
+          if (categoryContainer) {
+            categoryContainer.classList.add("visible");
+          }
+          
+          // Hide mood tags and analytics
           if (moodTagsContainer) moodTagsContainer.classList.add("hidden");
           if (analyticsContainer) analyticsContainer.classList.add("hidden");
+          
+          // Enable category buttons with animation restart
+          categoryButtons.forEach((btn, index) => {
+            btn.disabled = false;
+            // Force animation restart
+            btn.style.animation = 'none';
+            btn.offsetHeight; // Trigger reflow
+            btn.style.animation = '';
+          });
+          
+          debugLog("Category buttons enabled and shown with glows");
         } else {
-          if (categoryContainer) categoryContainer.classList.remove("visible");
+          // Hide categories
+          if (categoryContainer) {
+            categoryContainer.classList.remove("visible");
+          }
+          
+          // Show mood tags and analytics
           if (moodTagsContainer) moodTagsContainer.classList.remove("hidden");
           if (analyticsContainer) analyticsContainer.classList.remove("hidden");
+          
+          // Disable category buttons
+          categoryButtons.forEach(btn => {
+            btn.disabled = true;
+          });
+          
+          debugLog("Category buttons disabled and hidden");
         }
       });
       
