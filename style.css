@@ -945,7 +945,6 @@ body.light-theme .greeting {
 }
 
 /* Hide controls by default, show on hover or when active */
-.dashboard-card .mood-input-container,
 .dashboard-card .task-controls,
 .dashboard-card .reminder-controls {
   opacity: 0;
@@ -959,6 +958,19 @@ body.light-theme .greeting {
   filter: blur(4px);
 }
 
+/* Mood input container - special handling */
+#moodSection .mood-input-container {
+  opacity: 0;
+  pointer-events: none;
+  max-height: 0;
+  transform: translateY(-10px) scale(0.98);
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), 
+              max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible !important;
+  filter: blur(4px);
+}
+
 .dashboard-card .btn-clear {
   opacity: 0;
   pointer-events: none;
@@ -969,7 +981,7 @@ body.light-theme .greeting {
 }
 
 /* Show on card hover - smooth fade and slide with stagger */
-.dashboard-card:hover .mood-input-container,
+#moodSection:hover .mood-input-container,
 .dashboard-card:hover .task-controls,
 .dashboard-card:hover .reminder-controls {
   opacity: 1;
@@ -998,7 +1010,7 @@ body.light-theme .greeting {
 }
 
 /* Show when card is active (clicked) - stays visible */
-.dashboard-card.active .mood-input-container,
+#moodSection.active .mood-input-container,
 .dashboard-card.active .task-controls,
 .dashboard-card.active .reminder-controls {
   opacity: 1;
@@ -1019,6 +1031,31 @@ body.light-theme .greeting {
   opacity: 1;
 }
 
+/* REINFORCED: Mood input always visible when focused or has value */
+#moodSection .mood-input-container:has(.mood-input:focus),
+#moodSection .mood-input-container:focus-within {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  max-height: 1000px !important;
+  transform: translateY(0) scale(1) !important;
+  filter: blur(0) !important;
+  overflow: visible !important;
+}
+
+/* REINFORCED: Category buttons visible when .visible class is active */
+.mood-categories.visible {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* REINFORCED: Category buttons themselves when enabled */
+.mood-category:not(:disabled) {
+  opacity: 1 !important;
+  display: inline-flex !important;
+}
+
 /* Always show content - never hide these */
 .dashboard-card .mood-tags,
 .dashboard-card .tasks-container,
@@ -1031,6 +1068,21 @@ body.light-theme .greeting {
   opacity: 1 !important;
   pointer-events: auto !important;
   max-height: none !important;
+  overflow: visible !important;
+}
+
+/* REINFORCED: Mood input field always visible and accessible */
+#moodSection .mood-input {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  display: block !important;
+}
+
+/* REINFORCED: Mood categories container when visible */
+#moodSection .mood-categories.visible {
+  opacity: 1 !important;
+  display: flex !important;
+  pointer-events: auto !important;
   overflow: visible !important;
 }
 
@@ -1395,7 +1447,7 @@ body.light-theme .greeting {
 
 /* Category buttons hidden by default, shown during input */
 .mood-categories {
-  display: flex;
+  display: flex !important;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
@@ -1403,7 +1455,7 @@ body.light-theme .greeting {
   margin-bottom: 0;
   padding: 12px;
   position: relative;
-  z-index: 1;
+  z-index: 10;
   max-height: 0;
   opacity: 0;
   transform: translateY(-12px) scale(0.96);
@@ -1411,17 +1463,18 @@ body.light-theme .greeting {
               max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
               transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
               margin 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: visible;
+  overflow: visible !important;
   pointer-events: none;
 }
 
 .mood-categories.visible {
-  max-height: 200px;
+  max-height: 500px !important;
   opacity: 1 !important;
-  transform: translateY(0) scale(1);
-  margin-top: 16px;
-  margin-bottom: 20px;
+  transform: translateY(0) scale(1) !important;
+  margin-top: 16px !important;
+  margin-bottom: 20px !important;
   pointer-events: auto !important;
+  filter: none !important;
 }
 .mood-tag {
   padding: 16px 24px 12px;
