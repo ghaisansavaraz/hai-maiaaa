@@ -1107,139 +1107,96 @@ body.light-theme .greeting {
   cursor: pointer;
 }
 
-/* Category Glow Effects - External aura */
+/* Seamless Category Glows - Clock-style persistent effects */
 
-/* Happy - Bright uplifting glow */
+/* Happy - Bright shimmering aura (always visible) */
 .mood-category.happy:not(:disabled) {
-  box-shadow: 
-    0 2px 8px rgba(0,0,0,0.04),
-    0 0 20px rgba(255,255,255,0.15),
-    0 0 40px rgba(255,255,255,0.08);
-  animation: happyGlow 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4)) drop-shadow(0 0 24px rgba(255,255,255,0.2));
+  animation: happyShimmer 2.5s ease-in-out infinite alternate;
 }
 
 .mood-category.happy:not(:disabled):hover {
-  box-shadow: 
-    0 4px 16px rgba(0,0,0,0.08),
-    0 0 30px rgba(255,255,255,0.25),
-    0 0 60px rgba(255,255,255,0.15);
-  transform: translateY(-2px);
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.6)) drop-shadow(0 0 40px rgba(255,255,255,0.3));
+  transform: translateY(-3px) scale(1.03);
 }
 
-@keyframes happyGlow {
-  0%, 100% {
-    box-shadow: 
-      0 2px 8px rgba(0,0,0,0.04),
-      0 0 20px rgba(255,255,255,0.15),
-      0 0 40px rgba(255,255,255,0.08);
+@keyframes happyShimmer {
+  0% {
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.4)) drop-shadow(0 0 24px rgba(255,255,255,0.2));
   }
-  50% {
-    box-shadow: 
-      0 2px 8px rgba(0,0,0,0.04),
-      0 0 30px rgba(255,255,255,0.2),
-      0 0 50px rgba(255,255,255,0.12);
+  100% {
+    filter: drop-shadow(0 0 16px rgba(255,255,255,0.5)) drop-shadow(0 0 32px rgba(255,255,255,0.25));
   }
 }
 
-/* Calm - Soft steady glow */
+/* Calm - Soft steady radiance (always visible) */
 .mood-category.calm:not(:disabled) {
-  box-shadow: 
-    0 2px 8px rgba(0,0,0,0.04),
-    0 0 15px rgba(255,255,255,0.1);
-  animation: calmGlow 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.25)) drop-shadow(0 0 20px rgba(255,255,255,0.12));
+  animation: calmRadiance 4s ease-in-out infinite alternate;
 }
 
 .mood-category.calm:not(:disabled):hover {
-  box-shadow: 
-    0 4px 16px rgba(0,0,0,0.08),
-    0 0 25px rgba(255,255,255,0.18);
-  transform: scale(1.02);
+  filter: drop-shadow(0 0 15px rgba(255,255,255,0.35)) drop-shadow(0 0 30px rgba(255,255,255,0.18));
+  transform: scale(1.04);
 }
 
-@keyframes calmGlow {
-  0%, 100% {
-    box-shadow: 
-      0 2px 8px rgba(0,0,0,0.04),
-      0 0 15px rgba(255,255,255,0.1);
+@keyframes calmRadiance {
+  0% {
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.25)) drop-shadow(0 0 20px rgba(255,255,255,0.12));
   }
-  50% {
-    box-shadow: 
-      0 2px 8px rgba(0,0,0,0.04),
-      0 0 20px rgba(255,255,255,0.14);
+  100% {
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.3)) drop-shadow(0 0 24px rgba(255,255,255,0.15));
   }
 }
 
-/* Tired - Dim fading glow */
+/* Tired - Dim fading aura (always visible) */
 .mood-category.tired:not(:disabled) {
-  box-shadow: 
-    0 2px 8px rgba(0,0,0,0.04),
-    0 0 10px rgba(255,255,255,0.06);
-  animation: tiredGlow 3s ease-in-out infinite;
-  opacity: 0.85;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.15)) drop-shadow(0 0 12px rgba(255,255,255,0.08));
+  animation: tiredFade 3.5s ease-in-out infinite alternate;
+  opacity: 0.88;
 }
 
 .mood-category.tired:not(:disabled):hover {
-  box-shadow: 
-    0 4px 16px rgba(0,0,0,0.08),
-    0 0 15px rgba(255,255,255,0.1);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)) drop-shadow(0 0 20px rgba(255,255,255,0.1));
   opacity: 1;
-}
-
-@keyframes tiredGlow {
-  0%, 100% {
-    box-shadow: 
-      0 2px 8px rgba(0,0,0,0.04),
-      0 0 10px rgba(255,255,255,0.06);
-    opacity: 0.85;
-  }
-  50% {
-    box-shadow: 
-      0 2px 8px rgba(0,0,0,0.04),
-      0 0 5px rgba(255,255,255,0.04);
-    opacity: 0.7;
-  }
-}
-
-/* Sad - Soft downward glow */
-.mood-category.sad:not(:disabled) {
-  box-shadow: 
-    0 4px 12px rgba(0,0,0,0.12),
-    0 0 12px rgba(255,255,255,0.08);
-  animation: sadGlow 2.5s ease-in-out infinite;
-}
-
-.mood-category.sad:not(:disabled):hover {
-  box-shadow: 
-    0 6px 16px rgba(0,0,0,0.16),
-    0 0 18px rgba(255,255,255,0.12);
   transform: translateY(1px);
 }
 
+@keyframes tiredFade {
+  0% {
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.15)) drop-shadow(0 0 12px rgba(255,255,255,0.08));
+    opacity: 0.88;
+  }
+  100% {
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.1)) drop-shadow(0 0 8px rgba(255,255,255,0.05));
+    opacity: 0.75;
+  }
+}
+
+/* Sad - Soft melancholic glow (always visible) */
+.mood-category.sad:not(:disabled) {
+  filter: drop-shadow(0 2px 8px rgba(255,255,255,0.2)) drop-shadow(0 4px 16px rgba(255,255,255,0.1));
+  animation: sadGlow 3s ease-in-out infinite alternate;
+}
+
+.mood-category.sad:not(:disabled):hover {
+  filter: drop-shadow(0 3px 12px rgba(255,255,255,0.3)) drop-shadow(0 6px 24px rgba(255,255,255,0.15));
+  transform: translateY(2px);
+}
+
 @keyframes sadGlow {
-  0%, 100% {
-    box-shadow: 
-      0 4px 12px rgba(0,0,0,0.12),
-      0 0 12px rgba(255,255,255,0.08);
+  0% {
+    filter: drop-shadow(0 2px 8px rgba(255,255,255,0.2)) drop-shadow(0 4px 16px rgba(255,255,255,0.1));
   }
-  50% {
-    box-shadow: 
-      0 5px 14px rgba(0,0,0,0.14),
-      0 0 8px rgba(255,255,255,0.06);
+  100% {
+    filter: drop-shadow(0 3px 10px rgba(255,255,255,0.25)) drop-shadow(0 5px 20px rgba(255,255,255,0.12));
   }
 }
 
-/* Active state for all categories */
-.mood-category:not(:disabled):hover {
-  border-color: rgba(255,255,255,0.3);
-  background: 
-    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)),
-    linear-gradient(45deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-}
-
+/* Active state */
 .mood-category:not(:disabled):active {
-  transform: scale(0.98);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transform: scale(0.96);
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
 }
 
 /* Mood input container */
@@ -1411,6 +1368,16 @@ body.light-theme .greeting {
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid rgba(255,255,255,0.08);
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.mood-analytics.hidden {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
 }
 
 .mood-stat {
@@ -2631,4 +2598,5 @@ html, body, * {
   opacity: 1;
   font-weight: 500;
 }
+
 

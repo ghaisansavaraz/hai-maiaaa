@@ -998,13 +998,17 @@
           btn.disabled = !hasText;
         });
         
-        // Show category buttons, hide mood tags during input
+        // Show category buttons, hide mood tags and analytics during input
+        const analyticsContainer = document.getElementById("moodAnalytics");
+        
         if (hasText) {
           if (categoryContainer) categoryContainer.classList.add("visible");
           if (moodTagsContainer) moodTagsContainer.classList.add("hidden");
+          if (analyticsContainer) analyticsContainer.classList.add("hidden");
         } else {
           if (categoryContainer) categoryContainer.classList.remove("visible");
           if (moodTagsContainer) moodTagsContainer.classList.remove("hidden");
+          if (analyticsContainer) analyticsContainer.classList.remove("hidden");
         }
       });
       
@@ -1043,9 +1047,11 @@
           btn.disabled = true;
         });
         
-        // Hide category buttons, show mood tags
+        // Hide category buttons, show mood tags and analytics
+        const analyticsContainer = document.getElementById("moodAnalytics");
         if (categoryContainer) categoryContainer.classList.remove("visible");
         if (moodTagsContainer) moodTagsContainer.classList.remove("hidden");
+        if (analyticsContainer) analyticsContainer.classList.remove("hidden");
         
         // Visual feedback
         button.style.transform = "scale(0.95)";
