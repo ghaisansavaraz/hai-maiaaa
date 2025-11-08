@@ -431,15 +431,15 @@ body.hide-day-particles .day-particles-container {
 
 /* Individual star positions with size variations */
 /* Giant stars with vivid glow */
-.star-1 { top: 10%; left: 15%; width: 6px; height: 6px; box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4); animation: pulse 3s infinite; }
-.star-8 { top: 80%; left: 85%; width: 7px; height: 7px; box-shadow: 0 0 25px rgba(255,255,255,0.9), 0 0 50px rgba(255,255,255,0.5); animation: pulse 3.5s infinite; }
-.star-15 { top: 75%; left: 45%; width: 6px; height: 6px; box-shadow: 0 0 18px rgba(255,255,255,0.75), 0 0 36px rgba(255,255,255,0.4); animation: pulse 2.8s infinite; }
+.star-1 { top: 10%; left: 15%; width: 6px; height: 6px; box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 60px rgba(255,255,255,0.45); filter: drop-shadow(0 0 12px rgba(255,255,255,0.6)); animation: pulse 3s infinite; }
+.star-8 { top: 80%; left: 85%; width: 7px; height: 7px; box-shadow: 0 0 28px rgba(255,255,255,0.95), 0 0 70px rgba(255,255,255,0.5); filter: drop-shadow(0 0 14px rgba(255,255,255,0.65)); animation: pulse 3.5s infinite; }
+.star-15 { top: 75%; left: 45%; width: 6px; height: 6px; box-shadow: 0 0 22px rgba(255,255,255,0.85), 0 0 50px rgba(255,255,255,0.45); filter: drop-shadow(0 0 12px rgba(255,255,255,0.55)); animation: pulse 2.8s infinite; }
 
 /* Large stars with organic pulse */
-.star-2 { top: 20%; left: 25%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 3.2s ease-in-out infinite; }
-.star-5 { top: 50%; left: 55%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 2.8s ease-in-out infinite; }
-.star-12 { top: 45%; left: 15%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 3.5s ease-in-out infinite; }
-.star-18 { top: 95%; left: 5%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 3s ease-in-out infinite; }
+.star-2 { top: 20%; left: 25%; width: 4px; height: 4px; box-shadow: 0 0 14px rgba(255,255,255,0.6); filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); border-radius: 30% 40% 28% 38%; animation: organicPulse 3.2s ease-in-out infinite; }
+.star-5 { top: 50%; left: 55%; width: 4px; height: 4px; box-shadow: 0 0 14px rgba(255,255,255,0.6); filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); border-radius: 30% 40% 28% 38%; animation: organicPulse 2.8s ease-in-out infinite; }
+.star-12 { top: 45%; left: 15%; width: 4px; height: 4px; box-shadow: 0 0 14px rgba(255,255,255,0.6); filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); border-radius: 30% 40% 28% 38%; animation: organicPulse 3.5s ease-in-out infinite; }
+.star-18 { top: 95%; left: 5%; width: 4px; height: 4px; box-shadow: 0 0 14px rgba(255,255,255,0.6); filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); border-radius: 30% 40% 28% 38%; animation: organicPulse 3s ease-in-out infinite; }
 
 /* Medium stars with subtle glow */
 .star-3 { top: 30%; left: 35%; width: 3px; height: 3px; box-shadow: 0 0 6px rgba(255,255,255,0.3); animation: blink1 2s infinite; }
@@ -607,12 +607,18 @@ body.hide-day-particles .day-particles-container {
   content: '';
   position: absolute;
   top: 50%;
-  left: 50%;
+  right: 0;
   height: 2px;
   /* Trail points opposite to travel direction (toward top-right) */
-  background: linear-gradient(to top right, transparent, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.9) 80%, rgba(255,255,255,1));
-  transform-origin: center center;
-  transform: translate(-50%, -50%) rotate(-45deg);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255,255,255,0.35) 40%,
+    rgba(255,255,255,0.85) 80%,
+    rgba(255,255,255,1) 100%
+  );
+  transform-origin: right center;
+  transform: translateY(-50%) rotate(-45deg);
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 
@@ -684,12 +690,12 @@ body.hide-day-particles .day-particles-container {
   }
   92% {
     opacity: 1;
-    transform: translate(-105vw, 72vh);
-    filter: brightness(3.5) drop-shadow(0 0 40px rgba(255,255,255,1)) drop-shadow(0 0 80px rgba(255,255,255,0.8));
+    transform: translate(-80vw, 80vh);
+    filter: brightness(4) drop-shadow(0 0 40px #ffffff) drop-shadow(0 0 100px rgba(255,255,255,0.8));
   }
   100% {
     opacity: 0;
-    transform: translate(-110vw, 75vh);
+    transform: translate(-85vw, 85vh);
     filter: brightness(1);
   }
 }
@@ -710,12 +716,12 @@ body.hide-day-particles .day-particles-container {
   }
   92% {
     opacity: 1;
-    transform: translate(-115vw, 82vh);
-    filter: brightness(4) drop-shadow(0 0 45px rgba(255,255,255,1)) drop-shadow(0 0 90px rgba(255,255,255,0.8));
+    transform: translate(-85vw, 85vh);
+    filter: brightness(4.2) drop-shadow(0 0 45px #ffffff) drop-shadow(0 0 110px rgba(255,255,255,0.85));
   }
   100% {
     opacity: 0;
-    transform: translate(-120vw, 85vh);
+    transform: translate(-90vw, 90vh);
     filter: brightness(1);
   }
 }
@@ -736,12 +742,12 @@ body.hide-day-particles .day-particles-container {
   }
   92% {
     opacity: 1;
-    transform: translate(-125vw, 87vh);
-    filter: brightness(4.5) drop-shadow(0 0 50px rgba(255,255,255,1)) drop-shadow(0 0 100px rgba(255,255,255,0.8));
+    transform: translate(-90vw, 90vh);
+    filter: brightness(4.6) drop-shadow(0 0 55px #ffffff) drop-shadow(0 0 120px rgba(255,255,255,0.85));
   }
   100% {
     opacity: 0;
-    transform: translate(-130vw, 90vh);
+    transform: translate(-95vw, 95vh);
     filter: brightness(1);
   }
 }
@@ -762,12 +768,12 @@ body.hide-day-particles .day-particles-container {
   }
   92% {
     opacity: 1;
-    transform: translate(-110vw, 77vh);
-    filter: brightness(3.8) drop-shadow(0 0 42px rgba(255,255,255,1)) drop-shadow(0 0 85px rgba(255,255,255,0.8));
+    transform: translate(-75vw, 75vh);
+    filter: brightness(4) drop-shadow(0 0 42px #ffffff) drop-shadow(0 0 95px rgba(255,255,255,0.8));
   }
   100% {
     opacity: 0;
-    transform: translate(-115vw, 80vh);
+    transform: translate(-80vw, 80vh);
     filter: brightness(1);
   }
 }
@@ -788,12 +794,12 @@ body.hide-day-particles .day-particles-container {
   }
   92% {
     opacity: 1;
-    transform: translate(-120vw, 85vh);
-    filter: brightness(4.2) drop-shadow(0 0 48px rgba(255,255,255,1)) drop-shadow(0 0 95px rgba(255,255,255,0.8));
+    transform: translate(-88vw, 88vh);
+    filter: brightness(4.8) drop-shadow(0 0 60px #ffffff) drop-shadow(0 0 140px rgba(255,255,255,0.85));
   }
   100% {
     opacity: 0;
-    transform: translate(-125vw, 88vh);
+    transform: translate(-93vw, 93vh);
     filter: brightness(1);
   }
 }
@@ -814,17 +820,17 @@ body.hide-day-particles .day-particles-container {
   left: 60%;
   width: 100px;
   height: 100px;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 30% 40%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 45% 35%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 55% 50%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 38% 52%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 50% 42%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 42% 45%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 60% 48%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 48% 38%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 35% 45%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 52% 55%;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 45% 35%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 55% 50%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 38% 52%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 50% 42%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 42% 45%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 60% 48%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 48% 38%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 35% 45%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 52% 55%, rgba(255,255,255,0.6) 1px, transparent 2px);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   box-shadow: 0 0 40px rgba(255,255,255,0.15);
@@ -836,15 +842,15 @@ body.hide-day-particles .day-particles-container {
   left: 12%;
   width: 90px;
   height: 90px;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 40% 40%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 50% 48%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 45% 52%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 55% 45%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 48% 38%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 52% 50%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 43% 46%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 57% 48%;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 50% 48%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 45% 52%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 55% 45%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 48% 38%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 52% 50%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 43% 46%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 57% 48%, rgba(255,255,255,0.6) 1px, transparent 2px);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   box-shadow: 0 0 35px rgba(255,255,255,0.12);
@@ -856,17 +862,17 @@ body.hide-day-particles .day-particles-container {
   left: 82%;
   width: 110px;
   height: 110px;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 35% 45%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 50% 40%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 45% 55%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 55% 50%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 40% 48%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 60% 45%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 48% 42%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 52% 52%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 42% 50%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 58% 48%;
+  background:
+    radial-gradient(circle at 35% 45%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 45% 55%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 55% 50%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 40% 48%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 60% 45%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 48% 42%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 52% 52%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 42% 50%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 58% 48%, rgba(255,255,255,0.7) 1px, transparent 2px);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   box-shadow: 0 0 45px rgba(255,255,255,0.18);
@@ -878,14 +884,14 @@ body.hide-day-particles .day-particles-container {
   left: 48%;
   width: 95px;
   height: 95px;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 42% 42%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 52% 48%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 48% 52%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 56% 44%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 46% 40%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 50% 56%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 54% 50%;
+  background:
+    radial-gradient(circle at 42% 42%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 52% 48%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 48% 52%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 56% 44%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 46% 40%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 50% 56%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 54% 50%, rgba(255,255,255,0.65) 1px, transparent 2px);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   box-shadow: 0 0 38px rgba(255,255,255,0.14);
@@ -897,13 +903,13 @@ body.hide-day-particles .day-particles-container {
   left: 8%;
   width: 85px;
   height: 85px;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 45% 45%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 50% 50%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 55% 48%,
-    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 48% 52%,
-    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 52% 44%,
-    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 43% 48%;
+  background:
+    radial-gradient(circle at 45% 45%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 55% 48%, rgba(255,255,255,0.7) 1px, transparent 2px),
+    radial-gradient(circle at 48% 52%, rgba(255,255,255,0.6) 1px, transparent 2px),
+    radial-gradient(circle at 52% 44%, rgba(255,255,255,0.65) 1px, transparent 2px),
+    radial-gradient(circle at 43% 48%, rgba(255,255,255,0.7) 1px, transparent 2px);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   box-shadow: 0 0 32px rgba(255,255,255,0.12);
