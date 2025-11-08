@@ -105,52 +105,6 @@
   });
 
   // Countdown and its greeting removed
-
-  // ---- Enhanced Shooting Stars System ----
-  class ShootingStars {
-    constructor() {
-      this.shootingStars = document.querySelectorAll('.shooting-star');
-      this.startShootingStars();
-    }
-
-    startShootingStars() {
-      // Initial delay
-      setTimeout(() => {
-        this.triggerShootingStar();
-        this.scheduleNextShootingStar();
-      }, 8000); // Start after 8 seconds
-    }
-    
-    scheduleNextShootingStar() {
-      // Random interval between 20-45 seconds for natural feeling
-      const nextDelay = 20000 + Math.random() * 25000;
-      setTimeout(() => {
-        this.triggerShootingStar();
-        this.scheduleNextShootingStar(); // Schedule the next one
-      }, nextDelay);
-    }
-
-    triggerShootingStar() {
-      // Only show shooting stars during night time
-      if (document.body.classList.contains('show-stars')) {
-        const randomStar = this.shootingStars[Math.floor(Math.random() * this.shootingStars.length)];
-        
-        // Get the star number to determine which animation to use
-        const starNumber = randomStar.className.match(/shooting-star-(\d+)/)[1];
-        
-        // Faster speeds (1.2s - 2.2s) for more dynamic feeling
-        const duration = 1.2 + Math.random() * 1.0;
-        const animationName = `shoot${starNumber}`;
-        
-        // Reset and trigger animation
-        randomStar.style.animation = 'none';
-        randomStar.offsetHeight; // Trigger reflow
-        randomStar.style.animation = `${animationName} ${duration}s ease-out`;
-        
-        debugLog(`Shooting star ${starNumber} triggered! Duration: ${duration.toFixed(2)}s`);
-      }
-    }
-  }
   class DynamicBackground {
     constructor() {
       debugLog("Initializing time-based background system (pure white/black)...");
@@ -245,7 +199,6 @@
 
   // Initialize systems
   let dynamicBackground = null;
-  let shootingStars = null;
 
   // ---- Dynamic greeting for dashboard ----
   // Time Display Functions
@@ -1309,9 +1262,6 @@
       
       // Initialize dynamic background first
       dynamicBackground = new DynamicBackground();
-      
-      // Initialize shooting stars
-      shootingStars = new ShootingStars();
       
       // Apply time-based theme
       applyTheme();
