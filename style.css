@@ -1,3 +1,4 @@
+/* UPDATED: Starfield fixes v2.2 - TRAIL ROTATION CORRECTED */
 :root {
   color-scheme: dark;
   --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -618,7 +619,7 @@ body.hide-day-particles .day-particles-container {
     rgba(255,255,255,1) 100%
   );
   transform-origin: right center;
-  transform: translateY(-50%) rotate(-45deg);
+  transform: translateY(-50%) rotate(45deg);
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 
