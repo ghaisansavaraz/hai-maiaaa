@@ -239,6 +239,49 @@
   let shootingStars = null;
 
   // ---- Dynamic greeting for dashboard ----
+  // ---- Moon Phase Calculation ----
+  function getMoonPhaseFraction(date = new Date()) {
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate();
+    let yy = year;
+    let mm = month;
+    if (mm < 3) { yy -= 1; mm += 12; }
+    ++mm;
+    const c = Math.floor(365.25 * yy);
+    const e = Math.floor(30.6 * mm);
+    const jd = c + e + day - 694039.09;
+    const days = jd % 29.5305882;
+    const phase = days / 29.5305882;
+    return (phase + 1) % 1;
+  }
+
+  function updateMoonPhase() {
+    const moonWidget = document.getElementById('moonWidget');
+    const moonLabel = document.getElementById('moonLabel');
+    
+    if (!moonWidget || !moonLabel) {
+      debugLog("Moon widget elements not found");
+      return;
+    }
+    
+    try {
+      const fraction = getMoonPhaseFraction();
+      moonWidget.style.setProperty('--phase', fraction.toFixed(3));
+      
+      const phaseNames = [
+        'New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous',
+        'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'
+      ];
+      const phaseIndex = Math.floor(fraction * 8) % 8;
+      moonLabel.textContent = phaseNames[phaseIndex];
+      
+      debugLog(`Moon phase updated: ${phaseNames[phaseIndex]} (${(fraction * 100).toFixed(1)}%)`);
+    } catch (error) {
+      debugError("Failed to update moon phase:", error);
+    }
+  }
+
   // Time Display Functions
   let lastTime = ''; // Track time changes for individual digit flipping
   
@@ -356,6 +399,18 @@
     setInterval(updateTime, 1000);
     
     debugLog("Header time display started successfully");
+  }
+
+  function startMoonPhaseDisplay() {
+    debugLog("Starting moon phase display...");
+    
+    // Update immediately
+    updateMoonPhase();
+    
+    // Update daily (moon phase doesn't change quickly)
+    setInterval(updateMoonPhase, 3600000); // Every hour
+    
+    debugLog("Moon phase display started");
   }
 
   // ---- Enhanced Mood System with Migration ----
@@ -1358,6 +1413,9 @@
       
       // Start time display immediately (always visible)
       startTimeDisplay();
+      
+      // Start moon phase display
+      startMoonPhaseDisplay();
       
       debugLog("Application initialized successfully");
     } catch (e) {
