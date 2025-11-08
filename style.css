@@ -229,80 +229,116 @@ body.hide-day-particles .day-particles-container {
 
 /* === LUXURY STARFIELD SYSTEM === */
 
-/* Milky Way Band */
+/* Milky Way Band - More vivid */
 .milky-way {
   position: fixed;
   inset: 0;
   background: linear-gradient(135deg, 
-    transparent 15%, 
-    rgba(255,255,255,0.02) 30%,
-    rgba(255,255,255,0.04) 45%, 
-    rgba(255,255,255,0.06) 50%, 
-    rgba(255,255,255,0.04) 55%,
-    rgba(255,255,255,0.02) 70%, 
-    transparent 85%);
+    transparent 10%, 
+    rgba(255,255,255,0.025) 25%,
+    rgba(255,255,255,0.05) 40%, 
+    rgba(255,255,255,0.08) 50%, 
+    rgba(255,255,255,0.05) 60%,
+    rgba(255,255,255,0.025) 75%, 
+    transparent 90%);
   pointer-events: none;
   z-index: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
+  animation: milkyWayGlow 30s ease-in-out infinite alternate;
 }
 
-/* Nebula Effects */
+@keyframes milkyWayGlow {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Nebula Effects - Vivid and visible */
 .nebula {
   position: fixed;
   pointer-events: none;
   border-radius: 50%;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.5s ease;
+  z-index: 0;
 }
 
 .nebula-1 {
-  width: 800px;
-  height: 800px;
-  top: -10%;
-  right: -15%;
-  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
-  filter: blur(100px);
+  width: 900px;
+  height: 900px;
+  top: -12%;
+  right: -18%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 35%, rgba(255,255,255,0.01) 60%, transparent 75%);
+  filter: blur(110px);
   animation: nebulaDrift1 120s linear infinite;
-  z-index: 0;
 }
 
 .nebula-2 {
-  width: 600px;
-  height: 600px;
-  bottom: -5%;
-  left: -10%;
-  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 50%, transparent 75%);
-  filter: blur(80px);
+  width: 700px;
+  height: 700px;
+  bottom: -8%;
+  left: -12%;
+  background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.01) 65%, transparent 80%);
+  filter: blur(90px);
   animation: nebulaDrift2 90s linear infinite reverse;
-  z-index: 0;
 }
 
 .nebula-3 {
-  width: 700px;
-  height: 700px;
+  width: 800px;
+  height: 800px;
   top: 40%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 60%, transparent 80%);
-  filter: blur(120px);
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.005) 70%, transparent 85%);
+  filter: blur(130px);
   animation: nebulaPulse 60s ease-in-out infinite;
-  z-index: 0;
+}
+
+/* Add more nebulas for richness */
+.nebula-4 {
+  width: 650px;
+  height: 650px;
+  top: 10%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 55%, transparent 80%);
+  filter: blur(100px);
+  animation: nebulaDrift1 100s linear infinite reverse;
+}
+
+.nebula-5 {
+  width: 750px;
+  height: 750px;
+  bottom: 15%;
+  right: 10%;
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.025) 50%, transparent 75%);
+  filter: blur(95px);
+  animation: nebulaDrift2 110s linear infinite;
 }
 
 @keyframes nebulaDrift1 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(-20px, 20px) rotate(360deg); }
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { transform: translate(-20px, 20px) rotate(360deg); opacity: 0.8; }
 }
 
 @keyframes nebulaDrift2 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(15px, -15px) rotate(360deg); }
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.75; }
+  50% { opacity: 1; }
+  100% { transform: translate(15px, -15px) rotate(360deg); opacity: 0.75; }
 }
 
 @keyframes nebulaPulse {
-  0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+  0%, 100% { 
+    opacity: 0.7; 
+    transform: translate(-50%, -50%) scale(1); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: translate(-50%, -50%) scale(1.15); 
+  }
 }
 
 /* Multi-Layer Star System */
@@ -317,66 +353,77 @@ body.hide-day-particles .day-particles-container {
   transition: opacity 0.5s ease;
 }
 
-/* Background layer - tiny distant stars */
+/* Background layer - tiny distant stars (more vivid, more stars) */
 .stars-layer-back {
   z-index: 1;
   background-image:
-    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 23% 42%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 67% 28%, rgba(255,255,255,0.35), transparent),
-    radial-gradient(1px 1px at 89% 73%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 34% 91%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 78% 54%, rgba(255,255,255,0.35), transparent),
-    radial-gradient(1px 1px at 45% 7%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 56% 67%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 91% 23%, rgba(255,255,255,0.35), transparent),
-    radial-gradient(1px 1px at 8% 82%, rgba(255,255,255,0.3), transparent);
+    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 23% 42%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 67% 28%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 89% 73%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 34% 91%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 78% 54%, rgba(255,255,255,0.48), transparent),
+    radial-gradient(1px 1px at 45% 7%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 56% 67%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 91% 23%, rgba(255,255,255,0.48), transparent),
+    radial-gradient(1px 1px at 8% 82%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 52% 12%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 31% 58%, rgba(255,255,255,0.48), transparent),
+    radial-gradient(1px 1px at 73% 86%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 16% 45%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 95% 61%, rgba(255,255,255,0.48), transparent);
   background-size: 100% 100%;
   animation: twinkleSlow 8s ease-in-out infinite alternate;
 }
 
-/* Mid layer - medium stars */
+/* Mid layer - medium stars (more vivid, more stars) */
 .stars-layer-mid {
   z-index: 2;
   background-image:
-    radial-gradient(2px 2px at 18% 32%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 72% 19%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 41% 78%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 85% 51%, rgba(255,255,255,0.65), transparent),
-    radial-gradient(2px 2px at 26% 65%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 63% 43%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 94% 88%, rgba(255,255,255,0.65), transparent),
-    radial-gradient(2px 2px at 14% 12%, rgba(255,255,255,0.7), transparent);
+    radial-gradient(2px 2px at 18% 32%, rgba(255,255,255,0.75), transparent),
+    radial-gradient(2px 2px at 72% 19%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 41% 78%, rgba(255,255,255,0.75), transparent),
+    radial-gradient(2px 2px at 85% 51%, rgba(255,255,255,0.78), transparent),
+    radial-gradient(2px 2px at 26% 65%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 63% 43%, rgba(255,255,255,0.75), transparent),
+    radial-gradient(2px 2px at 94% 88%, rgba(255,255,255,0.78), transparent),
+    radial-gradient(2px 2px at 14% 12%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 48% 26%, rgba(255,255,255,0.75), transparent),
+    radial-gradient(2px 2px at 37% 59%, rgba(255,255,255,0.78), transparent),
+    radial-gradient(2px 2px at 82% 74%, rgba(255,255,255,0.75), transparent),
+    radial-gradient(2px 2px at 9% 38%, rgba(255,255,255,0.8), transparent);
   background-size: 100% 100%;
   animation: twinkleMedium 5s ease-in-out infinite alternate;
 }
 
-/* Front layer - bright prominent stars */
+/* Front layer - bright prominent stars with glow */
 .stars-layer-front {
   z-index: 3;
   background-image:
-    radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 3px) 38% 22%,
-    radial-gradient(circle, rgba(255,255,255,0.85) 1px, transparent 3px) 71% 67%,
-    radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 3px) 19% 81%,
-    radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 3px) 88% 36%,
-    radial-gradient(circle, rgba(255,255,255,0.85) 1px, transparent 3px) 52% 58%;
+    radial-gradient(circle, rgba(255,255,255,1) 1.5px, rgba(255,255,255,0.5) 2px, transparent 6px) 38% 22%,
+    radial-gradient(circle, rgba(255,255,255,0.95) 1.5px, rgba(255,255,255,0.5) 2px, transparent 6px) 71% 67%,
+    radial-gradient(circle, rgba(255,255,255,1) 1.5px, rgba(255,255,255,0.5) 2px, transparent 6px) 19% 81%,
+    radial-gradient(circle, rgba(255,255,255,0.9) 1.5px, rgba(255,255,255,0.5) 2px, transparent 6px) 88% 36%,
+    radial-gradient(circle, rgba(255,255,255,0.95) 1.5px, rgba(255,255,255,0.5) 2px, transparent 6px) 52% 58%,
+    radial-gradient(circle, rgba(255,255,255,0.9) 1.5px, rgba(255,255,255,0.4) 2px, transparent 5px) 28% 44%,
+    radial-gradient(circle, rgba(255,255,255,0.95) 1.5px, rgba(255,255,255,0.4) 2px, transparent 5px) 64% 29%;
   background-size: 200% 200%;
   background-repeat: no-repeat;
   animation: twinkleFast 3s ease-in-out infinite alternate;
 }
 
 @keyframes twinkleSlow {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.9; }
-}
-
-@keyframes twinkleMedium {
   0%, 100% { opacity: 0.7; }
   50% { opacity: 1; }
 }
 
-@keyframes twinkleFast {
+@keyframes twinkleMedium {
   0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes twinkleFast {
+  0%, 100% { opacity: 0.9; }
   50% { opacity: 1; }
 }
 
@@ -401,22 +448,22 @@ body.hide-day-particles .day-particles-container {
 }
 
 /* Individual star positions with size variations */
-/* Giant stars with glow */
-.star-1 { top: 10%; left: 15%; width: 5px; height: 5px; box-shadow: 0 0 12px rgba(255,255,255,0.6); animation: pulse 3s infinite; }
-.star-8 { top: 80%; left: 85%; width: 6px; height: 6px; box-shadow: 0 0 15px rgba(255,255,255,0.7); animation: pulse 3.5s infinite; }
-.star-15 { top: 75%; left: 45%; width: 5px; height: 5px; box-shadow: 0 0 10px rgba(255,255,255,0.5); animation: pulse 2.8s infinite; }
+/* Giant stars with vivid glow */
+.star-1 { top: 10%; left: 15%; width: 6px; height: 6px; box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4); animation: pulse 3s infinite; }
+.star-8 { top: 80%; left: 85%; width: 7px; height: 7px; box-shadow: 0 0 25px rgba(255,255,255,0.9), 0 0 50px rgba(255,255,255,0.5); animation: pulse 3.5s infinite; }
+.star-15 { top: 75%; left: 45%; width: 6px; height: 6px; box-shadow: 0 0 18px rgba(255,255,255,0.75), 0 0 36px rgba(255,255,255,0.4); animation: pulse 2.8s infinite; }
 
-/* Large stars */
-.star-2 { top: 20%; left: 25%; width: 4px; height: 4px; box-shadow: 0 0 8px rgba(255,255,255,0.4); animation: shimmer 2.5s infinite; }
-.star-5 { top: 50%; left: 55%; width: 4px; height: 4px; box-shadow: 0 0 8px rgba(255,255,255,0.4); animation: shimmer 2.2s infinite; }
-.star-12 { top: 45%; left: 15%; width: 4px; height: 4px; box-shadow: 0 0 8px rgba(255,255,255,0.4); animation: flash 4s infinite; }
-.star-18 { top: 95%; left: 5%; width: 4px; height: 4px; box-shadow: 0 0 8px rgba(255,255,255,0.4); animation: shimmer 2.8s infinite; }
+/* Large stars with organic pulse */
+.star-2 { top: 20%; left: 25%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 3.2s ease-in-out infinite; }
+.star-5 { top: 50%; left: 55%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 2.8s ease-in-out infinite; }
+.star-12 { top: 45%; left: 15%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 3.5s ease-in-out infinite; }
+.star-18 { top: 95%; left: 5%; width: 4px; height: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: organicPulse 3s ease-in-out infinite; }
 
-/* Medium stars */
-.star-3 { top: 30%; left: 35%; width: 3px; height: 3px; animation: blink1 2s infinite; }
-.star-4 { top: 40%; left: 45%; width: 3px; height: 3px; animation: breathe 5s infinite; }
-.star-7 { top: 70%; left: 75%; width: 3px; height: 3px; animation: blink3 2.3s infinite; }
-.star-10 { top: 25%; left: 85%; width: 3px; height: 3px; animation: blink1 1.6s infinite; }
+/* Medium stars with subtle glow */
+.star-3 { top: 30%; left: 35%; width: 3px; height: 3px; box-shadow: 0 0 6px rgba(255,255,255,0.3); animation: blink1 2s infinite; }
+.star-4 { top: 40%; left: 45%; width: 3px; height: 3px; box-shadow: 0 0 6px rgba(255,255,255,0.3); animation: breathe 5s infinite; }
+.star-7 { top: 70%; left: 75%; width: 3px; height: 3px; box-shadow: 0 0 6px rgba(255,255,255,0.3); animation: blink3 2.3s infinite; }
+.star-10 { top: 25%; left: 85%; width: 3px; height: 3px; box-shadow: 0 0 6px rgba(255,255,255,0.3); animation: blink1 1.6s infinite; }
 
 /* Small stars */
 .star-6 { top: 60%; left: 65%; width: 2px; height: 2px; animation: blink3 1.7s infinite; }
@@ -424,14 +471,14 @@ body.hide-day-particles .day-particles-container {
 .star-11 { top: 35%; left: 5%; width: 2px; height: 2px; animation: blink2 2.4s infinite; }
 .star-13 { top: 55%; left: 25%; width: 2px; height: 2px; animation: blink1 2.0s infinite; }
 .star-14 { top: 65%; left: 35%; width: 2px; height: 2px; animation: blink2 1.7s infinite; }
-/* Micro stars (distant) */
-.star-16 { top: 85%; left: 55%; width: 1px; height: 1px; opacity: 0.5; animation: blink1 3.5s infinite; }
-.star-19 { top: 12%; left: 95%; width: 1px; height: 1px; opacity: 0.4; animation: blink1 4s infinite; }
-.star-24 { top: 38%; left: 5%; width: 1px; height: 1px; opacity: 0.5; animation: blink3 3.7s infinite; }
-.star-29 { top: 88%; left: 15%; width: 1px; height: 1px; opacity: 0.4; animation: blink2 4.2s infinite; }
-.star-34 { top: 33%; left: 15%; width: 1px; height: 1px; opacity: 0.5; animation: blink1 3.8s infinite; }
-.star-39 { top: 83%; left: 25%; width: 1px; height: 1px; opacity: 0.4; animation: blink3 4.3s infinite; }
-.star-44 { top: 37%; left: 25%; width: 1px; height: 1px; opacity: 0.5; animation: blink2 3.9s infinite; }
+/* Micro stars (distant) - More vivid */
+.star-16 { top: 85%; left: 55%; width: 1.5px; height: 1.5px; opacity: 0.6; animation: blink1 3.5s infinite; }
+.star-19 { top: 12%; left: 95%; width: 1.5px; height: 1.5px; opacity: 0.55; animation: blink1 4s infinite; }
+.star-24 { top: 38%; left: 5%; width: 1.5px; height: 1.5px; opacity: 0.6; animation: blink3 3.7s infinite; }
+.star-29 { top: 88%; left: 15%; width: 1.5px; height: 1.5px; opacity: 0.55; animation: blink2 4.2s infinite; }
+.star-34 { top: 33%; left: 15%; width: 1.5px; height: 1.5px; opacity: 0.6; animation: blink1 3.8s infinite; }
+.star-39 { top: 83%; left: 25%; width: 1.5px; height: 1.5px; opacity: 0.55; animation: blink3 4.3s infinite; }
+.star-44 { top: 37%; left: 25%; width: 1.5px; height: 1.5px; opacity: 0.6; animation: blink2 3.9s infinite; }
 
 /* Small stars (standard) */
 .star-17 { top: 5%; left: 65%; width: 2px; height: 2px; animation: blink2 2.3s infinite; }
@@ -464,37 +511,45 @@ body.hide-day-particles .day-particles-container {
 
 /* Luxury Twinkle Animations */
 
-/* Smooth pulse for giant stars */
+/* Vivid pulse for giant stars */
 @keyframes pulse {
   0%, 100% {
-    opacity: 0.7;
+    opacity: 0.85;
     transform: scale(1);
-    box-shadow: 0 0 8px rgba(255,255,255,0.4);
+    box-shadow: 0 0 15px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3);
   }
   50% {
     opacity: 1;
-    transform: scale(1.1);
-    box-shadow: 0 0 16px rgba(255,255,255,0.7);
+    transform: scale(1.2);
+    box-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 60px rgba(255,255,255,0.5);
   }
 }
 
-/* Shimmer for large stars */
-@keyframes shimmer {
+/* Organic pulse for large stars - less circular */
+@keyframes organicPulse {
   0%, 100% {
-    opacity: 0.6;
-    box-shadow: 0 0 4px rgba(255,255,255,0.3);
-  }
-  25% {
-    opacity: 0.9;
+    opacity: 0.7;
+    transform: scale(1);
+    border-radius: 50%;
     box-shadow: 0 0 10px rgba(255,255,255,0.5);
   }
+  25% {
+    opacity: 0.85;
+    transform: scale(1.12);
+    border-radius: 45%;
+    box-shadow: 0 0 16px rgba(255,255,255,0.7);
+  }
   50% {
-    opacity: 0.7;
-    box-shadow: 0 0 6px rgba(255,255,255,0.4);
+    opacity: 0.95;
+    transform: scale(1.18);
+    border-radius: 48%;
+    box-shadow: 0 0 18px rgba(255,255,255,0.8);
   }
   75% {
-    opacity: 1;
-    box-shadow: 0 0 12px rgba(255,255,255,0.6);
+    opacity: 0.8;
+    transform: scale(1.08);
+    border-radius: 55%;
+    box-shadow: 0 0 14px rgba(255,255,255,0.6);
   }
 }
 
@@ -521,20 +576,20 @@ body.hide-day-particles .day-particles-container {
   }
 }
 
-/* Standard blink animations */
+/* Vivid blink animations */
 @keyframes blink1 {
-  0%, 100% { opacity: 0.3; }
+  0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
 
 @keyframes blink2 {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.8; }
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.95; }
 }
 
 @keyframes blink3 {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.95; }
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 /* Enhanced Shooting Stars */
@@ -561,108 +616,362 @@ body.hide-day-particles .day-particles-container {
 .shooting-star::before {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  height: 1.5px;
-  background: linear-gradient(270deg, rgba(255,255,255,1), rgba(255,255,255,0.8) 30%, transparent);
-  transform-origin: right center;
-  box-shadow: 0 0 4px rgba(255,255,255,0.6);
+  top: 50%;
+  left: 50%;
+  height: 2px;
+  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,255,255,0.9) 20%, rgba(255,255,255,0.6) 50%, transparent);
+  transform-origin: left center;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 
-/* Variable lengths for each shooting star */
+/* Start positions - top right corner variations */
 .shooting-star-1 {
-  top: 20%;
-  right: 0%;
+  top: 5%;
+  right: -5%;
   animation: none;
 }
 
 .shooting-star-1::before {
-  width: 120px;
+  width: 130px;
 }
 
 .shooting-star-2 {
-  top: 50%;
-  right: 0%;
+  top: 15%;
+  right: -3%;
   animation: none;
 }
 
 .shooting-star-2::before {
-  width: 90px;
+  width: 110px;
 }
 
 .shooting-star-3 {
-  top: 80%;
-  right: 0%;
+  top: 8%;
+  right: -2%;
   animation: none;
 }
 
 .shooting-star-3::before {
-  width: 150px;
+  width: 160px;
 }
 
+.shooting-star-4 {
+  top: 12%;
+  right: -4%;
+  animation: none;
+}
+
+.shooting-star-4::before {
+  width: 140px;
+}
+
+.shooting-star-5 {
+  top: 3%;
+  right: -1%;
+  animation: none;
+}
+
+.shooting-star-5::before {
+  width: 120px;
+}
+
+/* Diagonal shooting star animations - Top right to bottom left with bright flash */
 @keyframes shoot1 {
   0% {
     opacity: 0;
-    transform: translateX(0) translateY(0);
+    transform: translate(0, 0);
+    filter: brightness(1);
   }
-  10% {
+  5% {
     opacity: 1;
   }
-  90% {
+  85% {
     opacity: 1;
+    filter: brightness(1.2);
+  }
+  95% {
+    opacity: 1;
+    filter: brightness(2.5) drop-shadow(0 0 20px rgba(255,255,255,1));
   }
   100% {
     opacity: 0;
-    transform: translateX(-100vw) translateY(50px);
+    transform: translate(-110vw, 75vh);
+    filter: brightness(1);
   }
 }
 
 @keyframes shoot2 {
   0% {
     opacity: 0;
-    transform: translateX(0) translateY(0);
+    transform: translate(0, 0);
+    filter: brightness(1);
   }
-  15% {
+  5% {
     opacity: 1;
   }
   85% {
     opacity: 1;
+    filter: brightness(1.3);
+  }
+  95% {
+    opacity: 1;
+    filter: brightness(2.8) drop-shadow(0 0 25px rgba(255,255,255,1));
   }
   100% {
     opacity: 0;
-    transform: translateX(-100vw) translateY(30px);
+    transform: translate(-120vw, 85vh);
+    filter: brightness(1);
   }
 }
 
 @keyframes shoot3 {
   0% {
     opacity: 0;
-    transform: translateX(0) translateY(0);
+    transform: translate(0, 0);
+    filter: brightness(1);
   }
-  20% {
+  5% {
     opacity: 1;
   }
-  80% {
+  85% {
     opacity: 1;
+    filter: brightness(1.4);
+  }
+  95% {
+    opacity: 1;
+    filter: brightness(3) drop-shadow(0 0 30px rgba(255,255,255,1));
   }
   100% {
     opacity: 0;
-    transform: translateX(-100vw) translateY(20px);
+    transform: translate(-130vw, 90vh);
+    filter: brightness(1);
   }
 }
 
-/* Control star visibility - robust with luxury elements */
+@keyframes shoot4 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+    filter: brightness(1);
+  }
+  5% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+    filter: brightness(1.3);
+  }
+  95% {
+    opacity: 1;
+    filter: brightness(2.6) drop-shadow(0 0 28px rgba(255,255,255,1));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-115vw, 80vh);
+    filter: brightness(1);
+  }
+}
+
+@keyframes shoot5 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+    filter: brightness(1);
+  }
+  5% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+    filter: brightness(1.5);
+  }
+  95% {
+    opacity: 1;
+    filter: brightness(3.2) drop-shadow(0 0 35px rgba(255,255,255,1));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-125vw, 88vh);
+    filter: brightness(1);
+  }
+}
+
+/* Constellation styling */
+.constellation {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.constellation line {
+  stroke-linecap: round;
+  animation: constellationFade 10s ease-in-out infinite alternate;
+}
+
+.constellation-dipper {
+  animation-delay: 0s;
+}
+
+.constellation-w {
+  animation-delay: 3s;
+}
+
+.constellation-triangle {
+  animation-delay: 6s;
+}
+
+@keyframes constellationFade {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Star Clusters - Dense groupings */
+.star-cluster {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  filter: blur(0.3px);
+}
+
+.cluster-1 {
+  top: 22%;
+  left: 60%;
+  width: 100px;
+  height: 100px;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 30% 40%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 45% 35%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 55% 50%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 38% 52%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 50% 42%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 42% 45%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 60% 48%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 48% 38%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 35% 45%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 52% 55%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 40px rgba(255,255,255,0.15);
+  animation: clusterGlow 12s ease-in-out infinite alternate;
+}
+
+.cluster-2 {
+  top: 62%;
+  left: 12%;
+  width: 90px;
+  height: 90px;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 40% 40%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 50% 48%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 45% 52%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 55% 45%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 48% 38%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 52% 50%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 43% 46%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 57% 48%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 35px rgba(255,255,255,0.12);
+  animation: clusterGlow 14s ease-in-out infinite alternate;
+}
+
+.cluster-3 {
+  top: 8%;
+  left: 82%;
+  width: 110px;
+  height: 110px;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 35% 45%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 50% 40%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 45% 55%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 55% 50%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 40% 48%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 60% 45%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 48% 42%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 52% 52%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 42% 50%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 58% 48%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 45px rgba(255,255,255,0.18);
+  animation: clusterGlow 10s ease-in-out infinite alternate;
+}
+
+.cluster-4 {
+  top: 78%;
+  left: 48%;
+  width: 95px;
+  height: 95px;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 42% 42%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 52% 48%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 48% 52%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 56% 44%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 46% 40%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 50% 56%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 54% 50%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 38px rgba(255,255,255,0.14);
+  animation: clusterGlow 13s ease-in-out infinite alternate;
+}
+
+.cluster-5 {
+  top: 35%;
+  left: 8%;
+  width: 85px;
+  height: 85px;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 45% 45%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 50% 50%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 55% 48%,
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px) 48% 52%,
+    radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 2px) 52% 44%,
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 2px) 43% 48%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 32px rgba(255,255,255,0.12);
+  animation: clusterGlow 15s ease-in-out infinite alternate;
+}
+
+@keyframes clusterGlow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.05);
+  }
+}
+
+/* Control star visibility - robust with all luxury elements */
 body.show-stars .stars-container,
 body.show-stars .stars-layer,
 body.show-stars .milky-way,
-body.show-stars .nebula {
+body.show-stars .nebula,
+body.show-stars .constellation,
+body.show-stars .star-cluster {
   opacity: 1 !important;
 }
 
 body.hide-stars .stars-container,
 body.hide-stars .stars-layer,
 body.hide-stars .milky-way,
-body.hide-stars .nebula {
+body.hide-stars .nebula,
+body.hide-stars .constellation,
+body.hide-stars .star-cluster {
   opacity: 0 !important;
 }
 
@@ -3088,5 +3397,7 @@ html, body, * {
   opacity: 1;
   font-weight: 500;
 }
+
+
 
 

@@ -138,8 +138,8 @@
         // Get the star number to determine which animation to use
         const starNumber = randomStar.className.match(/shooting-star-(\d+)/)[1];
         
-        // Variable speeds (1.5s - 3s)
-        const duration = 1.5 + Math.random() * 1.5;
+        // Faster speeds (1.2s - 2.2s) for more dynamic feeling
+        const duration = 1.2 + Math.random() * 1.0;
         const animationName = `shoot${starNumber}`;
         
         // Reset and trigger animation
