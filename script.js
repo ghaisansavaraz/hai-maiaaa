@@ -106,7 +106,7 @@
 
   // Countdown and its greeting removed
 
-  // ---- Shooting Stars System ----
+  // ---- Enhanced Shooting Stars System ----
   class ShootingStars {
     constructor() {
       this.shootingStars = document.querySelectorAll('.shooting-star');
@@ -117,11 +117,17 @@
       // Initial delay
       setTimeout(() => {
         this.triggerShootingStar();
-        // Then every 5 minutes
-        setInterval(() => {
-          this.triggerShootingStar();
-        }, 300000);
-      }, 15000); // Start after 15 seconds
+        this.scheduleNextShootingStar();
+      }, 8000); // Start after 8 seconds
+    }
+    
+    scheduleNextShootingStar() {
+      // Random interval between 20-45 seconds for natural feeling
+      const nextDelay = 20000 + Math.random() * 25000;
+      setTimeout(() => {
+        this.triggerShootingStar();
+        this.scheduleNextShootingStar(); // Schedule the next one
+      }, nextDelay);
     }
 
     triggerShootingStar() {
@@ -131,14 +137,17 @@
         
         // Get the star number to determine which animation to use
         const starNumber = randomStar.className.match(/shooting-star-(\d+)/)[1];
+        
+        // Variable speeds (1.5s - 3s)
+        const duration = 1.5 + Math.random() * 1.5;
         const animationName = `shoot${starNumber}`;
         
         // Reset and trigger animation
         randomStar.style.animation = 'none';
         randomStar.offsetHeight; // Trigger reflow
-        randomStar.style.animation = `${animationName} 2s ease-out`;
+        randomStar.style.animation = `${animationName} ${duration}s ease-out`;
         
-        debugLog(`Shooting star ${starNumber} triggered!`);
+        debugLog(`Shooting star ${starNumber} triggered! Duration: ${duration.toFixed(2)}s`);
       }
     }
   }
