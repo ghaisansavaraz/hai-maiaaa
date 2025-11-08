@@ -262,7 +262,7 @@ body.hide-day-particles .day-particles-container {
   position: fixed;
   pointer-events: none;
   border-radius: 50%;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 0.5s ease;
   z-index: 0;
 }
@@ -353,7 +353,7 @@ body.hide-day-particles .day-particles-container {
   transition: opacity 0.5s ease;
 }
 
-/* Background layer - tiny distant stars (more vivid, more stars) */
+/* Background layer - tiny distant stars (static, no animation) */
 .stars-layer-back {
   z-index: 1;
   background-image:
@@ -373,10 +373,9 @@ body.hide-day-particles .day-particles-container {
     radial-gradient(1px 1px at 16% 45%, rgba(255,255,255,0.45), transparent),
     radial-gradient(1px 1px at 95% 61%, rgba(255,255,255,0.48), transparent);
   background-size: 100% 100%;
-  animation: twinkleSlow 8s ease-in-out infinite alternate;
 }
 
-/* Mid layer - medium stars (more vivid, more stars) */
+/* Mid layer - medium stars (static, no animation) */
 .stars-layer-mid {
   z-index: 2;
   background-image:
@@ -393,10 +392,9 @@ body.hide-day-particles .day-particles-container {
     radial-gradient(2px 2px at 82% 74%, rgba(255,255,255,0.75), transparent),
     radial-gradient(2px 2px at 9% 38%, rgba(255,255,255,0.8), transparent);
   background-size: 100% 100%;
-  animation: twinkleMedium 5s ease-in-out infinite alternate;
 }
 
-/* Front layer - bright prominent stars with glow */
+/* Front layer - bright prominent stars with glow (static, no animation) */
 .stars-layer-front {
   z-index: 3;
   background-image:
@@ -409,22 +407,6 @@ body.hide-day-particles .day-particles-container {
     radial-gradient(circle, rgba(255,255,255,0.95) 1.5px, rgba(255,255,255,0.4) 2px, transparent 5px) 64% 29%;
   background-size: 200% 200%;
   background-repeat: no-repeat;
-  animation: twinkleFast 3s ease-in-out infinite alternate;
-}
-
-@keyframes twinkleSlow {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
-}
-
-@keyframes twinkleMedium {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
-}
-
-@keyframes twinkleFast {
-  0%, 100% { opacity: 0.9; }
-  50% { opacity: 1; }
 }
 
 /* Enhanced stars container */
@@ -511,44 +493,52 @@ body.hide-day-particles .day-particles-container {
 
 /* Luxury Twinkle Animations */
 
-/* Vivid pulse for giant stars */
+/* Dramatic flash pulse for giant stars */
 @keyframes pulse {
-  0%, 100% {
-    opacity: 0.85;
+  0%, 70% {
+    opacity: 0.8;
     transform: scale(1);
-    box-shadow: 0 0 15px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3);
+    box-shadow: 0 0 12px rgba(255,255,255,0.5), 0 0 24px rgba(255,255,255,0.25);
+    filter: brightness(1);
   }
-  50% {
+  85% {
     opacity: 1;
-    transform: scale(1.2);
-    box-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 60px rgba(255,255,255,0.5);
+    transform: scale(1.5);
+    box-shadow: 0 0 60px rgba(255,255,255,1), 0 0 120px rgba(255,255,255,0.8), 0 0 180px rgba(255,255,255,0.4);
+    filter: brightness(3);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(255,255,255,0.5), 0 0 24px rgba(255,255,255,0.25);
+    filter: brightness(1);
   }
 }
 
-/* Organic pulse for large stars - less circular */
+/* Organic pulse for large stars - sharper, less circular */
 @keyframes organicPulse {
   0%, 100% {
     opacity: 0.7;
-    transform: scale(1);
-    border-radius: 50%;
+    transform: scale(1) rotate(0deg);
+    border-radius: 30%;
     box-shadow: 0 0 10px rgba(255,255,255,0.5);
   }
   25% {
     opacity: 0.85;
-    transform: scale(1.12);
-    border-radius: 45%;
+    transform: scale(1.12) rotate(5deg);
+    border-radius: 25%;
     box-shadow: 0 0 16px rgba(255,255,255,0.7);
   }
   50% {
     opacity: 0.95;
-    transform: scale(1.18);
-    border-radius: 48%;
+    transform: scale(1.18) rotate(-5deg);
+    border-radius: 28%;
     box-shadow: 0 0 18px rgba(255,255,255,0.8);
   }
   75% {
     opacity: 0.8;
-    transform: scale(1.08);
-    border-radius: 55%;
+    transform: scale(1.08) rotate(3deg);
+    border-radius: 35%;
     box-shadow: 0 0 14px rgba(255,255,255,0.6);
   }
 }
@@ -619,8 +609,9 @@ body.hide-day-particles .day-particles-container {
   top: 50%;
   left: 50%;
   height: 2px;
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,255,255,0.9) 20%, rgba(255,255,255,0.6) 50%, transparent);
-  transform-origin: left center;
+  /* Trail points opposite to travel direction (toward top-right) */
+  background: linear-gradient(to top right, transparent, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.9) 80%, rgba(255,255,255,1));
+  transform-origin: center center;
   transform: translate(-50%, -50%) rotate(-45deg);
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
@@ -685,14 +676,16 @@ body.hide-day-particles .day-particles-container {
   }
   5% {
     opacity: 1;
+    filter: brightness(1);
   }
-  85% {
+  80% {
     opacity: 1;
     filter: brightness(1.2);
   }
-  95% {
+  92% {
     opacity: 1;
-    filter: brightness(2.5) drop-shadow(0 0 20px rgba(255,255,255,1));
+    transform: translate(-105vw, 72vh);
+    filter: brightness(3.5) drop-shadow(0 0 40px rgba(255,255,255,1)) drop-shadow(0 0 80px rgba(255,255,255,0.8));
   }
   100% {
     opacity: 0;
@@ -709,14 +702,16 @@ body.hide-day-particles .day-particles-container {
   }
   5% {
     opacity: 1;
+    filter: brightness(1);
   }
-  85% {
+  80% {
     opacity: 1;
     filter: brightness(1.3);
   }
-  95% {
+  92% {
     opacity: 1;
-    filter: brightness(2.8) drop-shadow(0 0 25px rgba(255,255,255,1));
+    transform: translate(-115vw, 82vh);
+    filter: brightness(4) drop-shadow(0 0 45px rgba(255,255,255,1)) drop-shadow(0 0 90px rgba(255,255,255,0.8));
   }
   100% {
     opacity: 0;
@@ -733,14 +728,16 @@ body.hide-day-particles .day-particles-container {
   }
   5% {
     opacity: 1;
+    filter: brightness(1);
   }
-  85% {
+  80% {
     opacity: 1;
     filter: brightness(1.4);
   }
-  95% {
+  92% {
     opacity: 1;
-    filter: brightness(3) drop-shadow(0 0 30px rgba(255,255,255,1));
+    transform: translate(-125vw, 87vh);
+    filter: brightness(4.5) drop-shadow(0 0 50px rgba(255,255,255,1)) drop-shadow(0 0 100px rgba(255,255,255,0.8));
   }
   100% {
     opacity: 0;
@@ -757,14 +754,16 @@ body.hide-day-particles .day-particles-container {
   }
   5% {
     opacity: 1;
+    filter: brightness(1);
   }
-  85% {
+  80% {
     opacity: 1;
     filter: brightness(1.3);
   }
-  95% {
+  92% {
     opacity: 1;
-    filter: brightness(2.6) drop-shadow(0 0 28px rgba(255,255,255,1));
+    transform: translate(-110vw, 77vh);
+    filter: brightness(3.8) drop-shadow(0 0 42px rgba(255,255,255,1)) drop-shadow(0 0 85px rgba(255,255,255,0.8));
   }
   100% {
     opacity: 0;
@@ -781,14 +780,16 @@ body.hide-day-particles .day-particles-container {
   }
   5% {
     opacity: 1;
+    filter: brightness(1);
   }
-  85% {
+  80% {
     opacity: 1;
     filter: brightness(1.5);
   }
-  95% {
+  92% {
     opacity: 1;
-    filter: brightness(3.2) drop-shadow(0 0 35px rgba(255,255,255,1));
+    transform: translate(-120vw, 85vh);
+    filter: brightness(4.2) drop-shadow(0 0 48px rgba(255,255,255,1)) drop-shadow(0 0 95px rgba(255,255,255,0.8));
   }
   100% {
     opacity: 0;
@@ -797,42 +798,6 @@ body.hide-day-particles .day-particles-container {
   }
 }
 
-/* Constellation styling */
-.constellation {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 4;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.constellation line {
-  stroke-linecap: round;
-  animation: constellationFade 10s ease-in-out infinite alternate;
-}
-
-.constellation-dipper {
-  animation-delay: 0s;
-}
-
-.constellation-w {
-  animation-delay: 3s;
-}
-
-.constellation-triangle {
-  animation-delay: 6s;
-}
-
-@keyframes constellationFade {
-  0%, 100% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.3;
-  }
-}
 
 /* Star Clusters - Dense groupings */
 .star-cluster {
@@ -961,7 +926,6 @@ body.show-stars .stars-container,
 body.show-stars .stars-layer,
 body.show-stars .milky-way,
 body.show-stars .nebula,
-body.show-stars .constellation,
 body.show-stars .star-cluster {
   opacity: 1 !important;
 }
@@ -970,7 +934,6 @@ body.hide-stars .stars-container,
 body.hide-stars .stars-layer,
 body.hide-stars .milky-way,
 body.hide-stars .nebula,
-body.hide-stars .constellation,
 body.hide-stars .star-cluster {
   opacity: 0 !important;
 }
