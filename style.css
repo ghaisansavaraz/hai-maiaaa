@@ -907,40 +907,139 @@ body.light-theme .greeting {
   letter-spacing: 0.02em;
 }
 
-/* Moon Phase Widget */
+/* Luxury Moon Phase Widget */
 .header-moon-phase {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  opacity: 0.75;
+  gap: 8px;
+  opacity: 0.85;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  position: relative;
+}
+
+/* Radial sunburst pattern behind moon */
+.header-moon-phase::before {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: 
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(255,255,255,0.04) 0deg 0.5deg,
+      transparent 0.5deg 1deg
+    );
+  z-index: -1;
+  border-radius: 50%;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
 }
 
 .header-moon-phase:hover {
   opacity: 1;
-  transform: scale(1.05);
+  transform: scale(1.08);
+}
+
+.header-moon-phase:hover::before {
+  opacity: 0.8;
 }
 
 .moon-widget {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(248,250,252,0.95);
+  background: rgba(248,250,252,0.98);
   box-shadow: 
-    0 0 8px rgba(255,255,255,0.2) inset,
-    0 2px 8px rgba(0,0,0,0.15),
-    0 0 12px rgba(255,255,255,0.1);
+    0 0 10px rgba(255,255,255,0.25) inset,
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 2px 10px rgba(0,0,0,0.18),
+    0 0 16px rgba(255,255,255,0.15);
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glass crystal reflection effect */
+.moon-widget::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25), transparent);
+  border-radius: 50% 50% 40% 40%;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 .moon-widget:hover {
   box-shadow: 
-    0 0 12px rgba(255,255,255,0.3) inset,
-    0 4px 12px rgba(0,0,0,0.2),
-    0 0 20px rgba(255,255,255,0.15);
+    0 0 16px rgba(255,255,255,0.35) inset,
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 4px 16px rgba(0,0,0,0.22),
+    0 0 24px rgba(255,255,255,0.2);
+  transform: rotate(2deg);
+}
+
+.moon-widget:hover::after {
+  opacity: 0.8;
+}
+
+/* Star field background */
+.moon-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: 
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,0.9) 0.6px, transparent 0.7px),
+    radial-gradient(circle at 88% 25%, rgba(255,255,255,0.7) 0.5px, transparent 0.6px),
+    radial-gradient(circle at 20% 75%, rgba(255,255,255,0.8) 0.5px, transparent 0.6px),
+    radial-gradient(circle at 85% 70%, rgba(255,255,255,0.6) 0.5px, transparent 0.6px),
+    radial-gradient(circle at 45% 15%, rgba(255,255,255,0.5) 0.4px, transparent 0.5px),
+    radial-gradient(circle at 65% 85%, rgba(255,255,255,0.6) 0.5px, transparent 0.6px),
+    radial-gradient(circle at 15% 45%, rgba(255,255,255,0.7) 0.5px, transparent 0.6px),
+    radial-gradient(circle at 90% 55%, rgba(255,255,255,0.5) 0.4px, transparent 0.5px),
+    radial-gradient(circle at 35% 88%, rgba(255,255,255,0.6) 0.5px, transparent 0.6px),
+    radial-gradient(circle at 75% 12%, rgba(255,255,255,0.8) 0.6px, transparent 0.7px);
+  pointer-events: none;
+}
+
+/* Four-pointed stars */
+.moon-stars::before,
+.moon-stars::after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 
+    0 0 3px rgba(255,255,255,0.8),
+    0 1px 0 rgba(255,255,255,0.6),
+    0 -1px 0 rgba(255,255,255,0.6),
+    1px 0 0 rgba(255,255,255,0.6),
+    -1px 0 0 rgba(255,255,255,0.6);
+  border-radius: 50%;
+}
+
+.moon-stars::before {
+  top: 30%;
+  left: 25%;
+}
+
+.moon-stars::after {
+  top: 65%;
+  right: 22%;
+}
+
+/* Moon circle with detailed surface */
+.moon-circle {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 50%;
 }
 
 .moon-circle::before,
@@ -952,19 +1051,80 @@ body.light-theme .greeting {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(15,23,42,0.85);
+  background: rgba(15,23,42,0.88);
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Moon phase shadow calculation using CSS variable --phase (0-1) */
 .moon-circle::before {
   clip-path: ellipse(calc(50% * var(--phase)) 50% at 50% 50%);
-  transform: translateX(calc(20px * (1 - var(--phase))));
+  transform: translateX(calc(24px * (1 - var(--phase))));
 }
 
 .moon-circle::after {
   clip-path: ellipse(calc(50% * (1 - var(--phase))) 50% at 50% 50%);
-  transform: translateX(calc(-20px * var(--phase)));
+  transform: translateX(calc(-24px * var(--phase)));
+}
+
+/* Detailed moon surface texture */
+.moon-surface {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle at 35% 28%, rgba(255,255,255,1), rgba(245,245,245,0.98) 30%, rgba(230,230,230,0.95) 60%, rgba(210,210,210,0.92)),
+    radial-gradient(circle at 28% 42%, rgba(200,200,200,0.4) 2%, transparent 2.5%),
+    radial-gradient(circle at 58% 48%, rgba(195,195,195,0.35) 2.5%, transparent 3%),
+    radial-gradient(circle at 42% 60%, rgba(205,205,205,0.3) 1.8%, transparent 2.2%),
+    radial-gradient(circle at 65% 35%, rgba(200,200,200,0.35) 2%, transparent 2.5%),
+    radial-gradient(circle at 38% 28%, rgba(190,190,190,0.25) 1.5%, transparent 2%),
+    radial-gradient(circle at 70% 62%, rgba(195,195,195,0.3) 1.6%, transparent 2%),
+    radial-gradient(circle at 25% 68%, rgba(200,200,200,0.28) 1.4%, transparent 1.8%);
+  filter: contrast(1.08) brightness(1.02);
+  pointer-events: none;
+}
+
+/* Subtle cloud wisps */
+.moon-clouds {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(255,255,255,0.22);
+  filter: blur(3px);
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.cloud-1 {
+  width: 14px;
+  height: 5px;
+  bottom: 10px;
+  left: 6px;
+  border-radius: 50% 50% 30% 40%;
+}
+
+.cloud-2 {
+  width: 16px;
+  height: 6px;
+  bottom: 8px;
+  right: 8px;
+  border-radius: 45% 55% 35% 45%;
+}
+
+.cloud-3 {
+  width: 10px;
+  height: 4px;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
 }
 
 .moon-label {
@@ -984,15 +1144,36 @@ body.light-theme .greeting {
 
 /* Light theme moon adaptation */
 body.light-theme .moon-widget {
-  background: rgba(15,23,42,0.9);
+  background: rgba(15,23,42,0.92);
   box-shadow: 
-    0 0 8px rgba(0,0,0,0.15) inset,
-    0 2px 8px rgba(0,0,0,0.2);
+    0 0 10px rgba(0,0,0,0.2) inset,
+    0 1px 0 rgba(0,0,0,0.3) inset,
+    0 2px 10px rgba(0,0,0,0.25);
 }
 
 body.light-theme .moon-circle::before,
 body.light-theme .moon-circle::after {
-  background: rgba(248,250,252,0.95);
+  background: rgba(248,250,252,0.98);
+}
+
+body.light-theme .moon-surface {
+  background: 
+    radial-gradient(circle at 35% 28%, rgba(20,20,20,1), rgba(35,35,35,0.98) 30%, rgba(50,50,50,0.95) 60%, rgba(65,65,65,0.92)),
+    radial-gradient(circle at 28% 42%, rgba(80,80,80,0.4) 2%, transparent 2.5%),
+    radial-gradient(circle at 58% 48%, rgba(85,85,85,0.35) 2.5%, transparent 3%),
+    radial-gradient(circle at 42% 60%, rgba(75,75,75,0.3) 1.8%, transparent 2.2%),
+    radial-gradient(circle at 65% 35%, rgba(80,80,80,0.35) 2%, transparent 2.5%);
+}
+
+body.light-theme .moon-stars {
+  background-image: 
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,0.9) 0.6px, transparent 0.7px),
+    radial-gradient(circle at 88% 25%, rgba(255,255,255,0.7) 0.5px, transparent 0.6px),
+    radial-gradient(circle at 20% 75%, rgba(255,255,255,0.8) 0.5px, transparent 0.6px);
+}
+
+body.light-theme .cloud {
+  background: rgba(0,0,0,0.18);
 }
 
 body.light-theme .moon-label {
@@ -2180,20 +2361,40 @@ body #moodSection .mood-categories.visible .mood-category:not(:disabled) {
   
   /* Make moon widget smaller on mobile */
   .moon-widget {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
   }
   
   .moon-circle::before {
-    transform: translateX(calc(16px * (1 - var(--phase))));
+    transform: translateX(calc(20px * (1 - var(--phase))));
   }
   
   .moon-circle::after {
-    transform: translateX(calc(-16px * var(--phase)));
+    transform: translateX(calc(-20px * var(--phase)));
   }
   
   .moon-label {
     font-size: 9px;
+  }
+  
+  .header-moon-phase::before {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .cloud-1 {
+    width: 12px;
+    height: 4px;
+  }
+  
+  .cloud-2 {
+    width: 14px;
+    height: 5px;
+  }
+  
+  .cloud-3 {
+    width: 8px;
+    height: 3px;
   }
 }
 
