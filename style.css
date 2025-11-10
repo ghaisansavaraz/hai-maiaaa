@@ -1,4 +1,4 @@
-/* UPDATED: Smaller star sizes with vibrant blinking + aggressive flashes */
+/* UPDATED: Visible nebulas (z-index 2) + smaller vibrant stars */
 :root {
   color-scheme: dark;
   --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -265,7 +265,7 @@ body.hide-day-particles .day-particles-container {
   border-radius: 50%;
   opacity: 0;
   transition: opacity 0.5s ease;
-  z-index: 0;
+  z-index: 2;
 }
 
 .nebula-1 {
@@ -273,8 +273,8 @@ body.hide-day-particles .day-particles-container {
   height: 900px;
   top: -12%;
   right: -18%;
-  background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 35%, rgba(255,255,255,0.08) 60%, transparent 75%);
-  filter: blur(80px);
+  background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.3) 35%, rgba(255,255,255,0.15) 60%, rgba(255,255,255,0.05) 75%, transparent 85%);
+  filter: blur(60px);
   animation: nebulaDrift1 120s linear infinite;
 }
 
@@ -283,8 +283,8 @@ body.hide-day-particles .day-particles-container {
   height: 700px;
   bottom: -8%;
   left: -12%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.06) 65%, transparent 80%);
-  filter: blur(70px);
+  background: radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.28) 45%, rgba(255,255,255,0.12) 65%, rgba(255,255,255,0.04) 80%, transparent 90%);
+  filter: blur(55px);
   animation: nebulaDrift2 90s linear infinite reverse;
 }
 
@@ -293,8 +293,8 @@ body.hide-day-particles .day-particles-container {
   height: 800px;
   top: 40%;
   left: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 70%, transparent 85%);
-  filter: blur(90px);
+  background: radial-gradient(circle, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.1) 70%, rgba(255,255,255,0.03) 85%, transparent 95%);
+  filter: blur(65px);
   animation: nebulaPulse 60s ease-in-out infinite;
 }
 
@@ -304,8 +304,8 @@ body.hide-day-particles .day-particles-container {
   height: 650px;
   top: 10%;
   left: 20%;
-  background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 55%, rgba(255,255,255,0.04) 70%, transparent 80%);
-  filter: blur(75px);
+  background: radial-gradient(circle, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.2) 55%, rgba(255,255,255,0.08) 70%, rgba(255,255,255,0.02) 80%, transparent 90%);
+  filter: blur(50px);
   animation: nebulaDrift1 100s linear infinite reverse;
 }
 
@@ -314,8 +314,8 @@ body.hide-day-particles .day-particles-container {
   height: 750px;
   bottom: 15%;
   right: 10%;
-  background: radial-gradient(circle, rgba(255,255,255,0.27) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 70%, transparent 75%);
-  filter: blur(85px);
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.23) 50%, rgba(255,255,255,0.1) 70%, rgba(255,255,255,0.03) 80%, transparent 90%);
+  filter: blur(58px);
   animation: nebulaDrift2 110s linear infinite;
 }
 
