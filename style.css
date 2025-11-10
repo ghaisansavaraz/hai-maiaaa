@@ -320,24 +320,20 @@ body.hide-day-particles .day-particles-container {
 }
 
 @keyframes nebulaDrift1 {
-  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
-  50% { opacity: 1; }
-  100% { transform: translate(-20px, 20px) rotate(360deg); opacity: 0.8; }
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-20px, 20px) rotate(360deg); }
 }
 
 @keyframes nebulaDrift2 {
-  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.75; }
-  50% { opacity: 1; }
-  100% { transform: translate(15px, -15px) rotate(360deg); opacity: 0.75; }
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(15px, -15px) rotate(360deg); }
 }
 
 @keyframes nebulaPulse {
   0%, 100% { 
-    opacity: 0.7; 
     transform: translate(-50%, -50%) scale(1); 
   }
   50% { 
-    opacity: 1; 
     transform: translate(-50%, -50%) scale(1.15); 
   }
 }
