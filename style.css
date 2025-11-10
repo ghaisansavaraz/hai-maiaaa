@@ -1,4 +1,4 @@
-/* UPDATED: Vibrant blinking stars with aggressive flash animations + enhanced glows */
+/* UPDATED: Smaller star sizes with vibrant blinking + aggressive flashes */
 :root {
   color-scheme: dark;
   --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -432,84 +432,84 @@ body.hide-day-particles .day-particles-container {
 
 /* Individual star positions with size variations */
 /* SPARKLING STARS - Intense brightness pulsing with dramatic glows */
-.star-1 { top: 10%; left: 15%; width: 4px; height: 4px; background: rgba(255,255,255,1); animation: sparkleIntense 2.5s infinite; }
-.star-8 { top: 80%; left: 85%; width: 4px; height: 4px; background: rgba(255,255,255,1); animation: sparkleIntense 3s infinite; }
-.star-15 { top: 75%; left: 45%; width: 4px; height: 4px; background: rgba(255,255,255,1); animation: sparkleIntense 2.8s infinite; }
-.star-2 { top: 20%; left: 25%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkle 3.2s ease-in-out infinite; }
-.star-5 { top: 50%; left: 55%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkle 2.8s ease-in-out infinite; }
-.star-12 { top: 45%; left: 15%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkle 3.5s ease-in-out infinite; }
-.star-18 { top: 95%; left: 5%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkle 3s ease-in-out infinite; }
+.star-1 { top: 10%; left: 15%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkleIntense 2.5s infinite; }
+.star-8 { top: 80%; left: 85%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkleIntense 3s infinite; }
+.star-15 { top: 75%; left: 45%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkleIntense 2.8s infinite; }
+.star-2 { top: 20%; left: 25%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); animation: sparkle 3.2s ease-in-out infinite; }
+.star-5 { top: 50%; left: 55%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); animation: sparkle 2.8s ease-in-out infinite; }
+.star-12 { top: 45%; left: 15%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); animation: sparkle 3.5s ease-in-out infinite; }
+.star-18 { top: 95%; left: 5%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); animation: sparkle 3s ease-in-out infinite; }
 
 /* BLINKING STARS - Traditional twinkling effect */
 /* Medium blinking stars */
-.star-3 { top: 30%; left: 35%; width: 3px; height: 3px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blinkAggressive 1.8s infinite; }
-.star-4 { top: 40%; left: 45%; width: 3px; height: 3px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: breathe 4.5s infinite; }
-.star-7 { top: 70%; left: 75%; width: 3px; height: 3px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blink3 2s infinite; }
-.star-10 { top: 25%; left: 85%; width: 3px; height: 3px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blinkAggressive 1.4s infinite; }
+.star-3 { top: 30%; left: 35%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blinkAggressive 1.8s infinite; }
+.star-4 { top: 40%; left: 45%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: breathe 4.5s infinite; }
+.star-7 { top: 70%; left: 75%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blink3 2s infinite; }
+.star-10 { top: 25%; left: 85%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blinkAggressive 1.4s infinite; }
 
 /* Small blinking stars */
-.star-6 { top: 60%; left: 65%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.5s infinite; }
-.star-9 { top: 15%; left: 75%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.9s infinite; }
-.star-11 { top: 35%; left: 5%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 2s infinite; }
-.star-13 { top: 55%; left: 25%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.8s infinite; }
-.star-14 { top: 65%; left: 35%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.5s infinite; }
+.star-6 { top: 60%; left: 65%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.5s infinite; }
+.star-9 { top: 15%; left: 75%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.9s infinite; }
+.star-11 { top: 35%; left: 5%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 2s infinite; }
+.star-13 { top: 55%; left: 25%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.8s infinite; }
+.star-14 { top: 65%; left: 35%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.5s infinite; }
 /* Micro stars (distant) */
-.star-16 { top: 85%; left: 55%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.2s infinite; }
-.star-19 { top: 12%; left: 95%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.5s infinite; }
-.star-24 { top: 38%; left: 5%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink3 3.2s infinite; }
-.star-29 { top: 88%; left: 15%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink2 3.6s infinite; }
-.star-34 { top: 33%; left: 15%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.3s infinite; }
-.star-39 { top: 83%; left: 25%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink3 3.8s infinite; }
-.star-44 { top: 37%; left: 25%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink2 3.4s infinite; }
+.star-16 { top: 85%; left: 55%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.2s infinite; }
+.star-19 { top: 12%; left: 95%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.5s infinite; }
+.star-24 { top: 38%; left: 5%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink3 3.2s infinite; }
+.star-29 { top: 88%; left: 15%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink2 3.6s infinite; }
+.star-34 { top: 33%; left: 15%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.3s infinite; }
+.star-39 { top: 83%; left: 25%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink3 3.8s infinite; }
+.star-44 { top: 37%; left: 25%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink2 3.4s infinite; }
 
 /* Small stars (standard) - all blinking with enhanced glow */
-.star-17 { top: 5%; left: 65%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 2s infinite; }
-.star-20 { top: 88%; left: 95%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.3s infinite; }
-.star-21 { top: 8%; left: 35%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.8s infinite; }
-.star-22 { top: 18%; left: 55%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.6s infinite; }
-.star-23 { top: 28%; left: 75%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.8s infinite; }
-.star-25 { top: 48%; left: 25%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 2s infinite; }
-.star-26 { top: 58%; left: 45%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.5s infinite; }
-.star-27 { top: 68%; left: 65%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.9s infinite; }
-.star-28 { top: 78%; left: 85%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.4s infinite; }
-.star-30 { top: 98%; left: 35%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
-.star-31 { top: 3%; left: 55%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.8s infinite; }
-.star-32 { top: 13%; left: 75%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.5s infinite; }
-.star-33 { top: 23%; left: 95%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.7s infinite; }
-.star-35 { top: 43%; left: 35%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.9s infinite; }
-.star-36 { top: 53%; left: 55%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
-.star-37 { top: 63%; left: 75%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.8s infinite; }
-.star-38 { top: 73%; left: 5%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.5s infinite; }
-.star-40 { top: 93%; left: 45%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.6s infinite; }
-.star-41 { top: 7%; left: 65%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.7s infinite; }
-.star-42 { top: 17%; left: 85%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.4s infinite; }
-.star-43 { top: 27%; left: 5%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 2.1s infinite; }
-.star-45 { top: 47%; left: 45%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.8s infinite; }
-.star-46 { top: 57%; left: 65%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.5s infinite; }
-.star-47 { top: 67%; left: 85%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.9s infinite; }
-.star-48 { top: 77%; left: 15%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
-.star-49 { top: 87%; left: 35%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.7s infinite; }
-.star-50 { top: 97%; left: 55%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.4s infinite; }
+.star-17 { top: 5%; left: 65%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 2s infinite; }
+.star-20 { top: 88%; left: 95%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.3s infinite; }
+.star-21 { top: 8%; left: 35%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.8s infinite; }
+.star-22 { top: 18%; left: 55%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.6s infinite; }
+.star-23 { top: 28%; left: 75%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.8s infinite; }
+.star-25 { top: 48%; left: 25%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 2s infinite; }
+.star-26 { top: 58%; left: 45%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.5s infinite; }
+.star-27 { top: 68%; left: 65%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.9s infinite; }
+.star-28 { top: 78%; left: 85%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.4s infinite; }
+.star-30 { top: 98%; left: 35%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
+.star-31 { top: 3%; left: 55%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.8s infinite; }
+.star-32 { top: 13%; left: 75%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.5s infinite; }
+.star-33 { top: 23%; left: 95%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.7s infinite; }
+.star-35 { top: 43%; left: 35%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.9s infinite; }
+.star-36 { top: 53%; left: 55%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
+.star-37 { top: 63%; left: 75%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.8s infinite; }
+.star-38 { top: 73%; left: 5%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.5s infinite; }
+.star-40 { top: 93%; left: 45%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.6s infinite; }
+.star-41 { top: 7%; left: 65%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.7s infinite; }
+.star-42 { top: 17%; left: 85%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.4s infinite; }
+.star-43 { top: 27%; left: 5%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 2.1s infinite; }
+.star-45 { top: 47%; left: 45%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.8s infinite; }
+.star-46 { top: 57%; left: 65%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.5s infinite; }
+.star-47 { top: 67%; left: 85%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink2 1.9s infinite; }
+.star-48 { top: 77%; left: 15%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
+.star-49 { top: 87%; left: 35%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.7s infinite; }
+.star-50 { top: 97%; left: 55%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.4s infinite; }
 
 /* Additional stars for denser starfield */
 /* More sparkling stars */
-.star-51 { top: 35%; left: 70%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkle 3.3s ease-in-out infinite; }
-.star-52 { top: 62%; left: 40%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkle 2.9s ease-in-out infinite; }
-.star-53 { top: 18%; left: 48%; width: 4px; height: 4px; background: rgba(255,255,255,1); animation: sparkleIntense 2.7s infinite; }
+.star-51 { top: 35%; left: 70%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); animation: sparkle 3.3s ease-in-out infinite; }
+.star-52 { top: 62%; left: 40%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); animation: sparkle 2.9s ease-in-out infinite; }
+.star-53 { top: 18%; left: 48%; width: 3px; height: 3px; background: rgba(255,255,255,1); animation: sparkleIntense 2.7s infinite; }
 
 /* More blinking stars */
-.star-54 { top: 14%; left: 22%; width: 3px; height: 3px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blinkAggressive 1.8s infinite; }
-.star-55 { top: 42%; left: 78%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
-.star-56 { top: 56%; left: 12%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 2s infinite; }
-.star-57 { top: 71%; left: 92%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.5s infinite; }
-.star-58 { top: 24%; left: 32%; width: 3px; height: 3px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: breathe 4.8s infinite; }
-.star-59 { top: 84%; left: 68%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.7s infinite; }
-.star-60 { top: 92%; left: 28%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.3s infinite; }
-.star-61 { top: 6%; left: 88%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.9s infinite; }
-.star-62 { top: 52%; left: 8%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink3 3.6s infinite; }
-.star-63 { top: 32%; left: 52%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.5s infinite; }
-.star-64 { top: 64%; left: 88%; width: 2px; height: 2px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 2.1s infinite; }
-.star-65 { top: 46%; left: 62%; width: 3px; height: 3px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blink3 1.9s infinite; }
+.star-54 { top: 14%; left: 22%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blinkAggressive 1.8s infinite; }
+.star-55 { top: 42%; left: 78%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.6s infinite; }
+.star-56 { top: 56%; left: 12%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 2s infinite; }
+.star-57 { top: 71%; left: 92%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.5s infinite; }
+.star-58 { top: 24%; left: 32%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: breathe 4.8s infinite; }
+.star-59 { top: 84%; left: 68%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink3 1.7s infinite; }
+.star-60 { top: 92%; left: 28%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink1 3.3s infinite; }
+.star-61 { top: 6%; left: 88%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 1.9s infinite; }
+.star-62 { top: 52%; left: 8%; width: 1px; height: 1px; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.6); animation: blink3 3.6s infinite; }
+.star-63 { top: 32%; left: 52%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blink1 1.5s infinite; }
+.star-64 { top: 64%; left: 88%; width: 1.5px; height: 1.5px; background: rgba(255,255,255,1); box-shadow: 0 0 12px rgba(255,255,255,0.7); animation: blinkAggressive 2.1s infinite; }
+.star-65 { top: 46%; left: 62%; width: 2.5px; height: 2.5px; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(255,255,255,0.8); animation: blink3 1.9s infinite; }
 
 /* Luxury Twinkle Animations */
 
