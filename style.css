@@ -273,8 +273,8 @@ body.hide-day-particles .day-particles-container {
   height: 900px;
   top: -12%;
   right: -18%;
-  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 35%, rgba(255,255,255,0.03) 60%, transparent 75%);
-  filter: blur(110px);
+  background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 35%, rgba(255,255,255,0.08) 60%, transparent 75%);
+  filter: blur(80px);
   animation: nebulaDrift1 120s linear infinite;
 }
 
@@ -283,8 +283,8 @@ body.hide-day-particles .day-particles-container {
   height: 700px;
   bottom: -8%;
   left: -12%;
-  background: radial-gradient(circle, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0.025) 65%, transparent 80%);
-  filter: blur(90px);
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.06) 65%, transparent 80%);
+  filter: blur(70px);
   animation: nebulaDrift2 90s linear infinite reverse;
 }
 
@@ -293,8 +293,8 @@ body.hide-day-particles .day-particles-container {
   height: 800px;
   top: 40%;
   left: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 70%, transparent 85%);
-  filter: blur(130px);
+  background: radial-gradient(circle, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 70%, transparent 85%);
+  filter: blur(90px);
   animation: nebulaPulse 60s ease-in-out infinite;
 }
 
@@ -304,8 +304,8 @@ body.hide-day-particles .day-particles-container {
   height: 650px;
   top: 10%;
   left: 20%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.04) 55%, transparent 80%);
-  filter: blur(100px);
+  background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 55%, rgba(255,255,255,0.04) 70%, transparent 80%);
+  filter: blur(75px);
   animation: nebulaDrift1 100s linear infinite reverse;
 }
 
@@ -314,8 +314,8 @@ body.hide-day-particles .day-particles-container {
   height: 750px;
   bottom: 15%;
   right: 10%;
-  background: radial-gradient(circle, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.05) 50%, transparent 75%);
-  filter: blur(95px);
+  background: radial-gradient(circle, rgba(255,255,255,0.27) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 70%, transparent 75%);
+  filter: blur(85px);
   animation: nebulaDrift2 110s linear infinite;
 }
 
