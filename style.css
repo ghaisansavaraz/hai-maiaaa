@@ -887,9 +887,6 @@ body.light-theme .dashboard {
 }
 
 /* Light theme text colors */
-body.light-theme .header-current-time,
-body.light-theme .header-current-date,
-body.light-theme .header-time-greeting,
 body.light-theme .card-title,
 body.light-theme .card-subtitle,
 body.light-theme .dashboard-card,
@@ -900,6 +897,14 @@ body.light-theme .deadline-date,
 body.light-theme .deadline-time,
 body.light-theme .mood-category {
   color: #ffffff !important;
+}
+
+/* Clock inverted for light theme */
+body.light-theme .header-current-time,
+body.light-theme .header-current-date,
+body.light-theme .header-time-greeting {
+  color: #1a1a1a !important;
+  text-shadow: 0 0 20px rgba(0,0,0,0.15) !important;
 }
 
 /* Light theme cards - more transparent for visibility on white */
