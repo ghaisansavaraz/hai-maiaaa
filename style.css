@@ -1,4 +1,4 @@
-/* UPDATED: BRIGHT nebulas (opacity 0.6-0.7 + box-shadow) + vibrant stars v2 */
+/* UPDATED: Nebula removed + vibrant stars v2 */
 :root {
   color-scheme: dark;
   --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -30,7 +30,6 @@
   --star-color-dim: rgba(255,255,255,0.3);
   --star-color-mid: rgba(255,255,255,0.6);
   --star-color-bright: rgba(255,255,255,0.9);
-  --nebula-color: rgba(255,255,255,0.04);
 }
 
 /* Robust black background */
@@ -255,91 +254,6 @@ body.hide-day-particles .day-particles-container {
   }
   50% {
     opacity: 1;
-  }
-}
-
-/* Nebula Effects - Vivid and visible */
-.nebula {
-  position: fixed;
-  pointer-events: none;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 2;
-}
-
-.nebula-1 {
-  width: 900px;
-  height: 900px;
-  top: -12%;
-  right: -18%;
-  background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.45) 35%, rgba(255,255,255,0.25) 60%, rgba(255,255,255,0.1) 75%, transparent 85%);
-  filter: blur(60px);
-  box-shadow: 0 0 200px rgba(255,255,255,0.3);
-  animation: nebulaDrift1 120s linear infinite;
-}
-
-.nebula-2 {
-  width: 700px;
-  height: 700px;
-  bottom: -8%;
-  left: -12%;
-  background: radial-gradient(circle, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.4) 45%, rgba(255,255,255,0.2) 65%, rgba(255,255,255,0.08) 80%, transparent 90%);
-  filter: blur(55px);
-  box-shadow: 0 0 180px rgba(255,255,255,0.25);
-  animation: nebulaDrift2 90s linear infinite reverse;
-}
-
-.nebula-3 {
-  width: 800px;
-  height: 800px;
-  top: 40%;
-  left: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.38) 50%, rgba(255,255,255,0.18) 70%, rgba(255,255,255,0.06) 85%, transparent 95%);
-  filter: blur(65px);
-  box-shadow: 0 0 190px rgba(255,255,255,0.28);
-  animation: nebulaPulse 60s ease-in-out infinite;
-}
-
-/* Add more nebulas for richness */
-.nebula-4 {
-  width: 650px;
-  height: 650px;
-  top: 10%;
-  left: 20%;
-  background: radial-gradient(circle, rgba(255,255,255,0.58) 0%, rgba(255,255,255,0.35) 55%, rgba(255,255,255,0.15) 70%, rgba(255,255,255,0.05) 80%, transparent 90%);
-  filter: blur(50px);
-  box-shadow: 0 0 170px rgba(255,255,255,0.22);
-  animation: nebulaDrift1 100s linear infinite reverse;
-}
-
-.nebula-5 {
-  width: 750px;
-  height: 750px;
-  bottom: 15%;
-  right: 10%;
-  background: radial-gradient(circle, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.37) 50%, rgba(255,255,255,0.17) 70%, rgba(255,255,255,0.06) 80%, transparent 90%);
-  filter: blur(58px);
-  box-shadow: 0 0 185px rgba(255,255,255,0.26);
-  animation: nebulaDrift2 110s linear infinite;
-}
-
-@keyframes nebulaDrift1 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(-20px, 20px) rotate(360deg); }
-}
-
-@keyframes nebulaDrift2 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(15px, -15px) rotate(360deg); }
-}
-
-@keyframes nebulaPulse {
-  0%, 100% { 
-    transform: translate(-50%, -50%) scale(1); 
-  }
-  50% { 
-    transform: translate(-50%, -50%) scale(1.15); 
   }
 }
 
@@ -753,7 +667,6 @@ body.hide-day-particles .day-particles-container {
 body.show-stars .stars-container,
 body.show-stars .stars-layer,
 body.show-stars .milky-way,
-body.show-stars .nebula,
 body.show-stars .star-cluster {
   opacity: 1 !important;
 }
@@ -761,7 +674,6 @@ body.show-stars .star-cluster {
 body.hide-stars .stars-container,
 body.hide-stars .stars-layer,
 body.hide-stars .milky-way,
-body.hide-stars .nebula,
 body.hide-stars .star-cluster {
   opacity: 0 !important;
 }
