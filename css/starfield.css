@@ -431,47 +431,6 @@ body.hide-stars .star-cluster {
   opacity: 0 !important;
 }
 
-/* Timer styles with glow */
-.timer {
-  font-size: clamp(44px, 12vw, 120px);
-  font-weight: 200;
-  letter-spacing: 0.18em;
-  opacity: 1 !important;
-  transition: transform .45s ease, opacity .45s ease;
-  cursor: pointer;
-  user-select: none;
-  color: #fff !important;
-  position: relative;
-  z-index: 10;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3) !important;
-  animation: timerGlow 3s ease-in-out infinite alternate !important;
-}
-
-.night-theme .timer {
-  color: #fff !important;
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
-  animation: timerGlow 3s ease-in-out infinite alternate;
-}
-
-.greeting {
-  margin-top: 12px;
-  font-size: 1.05rem;
-  font-weight: 300;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity .8s ease .6s, transform .8s ease .6s;
-  color: #fff !important;
-}
-
-.night-theme .greeting {
-  color: #fff !important;
-}
-
-.greeting.visible { 
-  opacity: 0.86; 
-  transform: translateY(0); 
-}
-
 /* Nighttime glow effects */
 .night-theme .current-time {
   animation: timeGlow 2s ease-in-out infinite alternate;
@@ -489,7 +448,5 @@ body.hide-stars .star-cluster {
   animation: timeGlow 2s ease-in-out infinite alternate;
 }
 
-.night-theme .time-greeting {
-  animation: timeGlow 2s ease-in-out infinite alternate;
-}
+/* Note: header-time-greeting is styled in dashboard.css */
 

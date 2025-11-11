@@ -9,13 +9,12 @@ import { loadReminders, initReminderEventListeners } from './reminders.js';
 
 let dynamicBackground = null;
 
-// Show dashboard (fade out countdown, fade in dashboard)
+// Show dashboard
 function showDashboard() {
   const dashboard = document.getElementById("dashboard");
   const centerContainer = document.querySelector(".center");
   const dashboardContent = document.getElementById("dashboardContent");
   
-  // Immediate show (countdown removed)
   if (dashboard) {
     dashboard.classList.remove("hidden");
     dashboard.classList.add("visible");
@@ -113,7 +112,7 @@ function initCardActivation() {
   });
 }
 
-// Hidden editor key (triple-click on dashboard title)
+// Editor key (triple-click on dashboard title)
 function initEditorKey() {
   const dashboard = document.getElementById("dashboard");
   let editorClicks = 0;

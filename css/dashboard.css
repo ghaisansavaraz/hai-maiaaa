@@ -1,22 +1,6 @@
 /* Dashboard Layout and Card Styles */
 
-/* Countdown container */
-.countdown-container { 
-  text-align: center; 
-  position: relative;
-  z-index: 10;
-}
-
-/* Secret input (hidden by default) */
-.secret-input {
-  display: none;
-  margin-top: 12px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.02);
-  color: inherit;
-}
+/* (Countdown styles removed) */
 
 /* High-End Dashboard Design - Transparent Container */
 .dashboard {
@@ -317,15 +301,7 @@ body.light-theme .mood-category {
   letter-spacing: 0.1em;
 }
 
-/* Greeting section */
-.greeting-text {
-  font-size: 1.2rem;
-  font-weight: 300;
-  padding: 16px 20px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.05);
-}
+/* (Legacy greeting section removed) */
 
 /* Enhanced visibility for light backgrounds */
 .time-display {
@@ -347,13 +323,7 @@ body.light-theme .mood-category {
   color: rgba(255,255,255,0.9) !important;
 }
 
-.time-greeting {
-  background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4)) !important;
-  background-color: rgba(0,0,0,0.5) !important;
-  border: 1px solid rgba(255,255,255,0.3) !important;
-  color: #fff !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
-}
+/* (Legacy .time-greeting styles removed – using .header-time-greeting instead) */
 
 .dash-title {
   color: #fff !important;
@@ -405,19 +375,9 @@ body.light-theme .mood-category {
   color: #555 !important;
 }
 
-.dashboard.light-theme .time-greeting {
-  background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.3)) !important;
-  background-color: rgba(255,255,255,0.35) !important;
-  border: 1px solid rgba(255,255,255,0.5) !important;
-  color: #333 !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
-}
+/* (Legacy light theme .time-greeting styles removed) */
 
-/* Light theme countdown */
-body.light-theme .timer,
-body.light-theme .greeting {
-  color: #000000 !important;
-}
+/* (Light theme countdown overrides removed) */
 
 /* Coming Soon Style */
 .coming-soon {
