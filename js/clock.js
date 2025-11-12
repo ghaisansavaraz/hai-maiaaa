@@ -1,6 +1,7 @@
 /* Clock and Time Display System */
 
 import { debugLog, debugError } from './config.js';
+import { getMoonPhaseData, getMaskParams } from './moon.js';
 
 let lastTime = ''; // Track time changes for individual digit flipping
 
@@ -89,9 +90,50 @@ export function updateTime() {
     if (hour >= 5 && hour < 12) greeting = "Good morning Maiaaa";
     else if (hour >= 12 && hour < 18) greeting = "Good afternoon Maiaaa";
     
-    if (headerTimeGreeting) {
-      headerTimeGreeting.textContent = greeting;
-      debugLog("Header greeting updated:", greeting);
+    // Update greeting inline structure
+    const greetingTextEl = document.querySelector('.greeting-text');
+    if (greetingTextEl) greetingTextEl.textContent = greeting;
+    
+    // Update moon phase (Jakarta)
+    try {
+      const moonData = getMoonPhaseData();
+      const phaseNameEl = document.getElementById('moonPhaseName');
+      if (phaseNameEl) phaseNameEl.textContent = moonData.name;
+      
+      const moonSvg = document.getElementById('moonIcon');
+      const mask = moonSvg ? moonSvg.querySelector('#moonMask') : null;
+      if (moonSvg && mask) {
+        // Build a dynamic phase mask using two circles to create crescent/gibbous
+        const { offset, radius, waxing } = getMaskParams(moonData.phase);
+        // Clear current mask contents
+        mask.innerHTML = '';
+        // Base: full dark rectangle
+        const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bg.setAttribute('x', '0');
+        bg.setAttribute('y', '0');
+        bg.setAttribute('width', '100');
+        bg.setAttribute('height', '100');
+        bg.setAttribute('fill', 'black');
+        mask.appendChild(bg);
+        // Light circle (the lit disk)
+        const light = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        light.setAttribute('cx', '50');
+        light.setAttribute('cy', '50');
+        light.setAttribute('r', '46');
+        light.setAttribute('fill', 'white');
+        mask.appendChild(light);
+        // Shadow circle to cut away illumination (creates phase)
+        const shadow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        shadow.setAttribute('cx', String(50 + offset));
+        shadow.setAttribute('cy', '50');
+        shadow.setAttribute('r', String(Math.max(36, Math.min(60, radius))));
+        shadow.setAttribute('fill', 'black');
+        // For waxing, subtract shadow from left; for waning from right
+        // Apply composite by drawing black over white area
+        mask.appendChild(shadow);
+      }
+    } catch (e) {
+      debugError('Failed to update moon phase', e);
     }
     
   } catch (error) {

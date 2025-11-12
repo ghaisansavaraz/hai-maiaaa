@@ -110,6 +110,34 @@ body.light-theme .dashboard {
   text-align: center;
   opacity: 0.8;
   letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.moon-icon {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.3));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.moon-icon:hover {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 18px rgba(255,255,255,0.45));
+}
+.moon-phase-name {
+  font-weight: 200;
+  letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+.greeting-separator {
+  opacity: 0.5;
+  color: rgba(255,255,255,0.7);
+}
+.greeting-text {
+  /* inherits main greeting typography */
 }
 
 /* Clock inverted for light theme */
