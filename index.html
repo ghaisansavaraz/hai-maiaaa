@@ -38,6 +38,14 @@
           <pattern id="moonTexPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
             <image href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
           </pattern>
+          <!-- Mask that yields the LIT portion (crescent/hemisphere) -->
+          <mask id="litMask">
+            <rect width="100" height="100" fill="black"/>
+            <!-- Base lit disc -->
+            <circle id="litDisc" cx="50" cy="50" r="48" fill="white"/>
+            <!-- Shadow disc subtracts to form crescent -->
+            <circle id="shadowDisc" cx="50" cy="50" r="48" fill="black"/>
+          </mask>
           <!-- Mask selects ONLY the unlit region for the shadow overlay -->
           <mask id="unlitMask">
             <rect width="100" height="100" fill="black"/>
@@ -47,11 +55,13 @@
             <circle id="litCutout" cx="50" cy="50" r="48" fill="black"/>
           </mask>
         </defs>
-        <!-- Base texture stays fully visible so details are preserved -->
-        <circle id="moonBase" cx="50" cy="50" r="48" fill="url(#moonTexPattern)"/>
-        <!-- Semi‑transparent shadow only over unlit region (opacity tuned to ~0.6–0.7) -->
-        <g id="shadowOverlay" mask="url(#unlitMask)">
-          <circle id="shadowOverlayCircle" cx="50" cy="50" r="48" fill="black" opacity="0.65"/>
+        <!-- Lit texture (masked to lit crescent/hemisphere) -->
+        <g id="moonLit" mask="url(#litMask)">
+          <circle cx="50" cy="50" r="48" fill="url(#moonTexPattern)"/>
+        </g>
+        <!-- Dimmer texture for unlit portion (shows 30–40% of texture) -->
+        <g id="moonUnlit" mask="url(#unlitMask)" opacity="0.35">
+          <circle cx="50" cy="50" r="48" fill="url(#moonTexPattern)"/>
         </g>
         <!-- Optional subtle rim -->
         <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,.08)"/>
