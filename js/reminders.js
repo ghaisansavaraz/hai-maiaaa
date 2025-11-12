@@ -125,6 +125,9 @@ export function loadReminders() {
       // Create card container
       const card = document.createElement("div");
       card.className = "reminder-card";
+      card.addEventListener("click", () => {
+        card.classList.toggle("active");
+      });
       
       // Staggered animation delay
       card.style.animationDelay = `${index * 0.05}s`;
@@ -210,7 +213,6 @@ function renderReminders() {
 export function initReminderEventListeners() {
   const reminderText = document.getElementById("reminderText");
   const addReminderBtn = document.getElementById("addReminder");
-  const clearRemindersBtn = document.getElementById("clearReminders");
   const exportReminders = document.getElementById("exportReminders");
   const importReminders = document.getElementById("importReminders");
   const importFile = document.getElementById("importFile");
@@ -227,15 +229,7 @@ export function initReminderEventListeners() {
     });
   }
 
-  // Clear reminders
-  if (clearRemindersBtn) {
-    clearRemindersBtn.addEventListener("click", () => {
-      if (confirm("Clear all reminders?")) {
-        localStorage.removeItem(STORAGE_KEY);
-        renderReminders();
-      }
-    });
-  }
+  // Clear all removed (individual delete only)
 
   // Export
   if (exportReminders) {

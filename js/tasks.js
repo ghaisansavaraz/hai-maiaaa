@@ -90,6 +90,41 @@ export function deleteTask(id) {
   renderTasks();
 }
 
+// Selection mode state
+let tasksSelectionMode = false;
+let selectedTaskIds = new Set();
+
+export function toggleTasksSelectionMode(triggerBtn) {
+  if (!tasksSelectionMode) {
+    tasksSelectionMode = true;
+    selectedTaskIds.clear();
+    const section = document.getElementById("tasksSection");
+    if (section) section.classList.add("selection-mode");
+    if (triggerBtn) triggerBtn.classList.add("is-selection-mode");
+  } else {
+    if (selectedTaskIds.size > 0) {
+      if (confirm(`Delete ${selectedTaskIds.size} selected task${selectedTaskIds.size > 1 ? 's' : ''}?`)) {
+        tasks = tasks.filter(t => !selectedTaskIds.has(String(t.id)));
+        saveTasks();
+        tasksSelectionMode = false;
+        selectedTaskIds.clear();
+        const section = document.getElementById("tasksSection");
+        if (section) section.classList.remove("selection-mode");
+        if (triggerBtn) triggerBtn.classList.remove("is-selection-mode");
+        renderTasks();
+        return;
+      }
+    }
+    // Cancel selection mode if nothing selected or not confirmed
+    tasksSelectionMode = false;
+    selectedTaskIds.clear();
+    const section = document.getElementById("tasksSection");
+    if (section) section.classList.remove("selection-mode");
+    if (triggerBtn) triggerBtn.classList.remove("is-selection-mode");
+  }
+  renderTasks();
+}
+
 function renderTasks() {
   const tasksContainer = document.getElementById("tasksContainer");
   if (!tasksContainer) return;
@@ -98,7 +133,7 @@ function renderTasks() {
   
   tasks.forEach(task => {
     const taskItem = document.createElement("div");
-    taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+    taskItem.className = `task-item ${task.completed ? 'completed' : ''} ${tasksSelectionMode ? 'selectable' : ''} ${selectedTaskIds.has(String(task.id)) ? 'selected' : ''}`;
     
     const isOverdue = task.deadline && new Date(task.deadline) < new Date() && !task.completed;
     if (isOverdue) {
@@ -109,11 +144,48 @@ function renderTasks() {
       new Date(task.deadline).toLocaleDateString() + ' ' + new Date(task.deadline).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
       'No deadline';
     
-    taskItem.innerHTML = `
-      <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
-      <div class="task-text">${task.text}</div>
-      <div class="task-deadline">${deadlineText}</div>
-    `;
+    // Base content
+    const checkbox = document.createElement("div");
+    checkbox.className = `task-checkbox ${task.completed ? 'checked' : ''}`;
+    if (!tasksSelectionMode) {
+      checkbox.setAttribute("onclick", `toggleTask('${task.id}')`);
+    }
+    const textEl = document.createElement("div");
+    textEl.className = "task-text";
+    textEl.textContent = task.text;
+    const deadlineEl = document.createElement("div");
+    deadlineEl.className = "task-deadline";
+    deadlineEl.textContent = deadlineText;
+    
+    taskItem.appendChild(checkbox);
+    taskItem.appendChild(textEl);
+    taskItem.appendChild(deadlineEl);
+    
+    // Selection overlay
+    if (tasksSelectionMode) {
+      const sel = document.createElement("div");
+      sel.className = "select-overlay";
+      sel.textContent = selectedTaskIds.has(String(task.id)) ? '✓' : '';
+      taskItem.appendChild(sel);
+    }
+    
+    // Click behavior: selection or normal
+    taskItem.addEventListener("click", () => {
+      if (tasksSelectionMode) {
+        const idStr = String(task.id);
+        if (selectedTaskIds.has(idStr)) {
+          selectedTaskIds.delete(idStr);
+          taskItem.classList.remove("selected");
+          const overlay = taskItem.querySelector(".select-overlay");
+          if (overlay) overlay.textContent = '';
+        } else {
+          selectedTaskIds.add(idStr);
+          taskItem.classList.add("selected");
+          const overlay = taskItem.querySelector(".select-overlay");
+          if (overlay) overlay.textContent = '✓';
+        }
+      }
+    });
     
     tasksContainer.appendChild(taskItem);
   });

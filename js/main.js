@@ -3,8 +3,8 @@
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
 import { DynamicBackground, applyTheme } from './background.js';
 import { startTimeDisplay } from './clock.js';
-import { loadMoods, initMoodEventListeners } from './mood.js';
-import { loadTasks, initTaskEventListeners, clearTasks } from './tasks.js';
+import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mood.js';
+import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 
 let dynamicBackground = null;
@@ -140,20 +140,14 @@ function initClearButtons() {
   const clearMoodBtn = document.getElementById("clearMood");
   if (clearMoodBtn) {
     clearMoodBtn.addEventListener("click", () => {
-      if (confirm("Clear all moods?")) {
-        localStorage.removeItem(MOOD_STORAGE_KEY);
-        loadMoods();
-      }
+      toggleMoodSelectionMode(clearMoodBtn);
     });
   }
   
   const clearTasksBtn = document.getElementById("clearTasks");
   if (clearTasksBtn) {
     clearTasksBtn.addEventListener("click", () => {
-      if (confirm("Clear all tasks?")) {
-        localStorage.removeItem(TASKS_STORAGE_KEY);
-        clearTasks();
-      }
+      toggleTasksSelectionMode(clearTasksBtn);
     });
   }
 }

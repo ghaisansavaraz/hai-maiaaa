@@ -2,6 +2,71 @@
 
 import { MOOD_STORAGE_KEY, debugLog, debugError } from './config.js';
 
+// Selection mode state
+let moodSelectionMode = false;
+let selectedMoodIds = new Set();
+
+export function toggleMoodSelectionMode(triggerBtn) {
+  try {
+    if (!moodSelectionMode) {
+      moodSelectionMode = true;
+      selectedMoodIds.clear();
+      const section = document.getElementById("moodSection");
+      if (section) section.classList.add("selection-mode");
+      if (triggerBtn) triggerBtn.classList.add("is-selection-mode");
+      debugLog("Mood selection mode enabled");
+      loadMoods();
+      // ESC to cancel
+      const escHandler = (e) => {
+        if (e.key === "Escape") {
+          document.removeEventListener("keydown", escHandler);
+          cancelMoodSelection(triggerBtn);
+        }
+      };
+      document.addEventListener("keydown", escHandler);
+    } else {
+      // Confirm deletion if any selected, otherwise exit selection mode
+      if (selectedMoodIds.size > 0) {
+        if (confirm(`Delete ${selectedMoodIds.size} selected mood${selectedMoodIds.size > 1 ? 's' : ''}?`)) {
+          deleteSelectedMoods();
+        }
+      } else {
+        cancelMoodSelection(triggerBtn);
+      }
+    }
+  } catch (e) {
+    debugError("Failed to toggle mood selection mode:", e);
+  }
+}
+
+function cancelMoodSelection(triggerBtn) {
+  moodSelectionMode = false;
+  selectedMoodIds.clear();
+  const section = document.getElementById("moodSection");
+  if (section) section.classList.remove("selection-mode");
+  if (triggerBtn) triggerBtn.classList.remove("is-selection-mode");
+  loadMoods();
+  debugLog("Mood selection mode cancelled");
+}
+
+function deleteSelectedMoods() {
+  try {
+    const moods = migrateMoodData();
+    const updated = moods.filter(m => !selectedMoodIds.has(String(m.id)));
+    localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(updated));
+    moodSelectionMode = false;
+    selectedMoodIds.clear();
+    const section = document.getElementById("moodSection");
+    if (section) section.classList.remove("selection-mode");
+    const triggerBtn = document.getElementById("clearMood");
+    if (triggerBtn) triggerBtn.classList.remove("is-selection-mode");
+    loadMoods();
+    debugLog("Deleted selected moods");
+  } catch (e) {
+    debugError("Failed to delete selected moods:", e);
+  }
+}
+
 // Data migration: Convert old string array to new object format with categories
 function migrateMoodData() {
   try {
@@ -193,7 +258,7 @@ export function loadMoods() {
     
     sortedMoods.forEach((moodData, index) => {
       const tag = document.createElement("div");
-      tag.className = `mood-tag intensity-${moodData.intensity}`;
+      tag.className = `mood-tag intensity-${moodData.intensity} ${moodSelectionMode ? 'selectable' : ''} ${selectedMoodIds.has(String(moodData.id)) ? 'selected' : ''}`;
       tag.setAttribute("data-id", moodData.id);
       tag.setAttribute("data-category", moodData.category || "Calm");
       tag.style.animationDelay = `${index * 0.05}s`;
@@ -229,17 +294,42 @@ export function loadMoods() {
         tag.setAttribute("title", moodData.category);
       }
       
-      // Click to cycle intensity
+      // Selection overlay checkbox
+      if (moodSelectionMode) {
+        const sel = document.createElement("div");
+        sel.className = "select-overlay";
+        sel.textContent = selectedMoodIds.has(String(moodData.id)) ? '✓' : '';
+        tag.appendChild(sel);
+      }
+      
+      // Click behavior: selection or intensity
       tag.addEventListener("click", (e) => {
-        if (e.detail === 1) { // Single click
-          cycleMoodIntensity(moodData.id);
+        if (moodSelectionMode) {
+          const idStr = String(moodData.id);
+          if (selectedMoodIds.has(idStr)) {
+            selectedMoodIds.delete(idStr);
+            tag.classList.remove("selected");
+            const overlay = tag.querySelector(".select-overlay");
+            if (overlay) overlay.textContent = '';
+          } else {
+            selectedMoodIds.add(idStr);
+            tag.classList.add("selected");
+            const overlay = tag.querySelector(".select-overlay");
+            if (overlay) overlay.textContent = '✓';
+          }
+        } else {
+          if (e.detail === 1) {
+            cycleMoodIntensity(moodData.id);
+          }
         }
       });
       
       // Double-click to edit note
       tag.addEventListener("dblclick", (e) => {
         e.preventDefault();
-        editMoodNote(moodData.id);
+        if (!moodSelectionMode) {
+          editMoodNote(moodData.id);
+        }
       });
       
       moodTags.appendChild(tag);
