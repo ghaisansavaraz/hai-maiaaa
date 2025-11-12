@@ -319,7 +319,9 @@ export function loadMoods() {
           } else {
             selectedMoodIds.add(idStr);
             tag.classList.add("selected");
-            console.log(`[Maiaaa] Selected mood ${idStr}. Classes:`, tag.className);
+            console.log(`[Maiaaa] ✓ Selected mood ${idStr}`);
+            console.log(`[Maiaaa] Classes:`, tag.className);
+            console.log(`[Maiaaa] Computed animation:`, window.getComputedStyle(tag).animation);
             console.log(`[Maiaaa] Total selected: ${selectedMoodIds.size}`);
             const overlay = tag.querySelector(".select-overlay");
             if (overlay) overlay.textContent = '✓';

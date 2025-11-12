@@ -1,4 +1,4 @@
-/* UI Components - PULSE FIXED v9 - Removed conflicting important overrides on transform/shadow */
+/* UI Components - SUPER BRIGHT SYNC v10 - Simplified animation with max brightness */
 
 /* === BUTTON STYLES === */
 
@@ -799,11 +799,17 @@ body.light-theme .mood-category:not(:disabled) {
     0 0 20px rgba(255,255,255,0.15);
 }
 
-/* Override category animations when selected */
+/* Override ALL category and intensity animations when selected */
+#moodSection.selection-mode .mood-tag.selected {
+  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+}
 #moodSection.selection-mode .mood-tag.selected[data-category="Happy"],
 #moodSection.selection-mode .mood-tag.selected[data-category="Calm"],
 #moodSection.selection-mode .mood-tag.selected[data-category="Tired"],
-#moodSection.selection-mode .mood-tag.selected[data-category="Sad"] {
+#moodSection.selection-mode .mood-tag.selected[data-category="Sad"],
+#moodSection.selection-mode .mood-tag.selected.intensity-light,
+#moodSection.selection-mode .mood-tag.selected.intensity-medium,
+#moodSection.selection-mode .mood-tag.selected.intensity-strong {
   animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
 }
 
@@ -1023,28 +1029,31 @@ body.light-theme .mood-category:not(:disabled) {
   cursor: pointer;
   transition: none !important; /* Remove all transitions in selection mode */
 }
-#tasksSection.selection-mode .tasks-container .task-item.selected,
-#tasksSection.selection-mode .tasks-container .task-item.selected:hover,
-#tasksSection.selection-mode .tasks-container .task-item.selected:active {
+#tasksSection.selection-mode .tasks-container .task-item.selected {
   outline: 2px solid rgba(255,107,107,0.6) !important;
   animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
   transition: none !important; /* Disable all transitions */
   background: rgba(255,255,255,0.08) !important;
   will-change: transform, box-shadow; /* Optimize animation */
 }
+#tasksSection.selection-mode .tasks-container .task-item.selected:hover,
+#tasksSection.selection-mode .tasks-container .task-item.selected:active,
+#tasksSection.selection-mode .tasks-container .task-item.selected.completed {
+  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+}
 
 @keyframes selectionPulse {
   0%, 100% {
-    box-shadow: 0 0 25px rgba(255,107,107,0.5) inset, 
-                0 4px 25px rgba(255,107,107,0.5),
-                0 0 35px rgba(255,107,107,0.3);
-    transform: scale(1) translateY(0);
+    box-shadow: 0 0 35px rgba(255,107,107,0.7) inset, 
+                0 8px 40px rgba(255,107,107,0.7),
+                0 0 50px rgba(255,107,107,0.5);
+    transform: scale(1.03);
   }
   50% {
-    box-shadow: 0 0 35px rgba(255,107,107,0.8) inset, 
-                0 8px 50px rgba(255,107,107,0.8),
-                0 0 60px rgba(255,107,107,0.6);
-    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 0 50px rgba(255,107,107,1) inset, 
+                0 12px 70px rgba(255,107,107,1),
+                0 0 80px rgba(255,107,107,0.8);
+    transform: scale(1.08);
   }
 }
 #tasksSection.selection-mode .tasks-container .task-item .task-checkbox { display: none; }
