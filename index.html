@@ -34,10 +34,6 @@
     <div id="moonIconContainer" aria-hidden="true">
       <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
-          <!-- Texture pattern (for broader browser support) -->
-          <pattern id="moonTexPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
-            <image href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
-          </pattern>
           <!-- Mask that yields the LIT portion (crescent/hemisphere) -->
           <mask id="litMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
             <rect width="100" height="100" fill="black"/>
@@ -56,13 +52,20 @@
           </mask>
         </defs>
         <!-- Lit texture (masked to lit crescent/hemisphere) -->
-        <g id="moonLit" mask="url(#litMask)">
-          <circle cx="50" cy="50" r="48" fill="url(#moonTexPattern)"/>
-        </g>
+        <image id="moonImageLit"
+               href="assets/moon/moonmap.jpg"
+               xlink:href="assets/moon/moonmap.jpg"
+               x="0" y="0" width="100" height="100"
+               preserveAspectRatio="xMidYMid slice"
+               mask="url(#litMask)"/>
         <!-- Dimmer texture for unlit portion (shows 30–40% of texture) -->
-        <g id="moonUnlit" mask="url(#unlitMask)" opacity="0.35">
-          <circle cx="50" cy="50" r="48" fill="url(#moonTexPattern)"/>
-        </g>
+        <image id="moonImageUnlit"
+               href="assets/moon/moonmap.jpg"
+               xlink:href="assets/moon/moonmap.jpg"
+               x="0" y="0" width="100" height="100"
+               preserveAspectRatio="xMidYMid slice"
+               mask="url(#unlitMask)"
+               opacity="0.35"/>
         <!-- Optional subtle rim -->
         <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,.08)"/>
       </svg>
