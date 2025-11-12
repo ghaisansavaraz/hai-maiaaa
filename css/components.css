@@ -1,4 +1,4 @@
-/* UI Components - PULSING FIXED v6 - Animation on icon-trash img element */
+/* UI Components - SYNCED PULSE v7 - Bright trash + persistent synced selection pulse */
 
 /* === BUTTON STYLES === */
 
@@ -267,11 +267,13 @@
 
 @keyframes trashPulse {
   0%, 100% {
-    filter: drop-shadow(0 0 8px rgba(255,107,107,0.6));
+    filter: drop-shadow(0 0 12px rgba(255,107,107,0.8)) 
+            drop-shadow(0 0 20px rgba(255,107,107,0.5));
     transform: scale(1);
   }
   50% {
-    filter: drop-shadow(0 0 16px rgba(255,107,107,0.9));
+    filter: drop-shadow(0 0 20px rgba(255,107,107,1)) 
+            drop-shadow(0 0 35px rgba(255,107,107,0.8));
     transform: scale(1.08);
   }
 }
@@ -719,6 +721,12 @@ body.light-theme .mood-category:not(:disabled) {
   border-color: rgba(255,255,255,0.25);
 }
 
+/* Override hover when selected in selection mode - keep pulse animation */
+#moodSection.selection-mode .mood-tag.selected:hover {
+  box-shadow: none !important; /* Let animation handle box-shadow */
+  border-color: rgba(255,107,107,0.6) !important;
+}
+
 .mood-tag-text {
   font-size: 14px;
   font-weight: 400;
@@ -780,6 +788,13 @@ body.light-theme .mood-category:not(:disabled) {
   border-color: rgba(255,255,255,0.3);
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   font-weight: 500;
+}
+
+/* Override intensity transforms when selected - let animation handle it */
+#moodSection.selection-mode .mood-tag.selected.intensity-light,
+#moodSection.selection-mode .mood-tag.selected.intensity-medium,
+#moodSection.selection-mode .mood-tag.selected.intensity-strong {
+  transform: none !important; /* Animation will handle transform */
 }
 
 /* Category-specific tag styling */
@@ -979,29 +994,48 @@ body.light-theme .mood-category:not(:disabled) {
 }
 
 /* Mood selection visuals */
-#moodSection .mood-tags .mood-tag { position: relative; }
+#moodSection .mood-tags .mood-tag { 
+  position: relative;
+  transition: none; /* Remove transitions that might interfere */
+}
 #moodSection.selection-mode .mood-tags .mood-tag { cursor: pointer; filter: saturate(1.1); }
 #moodSection.selection-mode .mood-tags .mood-tag.selected {
-  outline: 1px solid rgba(255,107,107,0.5) !important;
-  animation: selectionPulse 1.5s ease-in-out infinite !important;
+  outline: 2px solid rgba(255,107,107,0.6) !important;
+  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+  /* Override any hover effects */
+}
+#moodSection.selection-mode .mood-tags .mood-tag.selected:hover {
+  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+  transform: none !important; /* Prevent hover transform */
 }
 
 /* Task selection visuals */
-#tasksSection .tasks-container .task-item { position: relative; }
+#tasksSection .tasks-container .task-item { 
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 #tasksSection.selection-mode .tasks-container .task-item { cursor: pointer; }
 #tasksSection.selection-mode .tasks-container .task-item.selected {
-  outline: 1px solid rgba(255,107,107,0.5) !important;
-  animation: selectionPulse 1.5s ease-in-out infinite !important;
+  outline: 2px solid rgba(255,107,107,0.6) !important;
+  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+}
+#tasksSection.selection-mode .tasks-container .task-item.selected:hover {
+  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+  transform: none !important; /* Prevent hover transform */
 }
 
 @keyframes selectionPulse {
   0%, 100% {
-    box-shadow: 0 0 16px rgba(255,107,107,0.3) inset, 0 4px 16px rgba(255,107,107,0.3);
-    transform: scale(1) translateY(0);
+    box-shadow: 0 0 20px rgba(255,107,107,0.4) inset, 
+                0 4px 20px rgba(255,107,107,0.4),
+                0 0 30px rgba(255,107,107,0.2);
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 24px rgba(255,107,107,0.5) inset, 0 6px 32px rgba(255,107,107,0.6);
-    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 0 30px rgba(255,107,107,0.7) inset, 
+                0 6px 40px rgba(255,107,107,0.7),
+                0 0 50px rgba(255,107,107,0.5);
+    transform: scale(1.04);
   }
 }
 #tasksSection.selection-mode .tasks-container .task-item .task-checkbox { display: none; }
@@ -1010,6 +1044,11 @@ body.light-theme .mood-category:not(:disabled) {
   background: rgba(255,255,255,0.08);
   transform: translateY(-1px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+/* Override hover when item is selected in selection mode */
+#tasksSection.selection-mode .task-item.selected:hover {
+  background: rgba(255,255,255,0.08) !important;
 }
 
 .task-item.completed {
