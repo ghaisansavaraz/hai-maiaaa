@@ -1,6 +1,7 @@
 /* Clock and Time Display System */
 
 import { debugLog, debugError } from './config.js';
+import { updateMoonDisplay } from './moon.js';
 
 let lastTime = ''; // Track time changes for individual digit flipping
 
@@ -90,9 +91,17 @@ export function updateTime() {
     else if (hour >= 12 && hour < 18) greeting = "Good afternoon Maiaaa";
     
     if (headerTimeGreeting) {
-      headerTimeGreeting.textContent = greeting;
+      const greetingTextSpan = document.getElementById("greetingText");
+      if (greetingTextSpan) {
+        greetingTextSpan.textContent = greeting;
+      } else {
+        headerTimeGreeting.textContent = greeting;
+      }
       debugLog("Header greeting updated:", greeting);
     }
+    
+    // Update moon display (phase label + mask)
+    updateMoonDisplay(now);
     
   } catch (error) {
     debugError("Failed to update header time", error);

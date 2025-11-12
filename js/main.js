@@ -4,7 +4,6 @@ import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLo
 import { DynamicBackground, applyTheme } from './background.js';
 import { startTimeDisplay } from './clock.js';
 import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mood.js';
-import { initMoon } from './moon.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 
@@ -187,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Start time display immediately (always visible)
     startTimeDisplay();
-    initMoon();
     
     // Show dashboard immediately
     showDashboard();

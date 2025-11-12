@@ -30,6 +30,30 @@
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
   <body>
+    <!-- Moon icon (top-right, fixed) -->
+    <div id="moonIconContainer" aria-hidden="true">
+      <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase">
+        <defs>
+          <!-- Mask selects ONLY the unlit region for the shadow overlay -->
+          <mask id="unlitMask">
+            <rect width="100" height="100" fill="black"/>
+            <!-- Potential unlit area: full disc -->
+            <circle id="unlitDisc" cx="50" cy="50" r="48" fill="white"/>
+            <!-- Cut out the lit crescent/hemisphere by offsetting this disc -->
+            <circle id="litCutout" cx="50" cy="50" r="48" fill="black"/>
+          </mask>
+        </defs>
+        <!-- Base texture stays fully visible so details are preserved -->
+        <image id="moonTex" href="https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004708/frames/730x730_1x1_30p/moon.0001.jpg" x="0" y="0" width="100" height="100"/>
+        <!-- Semi‑transparent shadow only over unlit region (opacity tuned to ~0.6–0.7) -->
+        <g id="shadowOverlay" mask="url(#unlitMask)">
+          <circle id="shadowOverlayCircle" cx="50" cy="50" r="48" fill="black" opacity="0.65"/>
+        </g>
+        <!-- Optional subtle rim -->
+        <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,.08)"/>
+      </svg>
+    </div>
+
     <!-- Day mode particles (clouds and light rays) -->
     <div class="day-particles-container">
       <!-- Soft floating clouds -->
@@ -147,8 +171,8 @@
               <div id="headerCurrentDate" class="header-current-date">Loading...</div>
             </div>
             <div id="headerTimeGreeting" class="header-time-greeting">
-              <span id="moonPhaseName" class="moon-phase-name">—</span>
-              <span class="greeting-separator">•</span>
+              <span id="moonPhaseLabel" class="moon-phase-label">—</span>
+              <span class="separator-dot" aria-hidden="true">•</span>
               <span id="greetingText">Good morning Maiaaa</span>
             </div>
           </div>
@@ -156,8 +180,6 @@
 
         <!-- Main Grid Layout -->
         <div class="dashboard-grid">
-      <!-- Moon - top right fixed -->
-      <div id="moonTopRight" class="moon-top-right" aria-label="Moon"></div>
           
           <!-- Left Column -->
           <div class="dashboard-column">
