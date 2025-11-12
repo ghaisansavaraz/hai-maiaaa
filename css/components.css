@@ -1,4 +1,4 @@
-/* UI Components - REMINDER BUTTONS FIXED v4 - Boxes restored, input white focus */
+/* UI Components - PULSING BRIGHTNESS v5 - Trash & selected items pulse like X button */
 
 /* === BUTTON STYLES === */
 
@@ -251,23 +251,26 @@
 
 .btn-trash:hover .icon-trash {
   opacity: 1;
-  filter: drop-shadow(0 0 6px rgba(255,70,70,0.9)) 
-          drop-shadow(0 0 12px rgba(255,70,70,0.6));
+  filter: drop-shadow(0 0 6px rgba(255,107,107,0.9)) 
+          drop-shadow(0 0 12px rgba(255,107,107,0.6));
+}
+
+.btn-trash.is-selection-mode {
+  animation: trashPulse 1.5s ease-in-out infinite;
 }
 
 .btn-trash.is-selection-mode .icon-trash {
   opacity: 1;
-  animation: redPulseIcon 1.6s ease-in-out infinite;
 }
 
-@keyframes redPulseIcon {
-  0%, 100% { 
-    filter: drop-shadow(0 0 6px rgba(255,70,70,0.7)) 
-            drop-shadow(0 0 10px rgba(255,70,70,0.4)); 
+@keyframes trashPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255,107,107,0.6));
+    transform: translateY(0) scale(1);
   }
-  50% { 
-    filter: drop-shadow(0 0 10px rgba(255,70,70,1)) 
-            drop-shadow(0 0 18px rgba(255,70,70,0.7)); 
+  50% {
+    filter: drop-shadow(0 0 16px rgba(255,107,107,0.9));
+    transform: translateY(0) scale(1.05);
   }
 }
 
@@ -977,16 +980,27 @@ body.light-theme .mood-category:not(:disabled) {
 #moodSection .mood-tags .mood-tag { position: relative; }
 #moodSection.selection-mode .mood-tags .mood-tag { cursor: pointer; filter: saturate(1.1); }
 #moodSection.selection-mode .mood-tags .mood-tag.selected {
-  outline: 1px solid rgba(255,70,70,0.5);
-  box-shadow: 0 0 18px rgba(255,70,70,0.25) inset;
+  outline: 1px solid rgba(255,107,107,0.5);
+  animation: selectionPulse 1.5s ease-in-out infinite;
 }
 
 /* Task selection visuals */
 #tasksSection .tasks-container .task-item { position: relative; }
 #tasksSection.selection-mode .tasks-container .task-item { cursor: pointer; }
 #tasksSection.selection-mode .tasks-container .task-item.selected {
-  outline: 1px solid rgba(255,70,70,0.5);
-  box-shadow: 0 0 18px rgba(255,70,70,0.25) inset;
+  outline: 1px solid rgba(255,107,107,0.5);
+  animation: selectionPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes selectionPulse {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(255,107,107,0.3) inset, 0 4px 16px rgba(255,107,107,0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(255,107,107,0.5) inset, 0 6px 32px rgba(255,107,107,0.6);
+    transform: scale(1.02);
+  }
 }
 #tasksSection.selection-mode .tasks-container .task-item .task-checkbox { display: none; }
 
