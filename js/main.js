@@ -1,4 +1,4 @@
-/* Main Application Entry Point */
+/* Main Application Entry Point - TRASH SELECTION v2 */
 
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
 import { DynamicBackground, applyTheme } from './background.js';
@@ -139,7 +139,9 @@ function initEditorKey() {
 function initClearButtons() {
   const clearMoodBtn = document.getElementById("clearMood");
   if (clearMoodBtn) {
+    console.log("[Maiaaa] Trash button wired for SELECTION MODE (not clear all)");
     clearMoodBtn.addEventListener("click", () => {
+      console.log("[Maiaaa] Trash clicked - toggling selection mode");
       toggleMoodSelectionMode(clearMoodBtn);
     });
   }
