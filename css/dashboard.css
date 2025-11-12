@@ -146,6 +146,15 @@ body.light-theme .moon-phase-label {
   text-shadow: 0 0 8px rgba(0,0,0,0.08);
 }
 
+/* Hide moon and its label during day (light theme) */
+body.light-theme #moonIconContainer {
+  display: none !important;
+}
+body.light-theme .moon-phase-label,
+body.light-theme .separator-dot {
+  display: none !important;
+}
+
 /* Dashboard Grid Layout */
 .dashboard-grid {
   display: grid;
