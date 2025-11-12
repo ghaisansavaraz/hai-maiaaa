@@ -1,4 +1,4 @@
-/* UI Components - GLOW NO SCALE v12 - Behind item, no expanding */
+/* UI Components - SOFT PULSE v13 - Light glow like X button (0.3-0.5 opacity) */
 
 /* === BUTTON STYLES === */
 
@@ -791,7 +791,7 @@ body.light-theme .mood-category:not(:disabled) {
 #moodSection.selection-mode .mood-tag.selected.intensity-light,
 #moodSection.selection-mode .mood-tag.selected.intensity-medium,
 #moodSection.selection-mode .mood-tag.selected.intensity-strong {
-  /* Remove static transform, animation will handle it */
+  transform: none !important; /* Neutralize intensity scale to avoid size variance */
 }
 
 /* Category-specific tag styling */
@@ -1019,10 +1019,11 @@ body.light-theme .mood-category:not(:disabled) {
 #moodSection.selection-mode .mood-tags .mood-tag.selected:hover,
 #moodSection.selection-mode .mood-tags .mood-tag.selected:active {
   outline: 2px solid rgba(255,107,107,0.6) !important;
-  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+  animation: softPulseGlow 1.5s ease-in-out 0s infinite !important;
   transition: none !important; /* Disable all transitions */
   border-color: rgba(255,107,107,0.6) !important;
-  will-change: filter; /* Optimize animation */
+  will-change: box-shadow; /* Optimize animation */
+  transform: none !important; /* fix size variance */
 }
 
 /* Task selection visuals */
@@ -1036,10 +1037,11 @@ body.light-theme .mood-category:not(:disabled) {
 }
 #tasksSection.selection-mode .tasks-container .task-item.selected {
   outline: 2px solid rgba(255,107,107,0.6) !important;
-  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
+  animation: softPulseGlow 1.5s ease-in-out 0s infinite !important;
   transition: none !important; /* Disable all transitions */
   background: rgba(255,255,255,0.08) !important;
-  will-change: filter; /* Optimize animation */
+  will-change: box-shadow; /* Optimize animation */
+  transform: none !important; /* fix size variance */
 }
 #tasksSection.selection-mode .tasks-container .task-item.selected:hover,
 #tasksSection.selection-mode .tasks-container .task-item.selected:active,
@@ -1047,14 +1049,16 @@ body.light-theme .mood-category:not(:disabled) {
   animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
 }
 
-@keyframes selectionPulse {
+@keyframes softPulseGlow {
   0%, 100% {
-    filter: drop-shadow(0 4px 15px rgba(255,107,107,0.8)) 
-            drop-shadow(0 4px 30px rgba(255,107,107,0.6));
+    box-shadow: 0 0 0 0 rgba(255,107,107,0),
+                0 0 12px rgba(255,107,107,0.28),
+                0 0 20px rgba(255,107,107,0.18);
   }
   50% {
-    filter: drop-shadow(0 6px 25px rgba(255,107,107,1)) 
-            drop-shadow(0 6px 45px rgba(255,107,107,0.9));
+    box-shadow: 0 0 0 0 rgba(255,107,107,0),
+                0 0 22px rgba(255,107,107,0.45),
+                0 0 34px rgba(255,107,107,0.3);
   }
 }
 #tasksSection.selection-mode .tasks-container .task-item .task-checkbox { display: none; }
