@@ -313,11 +313,14 @@ export function loadMoods() {
           if (selectedMoodIds.has(idStr)) {
             selectedMoodIds.delete(idStr);
             tag.classList.remove("selected");
+            console.log(`[Maiaaa] Deselected mood ${idStr}. Selected count: ${selectedMoodIds.size}`);
             const overlay = tag.querySelector(".select-overlay");
             if (overlay) overlay.textContent = '';
           } else {
             selectedMoodIds.add(idStr);
             tag.classList.add("selected");
+            console.log(`[Maiaaa] Selected mood ${idStr}. Classes:`, tag.className);
+            console.log(`[Maiaaa] Total selected: ${selectedMoodIds.size}`);
             const overlay = tag.querySelector(".select-overlay");
             if (overlay) overlay.textContent = '✓';
           }

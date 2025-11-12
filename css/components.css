@@ -1,4 +1,4 @@
-/* UI Components - SYNCED PULSE v7 - Bright trash + persistent synced selection pulse */
+/* UI Components - AGGRESSIVE SYNC v8 - Override ALL conflicting styles + category animations */
 
 /* === BUTTON STYLES === */
 
@@ -721,12 +721,6 @@ body.light-theme .mood-category:not(:disabled) {
   border-color: rgba(255,255,255,0.25);
 }
 
-/* Override hover when selected in selection mode - keep pulse animation */
-#moodSection.selection-mode .mood-tag.selected:hover {
-  box-shadow: none !important; /* Let animation handle box-shadow */
-  border-color: rgba(255,107,107,0.6) !important;
-}
-
 .mood-tag-text {
   font-size: 14px;
   font-weight: 400;
@@ -803,6 +797,14 @@ body.light-theme .mood-category:not(:disabled) {
   box-shadow: 
     0 4px 16px rgba(0,0,0,0.08),
     0 0 20px rgba(255,255,255,0.15);
+}
+
+/* Override category animations when selected */
+#moodSection.selection-mode .mood-tag.selected[data-category="Happy"],
+#moodSection.selection-mode .mood-tag.selected[data-category="Calm"],
+#moodSection.selection-mode .mood-tag.selected[data-category="Tired"],
+#moodSection.selection-mode .mood-tag.selected[data-category="Sad"] {
+  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
 }
 
 .mood-tag[data-category="Happy"]:hover {
@@ -996,17 +998,21 @@ body.light-theme .mood-category:not(:disabled) {
 /* Mood selection visuals */
 #moodSection .mood-tags .mood-tag { 
   position: relative;
-  transition: none; /* Remove transitions that might interfere */
 }
-#moodSection.selection-mode .mood-tags .mood-tag { cursor: pointer; filter: saturate(1.1); }
-#moodSection.selection-mode .mood-tags .mood-tag.selected {
+#moodSection.selection-mode .mood-tags .mood-tag { 
+  cursor: pointer; 
+  filter: saturate(1.1);
+  transition: none !important; /* Remove all transitions in selection mode */
+}
+#moodSection.selection-mode .mood-tags .mood-tag.selected,
+#moodSection.selection-mode .mood-tags .mood-tag.selected:hover,
+#moodSection.selection-mode .mood-tags .mood-tag.selected:active {
   outline: 2px solid rgba(255,107,107,0.6) !important;
   animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
-  /* Override any hover effects */
-}
-#moodSection.selection-mode .mood-tags .mood-tag.selected:hover {
-  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
-  transform: none !important; /* Prevent hover transform */
+  transform: none !important;
+  box-shadow: none !important; /* Let animation handle all shadows */
+  transition: none !important; /* Disable all transitions */
+  border-color: rgba(255,107,107,0.6) !important;
 }
 
 /* Task selection visuals */
@@ -1014,14 +1020,19 @@ body.light-theme .mood-category:not(:disabled) {
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-#tasksSection.selection-mode .tasks-container .task-item { cursor: pointer; }
-#tasksSection.selection-mode .tasks-container .task-item.selected {
+#tasksSection.selection-mode .tasks-container .task-item { 
+  cursor: pointer;
+  transition: none !important; /* Remove all transitions in selection mode */
+}
+#tasksSection.selection-mode .tasks-container .task-item.selected,
+#tasksSection.selection-mode .tasks-container .task-item.selected:hover,
+#tasksSection.selection-mode .tasks-container .task-item.selected:active {
   outline: 2px solid rgba(255,107,107,0.6) !important;
   animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
-}
-#tasksSection.selection-mode .tasks-container .task-item.selected:hover {
-  animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
-  transform: none !important; /* Prevent hover transform */
+  transform: none !important;
+  box-shadow: none !important; /* Let animation handle all shadows */
+  transition: none !important; /* Disable all transitions */
+  background: rgba(255,255,255,0.08) !important;
 }
 
 @keyframes selectionPulse {
@@ -1044,11 +1055,6 @@ body.light-theme .mood-category:not(:disabled) {
   background: rgba(255,255,255,0.08);
   transform: translateY(-1px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-
-/* Override hover when item is selected in selection mode */
-#tasksSection.selection-mode .task-item.selected:hover {
-  background: rgba(255,255,255,0.08) !important;
 }
 
 .task-item.completed {
