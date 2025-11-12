@@ -1,4 +1,4 @@
-/* Main Application Entry Point - TRASH SELECTION v2 */
+/* Main Application Entry Point - PULSING ANIMATIONS v6 */
 
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
 import { DynamicBackground, applyTheme } from './background.js';

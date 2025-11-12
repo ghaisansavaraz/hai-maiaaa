@@ -13,7 +13,11 @@ export function toggleMoodSelectionMode(triggerBtn) {
       selectedMoodIds.clear();
       const section = document.getElementById("moodSection");
       if (section) section.classList.add("selection-mode");
-      if (triggerBtn) triggerBtn.classList.add("is-selection-mode");
+      if (triggerBtn) {
+        triggerBtn.classList.add("is-selection-mode");
+        console.log("[Maiaaa] ✓ Added is-selection-mode class to trash button");
+        console.log("[Maiaaa] Trash button classes:", triggerBtn.className);
+      }
       debugLog("Mood selection mode enabled");
       loadMoods();
       // ESC to cancel
