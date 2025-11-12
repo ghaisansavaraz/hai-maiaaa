@@ -32,8 +32,12 @@
   <body>
     <!-- Moon icon (top-right, fixed) -->
     <div id="moonIconContainer" aria-hidden="true">
-      <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase">
+      <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
+          <!-- Texture pattern (for broader browser support) -->
+          <pattern id="moonTexPattern" patternUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+            <image href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
+          </pattern>
           <!-- Mask selects ONLY the unlit region for the shadow overlay -->
           <mask id="unlitMask">
             <rect width="100" height="100" fill="black"/>
@@ -44,7 +48,7 @@
           </mask>
         </defs>
         <!-- Base texture stays fully visible so details are preserved -->
-        <image id="moonTex" href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
+        <circle id="moonBase" cx="50" cy="50" r="48" fill="url(#moonTexPattern)"/>
         <!-- Semi‑transparent shadow only over unlit region (opacity tuned to ~0.6–0.7) -->
         <g id="shadowOverlay" mask="url(#unlitMask)">
           <circle id="shadowOverlayCircle" cx="50" cy="50" r="48" fill="black" opacity="0.65"/>
