@@ -1,4 +1,4 @@
-/* UI Components - PRECISE GLOW v14 - No gap, sits exactly on box (inset: 0) */
+/* UI Components - BRIGHTER GLOW v15 - Increased opacity 0.35-0.55 for visibility */
 
 /* === BUTTON STYLES === */
 
@@ -1064,12 +1064,12 @@ body.light-theme .mood-category:not(:disabled) {
 
 @keyframes softPulseAura {
   0%, 100% {
-    box-shadow: 0 0 12px rgba(255,107,107,0.24),
-                0 0 20px rgba(255,107,107,0.14);
+    box-shadow: 0 0 12px rgba(255,107,107,0.35),
+                0 0 20px rgba(255,107,107,0.22);
   }
   50% {
-    box-shadow: 0 0 20px rgba(255,107,107,0.4),
-                0 0 32px rgba(255,107,107,0.26);
+    box-shadow: 0 0 20px rgba(255,107,107,0.55),
+                0 0 32px rgba(255,107,107,0.38);
   }
 }
 #tasksSection.selection-mode .tasks-container .task-item .task-checkbox { display: none; }
