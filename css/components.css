@@ -1,4 +1,4 @@
-/* UI Components - DROP-SHADOW GLOW v11 - Filter instead of box-shadow + overflow fix */
+/* UI Components - GLOW NO SCALE v12 - Behind item, no expanding */
 
 /* === BUTTON STYLES === */
 
@@ -1022,7 +1022,7 @@ body.light-theme .mood-category:not(:disabled) {
   animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
   transition: none !important; /* Disable all transitions */
   border-color: rgba(255,107,107,0.6) !important;
-  will-change: transform, filter; /* Optimize animation */
+  will-change: filter; /* Optimize animation */
 }
 
 /* Task selection visuals */
@@ -1039,7 +1039,7 @@ body.light-theme .mood-category:not(:disabled) {
   animation: selectionPulse 1.5s ease-in-out 0s infinite !important;
   transition: none !important; /* Disable all transitions */
   background: rgba(255,255,255,0.08) !important;
-  will-change: transform, filter; /* Optimize animation */
+  will-change: filter; /* Optimize animation */
 }
 #tasksSection.selection-mode .tasks-container .task-item.selected:hover,
 #tasksSection.selection-mode .tasks-container .task-item.selected:active,
@@ -1049,16 +1049,12 @@ body.light-theme .mood-category:not(:disabled) {
 
 @keyframes selectionPulse {
   0%, 100% {
-    filter: drop-shadow(0 0 15px rgba(255,107,107,0.8)) 
-            drop-shadow(0 0 30px rgba(255,107,107,0.6))
-            drop-shadow(0 8px 25px rgba(255,107,107,0.5));
-    transform: scale(1.03);
+    filter: drop-shadow(0 4px 15px rgba(255,107,107,0.8)) 
+            drop-shadow(0 4px 30px rgba(255,107,107,0.6));
   }
   50% {
-    filter: drop-shadow(0 0 25px rgba(255,107,107,1)) 
-            drop-shadow(0 0 45px rgba(255,107,107,0.9))
-            drop-shadow(0 12px 40px rgba(255,107,107,0.8));
-    transform: scale(1.08);
+    filter: drop-shadow(0 6px 25px rgba(255,107,107,1)) 
+            drop-shadow(0 6px 45px rgba(255,107,107,0.9));
   }
 }
 #tasksSection.selection-mode .tasks-container .task-item .task-checkbox { display: none; }
