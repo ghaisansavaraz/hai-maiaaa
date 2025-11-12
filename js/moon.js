@@ -67,7 +67,7 @@ function buildMoonSVG(phase) {
   ];
 
   return `
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="moon-svg" role="img" aria-label="Moon phase: ${phaseName(phase)}">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="moon-svg" role="img" aria-label="Moon phase: ${phaseName(phase)}" shape-rendering="geometricPrecision">
   <defs>
     <!-- Enhanced base gradient with more depth -->
     <radialGradient id="moonBaseGrad" cx="48%" cy="42%" r="65%">
@@ -79,67 +79,67 @@ function buildMoonSVG(phase) {
     </radialGradient>
     <!-- Subtle texture overlay -->
     <radialGradient id="moonTexture" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="rgba(255,255,255,0.08)"/>
-      <stop offset="100%" stop-color="rgba(0,0,0,0.06)"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.06"/>
     </radialGradient>
     <!-- Shadow gradient for terminator -->
     <radialGradient id="moonShadow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="rgba(12,12,18,0.65)"/>
-      <stop offset="70%" stop-color="rgba(12,12,18,0.82)"/>
-      <stop offset="100%" stop-color="rgba(8,8,12,0.92)"/>
+      <stop offset="0%" stop-color="#0c0c12" stop-opacity="0.65"/>
+      <stop offset="70%" stop-color="#0c0c12" stop-opacity="0.82"/>
+      <stop offset="100%" stop-color="#08080c" stop-opacity="0.92"/>
     </radialGradient>
-    <clipPath id="moonClip">
+    <!-- Outer halo gradient -->
+    <radialGradient id="haloGrad" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="65%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="moonClip" clipPathUnits="userSpaceOnUse">
       <circle cx="${cx}" cy="${cy}" r="${r}"/>
     </clipPath>
-    <!-- Filter for subtle outer glow -->
-    <filter id="moonGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="1.2" result="blur"/>
-      <feComposite in="blur" in2="SourceGraphic" operator="over"/>
-    </filter>
   </defs>
   
-  <!-- Outer glow -->
-  <circle cx="${cx}" cy="${cy}" r="${r + 1.5}" fill="rgba(255,255,255,0.08)" opacity="0.7"/>
+  <!-- Outer soft halo -->
+  <circle cx="${cx}" cy="${cy}" r="${r + 6}" fill="url(#haloGrad)"/>
   
   <!-- Base sphere with gradient -->
-  <g filter="url(#moonGlow)">
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#moonBaseGrad)"/>
-    
-    <!-- Texture overlay for surface detail -->
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#moonTexture)" opacity="0.3" clip-path="url(#moonClip)"/>
-    
-    <!-- Dark shadow on terminator side -->
-    <ellipse cx="${waxing ? cx - r * 0.3 : cx + r * 0.3}" cy="${cy}" rx="${r * 0.96}" ry="${r * 0.96}"
-      fill="url(#moonShadow)" clip-path="url(#moonClip)"/>
-    
-    <!-- Illuminated portion (lit side) -->
-    <ellipse cx="${ellCx}" cy="${cy}" rx="${rx}" ry="${r * 0.98}" 
-      fill="rgba(255,255,255,0.94)" clip-path="url(#moonClip)"/>
-    
-    <!-- Bright limb highlight on lit edge -->
-    <ellipse cx="${ellCx}" cy="${cy}" rx="${Math.max(1, rx * 0.92)}" ry="${r * 0.96}" 
-      fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" clip-path="url(#moonClip)"/>
-    
-    <!-- Craters with depth -->
-    <g clip-path="url(#moonClip)">
-      ${craters.map(c => `
-        <!-- Crater at ${c.x.toFixed(1)}, ${c.y.toFixed(1)} -->
-        <circle cx="${c.x}" cy="${c.y}" r="${c.r}" fill="rgba(0,0,0,${c.opacity * 0.9})"/>
-        <circle cx="${c.x - c.r*0.15}" cy="${c.y - c.r*0.15}" r="${c.r * 0.7}" fill="rgba(0,0,0,${c.opacity * 1.2})"/>
-        <circle cx="${c.x + c.r*0.25}" cy="${c.y + c.r*0.25}" r="${c.r * 0.3}" fill="rgba(255,255,255,${c.opacity * 0.4})"/>
-      `).join('')}
-    </g>
-    
-    <!-- Subtle surface noise (maria/highlands) -->
-    <g clip-path="url(#moonClip)" opacity="0.12">
-      <ellipse cx="${cx - r*0.22}" cy="${cy - r*0.10}" rx="${r*0.18}" ry="${r*0.14}" fill="rgba(0,0,0,0.15)"/>
-      <ellipse cx="${cx + r*0.18}" cy="${cy + r*0.16}" rx="${r*0.22}" ry="${r*0.16}" fill="rgba(0,0,0,0.12)"/>
-      <ellipse cx="${cx - r*0.05}" cy="${cy + r*0.32}" rx="${r*0.14}" ry="${r*0.12}" fill="rgba(0,0,0,0.14)"/>
-    </g>
-    
-    <!-- Final subtle limb darkening -->
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#moonBaseGrad)"/>
+  
+  <!-- Texture overlay for surface detail -->
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#moonTexture)" opacity="0.3" clip-path="url(#moonClip)"/>
+  
+  <!-- Dark shadow on terminator side -->
+  <ellipse cx="${waxing ? cx - r * 0.3 : cx + r * 0.3}" cy="${cy}" rx="${r * 0.96}" ry="${r * 0.96}"
+    fill="url(#moonShadow)" clip-path="url(#moonClip)"/>
+  
+  <!-- Illuminated portion (lit side) -->
+  <ellipse cx="${ellCx}" cy="${cy}" rx="${rx}" ry="${r * 0.98}" 
+    fill="rgba(255,255,255,0.94)" clip-path="url(#moonClip)"/>
+  
+  <!-- Bright limb highlight on lit edge -->
+  <ellipse cx="${ellCx}" cy="${cy}" rx="${Math.max(1, rx * 0.92)}" ry="${r * 0.96}" 
+    fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.2" clip-path="url(#moonClip)" vector-effect="non-scaling-stroke"/>
+  
+  <!-- Craters with depth -->
+  <g clip-path="url(#moonClip)">
+    ${craters.map(c => `
+      <!-- Crater at ${c.x.toFixed(1)}, ${c.y.toFixed(1)} -->
+      <circle cx="${c.x}" cy="${c.y}" r="${c.r}" fill="rgba(0,0,0,${c.opacity * 0.9})"/>
+      <circle cx="${c.x - c.r*0.15}" cy="${c.y - c.r*0.18}" r="${c.r * 0.7}" fill="rgba(0,0,0,${c.opacity * 1.15})"/>
+      <circle cx="${c.x + c.r*0.25}" cy="${c.y + c.r*0.25}" r="${c.r * 0.35}" fill="#ffffff" opacity="${c.opacity * 0.4}"/>
+      <circle cx="${c.x}" cy="${c.y}" r="${c.r}" fill="none" stroke="#ffffff" stroke-opacity="${c.opacity * 0.35}" stroke-width="0.4"/>
+    `).join('')}
   </g>
+  
+  <!-- Subtle surface maria/highlands -->
+  <g clip-path="url(#moonClip)" opacity="0.12">
+    <ellipse cx="${cx - r*0.22}" cy="${cy - r*0.10}" rx="${r*0.18}" ry="${r*0.14}" fill="rgba(0,0,0,0.15)"/>
+    <ellipse cx="${cx + r*0.18}" cy="${cy + r*0.16}" rx="${r*0.22}" ry="${r*0.16}" fill="rgba(0,0,0,0.12)"/>
+    <ellipse cx="${cx - r*0.05}" cy="${cy + r*0.32}" rx="${r*0.14}" ry="${r*0.12}" fill="rgba(0,0,0,0.14)"/>
+  </g>
+  
+  <!-- Final subtle limb darkening -->
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/>
 </svg>
 `.trim();
 }
