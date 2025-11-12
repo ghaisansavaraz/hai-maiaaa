@@ -27,17 +27,17 @@ function normalizeCycle(x) {
 
 function phaseNameFromPhase(phase) {
 	// phase: 0..1 (0 new, 0.25 first quarter, 0.5 full, 0.75 last quarter)
-	// Thresholds tuned for intuitive names
-	const eps = 0.02;
+	// Use a tighter epsilon so quarters only show very near the exact events
+	const eps = 0.01; // ~0.30 days window
 	if (phase < eps || phase > 1 - eps) return "New Moon";
 	if (Math.abs(phase - 0.25) < eps) return "First Quarter";
 	if (Math.abs(phase - 0.5) < eps) return "Full Moon";
 	if (Math.abs(phase - 0.75) < eps) return "Last Quarter";
 
+	// Continuous ranges outside the narrow quarter windows
 	if (phase > 0 && phase < 0.25 - eps) return "Waxing Crescent";
 	if (phase >= 0.25 + eps && phase < 0.5 - eps) return "Waxing Gibbous";
 	if (phase >= 0.5 + eps && phase < 0.75 - eps) return "Waning Gibbous";
-	// else near the end of cycle but not within eps of 1
 	return "Waning Crescent";
 }
 
