@@ -1,4 +1,4 @@
-/* UI Components - Mood, Tasks, Reminders, Forms - TRASH SELECTION v2 */
+/* UI Components - REMINDER BUTTONS FIXED v4 - Boxes restored, input white focus */
 
 /* === BUTTON STYLES === */
 
@@ -225,7 +225,6 @@
   padding: 0;
   border: none;
   background: none;
-  color: rgba(255,255,255,0.6);
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
@@ -233,29 +232,43 @@
   filter: blur(2px);
   transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
               transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
-              filter 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
-              color 0.25s ease, filter 0.25s ease;
+              filter 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s;
 }
-.btn-trash .icon-trash { display: block; }
+
+.btn-trash .icon-trash { 
+  display: block;
+  opacity: 0.6;
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
 .dashboard-card:hover .btn-trash,
 .dashboard-card.active .btn-trash {
-  opacity: 0.9;
+  opacity: 1;
   pointer-events: auto;
   transform: translateY(0) scale(1);
   filter: blur(0);
 }
-.btn-trash:hover {
-  color: #ffffff;
-  filter: drop-shadow(0 0 8px rgba(255,70,70,0.9));
+
+.btn-trash:hover .icon-trash {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px rgba(255,70,70,0.9)) 
+          drop-shadow(0 0 12px rgba(255,70,70,0.6));
 }
-.btn-trash.is-selection-mode {
-  animation: redPulse 1.6s ease-in-out infinite;
-  color: #ffffff;
-  filter: drop-shadow(0 0 10px rgba(255,70,70,0.9));
+
+.btn-trash.is-selection-mode .icon-trash {
+  opacity: 1;
+  animation: redPulseIcon 1.6s ease-in-out infinite;
 }
-@keyframes redPulse {
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(255,70,70,0.6)); }
-  50%      { filter: drop-shadow(0 0 14px rgba(255,70,70,1)); }
+
+@keyframes redPulseIcon {
+  0%, 100% { 
+    filter: drop-shadow(0 0 6px rgba(255,70,70,0.7)) 
+            drop-shadow(0 0 10px rgba(255,70,70,0.4)); 
+  }
+  50% { 
+    filter: drop-shadow(0 0 10px rgba(255,70,70,1)) 
+            drop-shadow(0 0 18px rgba(255,70,70,0.7)); 
+  }
 }
 
 /* Icon Button Base Style */
@@ -335,7 +348,6 @@
   color: rgba(255, 107, 107, 1);
   animation: deletePulse 1.5s ease-in-out infinite !important;
   transform: translateY(-2px);
-  filter: drop-shadow(0 0 8px rgba(255,70,70,0.9));
 }
 
 .btn-icon.success {
@@ -1222,18 +1234,6 @@ body.light-theme .mood-category:not(:disabled) {
 .reminder-card.active .reminder-card-actions {
   opacity: 1;
   pointer-events: auto;
-}
-
-/* Icon-only style for reminder delete to remove box */
-.reminder-card-actions .btn-delete {
-  background: none;
-  border: none;
-  width: auto;
-  height: auto;
-  box-shadow: none;
-}
-.reminder-card-actions .btn-delete:hover {
-  filter: drop-shadow(0 0 8px rgba(255,70,70,0.9));
 }
 
 .reminders-empty-state {
