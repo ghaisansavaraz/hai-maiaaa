@@ -75,8 +75,7 @@ export function updateMoonDisplay(now = new Date()) {
 
 	// Update SVG mask overlay geometry
 	const litCutout = document.getElementById("litCutout");
-	const shadowDisc = document.getElementById("shadowDisc");
-	if (litCutout || shadowDisc) {
+	if (litCutout) {
 		// SVG viewBox 0..100, r = 48, center at (50,50)
 		const R = 48;
 		const cxBase = 50;
@@ -86,11 +85,17 @@ export function updateMoonDisplay(now = new Date()) {
 		const distLit = 2 * R * p.fraction;
 		// Unlit mask cutout distance: 2R at new, 0 at full
 		const distUnlit = 2 * R * (1 - p.fraction);
-		if (shadowDisc) shadowDisc.setAttribute("cx", (cxBase + sign * distLit).toFixed(2));
 		if (litCutout) litCutout.setAttribute("cx", (cxBase + sign * distUnlit).toFixed(2));
 	}
 
-	// No separate black overlay needed now; unlit texture opacity handled in SVG
+	// Ensure shadow opacity is at configured darkness (single shadow)
+	const shadowOverlay = document.getElementById("shadowOverlayCircle");
+	if (shadowOverlay) {
+		const root = document.documentElement;
+		const cssOpacity = getComputedStyle(root).getPropertyValue("--moon-shadow-opacity").trim();
+		const o = cssOpacity ? parseFloat(cssOpacity) : 0.85;
+		shadowOverlay.setAttribute("opacity", isNaN(o) ? "0.85" : String(o));
+	}
 }
 
 

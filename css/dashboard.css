@@ -414,7 +414,7 @@ body.light-theme .mood-category {
 
 /* --- Moon Icon (Top-Right) --- */
 :root {
-  --moon-shadow-opacity: 0.65; /* 60–70% darkness => 30–40% texture visibility */
+  --moon-shadow-opacity: 0.85; /* 85% darkness => 15% texture visibility */
 }
 
 #moonIconContainer {
