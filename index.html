@@ -38,9 +38,10 @@
             <circle cx="50" cy="50" r="48"/>
           </clipPath>
           <mask id="shadowMask" maskUnits="userSpaceOnUse">
-            <rect width="100" height="100" fill="black"/>
-            <!-- Movable cutout reveals the lit area by preventing shadow -->
-            <circle id="litCutout" cx="50" cy="50" r="48" fill="white"/>
+            <!-- White = show shadow; Black = hide shadow (reveal lit area) -->
+            <rect width="100" height="100" fill="white"/>
+            <!-- Movable cutout hides shadow inside this circle (lit area) -->
+            <circle id="litCutout" cx="50" cy="50" r="48" fill="black"/>
           </mask>
         </defs>
         <g clip-path="url(#moonClip)">
