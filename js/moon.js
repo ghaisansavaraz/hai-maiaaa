@@ -79,15 +79,21 @@ export function updateMoonDisplay(now = new Date()) {
 		// SVG viewBox 0..100, r = 49, center at (50,50)
 		const R = 49;
 		const cyBase = 50;
-		// Jakarta view: waxing lit on bottom, waning lit on top (bottom lit for waning crescent)
-		// The cutout disc creates the curved terminator line
-		// For waning crescent (36%): shadow at top, lit crescent at bottom
-		// Move cutout disc DOWN for waning (exposes bottom), UP for waxing (exposes top)
-		const sign = (p.waxing ? -1 : 1); // waning = +1 (move down), waxing = -1 (move up)
-		// Distance formula: at 0% illumination, disc at opposite edge; at 50%, disc at center; at 100%, disc at far edge
-		// Use a mapping that creates proper crescent curvature
+		// Jakarta view: waning shows lit at BOTTOM, waxing shows lit at TOP
+		// The litCutout disc REMOVES the lit area from the shadow mask
+		// For waning crescent (36% lit at bottom): cutout disc must be BELOW center to carve out bottom
+		// For waxing crescent (36% lit at top): cutout disc must be ABOVE center to carve out top
+		
+		// At fraction=0 (new): cutout far away, entire moon shadowed
+		// At fraction=0.5 (quarter): cutout at center, half moon visible
+		// At fraction=1 (full): cutout far opposite side, entire moon lit
+		
+		// Waning: cutout moves DOWN as fraction increases (exposes more at bottom)
+		// Waxing: cutout moves UP as fraction increases (exposes more at top)
+		const sign = (p.waxing ? -1 : 1);
+		// Map fraction 0→1 to offset -R→+R
 		const offset = (2 * p.fraction - 1) * R * sign;
-		const cy = cyBase + offset;
+		const cy = cyBase - offset; // Subtract to invert: waning moves down, waxing moves up
 		litCutout.setAttribute("cy", cy.toFixed(2));
 	}
 
