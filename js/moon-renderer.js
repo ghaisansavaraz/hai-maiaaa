@@ -1,4 +1,5 @@
 /* Moon Phase Renderer - DOM/SVG Updates */
+import { getBrightLimbAngleJakarta } from './moon-core.js';
 
 /**
  * Render moon phase visualization and label
@@ -17,29 +18,52 @@ export function renderMoon(phaseData) {
 		);
 	}
 
-	// Update SVG cutout position for shadow mask
+	// Update SVG cutout position for shadow mask using accurate overlap
 	const litCutout = document.getElementById("litCutout");
-	if (litCutout) {
-		const R = 48;      // cutout radius (matches clip radius)
-		const center = 50; // SVG center
-		
-		// Jakarta view: Waning = lit at BOTTOM, Waxing = lit at TOP
-		// The cutout (white circle) reveals the lit area by blocking shadow
-		// When cutout overlaps moon center, it reveals that side
-		
-		// Calculate how far the cutout center should be from moon center
-		// At fraction=0 (new): cutout far away, no overlap (all shadowed)
-		// At fraction=0.5 (half): cutout at edge, half overlap (half lit)
-		// At fraction=1 (full): cutout at center, full overlap (all lit)
-		
-		// Distance from center: 0% -> 2R away, 50% -> R away, 100% -> 0 (at center)
-		const distanceFromCenter = (1 - fraction) * 2 * R;
-		
-		// Direction: waning moves DOWN from center (cy > 50, reveals bottom), waxing moves UP (cy < 50, reveals top)
-		const dir = waxing ? -1 : 1;
-		const cy = center + dir * distanceFromCenter;
-		
-		litCutout.setAttribute("cy", cy.toFixed(2));
+	if (!litCutout) return;
+
+	const R = 48;      // cutout radius (matches clip radius)
+	const center = 50; // SVG center
+
+	// Overlap area of two equal circles (distance d between centers)
+	function overlapFraction(d, r) {
+		if (d <= 0) return 1;
+		if (d >= 2 * r) return 0;
+		const x = d / (2 * r);
+		const a = 2 * r * r * Math.acos(x);
+		const b = (d / 2) * Math.sqrt(Math.max(0, 4 * r * r - d * d));
+		return (a - b) / (Math.PI * r * r);
+	}
+
+	// Invert overlap to find distance for desired fraction
+	function distanceForFraction(f, r) {
+		let lo = 0, hi = 2 * r;
+		for (let i = 0; i < 32; i++) {
+			const mid = (lo + hi) / 2;
+			const fm = overlapFraction(mid, r);
+			if (fm > f) {
+				lo = mid;
+			} else {
+				hi = mid;
+			}
+		}
+		return (lo + hi) / 2;
+	}
+
+	// Small inward bias to avoid anti-aliased hairline at terminator
+	const epsilon = 0.25;
+	const d = Math.min(2 * R, Math.max(0, distanceForFraction(fraction, R) - epsilon));
+
+	// Jakarta: waxing = lit on TOP (cy < center), waning = lit on BOTTOM (cy > center)
+	const dir = waxing ? -1 : 1;
+	const cy = center + dir * d;
+	litCutout.setAttribute("cy", cy.toFixed(3));
+
+	// Apply bright-limb tilt to match real-sky orientation
+	const rot = document.getElementById("shadowRotate");
+	if (rot) {
+		const chi = getBrightLimbAngleJakarta(); // degrees
+		rot.setAttribute("transform", `rotate(${chi.toFixed(1)} 50 50)`);
 	}
 }
 
