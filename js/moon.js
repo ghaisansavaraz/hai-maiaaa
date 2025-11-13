@@ -80,48 +80,18 @@ export function updateMoonDisplay(now = new Date()) {
 		);
 	}
 
-	// Update both mask discs for Jakarta vertical view
-	const litDisc = document.getElementById("litDisc");
-	const unlitDisc = document.getElementById("unlitDisc");
-	
-	if (litDisc && unlitDisc) {
-		const R = 50; // disc radius
-		const center = 50;
-		
-		// Jakarta view: Waning = lit at BOTTOM, Waxing = lit at TOP
-		// Move BOTH discs vertically to create curved crescent
-		
-		// Calculate offset: at 0% = far away, at 50% = at center, at 100% = far opposite
-		// Use (1 - 2*fraction) to map: 0→+1, 0.5→0, 1→-1
-		const normalizedOffset = 1 - 2 * p.fraction;
-		
-		let litCy, unlitCy;
-		
-		if (p.waxing) {
-			// WAXING: Lit portion grows at TOP
-			// At 0%: litDisc at bottom (cy=100), unlitDisc at bottom (cy=100) - all dark
-			// At 36%: litDisc above center, unlitDisc below center - top crescent lit
-			// At 100%: litDisc at top (cy=0), unlitDisc at top (cy=0) - all lit
-			litCy = center + normalizedOffset * R;
-			unlitCy = center - normalizedOffset * R;
-		} else {
-			// WANING: Lit portion shrinks to BOTTOM
-			// At 100%: litDisc at bottom (cy=100), unlitDisc at bottom (cy=100) - all lit
-			// At 36%: litDisc below center, unlitDisc above center - bottom crescent lit
-			// At 0%: litDisc at top (cy=0), unlitDisc at top (cy=0) - all dark
-			litCy = center - normalizedOffset * R;
-			unlitCy = center + normalizedOffset * R;
-		}
-		
-		litDisc.setAttribute("cy", litCy.toFixed(2));
-		unlitDisc.setAttribute("cy", unlitCy.toFixed(2));
-		
-		console.log('[Moon Render]', {
-			waxing: p.waxing,
-			fraction: p.fraction.toFixed(3),
-			litCy: litCy.toFixed(1),
-			unlitCy: unlitCy.toFixed(1)
-		});
+	// Update single cutout disc for shadow mask (robust circular moon)
+	const litCutout = document.getElementById("litCutout");
+	if (litCutout) {
+		const R = 48;      // close to clip radius
+		const center = 50; // SVG center
+		// Offset mapping: 0% -> 2R (no overlap -> new), 50% -> R (half), 100% -> 0 (full)
+		const offset = (1 - p.fraction) * 2 * R;
+		// Direction: waning -> move downward (bottom lit), waxing -> move upward (top lit)
+		const dir = p.waxing ? -1 : 1;
+		const cy = center + dir * (offset - R);
+		litCutout.setAttribute("cy", cy.toFixed(2));
+		console.log('[Moon Render]', { waxing: p.waxing, fraction: p.fraction.toFixed(3), cy: cy.toFixed(2) });
 	}
 }
 
