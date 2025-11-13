@@ -62,6 +62,14 @@ export function getMoonPhaseJakarta(now = new Date()) {
 export function updateMoonDisplay(now = new Date()) {
 	// Compute phase
 	const p = getMoonPhaseJakarta(now);
+	
+	console.log('[Moon Debug]', {
+		phase: p.phase.toFixed(3),
+		fraction: p.fraction.toFixed(3),
+		waxing: p.waxing,
+		name: p.name,
+		ageDays: p.ageDays.toFixed(1)
+	});
 
 	// Update label (inline with greeting)
 	const label = document.getElementById("moonPhaseLabel");
@@ -77,23 +85,37 @@ export function updateMoonDisplay(now = new Date()) {
 	const litCutout = document.getElementById("litCutout");
 	if (litCutout) {
 		// SVG viewBox 0..100, r = 49, center at (50,50)
-		const R = 49;
+		const R = 48.3; // Match the litCutout radius in HTML
 		const cyBase = 50;
-		// Jakarta view: waning shows lit at BOTTOM, waxing shows lit at TOP
-		// The litCutout disc REMOVES the lit area from the shadow mask
-		// For waning crescent (36% lit at bottom): cutout disc must be BELOW center to carve out bottom
-		// For waxing crescent (36% lit at top): cutout disc must be ABOVE center to carve out top
 		
-		// At fraction=0 (new): cutout far away, entire moon shadowed
-		// At fraction=0.5 (quarter): cutout at center, half moon visible
-		// At fraction=1 (full): cutout far opposite side, entire moon lit
+		// Jakarta view: waning crescents show lit at BOTTOM, waxing crescents show lit at TOP
+		// The unlitMask works by: white areas allow shadow, black areas (litCutout) block shadow
+		// So litCutout carves out the LIT region from the shadow
 		
-		// Waning: cutout moves DOWN as fraction increases (exposes more at bottom)
-		// Waxing: cutout moves UP as fraction increases (exposes more at top)
-		const sign = (p.waxing ? -1 : 1);
-		// Map fraction 0→1 to offset -R→+R
-		const offset = (2 * p.fraction - 1) * R * sign;
-		const cy = cyBase - offset; // Subtract to invert: waning moves down, waxing moves up
+		// For waning (phase 0.5→1.0, fraction decreasing from 1.0→0):
+		//   - At full (fraction=1): litCutout far down (cy=98), entire moon lit
+		//   - At 3rd quarter (fraction=0.5): litCutout at center (cy=50), bottom half lit
+		//   - At waning crescent (fraction=0.36): litCutout above center, small crescent at bottom lit
+		//   - At new (fraction=0): litCutout far up (cy=2), no moon lit
+		
+		// For waxing (phase 0→0.5, fraction increasing from 0→1.0):
+		//   - At new (fraction=0): litCutout far down (cy=98), no moon lit
+		//   - At waxing crescent (fraction=0.36): litCutout below center, small crescent at top lit
+		//   - At 1st quarter (fraction=0.5): litCutout at center (cy=50), top half lit
+		//   - At full (fraction=1): litCutout far up (cy=2), entire moon lit
+		
+		let cy;
+		if (p.waxing) {
+			// Waxing: lit at TOP, cutout moves UP as fraction increases
+			// fraction 0→1 maps to cy: 98→2
+			cy = cyBase + (1 - 2 * p.fraction) * R;
+		} else {
+			// Waning: lit at BOTTOM, cutout moves DOWN as fraction decreases (which means as phase increases)
+			// fraction 1→0 maps to cy: 98→2
+			cy = cyBase - (1 - 2 * p.fraction) * R;
+		}
+		
+		console.log('[Moon Render]', { cy: cy.toFixed(2), waxing: p.waxing, fraction: p.fraction.toFixed(3) });
 		litCutout.setAttribute("cy", cy.toFixed(2));
 	}
 
