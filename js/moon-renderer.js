@@ -1,5 +1,7 @@
 /* Moon Phase Renderer - DOM/SVG Updates */
 import { getBrightLimbAngleJakarta } from './moon-core.js';
+import { computeCutout } from './moon-engine.js';
+import { MOON_RENDER_CONFIG } from './config.js';
 
 /**
  * Render moon phase visualization and label
@@ -18,50 +20,39 @@ export function renderMoon(phaseData) {
 		);
 	}
 
-	// Update SVG cutout position for shadow mask using accurate overlap
+	// Update SVG cutout position for shadow mask using calibrated engine
 	const litCutout = document.getElementById("litCutout");
 	if (!litCutout) return;
 
 	const R = 48;      // cutout radius (matches clip radius)
 	const center = 50; // SVG center
 
-	// Overlap area of two equal circles (distance d between centers)
-	function overlapFraction(d, r) {
-		if (d <= 0) return 1;
-		if (d >= 2 * r) return 0;
-		const x = d / (2 * r);
-		const a = 2 * r * r * Math.acos(x);
-		const b = (d / 2) * Math.sqrt(Math.max(0, 4 * r * r - d * d));
-		return (a - b) / (Math.PI * r * r);
+	// Determine tilt angle
+	let angleDeg;
+	if (MOON_RENDER_CONFIG.tilt === 'brightLimb') {
+		angleDeg = getBrightLimbAngleJakarta();
+	} else {
+		angleDeg = MOON_RENDER_CONFIG.fixedAngleDeg || 0;
 	}
 
-	// Invert overlap to find distance for desired fraction
-	function distanceForFraction(f, r) {
-		let lo = 0, hi = 2 * r;
-		for (let i = 0; i < 32; i++) {
-			const mid = (lo + hi) / 2;
-			const fm = overlapFraction(mid, r);
-			if (fm > f) {
-				lo = mid;
-			} else {
-				hi = mid;
-			}
-		}
-		return (lo + hi) / 2;
-	}
+	// Compute cutout position per selected mapping
+	const { cx, cy } = computeCutout({
+		fraction,
+		R,
+		angleDeg,
+		mapping: MOON_RENDER_CONFIG.mapping,
+		gamma: MOON_RENDER_CONFIG.gamma,
+		seamEpsilon: MOON_RENDER_CONFIG.seamEpsilon,
+		center
+	});
 
-	// Small inward bias to avoid anti-aliased hairline at terminator
-	const epsilon = 0.25;
-	const d = Math.min(2 * R, Math.max(0, distanceForFraction(fraction, R) - epsilon));
-
-	// Use bright-limb angle to direct the offset toward the Sun-lit side
-	// chi: 0° = north (up), 90° = east (right). Screen y grows downward.
-	const chi = getBrightLimbAngleJakarta() * Math.PI / 180;
-	const vx = Math.sin(chi);
-	const vy = -Math.cos(chi);
-	const cx = center + vx * d;
-	const cy = center + vy * d;
 	litCutout.setAttribute("cx", cx.toFixed(3));
 	litCutout.setAttribute("cy", cy.toFixed(3));
+
+	// Apply runtime opacity
+	const overlay = document.getElementById("shadowOverlay");
+	if (overlay && typeof MOON_RENDER_CONFIG.opacity === 'number') {
+		overlay.setAttribute("opacity", MOON_RENDER_CONFIG.opacity.toFixed(2));
+	}
 }
 
