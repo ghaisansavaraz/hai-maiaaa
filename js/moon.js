@@ -73,20 +73,21 @@ export function updateMoonDisplay(now = new Date()) {
 		);
 	}
 
-	// Update SVG mask overlay geometry - Jakarta view (vertical orientation)
+	// Update SVG mask overlay geometry - Jakarta view (vertical curved crescent)
 	const litCutout = document.getElementById("litCutout");
 	if (litCutout) {
 		// SVG viewBox 0..100, r = 49, center at (50,50)
 		const R = 49;
 		const cyBase = 50;
-		// Jakarta view: waxing lit on bottom, waning lit on top
-		// For waxing: shadow moves from top (cy=2) to bottom (cy=98)
-		// For waning: shadow moves from bottom (cy=98) to top (cy=2)
-		const sign = (p.waxing ? 1 : -1);
-		// Unlit mask cutout distance: 2R at new, 0 at full
-		const distUnlit = 2 * R * (1 - p.fraction);
-		// Position the cutout disc vertically
-		const cy = cyBase - sign * distUnlit;
+		// Jakarta view: waxing lit on bottom, waning lit on top (bottom lit for waning crescent)
+		// The cutout disc creates the curved terminator line
+		// For waning crescent (36%): shadow at top, lit crescent at bottom
+		// Move cutout disc DOWN for waning (exposes bottom), UP for waxing (exposes top)
+		const sign = (p.waxing ? -1 : 1); // waning = +1 (move down), waxing = -1 (move up)
+		// Distance formula: at 0% illumination, disc at opposite edge; at 50%, disc at center; at 100%, disc at far edge
+		// Use a mapping that creates proper crescent curvature
+		const offset = (2 * p.fraction - 1) * R * sign;
+		const cy = cyBase + offset;
 		litCutout.setAttribute("cy", cy.toFixed(2));
 	}
 
