@@ -38,12 +38,10 @@
           <clipPath id="moonDisc">
             <circle cx="50" cy="50" r="49"/>
           </clipPath>
-          <!-- Mask selects ONLY the unlit region for the shadow overlay (Jakarta vertical view) -->
+          <!-- Mask for shadow overlay - white allows shadow, black blocks it (Jakarta vertical view) -->
           <mask id="unlitMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type:luminance">
-            <rect width="100" height="100" fill="black"/>
-            <!-- Potential unlit area: full disc -->
-            <circle id="unlitDisc" cx="50" cy="50" r="49.1" fill="white"/>
-            <!-- Cut out the lit crescent/hemisphere by offsetting this disc VERTICALLY -->
+            <rect width="100" height="100" fill="white"/>
+            <!-- This disc BLOCKS the shadow, revealing the lit crescent -->
             <circle id="litCutout" cx="50" cy="98" r="48.3" fill="black"/>
           </mask>
         </defs>
