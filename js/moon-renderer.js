@@ -54,16 +54,14 @@ export function renderMoon(phaseData) {
 	const epsilon = 0.25;
 	const d = Math.min(2 * R, Math.max(0, distanceForFraction(fraction, R) - epsilon));
 
-	// Jakarta: waxing = lit on TOP (cy < center), waning = lit on BOTTOM (cy > center)
-	const dir = waxing ? -1 : 1;
-	const cy = center + dir * d;
+	// Use bright-limb angle to direct the offset toward the Sun-lit side
+	// chi: 0° = north (up), 90° = east (right). Screen y grows downward.
+	const chi = getBrightLimbAngleJakarta() * Math.PI / 180;
+	const vx = Math.sin(chi);
+	const vy = -Math.cos(chi);
+	const cx = center + vx * d;
+	const cy = center + vy * d;
+	litCutout.setAttribute("cx", cx.toFixed(3));
 	litCutout.setAttribute("cy", cy.toFixed(3));
-
-	// Apply bright-limb tilt to match real-sky orientation
-	const rot = document.getElementById("shadowRotate");
-	if (rot) {
-		const chi = getBrightLimbAngleJakarta(); // degrees
-		rot.setAttribute("transform", `rotate(${chi.toFixed(1)} 50 50)`);
-	}
 }
 
