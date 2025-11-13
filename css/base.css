@@ -134,8 +134,9 @@ html, body, * {
   max-width: 100%;
   min-height: 100vh;
   justify-content: center;
-  transform: scale(0.8);
-  transform-origin: top center;
+  zoom: 0.8;
+  -moz-transform: scale(0.8);
+  -moz-transform-origin: top center;
 }
 
 /* When dashboard is visible, change center container to flex-start */
