@@ -1,4 +1,4 @@
-/* Moon phase calculation and UI update for Jakarta timezone (UTC+7) */
+/* Moon Phase Calculation - Pure Functions for Jakarta Timezone */
 
 // Synodic month (mean lunar cycle) in days
 const SYNODIC_MONTH_DAYS = 29.530588853;
@@ -12,7 +12,7 @@ function toJulianDay(date) {
 	return date.getTime() / MS_PER_DAY + UNIX_EPOCH_TO_JD;
 }
 
-function getJakartaDate(now = new Date()) {
+export function getJakartaDate(now = new Date()) {
 	// Convert current instant to Asia/Jakarta local clock time (UTC+7, no DST)
 	// Compute UTC ms, then add +7 hours
 	const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -41,7 +41,12 @@ function phaseNameFromPhase(phase) {
 	return "Waning Crescent";
 }
 
-export function getMoonPhaseJakarta(now = new Date()) {
+/**
+ * Calculate moon phase for Jakarta timezone
+ * @param {Date} now - Current date/time (defaults to now)
+ * @returns {{fraction: number, waxing: boolean, name: string, phase: number, phaseAngle: number, ageDays: number}}
+ */
+export function getJakartaPhase(now = new Date()) {
 	const jakarta = getJakartaDate(now);
 	const jd = toJulianDay(jakarta);
 	const daysSinceRef = jd - REFERENCE_NEW_MOON_JD;
@@ -58,41 +63,4 @@ export function getMoonPhaseJakarta(now = new Date()) {
 	const name = phaseNameFromPhase(phase);
 	return { fraction, phase, phaseAngle, waxing, name, ageDays };
 }
-
-export function updateMoonDisplay(now = new Date()) {
-	// Compute phase
-	const p = getMoonPhaseJakarta(now);
-	
-	console.log('[Moon Phase]', {
-		phase: (p.phase * 100).toFixed(1) + '%',
-		illumination: (p.fraction * 100).toFixed(1) + '%',
-		waxing: p.waxing,
-		name: p.name
-	});
-
-	// Update label (inline with greeting)
-	const label = document.getElementById("moonPhaseLabel");
-	if (label) {
-		label.textContent = p.name;
-		label.setAttribute(
-			"aria-label",
-			`${p.name}, ${(p.fraction * 100).toFixed(0)}% illuminated`
-		);
-	}
-
-	// Update single cutout disc for shadow mask (robust circular moon)
-	const litCutout = document.getElementById("litCutout");
-	if (litCutout) {
-		const R = 48;      // close to clip radius
-		const center = 50; // SVG center
-		// Offset mapping: 0% -> 2R (no overlap -> new), 50% -> R (half), 100% -> 0 (full)
-		const offset = (1 - p.fraction) * 2 * R;
-		// Direction: waning -> move downward (bottom lit), waxing -> move upward (top lit)
-		const dir = p.waxing ? -1 : 1;
-		const cy = center + dir * (offset - R);
-		litCutout.setAttribute("cy", cy.toFixed(2));
-		console.log('[Moon Render]', { waxing: p.waxing, fraction: p.fraction.toFixed(3), cy: cy.toFixed(2) });
-	}
-}
-
 

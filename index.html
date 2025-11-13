@@ -34,26 +34,18 @@
     <div id="moonIconContainer" aria-hidden="true">
       <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering:geometricPrecision">
         <defs>
-          <!-- Circular clip for the entire moon -->
           <clipPath id="moonClip">
             <circle cx="50" cy="50" r="48"/>
           </clipPath>
-          <!-- Mask for lit portion (Jakarta vertical: waning=bottom lit, waxing=top lit) -->
-          <mask id="litMask" maskUnits="userSpaceOnUse">
+          <mask id="shadowMask" maskUnits="userSpaceOnUse">
             <rect width="100" height="100" fill="black"/>
-            <circle id="litDisc" cx="50" cy="50" r="50" fill="white"/>
-          </mask>
-          <!-- Mask for unlit portion (opposite of lit) -->
-          <mask id="unlitMask" maskUnits="userSpaceOnUse">
-            <rect width="100" height="100" fill="white"/>
-            <circle id="unlitDisc" cx="50" cy="50" r="50" fill="black"/>
+            <!-- Movable cutout reveals the lit area by preventing shadow -->
+            <circle id="litCutout" cx="50" cy="50" r="48" fill="white"/>
           </mask>
         </defs>
         <g clip-path="url(#moonClip)">
-          <!-- Lit portion: full brightness -->
-          <image mask="url(#litMask)" href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
-          <!-- Unlit portion: dimmed to 15% visibility -->
-          <image mask="url(#unlitMask)" href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" opacity="0.15"/>
+          <image href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
+          <rect x="0" y="0" width="100" height="100" fill="#000" opacity="0.85" mask="url(#shadowMask)"/>
         </g>
       </svg>
     </div>
