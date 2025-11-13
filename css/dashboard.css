@@ -4,7 +4,7 @@
 
 /* High-End Dashboard Design - Transparent Container */
 .dashboard {
-  width: min(1200px, 95vw);
+  width: min(600px, 95vw);
   min-height: 100vh;
   padding: 0;
   background: transparent !important;
@@ -40,7 +40,7 @@ body.light-theme .dashboard {
 
 /* Dashboard Content */
 .dashboard-content {
-  padding: 40px;
+  padding: 20px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 1s ease, transform 1s ease;
@@ -54,8 +54,8 @@ body.light-theme .dashboard {
 /* Dashboard Header with Clock */
 .dashboard-header {
   text-align: center;
-  margin-bottom: 48px;
-  padding-bottom: 32px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -74,7 +74,7 @@ body.light-theme .dashboard {
 }
 
 .header-current-time {
-  font-size: clamp(36px, 8vw, 56px);
+  font-size: clamp(18px, 4vw, 28px);
   font-weight: 200;
   font-family: var(--font-stack);
   color: #fff;
@@ -95,7 +95,7 @@ body.light-theme .dashboard {
 }
 
 .header-current-date {
-  font-size: clamp(14px, 3vw, 18px);
+  font-size: clamp(7px, 1.5vw, 9px);
   font-weight: 300;
   font-family: var(--font-stack);
   color: rgba(255,255,255,0.7);
@@ -104,7 +104,7 @@ body.light-theme .dashboard {
 }
 
 .header-time-greeting {
-  font-size: clamp(16px, 4vw, 22px);
+  font-size: clamp(8px, 2vw, 11px);
   font-weight: 300;
   color: #fff;
   text-align: center;
@@ -159,14 +159,14 @@ body.light-theme .separator-dot {
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  margin-bottom: 48px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .dashboard-column {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 }
 
 /* Dashboard Cards - More transparent for star visibility */
@@ -177,8 +177,8 @@ body.light-theme .separator-dot {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255,255,255,0.1) !important;
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 8px;
+  padding: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
