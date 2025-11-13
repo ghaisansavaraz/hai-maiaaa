@@ -63,12 +63,11 @@ export function updateMoonDisplay(now = new Date()) {
 	// Compute phase
 	const p = getMoonPhaseJakarta(now);
 	
-	console.log('[Moon Debug]', {
-		phase: p.phase.toFixed(3),
-		fraction: p.fraction.toFixed(3),
+	console.log('[Moon Phase]', {
+		phase: (p.phase * 100).toFixed(1) + '%',
+		illumination: (p.fraction * 100).toFixed(1) + '%',
 		waxing: p.waxing,
-		name: p.name,
-		ageDays: p.ageDays.toFixed(1)
+		name: p.name
 	});
 
 	// Update label (inline with greeting)
@@ -81,51 +80,48 @@ export function updateMoonDisplay(now = new Date()) {
 		);
 	}
 
-	// Update SVG mask overlay geometry - Jakarta view (vertical curved crescent)
-	const litCutout = document.getElementById("litCutout");
-	if (litCutout) {
-		// SVG viewBox 0..100, r = 49, center at (50,50)
-		const R = 48.3; // Match the litCutout radius in HTML
-		const cyBase = 50;
+	// Update both mask discs for Jakarta vertical view
+	const litDisc = document.getElementById("litDisc");
+	const unlitDisc = document.getElementById("unlitDisc");
+	
+	if (litDisc && unlitDisc) {
+		const R = 50; // disc radius
+		const center = 50;
 		
-		// Jakarta view: waning crescents show lit at BOTTOM, waxing crescents show lit at TOP
-		// The unlitMask works by: white areas allow shadow, black areas (litCutout) block shadow
-		// So litCutout carves out the LIT region from the shadow
+		// Jakarta view: Waning = lit at BOTTOM, Waxing = lit at TOP
+		// Move BOTH discs vertically to create curved crescent
 		
-		// For waning (phase 0.5→1.0, fraction decreasing from 1.0→0):
-		//   - At full (fraction=1): litCutout far down (cy=98), entire moon lit
-		//   - At 3rd quarter (fraction=0.5): litCutout at center (cy=50), bottom half lit
-		//   - At waning crescent (fraction=0.36): litCutout above center, small crescent at bottom lit
-		//   - At new (fraction=0): litCutout far up (cy=2), no moon lit
+		// Calculate offset: at 0% = far away, at 50% = at center, at 100% = far opposite
+		// Use (1 - 2*fraction) to map: 0→+1, 0.5→0, 1→-1
+		const normalizedOffset = 1 - 2 * p.fraction;
 		
-		// For waxing (phase 0→0.5, fraction increasing from 0→1.0):
-		//   - At new (fraction=0): litCutout far down (cy=98), no moon lit
-		//   - At waxing crescent (fraction=0.36): litCutout below center, small crescent at top lit
-		//   - At 1st quarter (fraction=0.5): litCutout at center (cy=50), top half lit
-		//   - At full (fraction=1): litCutout far up (cy=2), entire moon lit
+		let litCy, unlitCy;
 		
-		let cy;
 		if (p.waxing) {
-			// Waxing: lit at TOP, cutout moves UP as fraction increases
-			// fraction 0→1 maps to cy: 98→2
-			cy = cyBase + (1 - 2 * p.fraction) * R;
+			// WAXING: Lit portion grows at TOP
+			// At 0%: litDisc at bottom (cy=100), unlitDisc at bottom (cy=100) - all dark
+			// At 36%: litDisc above center, unlitDisc below center - top crescent lit
+			// At 100%: litDisc at top (cy=0), unlitDisc at top (cy=0) - all lit
+			litCy = center + normalizedOffset * R;
+			unlitCy = center - normalizedOffset * R;
 		} else {
-			// Waning: lit at BOTTOM, cutout moves DOWN as fraction decreases (which means as phase increases)
-			// fraction 1→0 maps to cy: 98→2
-			cy = cyBase - (1 - 2 * p.fraction) * R;
+			// WANING: Lit portion shrinks to BOTTOM
+			// At 100%: litDisc at bottom (cy=100), unlitDisc at bottom (cy=100) - all lit
+			// At 36%: litDisc below center, unlitDisc above center - bottom crescent lit
+			// At 0%: litDisc at top (cy=0), unlitDisc at top (cy=0) - all dark
+			litCy = center - normalizedOffset * R;
+			unlitCy = center + normalizedOffset * R;
 		}
 		
-		console.log('[Moon Render]', { cy: cy.toFixed(2), waxing: p.waxing, fraction: p.fraction.toFixed(3) });
-		litCutout.setAttribute("cy", cy.toFixed(2));
-	}
-
-	// Ensure shadow opacity is at configured darkness (single shadow)
-	const shadowOverlay = document.getElementById("shadowOverlayCircle");
-	if (shadowOverlay) {
-		const root = document.documentElement;
-		const cssOpacity = getComputedStyle(root).getPropertyValue("--moon-shadow-opacity").trim();
-		const o = cssOpacity ? parseFloat(cssOpacity) : 0.85;
-		shadowOverlay.setAttribute("opacity", isNaN(o) ? "0.85" : String(o));
+		litDisc.setAttribute("cy", litCy.toFixed(2));
+		unlitDisc.setAttribute("cy", unlitCy.toFixed(2));
+		
+		console.log('[Moon Render]', {
+			waxing: p.waxing,
+			fraction: p.fraction.toFixed(3),
+			litCy: litCy.toFixed(1),
+			unlitCy: unlitCy.toFixed(1)
+		});
 	}
 }
 

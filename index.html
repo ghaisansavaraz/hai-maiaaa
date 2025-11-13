@@ -34,27 +34,26 @@
     <div id="moonIconContainer" aria-hidden="true">
       <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering:geometricPrecision">
         <defs>
-          <!-- Clip to a perfect circular disc -->
-          <clipPath id="moonDisc">
-            <circle cx="50" cy="50" r="49"/>
+          <!-- Circular clip for the entire moon -->
+          <clipPath id="moonClip">
+            <circle cx="50" cy="50" r="48"/>
           </clipPath>
-          <!-- Mask for shadow overlay - white allows shadow, black blocks it (Jakarta vertical view) -->
-          <mask id="unlitMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type:luminance">
+          <!-- Mask for lit portion (Jakarta vertical: waning=bottom lit, waxing=top lit) -->
+          <mask id="litMask" maskUnits="userSpaceOnUse">
+            <rect width="100" height="100" fill="black"/>
+            <circle id="litDisc" cx="50" cy="50" r="50" fill="white"/>
+          </mask>
+          <!-- Mask for unlit portion (opposite of lit) -->
+          <mask id="unlitMask" maskUnits="userSpaceOnUse">
             <rect width="100" height="100" fill="white"/>
-            <!-- This disc BLOCKS the shadow, revealing the lit crescent -->
-            <circle id="litCutout" cx="50" cy="98" r="48.3" fill="black"/>
+            <circle id="unlitDisc" cx="50" cy="50" r="50" fill="black"/>
           </mask>
         </defs>
-        <!-- Base texture (full) -->
-        <image id="moonImageBase"
-               href="assets/moon/moonmap.jpg"
-               xlink:href="assets/moon/moonmap.jpg"
-               x="0" y="0" width="100" height="100"
-               preserveAspectRatio="xMidYMid slice"
-               clip-path="url(#moonDisc)"/>
-        <!-- Single dim shadow overlay only on unlit region -->
-        <g id="shadowOverlay" mask="url(#unlitMask)" clip-path="url(#moonDisc)">
-          <circle id="shadowOverlayCircle" cx="50" cy="50" r="49.15" fill="black" opacity="0.85"/>
+        <g clip-path="url(#moonClip)">
+          <!-- Lit portion: full brightness -->
+          <image mask="url(#litMask)" href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
+          <!-- Unlit portion: dimmed to 15% visibility -->
+          <image mask="url(#unlitMask)" href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" opacity="0.15"/>
         </g>
       </svg>
     </div>
