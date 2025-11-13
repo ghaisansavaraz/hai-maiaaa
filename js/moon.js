@@ -80,10 +80,13 @@ export function updateMoonDisplay(now = new Date()) {
 		// SVG viewBox 0..100, r = 48, center at (50,50)
 		const R = 48;
 		const cxBase = 50;
-		// Offset mapping: fraction -> offset; flip direction by waxing/waning
-		const cx = cxBase + (2 * p.fraction - 1) * R * (p.waxing ? 1 : -1);
-		if (litCutout) litCutout.setAttribute("cx", cx.toFixed(2));
-		if (shadowDisc) shadowDisc.setAttribute("cx", cx.toFixed(2));
+		const sign = p.waxing ? 1 : -1;
+		// Lit mask subtraction disc distance: 0 at new, 2R at full
+		const distLit = 2 * R * p.fraction;
+		// Unlit mask cutout distance: 2R at new, 0 at full
+		const distUnlit = 2 * R * (1 - p.fraction);
+		if (shadowDisc) shadowDisc.setAttribute("cx", (cxBase + sign * distLit).toFixed(2));
+		if (litCutout) litCutout.setAttribute("cx", (cxBase + sign * distUnlit).toFixed(2));
 	}
 
 	// No separate black overlay needed now; unlit texture opacity handled in SVG
