@@ -73,19 +73,21 @@ export function updateMoonDisplay(now = new Date()) {
 		);
 	}
 
-	// Update SVG mask overlay geometry
+	// Update SVG mask overlay geometry - Jakarta view (vertical orientation)
 	const litCutout = document.getElementById("litCutout");
 	if (litCutout) {
-		// SVG viewBox 0..100, r = 48, center at (50,50)
-		const R = 48;
-		const cxBase = 50;
-		// Orientation for Jakarta: waxing lit on right, waning lit on left
+		// SVG viewBox 0..100, r = 49, center at (50,50)
+		const R = 49;
+		const cyBase = 50;
+		// Jakarta view: waxing lit on bottom, waning lit on top
+		// For waxing: shadow moves from top (cy=2) to bottom (cy=98)
+		// For waning: shadow moves from bottom (cy=98) to top (cy=2)
 		const sign = (p.waxing ? 1 : -1);
-		// Lit mask subtraction disc distance: 0 at new, 2R at full
-		const distLit = 2 * R * p.fraction;
 		// Unlit mask cutout distance: 2R at new, 0 at full
 		const distUnlit = 2 * R * (1 - p.fraction);
-		if (litCutout) litCutout.setAttribute("cx", (cxBase + sign * distUnlit).toFixed(2));
+		// Position the cutout disc vertically
+		const cy = cyBase - sign * distUnlit;
+		litCutout.setAttribute("cy", cy.toFixed(2));
 	}
 
 	// Ensure shadow opacity is at configured darkness (single shadow)
