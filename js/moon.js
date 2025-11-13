@@ -79,8 +79,8 @@ export function updateMoonDisplay(now = new Date()) {
 		// SVG viewBox 0..100, r = 48, center at (50,50)
 		const R = 48;
 		const cxBase = 50;
-		// Hemisphere/orientation flip: invert to match Jakarta view
-		const sign = (p.waxing ? 1 : -1) * -1;
+		// Orientation for Jakarta: waxing lit on right, waning lit on left
+		const sign = (p.waxing ? 1 : -1);
 		// Lit mask subtraction disc distance: 0 at new, 2R at full
 		const distLit = 2 * R * p.fraction;
 		// Unlit mask cutout distance: 2R at new, 0 at full
