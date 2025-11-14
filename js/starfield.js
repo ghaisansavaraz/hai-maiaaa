@@ -91,6 +91,7 @@ export function initStarfield() {
     const mid = document.querySelector('.stars-layer-mid');
     const front = document.querySelector('.stars-layer-front');
     const sparkle = document.querySelector('.stars-layer-sparkle');
+    const effects = document.querySelector('.stars-effects');
     if (!back || !mid || !front) {
       debugLog('Starfield layers missing; skipping init');
       return;
@@ -125,9 +126,44 @@ export function initStarfield() {
       };
       requestAnimationFrame(tick);
     }
+    // Trigger one shooting star on load (if effects layer exists)
+    if (effects && !reduceMotion) {
+      setTimeout(() => spawnShootingStar(effects), 800);
+      // expose manual trigger for debugging
+      window.spawnShootingStar = () => spawnShootingStar(effects);
+    }
     debugLog('Starfield initialized');
   } catch (e) {
     console.error(e);
+  }
+}
+
+// Create a fast shooting star from top-right to bottom-left with an end flash
+function spawnShootingStar(container) {
+  try {
+    const star = document.createElement('div');
+    star.className = 'shooting-star';
+    // Duration randomization for variety
+    const dur = (Math.random() * 0.4 + 1.2).toFixed(2) + 's';
+    star.style.setProperty('--ss-dur', dur);
+    // Build internals: head, trail, aura
+    const head = document.createElement('div');
+    head.className = 'shooting-head';
+    const trail = document.createElement('div');
+    trail.className = 'shooting-trail';
+    const aura = document.createElement('div');
+    aura.className = 'shooting-aura';
+    star.appendChild(trail);
+    star.appendChild(head);
+    star.appendChild(aura);
+    container.appendChild(star);
+    const cleanup = () => {
+      star.removeEventListener('animationend', cleanup);
+      if (star.parentNode) star.parentNode.removeChild(star);
+    };
+    star.addEventListener('animationend', cleanup);
+  } catch (e) {
+    console.error('spawnShootingStar failed', e);
   }
 }
 
