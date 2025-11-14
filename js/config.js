@@ -53,25 +53,25 @@ export function debugError(message, error) {
 // Starfield configuration
 export const STARFIELD_CONFIG = {
   densities: {
-    back: 120,
-    mid: 80,
-    front: 40,
-    sparkle: 12
+    back: 220,
+    mid: 160,
+    front: 90,
+    sparkle: 36
   },
-  sizePx: { min: 0.6, max: 2.6 },
-  opacity: { min: 0.55, max: 0.95 },
-  twinkleSec: { min: 2.8, max: 5.2 },
+  sizePx: { min: 0.7, max: 3.0 },
+  opacity: { min: 0.65, max: 1.0 },
+  twinkleSec: { min: 2.2, max: 5.0 },
   parallax: {
-    back: 0.12,
-    mid: 0.24,
-    front: 0.42,
-    sparkle: 0.58
+    back: 0.20,
+    mid: 0.40,
+    front: 0.70,
+    sparkle: 0.90
   },
-  amplitudePx: { back: 6, mid: 9, front: 12, sparkle: 14 },
-  drift: { turnPerSec: 0.015 },
+  amplitudePx: { back: 10, mid: 16, front: 24, sparkle: 28 },
+  drift: { turnPerSec: 0.03 },
   hideLegacy: true,
   // Visual variants
-  aggressiveFraction: { back: 0.05, mid: 0.12, front: 0.20, sparkle: 0.30 },
-  beacon: { perLayer: 2, periodSec: { min: 12, max: 24 } }
+  aggressiveFraction: { back: 0.08, mid: 0.18, front: 0.35, sparkle: 0.50 },
+  beacon: { perLayer: 3, periodSec: { min: 10, max: 18 } }
 };
 
