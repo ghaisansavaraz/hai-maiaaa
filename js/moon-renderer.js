@@ -30,9 +30,8 @@ export function renderMoon(phaseData) {
 	const r2 = R * TERMINATOR_SCALE;
 	litCutout.setAttribute("r", r2.toFixed(2));
 
-	// Flip diagonal between waxing/waning for Jakarta view
-	// Adjusted so the illuminated "C" faces the correct way
-	const angleDeg = BASE_ANGLE_DEG + (waxing ? 180 : 0);
+	// Automatic orientation: pick an angle so the lit side matches waxing/waning
+	const angleDeg = chooseAngleDeg(waxing, BASE_ANGLE_DEG);
 	const rad = angleDeg * Math.PI / 180;
 	const vx = Math.sin(rad);
 	const vy = -Math.cos(rad); // screen Y grows down
@@ -47,6 +46,24 @@ export function renderMoon(phaseData) {
 
 	litCutout.setAttribute("cx", cx.toFixed(2));
 	litCutout.setAttribute("cy", cy.toFixed(2));
+}
+
+// Pick an angle that makes the lit crescent face the expected side.
+// For timeanddate-style: Waxing → right-lit, Waning → left-lit.
+function chooseAngleDeg(waxing, base) {
+	const expectRight = !!waxing;
+	const candidates = [
+		base + (waxing ? 180 : 0),
+		-base + (waxing ? 180 : 0),
+		base + (waxing ? 0 : 180),
+		-base + (waxing ? 0 : 180)
+	];
+	for (const a of candidates) {
+		const vx = Math.sin(a * Math.PI / 180);
+		const litRight = vx > 0;
+		if (litRight === expectRight) return a;
+	}
+	return candidates[0];
 }
 
 /* Helpers */
