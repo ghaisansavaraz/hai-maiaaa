@@ -120,6 +120,23 @@ body.hide-day-particles .day-particles-container {
 
 /* === LUXURY STARFIELD SYSTEM === */
 
+/* Configurable tokens */
+:root {
+  --sf-density-back: 180;
+  --sf-density-mid: 120;
+  --sf-density-front: 60;
+  --sf-density-sparkle: 24;
+  --sf-size-min: 0.6px;
+  --sf-size-max: 2.6px;
+  --sf-twinkle-min: 2.5s;
+  --sf-twinkle-max: 5.5s;
+  --sf-parallax-back: 0.15;
+  --sf-parallax-mid: 0.30;
+  --sf-parallax-front: 0.55;
+  --sf-parallax-sparkle: 0.75;
+  --sf-drift-speed: 0.02turn;
+}
+
 /* Milky Way Band */
 .milky-way {
   position: fixed;
@@ -149,6 +166,12 @@ body.hide-day-particles .day-particles-container {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
+}
+
+/* Sparkle layer - rare bright twinkles */
+.stars-layer-sparkle {
+  z-index: 4;
+  will-change: transform, opacity;
 }
 
 /* Background layer - tiny distant stars */
@@ -206,6 +229,41 @@ body.hide-day-particles .day-particles-container {
   background-size: 200% 200%;
   background-repeat: no-repeat;
 }
+
+/* Procedural star nodes (JS adds) */
+.sf-star {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  opacity: var(--o, 0.9);
+  width: var(--sz, 2px);
+  height: var(--sz, 2px);
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 calc(var(--sz,2px) * 1.5) rgba(255,255,255,0.6));
+  animation: sfTwinkle var(--tw, 4s) ease-in-out infinite;
+  animation-delay: var(--td, 0s);
+  will-change: opacity, filter;
+  mix-blend-mode: screen;
+}
+.sf-star::after {
+  content: "";
+  position: absolute;
+  inset: -180%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 60%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@keyframes sfTwinkle {
+  0%, 100% { opacity: calc(var(--o,0.9) * 0.85); filter: drop-shadow(0 0 calc(var(--sz,2px) * 1.2) rgba(255,255,255,0.55)); }
+  50%      { opacity: calc(var(--o,0.9) * 1.05); filter: drop-shadow(0 0 calc(var(--sz,2px) * 2.1) rgba(195,210,255,0.9)); }
+}
+
+/* Optional: hide legacy static star container when using procedural system */
+body.proc-stars .stars-container { display: none; }
 
 /* Enhanced stars container */
 .stars-container {

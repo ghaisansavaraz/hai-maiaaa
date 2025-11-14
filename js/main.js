@@ -7,6 +7,7 @@ import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mo
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initMoonSync } from './moon-sync.js';
+import { initStarfield } from './starfield.js';
 
 let dynamicBackground = null;
 
@@ -165,6 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Apply time-based theme
     applyTheme();
+    // Initialize procedural starfield
+    initStarfield();
     
     // Initialize card activation system
     initCardActivation();

@@ -50,3 +50,24 @@ export function debugError(message, error) {
   }
 }
 
+// Starfield configuration
+export const STARFIELD_CONFIG = {
+  densities: {
+    back: 180,
+    mid: 120,
+    front: 60,
+    sparkle: 24
+  },
+  sizePx: { min: 0.6, max: 2.6 },
+  opacity: { min: 0.65, max: 1.0 },
+  twinkleSec: { min: 2.5, max: 5.5 },
+  parallax: {
+    back: 0.15,
+    mid: 0.30,
+    front: 0.55,
+    sparkle: 0.75
+  },
+  drift: { turnPerSec: 0.02 },
+  hideLegacy: true
+};
+
