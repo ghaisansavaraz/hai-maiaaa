@@ -53,7 +53,7 @@ export function debugError(message, error) {
 // Moon rendering configuration (calibrated)
 export const MOON_RENDER_CONFIG = {
   // Curvature mapping: 'overlapExact' | 'linearChord' | 'gammaChord'
-  mapping: 'gammaChord',
+  mapping: 'linearChord',
   // Gamma for gammaChord mapping (tune for closest visual match)
   gamma: 0.92,
   // Shadow overlay opacity (0.35–0.45 recommended)
