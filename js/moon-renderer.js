@@ -31,8 +31,8 @@ export function renderMoon(phaseData) {
 	litCutout.setAttribute("r", r2.toFixed(2));
 
 	// Flip diagonal between waxing/waning for Jakarta view
-	// Adjusted to match reference orientation (swap 180° offset)
-	const angleDeg = BASE_ANGLE_DEG + (waxing ? 0 : 180);
+	// Adjusted so the illuminated "C" faces the correct way
+	const angleDeg = BASE_ANGLE_DEG + (waxing ? 180 : 0);
 	const rad = angleDeg * Math.PI / 180;
 	const vx = Math.sin(rad);
 	const vy = -Math.cos(rad); // screen Y grows down
