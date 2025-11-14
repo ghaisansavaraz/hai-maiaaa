@@ -98,6 +98,8 @@ export function initStarfield() {
     if (STARFIELD_CONFIG.hideLegacy) {
       document.body.classList.add('proc-stars');
     }
+    // Ensure star layers are visible
+    document.body.classList.add('show-stars');
     // Seeded RNG
     const rand = mulberry32(seededFromEnv());
     // Densities (can lower on small screens)
