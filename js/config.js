@@ -52,14 +52,16 @@ export function debugError(message, error) {
 
 // Moon rendering configuration (calibrated)
 export const MOON_RENDER_CONFIG = {
-  // Curvature mapping: 'overlapExact' | 'linearChord' | 'gammaChord'
-  mapping: 'linearChord',
+  // Curvature mapping: 'overlapExact' | 'linearChord' | 'gammaChord' | 'overlapScaled'
+  mapping: 'overlapScaled',
   // Gamma for gammaChord mapping (tune for closest visual match)
   gamma: 0.92,
   // Shadow overlay opacity (0.35–0.45 recommended)
   opacity: 0.40,
   // Small inward bias to prevent anti-aliased seam at terminator
   seamEpsilon: 0.25,
+  // Radius multiplier for the terminator (controls curvature flatness; 1.4–2.0 flattens)
+  terminatorRadiusMultiplier: 1.6,
   // Tilt source: 'brightLimb' (physical) or 'fixed' (static diagonal)
   tilt: 'brightLimb',
   // Fixed angle used when tilt='fixed' (degrees)

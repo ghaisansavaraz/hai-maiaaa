@@ -43,6 +43,7 @@ export function renderMoon(phaseData) {
 		mapping: MOON_RENDER_CONFIG.mapping,
 		gamma: MOON_RENDER_CONFIG.gamma,
 		seamEpsilon: MOON_RENDER_CONFIG.seamEpsilon,
+		rScale: MOON_RENDER_CONFIG.terminatorRadiusMultiplier,
 		center
 	});
 
