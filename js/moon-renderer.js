@@ -22,9 +22,9 @@ export function renderMoon(phaseData) {
 	const center = 50;
 
 	// Tunables to match timeanddate-style illustration
-	const TERMINATOR_SCALE = 1.85;   // >1 flattens the arc (try 1.70–1.95)
+	const TERMINATOR_SCALE = 1.90;   // >1 flattens the arc (try 1.70–1.95)
 	const SEAM_EPS = 0.25;           // avoids anti-aliased hairline along terminator
-	const BASE_ANGLE_DEG = -35;      // diagonal like reference
+	const BASE_ANGLE_DEG = -33;      // subtle angle tweak for closer match
 
 	// Use a larger cutout radius for a flatter arc
 	const r2 = R * TERMINATOR_SCALE;
