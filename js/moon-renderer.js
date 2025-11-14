@@ -1,7 +1,4 @@
 /* Moon Phase Renderer - DOM/SVG Updates */
-import { getBrightLimbAngleJakarta } from './moon-core.js';
-import { computeCutout } from './moon-engine.js';
-import { MOON_RENDER_CONFIG } from './config.js';
 
 /**
  * Render moon phase visualization and label
@@ -13,47 +10,36 @@ export function renderMoon(phaseData) {
 	// Update label (inline with greeting)
 	const label = document.getElementById("moonPhaseLabel");
 	if (label) {
-		label.textContent = `${name}`;
+		label.textContent = `${name} · ${(fraction * 100).toFixed(0)}%`;
 		label.setAttribute(
 			"aria-label",
 			`${name}, ${(fraction * 100).toFixed(0)}% illuminated`
 		);
 	}
 
-	// Update SVG cutout position for shadow mask using calibrated engine
+	// Update SVG cutout position for shadow mask
 	const litCutout = document.getElementById("litCutout");
-	if (!litCutout) return;
-
-	const R = 48;      // cutout radius (matches clip radius)
-	const center = 50; // SVG center
-
-	// Determine tilt angle
-	let angleDeg;
-	if (MOON_RENDER_CONFIG.tilt === 'brightLimb') {
-		angleDeg = getBrightLimbAngleJakarta();
-	} else {
-		angleDeg = MOON_RENDER_CONFIG.fixedAngleDeg || 0;
-	}
-
-	// Compute cutout position per selected mapping
-	const { cx, cy } = computeCutout({
-		fraction,
-		R,
-		angleDeg,
-		mapping: MOON_RENDER_CONFIG.mapping,
-		gamma: MOON_RENDER_CONFIG.gamma,
-		seamEpsilon: MOON_RENDER_CONFIG.seamEpsilon,
-		rScale: MOON_RENDER_CONFIG.terminatorRadiusMultiplier,
-		center
-	});
-
-	litCutout.setAttribute("cx", cx.toFixed(3));
-	litCutout.setAttribute("cy", cy.toFixed(3));
-
-	// Apply runtime opacity
-	const overlay = document.getElementById("shadowOverlay");
-	if (overlay && typeof MOON_RENDER_CONFIG.opacity === 'number') {
-		overlay.setAttribute("opacity", MOON_RENDER_CONFIG.opacity.toFixed(2));
+	if (litCutout) {
+		const R = 48;      // cutout radius (matches clip radius)
+		const center = 50; // SVG center
+		
+		// Jakarta view: Waning = lit at BOTTOM, Waxing = lit at TOP
+		// The cutout (white circle) reveals the lit area by blocking shadow
+		// When cutout overlaps moon center, it reveals that side
+		
+		// Calculate how far the cutout center should be from moon center
+		// At fraction=0 (new): cutout far away, no overlap (all shadowed)
+		// At fraction=0.5 (half): cutout at edge, half overlap (half lit)
+		// At fraction=1 (full): cutout at center, full overlap (all lit)
+		
+		// Distance from center: 0% -> 2R away, 50% -> R away, 100% -> 0 (at center)
+		const distanceFromCenter = (1 - fraction) * 2 * R;
+		
+		// Direction: waning moves DOWN from center (cy > 50, reveals bottom), waxing moves UP (cy < 50, reveals top)
+		const dir = waxing ? -1 : 1;
+		const cy = center + dir * distanceFromCenter;
+		
+		litCutout.setAttribute("cy", cy.toFixed(2));
 	}
 }
 
