@@ -357,7 +357,7 @@ body.light-theme .twinkle-overlay {
   top: var(--y, 50%);
   transform: translate(-50%, -50%);
   filter: drop-shadow(0 0 calc(var(--sz,1.6px) * 1.4) rgba(255,255,255,0.55));
-  animation: sfTwinkle var(--tw, 4s) ease-in-out infinite;
+  animation: sfTwinkle var(--tw, 4s) steps(2, end) infinite;
   animation-delay: var(--td, 0s);
   will-change: opacity, filter;
   mix-blend-mode: screen;
@@ -379,7 +379,7 @@ body.light-theme .twinkle-overlay {
 
 /* Aggressive blink variant */
 .sf-agg {
-  animation: sfBlinkAgg var(--tw, 3s) ease-in-out infinite;
+  animation: sfBlinkAgg var(--tw, 3s) steps(2, end) infinite;
 }
 @keyframes sfBlinkAgg {
   0%, 100% { opacity: calc(var(--o,0.95) * 0.55); filter: drop-shadow(0 0 calc(var(--sz,2px) * 0.9) rgba(255,255,255,0.45)); }
@@ -394,7 +394,7 @@ body.light-theme .twinkle-overlay {
 
 /* Rare bright beacons */
 .sf-beacon {
-  animation: sfBeacon var(--bk, 18s) ease-in-out infinite;
+  animation: sfBeacon var(--bk, 18s) steps(2, end) infinite;
   animation-delay: var(--bd, 0s);
 }
 @keyframes sfBeacon {
