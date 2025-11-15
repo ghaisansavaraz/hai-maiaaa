@@ -2,14 +2,33 @@
 
 import { debugLog } from './config.js';
 
+let manualThemeOverride = null;
+let backgroundInstance = null;
+
 export class DynamicBackground {
   constructor() {
     debugLog("Initializing time-based background system (pure white/black)...");
+    backgroundInstance = this;
     this.updateBackground();
     this.startTimeSync();
   }
 
   getCurrentTheme() {
+    if (manualThemeOverride === 'light') {
+      return {
+        name: 'light',
+        isLight: true,
+        gradient: '#ffffff'
+      };
+    }
+    if (manualThemeOverride === 'dark') {
+      return {
+        name: 'dark',
+        isLight: false,
+        gradient: '#000000'
+      };
+    }
+
     const hour = new Date().getHours();
     
     // Simple time-based theme selection
@@ -51,6 +70,7 @@ export class DynamicBackground {
       // Apply light theme classes
       document.body.classList.add('light-theme');
       document.body.classList.remove('dark-theme');
+      document.body.classList.remove('night-theme');
       
       // Hide day particles (no clouds/light rays), hide stars
       document.body.classList.remove('show-day-particles');
@@ -91,6 +111,17 @@ export class DynamicBackground {
     setInterval(() => {
       this.updateBackground();
     }, 3600000);
+  }
+}
+
+export function setManualThemeOverride(mode) {
+  if (mode === 'light' || mode === 'dark') {
+    manualThemeOverride = mode;
+  } else {
+    manualThemeOverride = null;
+  }
+  if (backgroundInstance) {
+    backgroundInstance.updateBackground();
   }
 }
 

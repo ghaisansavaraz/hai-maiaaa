@@ -1,7 +1,7 @@
 /* Main Application Entry Point - PULSING ANIMATIONS v6 */
 
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
-import { DynamicBackground, applyTheme } from './background.js';
+import { DynamicBackground, applyTheme, setManualThemeOverride } from './background.js';
 import { startTimeDisplay } from './clock.js';
 import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mood.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
@@ -137,6 +137,29 @@ function initEditorKey() {
   }
 }
 
+function initThemeTestToggle() {
+  const zone = document.getElementById("themeToggleZone");
+  if (!zone) return;
+  let clickCount = 0;
+  let resetTimer = null;
+
+  zone.addEventListener("click", () => {
+    clickCount += 1;
+    if (resetTimer) clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      clickCount = 0;
+    }, 600);
+
+    if (clickCount >= 4) {
+      clickCount = 0;
+      const targetMode = document.body.classList.contains("light-theme") ? "dark" : "light";
+      setManualThemeOverride(targetMode);
+      zone.classList.add("flash");
+      setTimeout(() => zone.classList.remove("flash"), 280);
+    }
+  });
+}
+
 // Clear mood button
 function initClearButtons() {
   const clearMoodBtn = document.getElementById("clearMood");
@@ -184,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initTaskEventListeners();
     initClearButtons();
     initEditorKey();
+    initThemeTestToggle();
     
     // Force re-render tasks to remove any old flower elements from cache
     loadTasks();
