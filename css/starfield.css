@@ -374,13 +374,13 @@ body.light-theme .twinkle-overlay {
   position: absolute;
   border-radius: 50%;
   background: rgba(255,255,255,0.95);
-  opacity: var(--o, 0.9);
-  width: var(--sz, 2px);
-  height: var(--sz, 2px);
+  opacity: var(--o, 0.85);
+  width: var(--sz, 1.6px);
+  height: var(--sz, 1.6px);
   left: var(--x, 50%);
   top: var(--y, 50%);
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 0 calc(var(--sz,2px) * 1.6) rgba(255,255,255,0.65));
+  filter: drop-shadow(0 0 calc(var(--sz,1.6px) * 1.4) rgba(255,255,255,0.55));
   animation: sfTwinkle var(--tw, 4s) ease-in-out infinite;
   animation-delay: var(--td, 0s);
   will-change: opacity, filter;
