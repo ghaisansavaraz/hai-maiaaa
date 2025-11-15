@@ -102,8 +102,12 @@ export function initStarfield() {
     if (STARFIELD_CONFIG.hideLegacy) {
       document.body.classList.add('proc-stars');
     }
-    // Ensure star layers are visible
-    document.body.classList.add('show-stars');
+    // Ensure star layers are visible only at night
+    if (document.body.classList.contains('dark-theme') || document.body.classList.contains('night-theme')) {
+      document.body.classList.add('show-stars');
+    } else {
+      document.body.classList.remove('show-stars');
+    }
     // Seeded RNG
     const rand = mulberry32(seededFromEnv());
     // Densities (can lower on small screens)

@@ -240,6 +240,14 @@ body.show-stars .stars-effects {
   opacity: 1 !important;
 }
 
+/* Hide sky elements in light theme (daytime) */
+body.light-theme .stars-layer,
+body.light-theme .milky-way,
+body.light-theme .stars-effects,
+body.light-theme .twinkle-overlay {
+  opacity: 0 !important;
+}
+
 /* GPU-friendly parallax using custom properties for amplitude */
 @keyframes sfParallax {
   0%   { transform: translate3d(calc(var(--dx, 8px) * -1), calc(var(--dy, 8px) * -1), 0); }
