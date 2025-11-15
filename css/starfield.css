@@ -260,6 +260,7 @@ body.light-theme .twinkle-overlay {
   90%     { opacity: 0.9; transform: scale(1.8); }
   100%    { opacity: 0; transform: scale(2.0); }
 }
+
 /* Background layer - tiny distant stars */
 .stars-layer-back {
   z-index: 1;
@@ -317,6 +318,7 @@ body.light-theme .twinkle-overlay {
 }
 
 /* Procedural star nodes removed — using static CSS dotted layers */
+
 /* Optional: hide legacy static star container when using procedural system */
 body.proc-stars .stars-container { display: none; }
 
