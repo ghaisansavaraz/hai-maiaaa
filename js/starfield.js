@@ -124,11 +124,14 @@ export function initStarfield() {
     if (mw) {
       mw.style.transform = 'none';
     }
-    // Trigger one shooting star on load (if effects layer exists)
     if (effects && !reduceMotion) {
-      setTimeout(() => spawnShootingStar(effects), 800);
-      // expose manual trigger for debugging
-      window.spawnShootingStar = () => spawnShootingStar(effects);
+      const trigger = () => spawnShootingStar(effects);
+      setTimeout(trigger, 800); // initial launch
+      // periodic launch every 20–35 seconds
+      setInterval(() => {
+        trigger();
+      }, Math.floor(Math.random() * 15000) + 20000);
+      window.spawnShootingStar = trigger;
     }
     debugLog('Starfield initialized');
   } catch (e) {
