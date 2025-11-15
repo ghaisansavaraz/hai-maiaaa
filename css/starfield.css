@@ -180,13 +180,14 @@ body.hide-day-particles .day-particles-container {
 }
 
 /* Twinkle overlay fields (screen blend) */
-.twinkle-overlay {
+.twinkle-overlay,
+.twinkle-overlay.alt {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 3;
   mix-blend-mode: screen;
-  opacity: 0.14;
+  opacity: 0.12;
   background-image:
     radial-gradient(circle at 5% 8%, rgba(255,255,255,0.18) 20%, transparent 40%),
     radial-gradient(circle at 22% 35%, rgba(220,235,255,0.14) 18%, transparent 42%),
@@ -196,30 +197,8 @@ body.hide-day-particles .day-particles-container {
     radial-gradient(circle at 74% 61%, rgba(220,235,255,0.14) 18%, transparent 46%),
     radial-gradient(circle at 29% 71%, rgba(255,255,255,0.12) 16%, transparent 42%),
     radial-gradient(circle at 9% 86%, rgba(235,245,255,0.12) 18%, transparent 44%);
-  animation: twinkleField 9s ease-in-out infinite alternate;
   filter: blur(0.3px);
-}
-.twinkle-overlay.alt {
-  opacity: 0.12;
-  animation: twinkleField2 11s ease-in-out infinite alternate;
-  background-image:
-    radial-gradient(circle at 15% 22%, rgba(255,255,255,0.12) 16%, transparent 40%),
-    radial-gradient(circle at 34% 9%, rgba(220,235,255,0.1) 18%, transparent 46%),
-    radial-gradient(circle at 58% 18%, rgba(255,255,255,0.12) 18%, transparent 44%),
-    radial-gradient(circle at 78% 37%, rgba(235,245,255,0.10) 16%, transparent 42%),
-    radial-gradient(circle at 88% 74%, rgba(255,255,255,0.12) 18%, transparent 46%),
-    radial-gradient(circle at 46% 82%, rgba(220,235,255,0.1) 16%, transparent 42%),
-    radial-gradient(circle at 26% 53%, rgba(255,255,255,0.12) 18%, transparent 44%);
-}
-@keyframes twinkleField {
-  0%   { opacity: 0.12; transform: translate3d(-2px, -2px, 0); }
-  50%  { opacity: 0.22; transform: translate3d(1px, 0px, 0); }
-  100% { opacity: 0.18; transform: translate3d(2px, 2px, 0); }
-}
-@keyframes twinkleField2 {
-  0%   { opacity: 0.10; transform: translate3d(1px, -1px, 0); }
-  50%  { opacity: 0.20; transform: translate3d(-1px, 1px, 0); }
-  100% { opacity: 0.16; transform: translate3d(0px, 0px, 0); }
+  animation: none;
 }
 
 /* Effects layer for transient phenomena (e.g., shooting stars) */
@@ -248,13 +227,10 @@ body.light-theme .twinkle-overlay {
   opacity: 0 !important;
 }
 
-/* GPU-friendly parallax using custom properties for amplitude */
+/* Parallax animation disabled (static layers) */
 @keyframes sfParallax {
-  0%   { transform: translate3d(calc(var(--dx, 8px) * -1), calc(var(--dy, 8px) * -1), 0); }
-  25%  { transform: translate3d(var(--dx, 8px), calc(var(--dy, 8px) * -1), 0); }
-  50%  { transform: translate3d(var(--dx, 8px), var(--dy, 8px), 0); }
-  75%  { transform: translate3d(calc(var(--dx, 8px) * -1), var(--dy, 8px), 0); }
-  100% { transform: translate3d(calc(var(--dx, 8px) * -1), calc(var(--dy, 8px) * -1), 0); }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 /* Shooting star */

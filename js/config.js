@@ -53,10 +53,10 @@ export function debugError(message, error) {
 // Starfield configuration
 export const STARFIELD_CONFIG = {
   densities: {
-    back: 70,
-    mid: 50,
-    front: 28,
-    sparkle: 10
+    back: 50,
+    mid: 35,
+    front: 20,
+    sparkle: 8
   },
   sizePx: { min: 0.45, max: 2.2 },
   opacity: { min: 0.55, max: 0.95 },

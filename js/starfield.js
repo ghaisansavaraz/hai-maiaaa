@@ -113,25 +113,16 @@ export function initStarfield() {
     // Densities (can lower on small screens)
     const scale = Math.min(1, Math.max(0.6, window.innerWidth / 1440));
     const dens = STARFIELD_CONFIG.densities;
-    createStarsInLayer(back, Math.floor(dens.back * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.back, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.7 });
-    createStarsInLayer(mid, Math.floor(dens.mid * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.mid, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.5 });
-    createStarsInLayer(front, Math.floor(dens.front * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.front, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.3 });
+    createStarsInLayer(back, Math.floor(dens.back * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.back, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.9 });
+    createStarsInLayer(mid, Math.floor(dens.mid * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.mid, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.7 });
+    createStarsInLayer(front, Math.floor(dens.front * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.front, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.5 });
     if (sparkle) {
       createStarsInLayer(sparkle, Math.floor(dens.sparkle * scale), rand, { min: STARFIELD_CONFIG.sizePx.max, max: STARFIELD_CONFIG.sizePx.max * 1.6 }, { min: 0.85, max: 1.0 }, { min: 1.6, max: 3.0 }, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.sparkle, beaconCount: Math.max(1, STARFIELD_CONFIG.beacon.perLayer - 1), staticFraction: 0.1 });
     }
-    // Parallax drift (CSS-based for efficiency)
-    applyCssParallax({ back, mid, front, sparkle }, reduceMotion);
-    // Milky Way slow rotation
+    // Parallax and Milky Way animations disabled (only shooting star moves)
     const mw = document.querySelector('.milky-way');
-    if (mw && !reduceMotion) {
-      let a = 0;
-      const turnPerSec = STARFIELD_CONFIG.drift.turnPerSec;
-      const tick = () => {
-        a += turnPerSec / 60;
-        mw.style.transform = `rotate(${a}turn)`;
-        requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
+    if (mw) {
+      mw.style.transform = 'none';
     }
     // Trigger one shooting star on load (if effects layer exists)
     if (effects && !reduceMotion) {
