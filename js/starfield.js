@@ -25,6 +25,7 @@ function pick(rand, min, max) {
 function createStarsInLayer(layerEl, count, rand, sizePx, opacity, twinkleSec, opts = {}) {
   const aggressiveFraction = opts.aggressiveFraction || 0;
   const beaconCount = opts.beaconCount || 0;
+  const staticFraction = opts.staticFraction || 0;
   const frag = document.createDocumentFragment();
   // Rare bright beacons first
   for (let b = 0; b < beaconCount; b++) {
@@ -57,6 +58,9 @@ function createStarsInLayer(layerEl, count, rand, sizePx, opacity, twinkleSec, o
     if (rand() < aggressiveFraction) {
       star.classList.add('sf-agg');
     }
+    if (rand() < staticFraction) {
+      star.classList.add('sf-static');
+    }
     star.style.setProperty('--x', x);
     star.style.setProperty('--y', y);
     star.style.setProperty('--sz', sz.toFixed(2) + 'px');
@@ -68,20 +72,19 @@ function createStarsInLayer(layerEl, count, rand, sizePx, opacity, twinkleSec, o
   layerEl.appendChild(frag);
 }
 
-function parallaxLoop(layers, parallax, reduceMotion) {
-  if (reduceMotion) return; // respect preference
-  let t = 0;
-  const step = () => {
-    t += 0.0016; // ~60fps
-    layers.back.style.transform = `translate3d(${Math.sin(t) * parallax.back * STARFIELD_CONFIG.amplitudePx.back}px, ${Math.cos(t*0.9) * parallax.back * STARFIELD_CONFIG.amplitudePx.back}px, 0)`;
-    layers.mid.style.transform = `translate3d(${Math.sin(t*0.95) * parallax.mid * STARFIELD_CONFIG.amplitudePx.mid}px, ${Math.cos(t*0.85) * parallax.mid * STARFIELD_CONFIG.amplitudePx.mid}px, 0)`;
-    layers.front.style.transform = `translate3d(${Math.sin(t*1.1) * parallax.front * STARFIELD_CONFIG.amplitudePx.front}px, ${Math.cos(t*0.8) * parallax.front * STARFIELD_CONFIG.amplitudePx.front}px, 0)`;
-    if (layers.sparkle) {
-      layers.sparkle.style.transform = `translate3d(${Math.sin(t*1.2) * parallax.sparkle * STARFIELD_CONFIG.amplitudePx.sparkle}px, ${Math.cos(t*0.75) * parallax.sparkle * STARFIELD_CONFIG.amplitudePx.sparkle}px, 0)`;
-    }
-    requestAnimationFrame(step);
+// CSS-driven parallax: set amplitudes and durations via custom properties
+function applyCssParallax(layers, reduceMotion) {
+  if (reduceMotion) return;
+  const set = (el, dx, dy, dur) => {
+    if (!el) return;
+    el.style.setProperty('--dx', `${dx}px`);
+    el.style.setProperty('--dy', `${dy}px`);
+    el.style.setProperty('--sf-dur', `${dur}s`);
   };
-  requestAnimationFrame(step);
+  set(layers.back, STARFIELD_CONFIG.amplitudePx.back, STARFIELD_CONFIG.amplitudePx.back, 90);
+  set(layers.mid, STARFIELD_CONFIG.amplitudePx.mid, STARFIELD_CONFIG.amplitudePx.mid, 70);
+  set(layers.front, STARFIELD_CONFIG.amplitudePx.front, STARFIELD_CONFIG.amplitudePx.front, 50);
+  if (layers.sparkle) set(layers.sparkle, STARFIELD_CONFIG.amplitudePx.sparkle, STARFIELD_CONFIG.amplitudePx.sparkle, 40);
 }
 
 export function initStarfield() {
@@ -106,14 +109,14 @@ export function initStarfield() {
     // Densities (can lower on small screens)
     const scale = Math.min(1, Math.max(0.6, window.innerWidth / 1440));
     const dens = STARFIELD_CONFIG.densities;
-    createStarsInLayer(back, Math.floor(dens.back * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.back, beaconCount: STARFIELD_CONFIG.beacon.perLayer });
-    createStarsInLayer(mid, Math.floor(dens.mid * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.mid, beaconCount: STARFIELD_CONFIG.beacon.perLayer });
-    createStarsInLayer(front, Math.floor(dens.front * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.front, beaconCount: STARFIELD_CONFIG.beacon.perLayer });
+    createStarsInLayer(back, Math.floor(dens.back * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.back, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.7 });
+    createStarsInLayer(mid, Math.floor(dens.mid * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.mid, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.5 });
+    createStarsInLayer(front, Math.floor(dens.front * scale), rand, STARFIELD_CONFIG.sizePx, STARFIELD_CONFIG.opacity, STARFIELD_CONFIG.twinkleSec, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.front, beaconCount: STARFIELD_CONFIG.beacon.perLayer, staticFraction: 0.3 });
     if (sparkle) {
-      createStarsInLayer(sparkle, Math.floor(dens.sparkle * scale), rand, { min: STARFIELD_CONFIG.sizePx.max, max: STARFIELD_CONFIG.sizePx.max * 1.6 }, { min: 0.85, max: 1.0 }, { min: 1.6, max: 3.0 }, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.sparkle, beaconCount: Math.max(1, STARFIELD_CONFIG.beacon.perLayer - 1) });
+      createStarsInLayer(sparkle, Math.floor(dens.sparkle * scale), rand, { min: STARFIELD_CONFIG.sizePx.max, max: STARFIELD_CONFIG.sizePx.max * 1.6 }, { min: 0.85, max: 1.0 }, { min: 1.6, max: 3.0 }, { aggressiveFraction: STARFIELD_CONFIG.aggressiveFraction.sparkle, beaconCount: Math.max(1, STARFIELD_CONFIG.beacon.perLayer - 1), staticFraction: 0.1 });
     }
-    // Parallax drift
-    parallaxLoop({ back, mid, front, sparkle }, STARFIELD_CONFIG.parallax, reduceMotion);
+    // Parallax drift (CSS-based for efficiency)
+    applyCssParallax({ back, mid, front, sparkle }, reduceMotion);
     // Milky Way slow rotation
     const mw = document.querySelector('.milky-way');
     if (mw && !reduceMotion) {
