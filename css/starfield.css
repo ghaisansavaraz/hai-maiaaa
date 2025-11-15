@@ -166,11 +166,6 @@ body.hide-day-particles .day-particles-container {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
-  /* Parallax animation driven by custom properties set from JS */
-  animation-name: sfParallax;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-duration: var(--sf-dur, 60s);
 }
 
 /* Sparkle layer - rare bright twinkles */
@@ -179,27 +174,7 @@ body.hide-day-particles .day-particles-container {
   will-change: transform, opacity;
 }
 
-/* Twinkle overlay fields (screen blend) */
-.twinkle-overlay,
-.twinkle-overlay.alt {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 3;
-  mix-blend-mode: screen;
-  opacity: 0.12;
-  background-image:
-    radial-gradient(circle at 5% 8%, rgba(255,255,255,0.18) 20%, transparent 40%),
-    radial-gradient(circle at 22% 35%, rgba(220,235,255,0.14) 18%, transparent 42%),
-    radial-gradient(circle at 41% 17%, rgba(255,255,255,0.16) 16%, transparent 40%),
-    radial-gradient(circle at 63% 29%, rgba(210,225,255,0.12) 18%, transparent 44%),
-    radial-gradient(circle at 82% 11%, rgba(255,255,255,0.16) 20%, transparent 42%),
-    radial-gradient(circle at 74% 61%, rgba(220,235,255,0.14) 18%, transparent 46%),
-    radial-gradient(circle at 29% 71%, rgba(255,255,255,0.12) 16%, transparent 42%),
-    radial-gradient(circle at 9% 86%, rgba(235,245,255,0.12) 18%, transparent 44%);
-  filter: blur(0.3px);
-  animation: none;
-}
+/* Twinkle overlays removed */
 
 /* Effects layer for transient phenomena (e.g., shooting stars) */
 .stars-effects {
@@ -227,11 +202,7 @@ body.light-theme .twinkle-overlay {
   opacity: 0 !important;
 }
 
-/* Parallax animation disabled (static layers) */
-@keyframes sfParallax {
-  0%   { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(0, 0, 0); }
-}
+/* (No parallax keyframes) */
 
 /* Shooting star */
 .shooting-star {
@@ -345,62 +316,7 @@ body.light-theme .twinkle-overlay {
   background-repeat: no-repeat;
 }
 
-/* Procedural star nodes (JS adds) */
-.sf-star {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.95);
-  opacity: var(--o, 0.85);
-  width: var(--sz, 1.6px);
-  height: var(--sz, 1.6px);
-  left: var(--x, 50%);
-  top: var(--y, 50%);
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 0 calc(var(--sz,1.6px) * 1.4) rgba(255,255,255,0.55));
-  animation: sfTwinkle var(--tw, 4s) steps(2, end) infinite;
-  animation-delay: var(--td, 0s);
-  will-change: opacity, filter;
-  mix-blend-mode: screen;
-}
-.sf-star::after {
-  content: "";
-  position: absolute;
-  inset: -180%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.38), transparent 60%);
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-@keyframes sfTwinkle {
-  0%, 100% { opacity: calc(var(--o,0.9) * 0.85); filter: drop-shadow(0 0 calc(var(--sz,2px) * 1.1) rgba(255,255,255,0.5)); }
-  50%      { opacity: calc(var(--o,0.9) * 1.10); filter: drop-shadow(0 0 calc(var(--sz,2px) * 2.4) rgba(195,210,255,0.95)); }
-}
-
-/* Aggressive blink variant */
-.sf-agg {
-  animation: sfBlinkAgg var(--tw, 3s) steps(2, end) infinite;
-}
-@keyframes sfBlinkAgg {
-  0%, 100% { opacity: calc(var(--o,0.95) * 0.55); filter: drop-shadow(0 0 calc(var(--sz,2px) * 0.9) rgba(255,255,255,0.45)); }
-  45%      { opacity: calc(var(--o,0.95) * 1.25); filter: drop-shadow(0 0 calc(var(--sz,2px) * 3.0) rgba(210,225,255,1)); }
-  55%      { opacity: calc(var(--o,0.95) * 0.75); }
-}
-
-/* Static stars (no per-node animation) */
-.sf-static {
-  animation: none !important;
-}
-
-/* Rare bright beacons */
-.sf-beacon {
-  animation: sfBeacon var(--bk, 18s) steps(2, end) infinite;
-  animation-delay: var(--bd, 0s);
-}
-@keyframes sfBeacon {
-  0%, 6%, 100% { opacity: calc(var(--o,0.8) * 0.4); filter: drop-shadow(0 0 calc(var(--sz,2px) * 0.8) rgba(255,255,255,0.35)); }
-  3%          { opacity: 1; filter: drop-shadow(0 0 calc(var(--sz,2px) * 4.8) rgba(255,255,255,1)) drop-shadow(0 0 calc(var(--sz,2px) * 2.8) rgba(190,210,255,0.9)); }
-}
+/* Procedural star nodes removed — using static CSS dotted layers */
 /* Optional: hide legacy static star container when using procedural system */
 body.proc-stars .stars-container { display: none; }
 

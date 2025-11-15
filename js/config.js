@@ -50,28 +50,5 @@ export function debugError(message, error) {
   }
 }
 
-// Starfield configuration
-export const STARFIELD_CONFIG = {
-  densities: {
-    back: 50,
-    mid: 35,
-    front: 20,
-    sparkle: 8
-  },
-  sizePx: { min: 0.45, max: 2.2 },
-  opacity: { min: 0.55, max: 0.95 },
-  twinkleSec: { min: 2.6, max: 5.4 },
-  parallax: {
-    back: 0.16,
-    mid: 0.30,
-    front: 0.50,
-    sparkle: 0.70
-  },
-  amplitudePx: { back: 7, mid: 11, front: 16, sparkle: 18 },
-  drift: { turnPerSec: 0.02 },
-  hideLegacy: true,
-  // Visual variants
-  aggressiveFraction: { back: 0.05, mid: 0.12, front: 0.25, sparkle: 0.35 },
-  beacon: { perLayer: 2, periodSec: { min: 12, max: 20 } }
-};
+// (Procedural starfield config removed - using static CSS layers)
 
