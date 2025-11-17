@@ -1,5 +1,4 @@
 <!doctype html>
-<!-- TRASH ICON GLOW FIX v3 - IMG with data URI + red glow -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -21,39 +20,9 @@
           html,body { height:100%; margin:0; }
         </style>
 
-  <!-- CSS Files -->
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/starfield.css" />
-  <link rel="stylesheet" href="css/dashboard.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
   <body>
-    <!-- Hidden theme toggle zone (top-left) -->
-    <button id="themeToggleZone" aria-label="Toggle theme test"></button>
-
-    <!-- Moon icon (top-right, fixed) -->
-    <div id="moonIconContainer" aria-hidden="true">
-      <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering:geometricPrecision">
-        <defs>
-          <clipPath id="moonClip">
-            <circle cx="50" cy="50" r="48"/>
-          </clipPath>
-          <mask id="shadowMask" maskUnits="userSpaceOnUse">
-            <!-- White = show shadow; Black = hide shadow (reveal lit area) -->
-            <rect width="100" height="100" fill="white"/>
-            <!-- Movable cutout hides shadow inside this circle (lit area) -->
-            <circle id="litCutout" cx="50" cy="50" r="48" fill="black"/>
-          </mask>
-        </defs>
-        <g clip-path="url(#moonClip)">
-          <image href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
-          <rect x="0" y="0" width="100" height="100" fill="#000" opacity="0.40" mask="url(#shadowMask)"/>
-        </g>
-      </svg>
-    </div>
-
     <!-- Day mode particles (clouds and light rays) -->
     <div class="day-particles-container">
       <!-- Soft floating clouds -->
@@ -76,16 +45,93 @@
     <!-- Milky Way band -->
     <div class="milky-way"></div>
     
+    <!-- Nebula effects -->
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+    <div class="nebula nebula-4"></div>
+    <div class="nebula nebula-5"></div>
+    
     <!-- Multi-layer stars -->
     <div class="stars-layer stars-layer-back"></div>
     <div class="stars-layer stars-layer-mid"></div>
     <div class="stars-layer stars-layer-front"></div>
-    <div class="stars-layer stars-layer-sparkle"></div>
-    <!-- Effects layer (shooting star, flashes) -->
-    <div class="stars-effects"></div>
-
     
+    <!-- Original stars container (enhanced) -->
+    <div class="stars-container">
+      <div class="star star-1"></div>
+      <div class="star star-2"></div>
+      <div class="star star-3"></div>
+      <div class="star star-4"></div>
+      <div class="star star-5"></div>
+      <div class="star star-6"></div>
+      <div class="star star-7"></div>
+      <div class="star star-8"></div>
+      <div class="star star-9"></div>
+      <div class="star star-10"></div>
+      <div class="star star-11"></div>
+      <div class="star star-12"></div>
+      <div class="star star-13"></div>
+      <div class="star star-14"></div>
+      <div class="star star-15"></div>
+      <div class="star star-16"></div>
+      <div class="star star-17"></div>
+      <div class="star star-18"></div>
+      <div class="star star-19"></div>
+      <div class="star star-20"></div>
+      <div class="star star-21"></div>
+      <div class="star star-22"></div>
+      <div class="star star-23"></div>
+      <div class="star star-24"></div>
+      <div class="star star-25"></div>
+      <div class="star star-26"></div>
+      <div class="star star-27"></div>
+      <div class="star star-28"></div>
+      <div class="star star-29"></div>
+      <div class="star star-30"></div>
+      <div class="star star-31"></div>
+      <div class="star star-32"></div>
+      <div class="star star-33"></div>
+      <div class="star star-34"></div>
+      <div class="star star-35"></div>
+      <div class="star star-36"></div>
+      <div class="star star-37"></div>
+      <div class="star star-38"></div>
+      <div class="star star-39"></div>
+      <div class="star star-40"></div>
+      <div class="star star-41"></div>
+      <div class="star star-42"></div>
+      <div class="star star-43"></div>
+      <div class="star star-44"></div>
+      <div class="star star-45"></div>
+      <div class="star star-46"></div>
+      <div class="star star-47"></div>
+      <div class="star star-48"></div>
+      <div class="star star-49"></div>
+      <div class="star star-50"></div>
+      <div class="star star-51"></div>
+      <div class="star star-52"></div>
+      <div class="star star-53"></div>
+      <div class="star star-54"></div>
+      <div class="star star-55"></div>
+      <div class="star star-56"></div>
+      <div class="star star-57"></div>
+      <div class="star star-58"></div>
+      <div class="star star-59"></div>
+      <div class="star star-60"></div>
+      <div class="star star-61"></div>
+      <div class="star star-62"></div>
+      <div class="star star-63"></div>
+      <div class="star star-64"></div>
+      <div class="star star-65"></div>
+    </div>
     
+    <!-- Star Clusters -->
+    <div class="star-cluster cluster-1"></div>
+    <div class="star-cluster cluster-2"></div>
+    <div class="star-cluster cluster-3"></div>
+    <div class="star-cluster cluster-4"></div>
+    <div class="star-cluster cluster-5"></div>
     
   <!-- central area -->
   <div id="center" class="center dashboard-active">
@@ -100,11 +146,7 @@
               <div id="headerCurrentTime" class="header-current-time">--:--:--</div>
               <div id="headerCurrentDate" class="header-current-date">Loading...</div>
             </div>
-            <div id="headerTimeGreeting" class="header-time-greeting">
-              <span id="moonPhaseLabel" class="moon-phase-label">—</span>
-              <span class="separator-dot" aria-hidden="true">•</span>
-              <span id="greetingText">Good morning Maiaaa</span>
-            </div>
+            <div id="headerTimeGreeting" class="header-time-greeting">Good morning Maiaaa</div>
           </div>
         </header>
 
@@ -119,9 +161,7 @@
               <div class="card-header">
                 <h2 class="card-title">Mood</h2>
                 <div class="card-subtitle">How are you feeling today?</div>
-                <button id="clearMood" class="btn-trash" aria-label="Delete moods" title="Delete moods">
-                  <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 32 32'%3e%3cpath fill='white' d='M27 6.25H5a.75.75 0 0 0 0 1.5h1.25V26A1.75 1.75 0 0 0 8 27.75h16A1.75 1.75 0 0 0 25.75 26V7.75H27a.75.75 0 1 0 0-1.5M24.25 26a.25.25 0 0 1-.25.25H8a.25.25 0 0 1-.25-.25V7.75h16.5zm-14-23a.75.75 0 0 1 .75-.75h10a.75.75 0 1 1 0 1.5H11a.75.75 0 0 1-.75-.75'/%3e%3c/svg%3e" alt="" width="20" height="20" class="icon-trash" />
-                </button>
+                <button id="clearMood" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 
@@ -154,9 +194,7 @@
               <div class="card-header">
                 <h2 class="card-title">Tasks</h2>
                 <div class="card-subtitle">Maia's affairs</div>
-                <button id="clearTasks" class="btn-trash" aria-label="Delete tasks" title="Delete tasks">
-                  <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 32 32'%3e%3cpath fill='white' d='M27 6.25H5a.75.75 0 0 0 0 1.5h1.25V26A1.75 1.75 0 0 0 8 27.75h16A1.75 1.75 0 0 0 25.75 26V7.75H27a.75.75 0 1 0 0-1.5M24.25 26a.25.25 0 0 1-.25.25H8a.25.25 0 0 1-.25-.25V7.75h16.5zm-14-23a.75.75 0 0 1 .75-.75h10a.75.75 0 1 1 0 1.5H11a.75.75 0 0 1-.75-.75'/%3e%3c/svg%3e" alt="" width="20" height="20" class="icon-trash" />
-                </button>
+                <button id="clearTasks" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="task-controls">
@@ -181,6 +219,7 @@
               <div class="card-header">
                 <h2 class="card-title">Reminders</h2>
                 <div class="card-subtitle">Important notes</div>
+                <button id="clearReminders" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="reminder-controls">
@@ -196,6 +235,7 @@
               <div class="card-header">
                 <h2 class="card-title">Letters</h2>
                 <div class="card-subtitle">Messages from Gesan</div>
+                <button id="clearLetters" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="coming-soon">
@@ -214,7 +254,6 @@
     </main>
   </div>
 
-  <!-- JavaScript Modules -->
-  <script type="module" src="js/main.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>
