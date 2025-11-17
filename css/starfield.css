@@ -1,0 +1,38 @@
+/* Minimal starfield to restore stars visibility */
+
+/* Layered star canvases */
+.stars-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: transparent;
+}
+
+/* Static star container with individually positioned dots */
+.stars-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stars-container .star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
+}
+
+/* Mild twinkle */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.stars-container .star {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+

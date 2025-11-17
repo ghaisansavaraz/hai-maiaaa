@@ -38,14 +38,6 @@
           <clipPath id="moonDisc">
             <circle cx="50" cy="50" r="49"/>
           </clipPath>
-          <!-- Mask selects ONLY the unlit region for the shadow overlay (Jakarta vertical view) -->
-          <mask id="unlitMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type:luminance">
-            <rect width="100" height="100" fill="black"/>
-            <!-- Potential unlit area: full disc -->
-            <circle id="unlitDisc" cx="50" cy="50" r="49.1" fill="white"/>
-            <!-- Cut out the lit crescent/hemisphere by offsetting this disc VERTICALLY -->
-            <circle id="litCutout" cx="50" cy="98" r="48.3" fill="black"/>
-          </mask>
         </defs>
         <!-- Base texture (full) -->
         <image id="moonImageBase"
@@ -54,10 +46,7 @@
                x="0" y="0" width="100" height="100"
                preserveAspectRatio="xMidYMid slice"
                clip-path="url(#moonDisc)"/>
-        <!-- Single dim shadow overlay only on unlit region -->
-        <g id="shadowOverlay" mask="url(#unlitMask)" clip-path="url(#moonDisc)">
-          <circle id="shadowOverlayCircle" cx="50" cy="50" r="49.15" fill="black" opacity="0.85"/>
-        </g>
+        <!-- Static moon only (phases disabled) -->
       </svg>
     </div>
 

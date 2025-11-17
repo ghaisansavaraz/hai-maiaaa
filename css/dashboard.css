@@ -88,10 +88,28 @@ body.light-theme .dashboard {
 .time-digit {
   display: inline-block;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ensure smooth GPU-accelerated animation even under zoom/scale */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 
 .time-digit.flipping {
-  animation: particleFade 0.6s ease-out;
+  animation: particleFade 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Re-introduce the particleFade animation (animations.css was removed) */
+@keyframes particleFade {
+  0% {
+    opacity: 0.35;
+    transform: translateY(4px);
+    filter: blur(0.15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: none;
+  }
 }
 
 .header-current-date {
