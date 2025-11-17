@@ -1,7 +1,7 @@
 /* Clock and Time Display System */
 
 import { debugLog, debugError } from './config.js';
-import { renderMoonFromCache } from './moon-sync.js';
+import { updateMoonDisplay } from './moon.js';
 
 let lastTime = ''; // Track time changes for individual digit flipping
 
@@ -100,8 +100,8 @@ export function updateTime() {
       debugLog("Header greeting updated:", greeting);
     }
     
-    // Update moon display (phase label + mask) - uses cache or local calc (no network call)
-    renderMoonFromCache(now);
+    // Update moon display (phase label + mask)
+    updateMoonDisplay(now);
     
   } catch (error) {
     debugError("Failed to update header time", error);

@@ -6,7 +6,6 @@ import { startTimeDisplay } from './clock.js';
 import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mood.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
-import { initMoonSync } from './moon-sync.js';
 
 let dynamicBackground = null;
 
@@ -187,9 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Start time display immediately (always visible)
     startTimeDisplay();
-    
-    // Initialize moon phase sync (fetches from proxy, falls back to local calc)
-    initMoonSync();
     
     // Show dashboard immediately
     showDashboard();

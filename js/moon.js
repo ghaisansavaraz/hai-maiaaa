@@ -1,4 +1,4 @@
-/* Moon Phase Calculation - Pure Functions for Jakarta Timezone */
+/* Moon phase calculation and UI update for Jakarta timezone (UTC+7) */
 
 // Synodic month (mean lunar cycle) in days
 const SYNODIC_MONTH_DAYS = 29.530588853;
@@ -12,7 +12,7 @@ function toJulianDay(date) {
 	return date.getTime() / MS_PER_DAY + UNIX_EPOCH_TO_JD;
 }
 
-export function getJakartaDate(now = new Date()) {
+function getJakartaDate(now = new Date()) {
 	// Convert current instant to Asia/Jakarta local clock time (UTC+7, no DST)
 	// Compute UTC ms, then add +7 hours
 	const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -41,12 +41,7 @@ function phaseNameFromPhase(phase) {
 	return "Waning Crescent";
 }
 
-/**
- * Calculate moon phase for Jakarta timezone
- * @param {Date} now - Current date/time (defaults to now)
- * @returns {{fraction: number, waxing: boolean, name: string, phase: number, phaseAngle: number, ageDays: number}}
- */
-export function getJakartaPhase(now = new Date()) {
+export function getMoonPhaseJakarta(now = new Date()) {
 	const jakarta = getJakartaDate(now);
 	const jd = toJulianDay(jakarta);
 	const daysSinceRef = jd - REFERENCE_NEW_MOON_JD;
@@ -63,4 +58,46 @@ export function getJakartaPhase(now = new Date()) {
 	const name = phaseNameFromPhase(phase);
 	return { fraction, phase, phaseAngle, waxing, name, ageDays };
 }
+
+export function updateMoonDisplay(now = new Date()) {
+	// Compute phase
+	const p = getMoonPhaseJakarta(now);
+
+	// Update label (inline with greeting)
+	const label = document.getElementById("moonPhaseLabel");
+	if (label) {
+		label.textContent = p.name;
+		label.setAttribute(
+			"aria-label",
+			`${p.name}, ${(p.fraction * 100).toFixed(0)}% illuminated`
+		);
+	}
+
+	// Update SVG mask overlay geometry - Jakarta view (vertical orientation)
+	const litCutout = document.getElementById("litCutout");
+	if (litCutout) {
+		// SVG viewBox 0..100, r = 49, center at (50,50)
+		const R = 49;
+		const cyBase = 50;
+		// Jakarta view: waxing lit on bottom, waning lit on top
+		// For waxing: shadow moves from top (cy=2) to bottom (cy=98)
+		// For waning: shadow moves from bottom (cy=98) to top (cy=2)
+		const sign = (p.waxing ? 1 : -1);
+		// Unlit mask cutout distance: 2R at new, 0 at full
+		const distUnlit = 2 * R * (1 - p.fraction);
+		// Position the cutout disc vertically
+		const cy = cyBase - sign * distUnlit;
+		litCutout.setAttribute("cy", cy.toFixed(2));
+	}
+
+	// Ensure shadow opacity is at configured darkness (single shadow)
+	const shadowOverlay = document.getElementById("shadowOverlayCircle");
+	if (shadowOverlay) {
+		const root = document.documentElement;
+		const cssOpacity = getComputedStyle(root).getPropertyValue("--moon-shadow-opacity").trim();
+		const o = cssOpacity ? parseFloat(cssOpacity) : 0.85;
+		shadowOverlay.setAttribute("opacity", isNaN(o) ? "0.85" : String(o));
+	}
+}
+
 
