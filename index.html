@@ -22,12 +22,12 @@
         </style>
 
   <!-- CSS Files -->
-  <link rel="stylesheet" href="css/base.css?v=2" />
-  <!-- animations.css removed; animations moved inline -->
-  <link rel="stylesheet" href="css/starfield.css?v=2" />
-  <link rel="stylesheet" href="css/dashboard.css?v=2" />
-  <link rel="stylesheet" href="css/components.css?v=2" />
-  <link rel="stylesheet" href="css/responsive.css?v=2" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/starfield.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
 </head>
   <body>
     <!-- Moon icon (top-right, fixed) -->
@@ -38,24 +38,26 @@
           <clipPath id="moonDisc">
             <circle cx="50" cy="50" r="49"/>
           </clipPath>
-          <!-- Fallback gradient if image fails -->
-          <radialGradient id="moonFallback" cx="50%" cy="45%" r="60%">
-            <stop offset="0%" stop-color="#f7f7f2"/>
-            <stop offset="60%" stop-color="#e4e4df"/>
-            <stop offset="100%" stop-color="#cfcfcb"/>
-          </radialGradient>
+          <!-- Mask selects ONLY the unlit region for the shadow overlay -->
+          <mask id="unlitMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type:luminance">
+            <rect width="100" height="100" fill="black"/>
+            <!-- Potential unlit area: full disc -->
+            <circle id="unlitDisc" cx="50" cy="50" r="49.1" fill="white"/>
+            <!-- Cut out the lit crescent/hemisphere by offsetting this disc -->
+            <circle id="litCutout" cx="98" cy="50" r="48.3" fill="black"/>
+          </mask>
         </defs>
-        <!-- Base fallback disc -->
-        <circle cx="50" cy="50" r="49" fill="url(#moonFallback)" clip-path="url(#moonDisc)"/>
         <!-- Base texture (full) -->
         <image id="moonImageBase"
                href="assets/moon/moonmap.jpg"
                xlink:href="assets/moon/moonmap.jpg"
                x="0" y="0" width="100" height="100"
                preserveAspectRatio="xMidYMid slice"
-               onerror="this.style.display='none'"
                clip-path="url(#moonDisc)"/>
-        <!-- Static moon only (phases disabled) -->
+        <!-- Single dim shadow overlay only on unlit region -->
+        <g id="shadowOverlay" mask="url(#unlitMask)" clip-path="url(#moonDisc)">
+          <circle id="shadowOverlayCircle" cx="50" cy="50" r="49.15" fill="black" opacity="0.85"/>
+        </g>
       </svg>
     </div>
 
@@ -290,6 +292,6 @@
   </div>
 
   <!-- JavaScript Modules -->
-  <script type="module" src="js/main.js?v=2"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -1251,20 +1251,6 @@ body.light-theme .mood-category:not(:disabled) {
   animation: slideOutFade 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Animations restored (animations.css was removed) */
-@keyframes slideInFade {
-  0% { opacity: 0; transform: translateY(6px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideOutFade {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(6px); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 .reminder-card-content {
   flex: 1;
   min-width: 0;
