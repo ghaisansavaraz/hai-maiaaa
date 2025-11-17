@@ -47,28 +47,6 @@ function revealSections() {
   });
 }
 
-// Starfield: randomly place discrete stars if present
-function initStarfieldPositions() {
-  try {
-    const stars = document.querySelectorAll('.stars-container .star');
-    if (!stars || stars.length === 0) return;
-    stars.forEach((star, idx) => {
-      // Deterministic pseudo-random using index for stable layout across reloads
-      const seed = (idx + 1) * 9301 % 233280;
-      const rand1 = (seed / 233280);
-      const rand2 = ((seed * 1103515245 + 12345) % 2147483647) / 2147483647;
-      const top = Math.floor(rand1 * 100);
-      const left = Math.floor(rand2 * 100);
-      star.style.top = `${top}%`;
-      star.style.left = `${left}%`;
-      star.style.opacity = String(0.6 + (rand2 * 0.4)); // 0.6–1.0
-    });
-    debugLog(`Positioned ${stars.length} stars`);
-  } catch (e) {
-    debugError("initStarfieldPositions failed:", e);
-  }
-}
-
 // Letters system
 function renderLetters() {
   const lettersContainer = document.getElementById("lettersContainer");
@@ -182,51 +160,36 @@ document.addEventListener("DOMContentLoaded", () => {
   try {
     debugLog("Initializing application...");
     
-    // Apply lightweight, non-blocking initializations first
-    try {
-      startTimeDisplay(); // start clock immediately
-    } catch (e) {
-      debugError("startTimeDisplay failed:", e);
-    }
-    try {
-      initMoonSync(); // kick off moon sync early
-    } catch (e) {
-      debugError("initMoonSync failed:", e);
-    }
+    // Initialize dynamic background first
+    dynamicBackground = new DynamicBackground();
     
-    // Initialize dynamic background (non-critical)
-    try {
-      dynamicBackground = new DynamicBackground();
-    } catch (e) {
-      debugError("DynamicBackground failed:", e);
-    }
-    
-    // Apply time-based theme (non-critical)
-    try {
-      applyTheme();
-    } catch (e) {
-      debugError("applyTheme failed:", e);
-    }
+    // Apply time-based theme
+    applyTheme();
     
     // Initialize card activation system
-    try { initCardActivation(); } catch (e) { debugError("initCardActivation failed:", e); }
+    initCardActivation();
     
     // Initialize all components
-    try { loadMoods(); } catch (e) { debugError("loadMoods failed:", e); }
-    try { loadReminders(); } catch (e) { debugError("loadReminders failed:", e); }
-    try { loadTasks(); } catch (e) { debugError("loadTasks failed:", e); }
-    try { renderLetters(); } catch (e) { debugError("renderLetters failed:", e); }
+    loadMoods();
+    loadReminders();
+    loadTasks();
+    renderLetters();
     
     // Initialize event listeners
-    try { initMoodEventListeners(); } catch (e) { debugError("initMoodEventListeners failed:", e); }
-    try { initReminderEventListeners(); } catch (e) { debugError("initReminderEventListeners failed:", e); }
-    try { initTaskEventListeners(); } catch (e) { debugError("initTaskEventListeners failed:", e); }
-    try { initClearButtons(); } catch (e) { debugError("initClearButtons failed:", e); }
-    try { initEditorKey(); } catch (e) { debugError("initEditorKey failed:", e); }
-    try { initStarfieldPositions(); } catch (e) { debugError("initStarfieldPositions failed:", e); }
+    initMoodEventListeners();
+    initReminderEventListeners();
+    initTaskEventListeners();
+    initClearButtons();
+    initEditorKey();
     
     // Force re-render tasks to remove any old flower elements from cache
-    try { loadTasks(); } catch (e) { debugError("second loadTasks failed:", e); }
+    loadTasks();
+    
+    // Start time display immediately (always visible)
+    startTimeDisplay();
+    
+    // Initialize moon phase sync (fetches from proxy, falls back to local calc)
+    initMoonSync();
     
     // Show dashboard immediately
     showDashboard();
