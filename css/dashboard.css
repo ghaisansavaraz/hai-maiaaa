@@ -147,7 +147,13 @@ body.light-theme .moon-phase-label {
 }
 
 /* Hide moon and its label during day (light theme) */
-/* Daytime: keep moon and label visible, adjust tones via theme colors */
+body.light-theme #moonIconContainer {
+  display: none !important;
+}
+body.light-theme .moon-phase-label,
+body.light-theme .separator-dot {
+  display: none !important;
+}
 
 /* Dashboard Grid Layout */
 .dashboard-grid {

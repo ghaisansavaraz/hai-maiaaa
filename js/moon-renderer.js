@@ -1,89 +1,33 @@
-/* Moon Phase Renderer - compact engine inline (no extra files) */
+/* Moon Phase Renderer - DOM/SVG Updates */
 
 /**
  * Render moon phase visualization and label
- * @param {{fraction: number, waxing: boolean, name: string}} phaseData
+ * @param {{fraction: number, waxing: boolean, name: string}} phaseData - Moon phase data
  */
 export function renderMoon(phaseData) {
 	const { fraction, waxing, name } = phaseData;
 
-	// Visible label: name only (no percentage)
+	// Update label (inline with greeting)
 	const label = document.getElementById("moonPhaseLabel");
 	if (label) {
-		label.textContent = `${name}`;
-		label.setAttribute("aria-label", `${name}, ${(fraction * 100).toFixed(0)}% illuminated`);
+		label.textContent = `${name} · ${(fraction * 100).toFixed(0)}%`;
+		label.setAttribute(
+			"aria-label",
+			`${name}, ${(fraction * 100).toFixed(0)}% illuminated`
+		);
 	}
 
+	// Update SVG cutout position for shadow mask
 	const litCutout = document.getElementById("litCutout");
-	if (!litCutout) return;
-
-	// Moon disc radius and center (from SVG)
-	const R = 48;
-	const center = 50;
-
-	// Tunables to match timeanddate-style illustration
-	const TERMINATOR_SCALE = 1.85;   // >1 flattens the arc (try 1.70–1.95)
-	const SEAM_EPS = 0.25;           // avoids anti-aliased hairline along terminator
-	const BASE_ANGLE_DEG = -35;      // diagonal like reference
-
-	// Use a larger cutout radius for a flatter arc
-	const r2 = R * TERMINATOR_SCALE;
-	litCutout.setAttribute("r", r2.toFixed(2));
-
-	// Flip diagonal between waxing/waning for Jakarta view
-	// If bright side looks inverted, swap the 180°: (waxing ? 0 : 180)
-	const angleDeg = BASE_ANGLE_DEG + (waxing ? 180 : 0);
-	const rad = angleDeg * Math.PI / 180;
-	const vx = Math.sin(rad);
-	const vy = -Math.cos(rad); // screen Y grows down
-
-	// Compute distance that yields the requested lit fraction using two-circle overlap inversion
-	const f = clamp01(fraction);
-	const dRaw = distanceForOverlapDifferentR(f, R, r2);
-	const d = Math.max(0, Math.min(R + r2, dRaw - SEAM_EPS));
-
-	const cx = center + vx * d;
-	const cy = center + vy * d;
-
-	litCutout.setAttribute("cx", cx.toFixed(2));
-	litCutout.setAttribute("cy", cy.toFixed(2));
-}
-
-/* Helpers */
-
-function clamp01(x) {
-	return x < 0 ? 0 : (x > 1 ? 1 : x);
-}
-
-// Invert overlap: find distance d so that overlap(r1,r2,d)/area(r1) ~= f
-function distanceForOverlapDifferentR(f, r1, r2) {
-	if (f >= 1) return 0;           // full lit → centers coincide
-	if (f <= 0) return r1 + r2;     // new → no overlap
-	let lo = 0, hi = r1 + r2;
-	for (let i = 0; i < 40; i++) {
-		const mid = (lo + hi) / 2;
-		const fm = overlapFractionDifferentR(mid, r1, r2);
-		if (fm > f) lo = mid; else hi = mid;
+	if (litCutout) {
+		const R = 48;      // close to clip radius
+		const center = 50; // SVG center
+		// Offset mapping: 0% -> 2R (no overlap -> new), 50% -> R (half), 100% -> 0 (full)
+		const offset = (1 - fraction) * 2 * R;
+		// Direction: waning -> move downward (bottom lit), waxing -> move upward (top lit)
+		const dir = waxing ? -1 : 1;
+		const cy = center + dir * (offset - R);
+		litCutout.setAttribute("cy", cy.toFixed(2));
 	}
-	return (lo + hi) / 2;
 }
 
-function overlapFractionDifferentR(d, r1, r2) {
-	const area1 = Math.PI * r1 * r1;
-	return overlapAreaDifferentR(d, r1, r2) / area1;
-}
-
-// Overlap area for two circles with radii r1 and r2 separated by distance d
-function overlapAreaDifferentR(d, r1, r2) {
-	if (d >= r1 + r2) return 0;
-	if (d <= Math.abs(r2 - r1)) {
-		const rMin = Math.min(r1, r2);
-		return Math.PI * rMin * rMin;
-	}
-	const clamp = (x) => x < -1 ? -1 : (x > 1 ? 1 : x);
-	const a = Math.acos(clamp((d*d + r1*r1 - r2*r2) / (2*d*r1)));
-	const b = Math.acos(clamp((d*d + r2*r2 - r1*r1) / (2*d*r2)));
-	const area1 = r1*r1*a - 0.5*r1*r1*Math.sin(2*a);
-	const area2 = r2*r2*b - 0.5*r2*r2*Math.sin(2*b);
-	return area1 + area2;
-}
