@@ -328,7 +328,7 @@ export function loadMoods() {
           }
         } else {
           if (e.detail === 1) {
-            cycleMoodIntensity(moodData.id);
+          cycleMoodIntensity(moodData.id);
           }
         }
       });
@@ -337,7 +337,7 @@ export function loadMoods() {
       tag.addEventListener("dblclick", (e) => {
         e.preventDefault();
         if (!moodSelectionMode) {
-          editMoodNote(moodData.id);
+        editMoodNote(moodData.id);
         }
       });
       

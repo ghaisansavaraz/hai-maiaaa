@@ -95,7 +95,7 @@ export function updateTime() {
       if (greetingTextSpan) {
         greetingTextSpan.textContent = greeting;
       } else {
-        headerTimeGreeting.textContent = greeting;
+      headerTimeGreeting.textContent = greeting;
       }
       debugLog("Header greeting updated:", greeting);
     }
