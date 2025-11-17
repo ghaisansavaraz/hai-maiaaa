@@ -160,36 +160,50 @@ document.addEventListener("DOMContentLoaded", () => {
   try {
     debugLog("Initializing application...");
     
-    // Initialize dynamic background first
-    dynamicBackground = new DynamicBackground();
+    // Apply lightweight, non-blocking initializations first
+    try {
+      startTimeDisplay(); // start clock immediately
+    } catch (e) {
+      debugError("startTimeDisplay failed:", e);
+    }
+    try {
+      initMoonSync(); // kick off moon sync early
+    } catch (e) {
+      debugError("initMoonSync failed:", e);
+    }
     
-    // Apply time-based theme
-    applyTheme();
+    // Initialize dynamic background (non-critical)
+    try {
+      dynamicBackground = new DynamicBackground();
+    } catch (e) {
+      debugError("DynamicBackground failed:", e);
+    }
+    
+    // Apply time-based theme (non-critical)
+    try {
+      applyTheme();
+    } catch (e) {
+      debugError("applyTheme failed:", e);
+    }
     
     // Initialize card activation system
-    initCardActivation();
+    try { initCardActivation(); } catch (e) { debugError("initCardActivation failed:", e); }
     
     // Initialize all components
-    loadMoods();
-    loadReminders();
-    loadTasks();
-    renderLetters();
+    try { loadMoods(); } catch (e) { debugError("loadMoods failed:", e); }
+    try { loadReminders(); } catch (e) { debugError("loadReminders failed:", e); }
+    try { loadTasks(); } catch (e) { debugError("loadTasks failed:", e); }
+    try { renderLetters(); } catch (e) { debugError("renderLetters failed:", e); }
     
     // Initialize event listeners
-    initMoodEventListeners();
-    initReminderEventListeners();
-    initTaskEventListeners();
-    initClearButtons();
-    initEditorKey();
+    try { initMoodEventListeners(); } catch (e) { debugError("initMoodEventListeners failed:", e); }
+    try { initReminderEventListeners(); } catch (e) { debugError("initReminderEventListeners failed:", e); }
+    try { initTaskEventListeners(); } catch (e) { debugError("initTaskEventListeners failed:", e); }
+    try { initClearButtons(); } catch (e) { debugError("initClearButtons failed:", e); }
+    try { initEditorKey(); } catch (e) { debugError("initEditorKey failed:", e); }
     
     // Force re-render tasks to remove any old flower elements from cache
-    loadTasks();
-    
-    // Start time display immediately (always visible)
-    startTimeDisplay();
-    
-    // Initialize moon phase sync (fetches from proxy, falls back to local calc)
-    initMoonSync();
+    try { loadTasks(); } catch (e) { debugError("second loadTasks failed:", e); }
     
     // Show dashboard immediately
     showDashboard();

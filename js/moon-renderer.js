@@ -10,7 +10,7 @@ export function renderMoon(phaseData) {
 	// Update label (inline with greeting)
 	const label = document.getElementById("moonPhaseLabel");
 	if (label) {
-		label.textContent = `${name} · ${(fraction * 100).toFixed(0)}%`;
+		label.textContent = `${name}`;
 		label.setAttribute(
 			"aria-label",
 			`${name}, ${(fraction * 100).toFixed(0)}% illuminated`
