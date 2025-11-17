@@ -1,0 +1,11 @@
+# Netlify Configuration
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/moon"
+  to = "/.netlify/functions/moon"
+  status = 200
+

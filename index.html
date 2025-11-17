@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- TRASH ICON GLOW FIX v3 - IMG with data URI + red glow -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -20,9 +21,36 @@
           html,body { height:100%; margin:0; }
         </style>
 
-  <link rel="stylesheet" href="style.css" />
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/starfield.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
 </head>
   <body>
+    <!-- Moon icon (top-right, fixed) -->
+    <div id="moonIconContainer" aria-hidden="true">
+      <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering:geometricPrecision">
+        <defs>
+          <clipPath id="moonClip">
+            <circle cx="50" cy="50" r="48"/>
+          </clipPath>
+          <mask id="shadowMask" maskUnits="userSpaceOnUse">
+            <!-- White = show shadow; Black = hide shadow (reveal lit area) -->
+            <rect width="100" height="100" fill="white"/>
+            <!-- Movable cutout hides shadow inside this circle (lit area) -->
+            <circle id="litCutout" cx="50" cy="50" r="48" fill="black"/>
+          </mask>
+        </defs>
+        <g clip-path="url(#moonClip)">
+          <image href="assets/moon/moonmap.jpg" xlink:href="assets/moon/moonmap.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
+          <rect x="0" y="0" width="100" height="100" fill="#000" opacity="0.40" mask="url(#shadowMask)"/>
+        </g>
+      </svg>
+    </div>
+
     <!-- Day mode particles (clouds and light rays) -->
     <div class="day-particles-container">
       <!-- Soft floating clouds -->
@@ -44,13 +72,6 @@
     
     <!-- Milky Way band -->
     <div class="milky-way"></div>
-    
-    <!-- Nebula effects -->
-    <div class="nebula nebula-1"></div>
-    <div class="nebula nebula-2"></div>
-    <div class="nebula nebula-3"></div>
-    <div class="nebula nebula-4"></div>
-    <div class="nebula nebula-5"></div>
     
     <!-- Multi-layer stars -->
     <div class="stars-layer stars-layer-back"></div>
@@ -146,7 +167,11 @@
               <div id="headerCurrentTime" class="header-current-time">--:--:--</div>
               <div id="headerCurrentDate" class="header-current-date">Loading...</div>
             </div>
-            <div id="headerTimeGreeting" class="header-time-greeting">Good morning Maiaaa</div>
+            <div id="headerTimeGreeting" class="header-time-greeting">
+              <span id="moonPhaseLabel" class="moon-phase-label">—</span>
+              <span class="separator-dot" aria-hidden="true">•</span>
+              <span id="greetingText">Good morning Maiaaa</span>
+            </div>
           </div>
         </header>
 
@@ -161,7 +186,9 @@
               <div class="card-header">
                 <h2 class="card-title">Mood</h2>
                 <div class="card-subtitle">How are you feeling today?</div>
-                <button id="clearMood" class="btn-clear">Clear</button>
+                <button id="clearMood" class="btn-trash" aria-label="Delete moods" title="Delete moods">
+                  <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 32 32'%3e%3cpath fill='white' d='M27 6.25H5a.75.75 0 0 0 0 1.5h1.25V26A1.75 1.75 0 0 0 8 27.75h16A1.75 1.75 0 0 0 25.75 26V7.75H27a.75.75 0 1 0 0-1.5M24.25 26a.25.25 0 0 1-.25.25H8a.25.25 0 0 1-.25-.25V7.75h16.5zm-14-23a.75.75 0 0 1 .75-.75h10a.75.75 0 1 1 0 1.5H11a.75.75 0 0 1-.75-.75'/%3e%3c/svg%3e" alt="" width="20" height="20" class="icon-trash" />
+                </button>
               </div>
               <div class="card-content">
                 
@@ -194,7 +221,9 @@
               <div class="card-header">
                 <h2 class="card-title">Tasks</h2>
                 <div class="card-subtitle">Maia's affairs</div>
-                <button id="clearTasks" class="btn-clear">Clear</button>
+                <button id="clearTasks" class="btn-trash" aria-label="Delete tasks" title="Delete tasks">
+                  <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 32 32'%3e%3cpath fill='white' d='M27 6.25H5a.75.75 0 0 0 0 1.5h1.25V26A1.75 1.75 0 0 0 8 27.75h16A1.75 1.75 0 0 0 25.75 26V7.75H27a.75.75 0 1 0 0-1.5M24.25 26a.25.25 0 0 1-.25.25H8a.25.25 0 0 1-.25-.25V7.75h16.5zm-14-23a.75.75 0 0 1 .75-.75h10a.75.75 0 1 1 0 1.5H11a.75.75 0 0 1-.75-.75'/%3e%3c/svg%3e" alt="" width="20" height="20" class="icon-trash" />
+                </button>
               </div>
               <div class="card-content">
                 <div class="task-controls">
@@ -219,7 +248,6 @@
               <div class="card-header">
                 <h2 class="card-title">Reminders</h2>
                 <div class="card-subtitle">Important notes</div>
-                <button id="clearReminders" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="reminder-controls">
@@ -235,7 +263,6 @@
               <div class="card-header">
                 <h2 class="card-title">Letters</h2>
                 <div class="card-subtitle">Messages from Gesan</div>
-                <button id="clearLetters" class="btn-clear">Clear</button>
               </div>
               <div class="card-content">
                 <div class="coming-soon">
@@ -254,6 +281,7 @@
     </main>
   </div>
 
-  <script src="script.js?v=3"></script>
+  <!-- JavaScript Modules -->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

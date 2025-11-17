@@ -1,0 +1,153 @@
+/* Base Styles - Variables, Resets, and Body Styles */
+
+:root {
+  color-scheme: dark;
+  --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-lg: 0 16px 64px rgba(0,0,0,0.15);
+  --shadow-xl: 0 24px 96px rgba(0,0,0,0.2);
+  --blur-sm: blur(8px);
+  --blur-md: blur(16px);
+  --blur-lg: blur(32px);
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.6s ease;
+  --gradient-primary: linear-gradient(135deg, rgba(255,160,195,0.1), rgba(190,160,255,0.1));
+  --gradient-secondary: linear-gradient(135deg, rgba(140,180,255,0.1), rgba(255,200,160,0.1));
+  
+  /* Dynamic background variables */
+  --bg-primary: #000000;
+  --bg-secondary: #111111;
+  --bg-gradient: linear-gradient(135deg, #000000, #111111);
+  --accent-color: rgba(255,255,255,0.1);
+  --star-color: rgba(255,255,255,0.8);
+  
+  /* Luxury starfield colors */
+  --star-color-dim: rgba(255,255,255,0.3);
+  --star-color-mid: rgba(255,255,255,0.6);
+  --star-color-bright: rgba(255,255,255,0.9);
+}
+
+/* System accent color detection */
+@media (prefers-color-scheme: light) {
+  :root {
+    --accent-color: #007AFF;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-color: #0A84FF;
+  }
+}
+
+/* Robust black background */
+body {
+  font-family: var(--font-stack);
+  margin: 0;
+  min-height: 100vh;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #000000 !important;
+  color: #ffffff;
+  position: relative;
+  padding: 0;
+  transition: color 0.5s ease;
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+}
+
+/* Light theme - white background with black dashboard */
+body.light-theme {
+  background: #ffffff !important;
+  color: #000000 !important;
+  color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+}
+
+/* AGGRESSIVE OVERRIDE - Force dark mode and prevent light vignette */
+* {
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+}
+
+html, body {
+  background: var(--bg-gradient) !important;
+  color: #fff !important;
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+}
+
+/* Prevent any browser default styling that causes light vignette */
+body {
+  background-image: none !important;
+  background-attachment: fixed !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Override any light mode browser defaults */
+html {
+  background: var(--bg-gradient) !important;
+  filter: none !important;
+}
+
+/* Prevent light mode corner effects */
+body::before,
+body::after {
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Remove any browser light mode vignette effects */
+html, body, * {
+  background-image: none !important;
+  box-shadow: none !important;
+  border-image: none !important;
+}
+
+/* Override any browser light mode defaults */
+:root {
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
+}
+
+/* Center content */
+.center { 
+  position: relative; 
+  z-index: 2; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 18px; 
+  padding: 20px;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  justify-content: center;
+  zoom: 0.8;
+  -moz-transform: scale(0.8);
+  -moz-transform-origin: top center;
+}
+
+/* When dashboard is visible, change center container to flex-start */
+.center.dashboard-active {
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 60px;
+}
+
+.hidden { 
+  display: none; 
+}
+
