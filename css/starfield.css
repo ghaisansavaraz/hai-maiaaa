@@ -194,6 +194,16 @@ body.show-stars .stars-effects {
   opacity: 1 !important;
 }
 
+/* Fail-safe: show stars automatically in dark/night themes */
+body.dark-theme .stars-layer,
+body.dark-theme .milky-way,
+body.dark-theme .stars-effects,
+body.night-theme .stars-layer,
+body.night-theme .milky-way,
+body.night-theme .stars-effects {
+  opacity: 1 !important;
+}
+
 /* Hide sky elements in light theme (daytime) */
 body.light-theme .stars-layer,
 body.light-theme .milky-way,
