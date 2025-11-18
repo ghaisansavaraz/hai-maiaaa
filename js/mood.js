@@ -520,7 +520,6 @@ function applyMoodBookState() {
   const bookCover = section.querySelector(".book-cover");
   const bookInterior = section.querySelector(".book-interior");
   const claspButton = document.getElementById("moodBookClasp");
-  const dashboardGrid = document.querySelector(".dashboard-grid");
 
   const isClosed = moodBookClosed;
 
@@ -529,9 +528,6 @@ function applyMoodBookState() {
   bookShell?.classList.toggle("open", !isClosed);
   bookCover?.classList.toggle("open", !isClosed);
   bookInterior?.classList.toggle("open", !isClosed);
-  if (dashboardGrid) {
-    dashboardGrid.classList.toggle("book-open", !isClosed);
-  }
 
   if (claspButton) {
     claspButton.setAttribute(
