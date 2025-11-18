@@ -345,15 +345,19 @@
   color: rgba(255, 255, 255, 0.6);
   font-size: 18px;
   font-weight: 300;
+  border-color: rgba(255, 107, 107, 0.15);
+  box-shadow: 0 0 10px rgba(255,107,107,0.25),
+              0 0 18px rgba(255,107,107,0.15);
+  animation: deletePulse 2.4s ease-in-out infinite;
 }
 
-.btn-delete:hover {
+.btn-delete:hover,
+.reminder-card.active .btn-delete {
   background: 
     linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.1)),
     linear-gradient(45deg, rgba(255, 107, 107, 0.12), rgba(255, 107, 107, 0.08));
   border-color: rgba(255, 107, 107, 0.4);
   color: rgba(255, 107, 107, 1);
-  animation: deletePulse 1.5s ease-in-out infinite !important;
   transform: translateY(-2px);
 }
 
