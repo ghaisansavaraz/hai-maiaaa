@@ -242,75 +242,75 @@ body:not(.light-theme) .stars-container {
 
 @keyframes starTwinkle {
   0%, 100% {
-    opacity: 0.25;
-    filter: brightness(0.9);
+    opacity: 0.2;
+    filter: brightness(0.7);
   }
   50% {
     opacity: 1;
-    filter: brightness(1.6);
+    filter: brightness(2.2);
   }
 }
 
 /* Star sparkle effect (more visible blinking) */
 @keyframes starSparkle {
   0%, 100% {
-    opacity: 0.4;
-    filter: brightness(1.05);
+    opacity: 0.3;
+    filter: brightness(0.7);
   }
   25% {
     opacity: 1;
-    filter: brightness(2.2);
+    filter: brightness(2.5);
   }
   50% {
-    opacity: 0.25;
-    filter: brightness(0.85);
+    opacity: 0.2;
+    filter: brightness(0.6);
   }
   75% {
     opacity: 1;
-    filter: brightness(2);
+    filter: brightness(2.3);
   }
 }
 
 /* Minimalist visible blink - soft cadence */
 @keyframes starBlinkVisible {
   0%, 100% {
-    opacity: 0.3;
-    filter: brightness(0.9);
+    opacity: 0.25;
+    filter: brightness(0.7);
     box-shadow:
       0 0 4px rgba(255, 255, 255, 0.4),
       0 0 10px rgba(255, 255, 255, 0.2);
   }
   45% {
     opacity: 0.75;
-    filter: brightness(1.25);
+    filter: brightness(1.5);
     box-shadow:
-      0 0 6px rgba(255, 255, 255, 0.45),
-      0 0 14px rgba(255, 255, 255, 0.25);
+      0 0 8px rgba(255, 255, 255, 0.6),
+      0 0 16px rgba(255, 255, 255, 0.3);
   }
   60% {
-    opacity: 0.95;
-    filter: brightness(1.6);
+    opacity: 1;
+    filter: brightness(2);
     box-shadow:
-      0 0 10px rgba(255, 255, 255, 0.7),
-      0 0 20px rgba(255, 255, 255, 0.35);
+      0 0 12px rgba(255, 255, 255, 0.8),
+      0 0 24px rgba(255, 255, 255, 0.4);
   }
 }
 
 /* Star pulse with glow effect */
 @keyframes starPulseGlow {
   0%, 90%, 100% {
-    opacity: 0.4;
+    opacity: 0.3;
     box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
-    filter: brightness(1);
+    filter: brightness(0.8);
   }
   95% {
     opacity: 1;
     box-shadow: 
-      0 0 20px rgba(255, 255, 255, 1),
-      0 0 40px rgba(255, 255, 255, 0.8),
-      0 0 60px rgba(255, 255, 255, 0.6),
-      0 0 80px rgba(255, 255, 255, 0.4);
-    filter: brightness(3);
+      0 0 25px rgba(255, 255, 255, 1),
+      0 0 50px rgba(255, 255, 255, 0.9),
+      0 0 75px rgba(255, 255, 255, 0.7),
+      0 0 100px rgba(255, 255, 255, 0.5);
+    filter: brightness(3.5);
   }
 }
 
