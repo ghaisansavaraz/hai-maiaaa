@@ -35,32 +35,19 @@
     
     <!-- Moon icon (top-right, fixed) -->
     <div id="moonIconContainer" aria-hidden="true">
-      <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon phase" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering:geometricPrecision">
+      <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering:geometricPrecision">
         <defs>
-          <!-- Clip to a perfect circular disc -->
           <clipPath id="moonDisc">
             <circle cx="50" cy="50" r="49"/>
           </clipPath>
-          <!-- Mask selects ONLY the unlit region for the shadow overlay -->
-          <mask id="unlitMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type:luminance">
-            <rect width="100" height="100" fill="black"/>
-            <!-- Potential unlit area: full disc -->
-            <circle id="unlitDisc" cx="50" cy="50" r="49.1" fill="white"/>
-            <!-- Cut out the lit crescent/hemisphere by offsetting this disc -->
-            <circle id="litCutout" cx="98" cy="50" r="48.3" fill="black"/>
-          </mask>
         </defs>
-        <!-- Base texture (full) - Using NASA public domain texture -->
         <image id="moonImageBase"
                href="https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_1k.jpg"
                xlink:href="https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_1k.jpg"
                x="0" y="0" width="100" height="100"
                preserveAspectRatio="xMidYMid slice"
                clip-path="url(#moonDisc)"/>
-        <!-- Single dim shadow overlay only on unlit region -->
-        <g id="shadowOverlay" mask="url(#unlitMask)" clip-path="url(#moonDisc)">
-          <circle id="shadowOverlayCircle" cx="50" cy="50" r="49.15" fill="black" opacity="0.85"/>
-        </g>
+        <circle cx="50" cy="50" r="49" fill="white" opacity="0.05" clip-path="url(#moonDisc)"/>
       </svg>
     </div>
 
@@ -244,8 +231,6 @@
               <div id="headerCurrentDate" class="header-current-date">Loading...</div>
             </div>
             <div id="headerTimeGreeting" class="header-time-greeting">
-              <span id="moonPhaseLabel" class="moon-phase-label">—</span>
-              <span class="separator-dot" aria-hidden="true">•</span>
               <span id="greetingText">Good morning Maiaaa</span>
             </div>
           </div>

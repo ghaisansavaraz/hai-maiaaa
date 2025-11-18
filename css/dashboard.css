@@ -112,25 +112,11 @@ body.light-theme .dashboard {
   letter-spacing: 0.02em;
 }
 
-/* Inline moon phase label + separator */
 .header-time-greeting {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-}
-
-.moon-phase-label {
-  font-weight: 300;
-  color: rgba(255,255,255,0.85);
-  letter-spacing: 0.04em;
-  text-shadow: 0 0 8px rgba(255,255,255,0.15);
-  white-space: nowrap;
-}
-
-.separator-dot {
-  opacity: 0.5;
-  transform: translateY(-1px);
 }
 
 /* Clock inverted for light theme */
@@ -141,17 +127,8 @@ body.light-theme .header-time-greeting {
   text-shadow: 0 0 20px rgba(0,0,0,0.15) !important;
 }
 
-body.light-theme .moon-phase-label {
-  color: rgba(26,26,26,0.9);
-  text-shadow: 0 0 8px rgba(0,0,0,0.08);
-}
-
 /* Hide moon and its label during day (light theme) */
 body.light-theme #moonIconContainer {
-  display: none !important;
-}
-body.light-theme .moon-phase-label,
-body.light-theme .separator-dot {
   display: none !important;
 }
 
@@ -414,7 +391,6 @@ body.light-theme .mood-category {
 
 /* --- Moon Icon (Top-Right) --- */
 :root {
-  --moon-shadow-opacity: 0.85; /* 85% darkness => 15% texture visibility */
 }
 
 #moonIconContainer {
