@@ -6,6 +6,7 @@ import { startTimeDisplay } from './clock.js';
 import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mood.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
+import { initShootingStar } from './shootingstar.js';
 
 let dynamicBackground = null;
 
@@ -221,6 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Start time display immediately (always visible)
     startTimeDisplay();
+    
+    // Initialize shooting star system
+    initShootingStar();
     
     // Show dashboard immediately
     showDashboard();
