@@ -158,15 +158,20 @@ function initClearButtons() {
 
   const bookSpine = document.querySelector(".book-spine");
   if (bookSpine) {
-    bookSpine.addEventListener("click", () => {
-      if (!document.getElementById("moodSection")?.classList.contains("book-closed")) {
+    bookSpine.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const section = document.getElementById("moodSection");
+      if (section && !section.classList.contains("book-closed")) {
+        console.log("[Maiaaa] Spine clicked - closing book");
         toggleBookState();
       }
     });
     bookSpine.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        if (!document.getElementById("moodSection")?.classList.contains("book-closed")) {
+        e.stopPropagation();
+        const section = document.getElementById("moodSection");
+        if (section && !section.classList.contains("book-closed")) {
           toggleBookState();
         }
       }

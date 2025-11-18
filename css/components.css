@@ -336,6 +336,7 @@
   border-radius: 18px 0 0 18px;
   box-shadow: inset -4px 0 10px rgba(0,0,0,0.15) !important;
   position: relative;
+  z-index: 10;
 }
 
 .book-spine::before {
@@ -350,6 +351,19 @@
   border-right: 1px solid rgba(255,255,255,0.4);
   border-radius: 4px;
   opacity: 0.8;
+  pointer-events: none;
+}
+
+.book-shell.open .book-spine {
+  cursor: pointer;
+  pointer-events: auto !important;
+  transition: background 0.2s ease, opacity 0.2s ease;
+  z-index: 25;
+}
+
+.book-shell.open .book-spine:hover {
+  background: linear-gradient(90deg, #d0d0d0, #c0c0c0) !important;
+  opacity: 0.9;
 }
 
 .book-front {
@@ -496,7 +510,7 @@
 
 .book-page {
   width: 50%;
-  padding: 26px 32px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
 }
@@ -555,7 +569,7 @@
   max-height: 365px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 8px 10px 10px;
+  padding: 6px 4px 8px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -602,8 +616,9 @@
   font-family: "Playfair Display", Georgia, serif;
   width: 100%;
   margin: 0;
-  padding: 12px 14px 8px;
+  padding: 10px 8px 6px;
   align-items: flex-start;
+  box-sizing: border-box;
 }
 
 .mood-book.book-closed .book-interior {
