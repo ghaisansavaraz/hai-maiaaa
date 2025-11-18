@@ -149,10 +149,27 @@ function initClearButtons() {
   
   const bookClaspBtn = document.getElementById("moodBookClasp");
   if (bookClaspBtn) {
-    console.log("[Maiaaa] Book clasp wired for mood journal");
+    console.log("[Maiaaa] Book keyhole wired for mood journal");
     bookClaspBtn.addEventListener("click", () => {
-      console.log("[Maiaaa] Clasp clicked - toggling book state");
+      console.log("[Maiaaa] Keyhole clicked - toggling book state");
       toggleBookState();
+    });
+  }
+
+  const bookSpine = document.querySelector(".book-spine");
+  if (bookSpine) {
+    bookSpine.addEventListener("click", () => {
+      if (!document.getElementById("moodSection")?.classList.contains("book-closed")) {
+        toggleBookState();
+      }
+    });
+    bookSpine.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (!document.getElementById("moodSection")?.classList.contains("book-closed")) {
+          toggleBookState();
+        }
+      }
     });
   }
   

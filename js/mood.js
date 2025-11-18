@@ -521,6 +521,7 @@ function applyMoodBookState() {
   const bookCover = section.querySelector(".book-cover");
   const bookInterior = section.querySelector(".book-interior");
   const claspButton = document.getElementById("moodBookClasp");
+  const bookSpine = section.querySelector(".book-spine");
 
   const isClosed = moodBookClosed;
 
@@ -539,6 +540,18 @@ function applyMoodBookState() {
       "title",
       isClosed ? "Open journal" : "Close journal"
     );
+  }
+
+  if (bookSpine) {
+    if (!isClosed) {
+      bookSpine.setAttribute("role", "button");
+      bookSpine.setAttribute("tabindex", "0");
+      bookSpine.setAttribute("aria-label", "Close mood journal");
+    } else {
+      bookSpine.removeAttribute("role");
+      bookSpine.removeAttribute("tabindex");
+      bookSpine.removeAttribute("aria-label");
+    }
   }
 
   debugLog(`Mood journal ${isClosed ? "closed" : "opened"}`);
