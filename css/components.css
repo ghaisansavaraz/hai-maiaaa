@@ -279,6 +279,14 @@
 }
 
 /* Mood Book Layout */
+#moodSection.mood-book {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
 .mood-book {
   position: relative;
   width: 100%;
@@ -286,13 +294,12 @@
   perspective: 1600px;
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
 }
 
 .book-shell {
   position: relative;
-  width: min(780px, 100%);
-  height: 520px;
+  width: min(680px, 92vw);
+  height: 500px;
   transform-style: preserve-3d;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -415,6 +422,8 @@
 
 .book-shell.open .book-clasp {
   animation: none;
+  right: auto;
+  left: calc(50% - 28px);
 }
 
 .book-clasp:hover {
@@ -584,13 +593,25 @@
   filter: none;
   pointer-events: auto;
   margin-top: 20px;
+  gap: 12px;
+}
+
+.mood-book .mood-category {
+  background: rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.15);
+  color: rgba(0,0,0,0.8);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.mood-book .mood-category:not(:disabled):hover {
+  filter: drop-shadow(0 0 8px rgba(0,0,0,0.15));
 }
 
 .mood-book .mood-input {
   opacity: 1 !important;
   pointer-events: auto !important;
   transform: none !important;
-  background: rgba(0,0,0,0.03);
+  background: rgba(0,0,0,0.02);
   border-color: rgba(0,0,0,0.08);
   color: #111;
 }
@@ -605,6 +626,16 @@
 
 .mood-book .mood-tag {
   color: #222;
+}
+
+.mood-tags-book .mood-tag {
+  width: 100%;
+  max-width: none;
+  align-items: flex-start;
+  text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  gap: 6px;
 }
 
 /* Icon Button Base Style */
