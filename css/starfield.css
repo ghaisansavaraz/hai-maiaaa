@@ -392,15 +392,15 @@ body:not(.light-theme) .stars-container {
 
 /* Apply different behaviors to stars */
 .star:nth-child(6n+1) {
-  animation: starSparkle 5s ease-in-out infinite;
+  animation: starSparkle 3.5s ease-in-out infinite;
 }
 
 .star:nth-child(6n+2) {
-  animation: starTwinkle 6s ease-in-out infinite;
+  animation: starTwinkle 4s ease-in-out infinite;
 }
 
 .star:nth-child(6n+3) {
-  animation: starSparkle 7s ease-in-out infinite;
+  animation: starSparkle 4.5s ease-in-out infinite;
   animation-delay: 1.5s;
 }
 
@@ -448,19 +448,19 @@ body:not(.light-theme) .stars-container {
 .star:nth-child(17n)    { animation-delay: -1.21s; }
 
 /* Layer 2: Duration variations using prime 13 */
-.star:nth-child(13n+1)  { animation-duration: 6.2s; }
-.star:nth-child(13n+2)  { animation-duration: 8.4s; }
-.star:nth-child(13n+3)  { animation-duration: 10.6s; }
-.star:nth-child(13n+4)  { animation-duration: 12.8s; }
-.star:nth-child(13n+5)  { animation-duration: 7.5s; }
-.star:nth-child(13n+6)  { animation-duration: 9.7s; }
-.star:nth-child(13n+7)  { animation-duration: 13.9s; }
-.star:nth-child(13n+8)  { animation-duration: 8.8s; }
-.star:nth-child(13n+9)  { animation-duration: 11.4s; }
-.star:nth-child(13n+10) { animation-duration: 7.1s; }
-.star:nth-child(13n+11) { animation-duration: 9.3s; }
-.star:nth-child(13n+12) { animation-duration: 14.5s; }
-.star:nth-child(13n)    { animation-duration: 10.2s; }
+.star:nth-child(13n+1)  { animation-duration: 4.2s; }
+.star:nth-child(13n+2)  { animation-duration: 5.8s; }
+.star:nth-child(13n+3)  { animation-duration: 7.3s; }
+.star:nth-child(13n+4)  { animation-duration: 9.1s; }
+.star:nth-child(13n+5)  { animation-duration: 5.1s; }
+.star:nth-child(13n+6)  { animation-duration: 6.7s; }
+.star:nth-child(13n+7)  { animation-duration: 10.4s; }
+.star:nth-child(13n+8)  { animation-duration: 6.2s; }
+.star:nth-child(13n+9)  { animation-duration: 8.5s; }
+.star:nth-child(13n+10) { animation-duration: 4.9s; }
+.star:nth-child(13n+11) { animation-duration: 6.4s; }
+.star:nth-child(13n+12) { animation-duration: 11.2s; }
+.star:nth-child(13n)    { animation-duration: 7.7s; }
 
 /* Layer 3: Additional offset using prime 11 */
 .star:nth-child(11n+1)  { animation-delay: -0.09s; }
