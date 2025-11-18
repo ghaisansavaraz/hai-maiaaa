@@ -154,13 +154,36 @@ function initClearButtons() {
   }
 }
 
-// Theme toggle button (hidden, for testing)
+// Theme toggle button (hidden, for testing) - Requires triple-click
 function initThemeToggle() {
   const themeToggleBtn = document.getElementById("themeToggle");
   if (themeToggleBtn) {
+    let clickCount = 0;
+    let clickTimer = null;
+    
     themeToggleBtn.addEventListener("click", () => {
-      toggleTheme();
-      debugLog("Theme toggle clicked");
+      clickCount++;
+      debugLog(`Theme toggle click ${clickCount}/3`);
+      
+      // Clear existing timer
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+      }
+      
+      // Check if we reached 3 clicks
+      if (clickCount === 3) {
+        toggleTheme();
+        debugLog("✓ Triple-click detected - Theme toggled!");
+        clickCount = 0;
+        clickTimer = null;
+      } else {
+        // Reset counter after 1 second if not completed
+        clickTimer = setTimeout(() => {
+          debugLog(`Triple-click timeout - resetting (was at ${clickCount}/3)`);
+          clickCount = 0;
+          clickTimer = null;
+        }, 1000);
+      }
     });
   }
 }
