@@ -278,6 +278,209 @@
   }
 }
 
+/* Lock Button - Vintage Brass Clasp Style */
+.btn-lock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.95);
+  filter: blur(2px);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              filter 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s;
+  margin-right: 8px;
+}
+
+.btn-lock .lock-icon {
+  display: block;
+  color: #d4af37; /* Brass color */
+  opacity: 0.7;
+  transition: opacity 0.25s ease, 
+              filter 0.25s ease, 
+              transform 0.25s ease;
+  filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.3));
+}
+
+.dashboard-card:hover .btn-lock,
+.dashboard-card.active .btn-lock {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.btn-lock:hover .lock-icon {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6)) 
+          drop-shadow(0 0 16px rgba(212, 175, 55, 0.4));
+  transform: scale(1.05);
+}
+
+.btn-lock:active .lock-icon {
+  transform: scale(0.95);
+}
+
+/* Locked state styling */
+#moodSection.locked {
+  position: relative;
+  background: 
+    linear-gradient(135deg, rgba(139, 90, 43, 0.15), rgba(101, 67, 33, 0.12)),
+    linear-gradient(45deg, rgba(120, 81, 45, 0.1), rgba(92, 64, 32, 0.08)) !important;
+  border-color: rgba(212, 175, 55, 0.2) !important;
+}
+
+/* Leather texture effect when locked */
+#moodSection.locked::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
+  border-radius: 16px;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Content blur when locked */
+#moodSection.locked .card-content {
+  filter: blur(12px);
+  opacity: 0.3;
+  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lock overlay */
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  z-index: 100;
+  pointer-events: none;
+  animation: lockOverlayFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.lock-overlay-icon {
+  color: #d4af37;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6))
+          drop-shadow(0 0 24px rgba(212, 175, 55, 0.4));
+  animation: lockIconFloat 3s ease-in-out infinite;
+}
+
+.lock-overlay-text {
+  margin-top: 16px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: #d4af37;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+/* Unlocking animation */
+.lock-overlay.unlocking {
+  animation: lockOverlayFadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.lock-overlay.unlocking .lock-overlay-icon {
+  animation: lockIconUnlock 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Lock animations */
+@keyframes lockOverlayFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes lockOverlayFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes lockIconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes lockIconUnlock {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-10px) rotate(15deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-20px) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+/* Lock icon state changes */
+#moodSection.locked .btn-lock .lock-icon {
+  color: #ffd700; /* Brighter gold when locked */
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))
+          drop-shadow(0 0 16px rgba(255, 215, 0, 0.4));
+}
+
+/* Rotate shackle when unlocked */
+#moodSection:not(.locked) .btn-lock .lock-shackle {
+  transform-origin: 12px 11px;
+  transform: rotate(-45deg) translateY(-2px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#moodSection.locked .btn-lock .lock-shackle {
+  transform: rotate(0deg) translateY(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Icon Button Base Style */
 .btn-icon {
   width: 32px;

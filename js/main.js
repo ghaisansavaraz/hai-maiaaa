@@ -3,7 +3,7 @@
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
 import { DynamicBackground, applyTheme, toggleTheme } from './background.js';
 import { startTimeDisplay } from './clock.js';
-import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mood.js';
+import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode, toggleMoodLock, loadMoodLockState } from './mood.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar } from './shootingstar.js';
@@ -136,7 +136,7 @@ function initEditorKey() {
   }
 }
 
-// Clear mood button
+// Clear mood button and lock button
 function initClearButtons() {
   const clearMoodBtn = document.getElementById("clearMood");
   if (clearMoodBtn) {
@@ -144,6 +144,15 @@ function initClearButtons() {
     clearMoodBtn.addEventListener("click", () => {
       console.log("[Maiaaa] Trash clicked - toggling selection mode");
       toggleMoodSelectionMode(clearMoodBtn);
+    });
+  }
+  
+  const lockMoodBtn = document.getElementById("lockMood");
+  if (lockMoodBtn) {
+    console.log("[Maiaaa] Lock button wired for mood journal");
+    lockMoodBtn.addEventListener("click", () => {
+      console.log("[Maiaaa] Lock clicked - toggling lock state");
+      toggleMoodLock();
     });
   }
   
@@ -205,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize all components
     loadMoods();
+    loadMoodLockState(); // Load lock state after moods are loaded
     loadReminders();
     loadTasks();
     renderLetters();
