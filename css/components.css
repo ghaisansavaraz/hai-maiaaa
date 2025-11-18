@@ -346,10 +346,7 @@
   font-size: 18px;
   font-weight: 300;
   border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 10px rgba(255,107,107,0.18),
-              0 0 18px rgba(255,107,107,0.1);
-  filter: drop-shadow(0 0 12px rgba(255,107,107,0.2));
-  animation: deletePulse 2.4s ease-in-out infinite;
+  /* idle: no glow/animation */
 }
 
 .btn-delete:hover,
@@ -359,6 +356,10 @@
     linear-gradient(45deg, rgba(255, 107, 107, 0.12), rgba(255, 107, 107, 0.08));
   border-color: rgba(255, 107, 107, 0.4);
   color: rgba(255, 107, 107, 1);
+  box-shadow: 0 0 10px rgba(255,107,107,0.35),
+              0 0 18px rgba(255,107,107,0.2);
+  filter: drop-shadow(0 0 12px rgba(255,107,107,0.35));
+  animation: deletePulse 2.4s ease-in-out infinite;
   transform: translateY(-2px);
 }
 
@@ -1324,7 +1325,6 @@ body.light-theme .mood-category:not(:disabled) {
   opacity: 1;
   pointer-events: auto;
 }
-
 .reminders-empty-state {
   display: flex;
   flex-direction: column;
