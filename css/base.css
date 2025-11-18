@@ -78,56 +78,22 @@ body.light-theme {
   -webkit-color-scheme: light !important;
 }
 
-/* AGGRESSIVE OVERRIDE - Force pure black background */
-* {
-  color-scheme: dark !important;
-  -webkit-color-scheme: dark !important;
-}
-
 html, body {
   background: #000000 !important;
   background-color: #000000 !important;
   color: #fff !important;
-  color-scheme: dark !important;
-  -webkit-color-scheme: dark !important;
+  color-scheme: dark;
+  -webkit-color-scheme: dark;
 }
 
 /* Prevent any browser default styling that causes light vignette */
 body {
-  background-image: none !important;
-  background-attachment: fixed !important;
-  box-shadow: none !important;
-  filter: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-/* Override any light mode browser defaults - Pure black */
-html {
-  background: #000000 !important;
-  background-color: #000000 !important;
-  filter: none !important;
-}
-
-/* Prevent light mode corner effects */
-body::before,
-body::after {
-  filter: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-/* Remove any browser light mode vignette effects */
-html, body, * {
-  background-image: none !important;
-  box-shadow: none !important;
-  border-image: none !important;
-}
-
-/* Override any browser light mode defaults */
-:root {
-  color-scheme: dark !important;
-  -webkit-color-scheme: dark !important;
+  background-image: none;
+  background-attachment: fixed;
+  box-shadow: none;
+  filter: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Center content */
