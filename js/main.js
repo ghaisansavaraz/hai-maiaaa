@@ -1,7 +1,7 @@
 /* Main Application Entry Point - PULSING ANIMATIONS v6 */
 
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
-import { DynamicBackground, applyTheme } from './background.js';
+import { DynamicBackground, applyTheme, toggleTheme } from './background.js';
 import { startTimeDisplay } from './clock.js';
 import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode } from './mood.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
@@ -154,6 +154,17 @@ function initClearButtons() {
   }
 }
 
+// Theme toggle button (hidden, for testing)
+function initThemeToggle() {
+  const themeToggleBtn = document.getElementById("themeToggle");
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", () => {
+      toggleTheme();
+      debugLog("Theme toggle clicked");
+    });
+  }
+}
+
 // Main initialization
 document.addEventListener("DOMContentLoaded", () => {
   try {
@@ -180,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initTaskEventListeners();
     initClearButtons();
     initEditorKey();
+    initThemeToggle();
     
     // Force re-render tasks to remove any old flower elements from cache
     loadTasks();

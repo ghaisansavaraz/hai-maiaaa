@@ -151,3 +151,39 @@ html, body, * {
   display: none; 
 }
 
+/* Hidden theme toggle button (top-left corner for testing) */
+.hidden-theme-toggle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 9999;
+  opacity: 0.02;
+  transition: opacity 0.3s ease;
+  padding: 0;
+  margin: 0;
+}
+
+.hidden-theme-toggle:hover {
+  opacity: 0.1;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent);
+}
+
+.hidden-theme-toggle:active {
+  opacity: 0.2;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent);
+}
+
+/* Light theme button styling */
+body.light-theme .hidden-theme-toggle:hover {
+  background: radial-gradient(circle at center, rgba(0,0,0,0.1), transparent);
+}
+
+body.light-theme .hidden-theme-toggle:active {
+  background: radial-gradient(circle at center, rgba(0,0,0,0.2), transparent);
+}
+
