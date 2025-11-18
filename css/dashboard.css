@@ -146,6 +146,14 @@ body.light-theme #moonIconContainer {
   gap: 48px;
 }
 
+.dashboard-grid .dashboard-column {
+  transition: transform 0.5s ease;
+}
+
+.dashboard-grid.book-open .dashboard-column:last-child {
+  transform: translateX(20px);
+}
+
 .dashboard-column {
   display: flex;
   flex-direction: column;
