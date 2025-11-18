@@ -250,9 +250,17 @@ body:not(.light-theme) .stars-container {
     opacity: 0.2;
     filter: brightness(0.7);
   }
+  25% {
+    opacity: 0.5;
+    filter: brightness(1.3);
+  }
   50% {
     opacity: 1;
     filter: brightness(2.2);
+  }
+  75% {
+    opacity: 0.5;
+    filter: brightness(1.3);
   }
 }
 
@@ -262,17 +270,33 @@ body:not(.light-theme) .stars-container {
     opacity: 0.3;
     filter: brightness(0.7);
   }
+  12.5% {
+    opacity: 0.6;
+    filter: brightness(1.4);
+  }
   25% {
     opacity: 1;
     filter: brightness(2.5);
+  }
+  37.5% {
+    opacity: 0.5;
+    filter: brightness(1.2);
   }
   50% {
     opacity: 0.2;
     filter: brightness(0.6);
   }
+  62.5% {
+    opacity: 0.6;
+    filter: brightness(1.5);
+  }
   75% {
     opacity: 1;
     filter: brightness(2.3);
+  }
+  87.5% {
+    opacity: 0.5;
+    filter: brightness(1.1);
   }
 }
 
@@ -284,6 +308,13 @@ body:not(.light-theme) .stars-container {
     box-shadow:
       0 0 4px rgba(255, 255, 255, 0.4),
       0 0 10px rgba(255, 255, 255, 0.2);
+  }
+  30% {
+    opacity: 0.5;
+    filter: brightness(1.1);
+    box-shadow:
+      0 0 6px rgba(255, 255, 255, 0.5),
+      0 0 12px rgba(255, 255, 255, 0.25);
   }
   45% {
     opacity: 0.75;
@@ -299,14 +330,33 @@ body:not(.light-theme) .stars-container {
       0 0 12px rgba(255, 255, 255, 0.8),
       0 0 24px rgba(255, 255, 255, 0.4);
   }
+  75% {
+    opacity: 0.7;
+    filter: brightness(1.4);
+    box-shadow:
+      0 0 8px rgba(255, 255, 255, 0.6),
+      0 0 16px rgba(255, 255, 255, 0.3);
+  }
 }
 
 /* Star pulse with glow effect */
 @keyframes starPulseGlow {
-  0%, 90%, 100% {
+  0%, 100% {
     opacity: 0.3;
     box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
     filter: brightness(0.8);
+  }
+  85% {
+    opacity: 0.3;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    filter: brightness(0.8);
+  }
+  90% {
+    opacity: 0.6;
+    box-shadow: 
+      0 0 12px rgba(255, 255, 255, 0.9),
+      0 0 24px rgba(255, 255, 255, 0.6);
+    filter: brightness(1.8);
   }
   95% {
     opacity: 1;
@@ -316,6 +366,13 @@ body:not(.light-theme) .stars-container {
       0 0 75px rgba(255, 255, 255, 0.7),
       0 0 100px rgba(255, 255, 255, 0.5);
     filter: brightness(3.5);
+  }
+  98% {
+    opacity: 0.7;
+    box-shadow: 
+      0 0 15px rgba(255, 255, 255, 0.95),
+      0 0 30px rgba(255, 255, 255, 0.7);
+    filter: brightness(2.2);
   }
 }
 
