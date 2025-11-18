@@ -138,6 +138,12 @@ body.light-theme #moonIconContainer {
   grid-template-columns: 1fr 1fr;
   gap: 32px;
   margin-bottom: 48px;
+  transition: grid-template-columns 0.5s ease, gap 0.5s ease;
+}
+
+.dashboard-grid.book-open {
+  grid-template-columns: 1.35fr 0.9fr;
+  gap: 48px;
 }
 
 .dashboard-column {
