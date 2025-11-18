@@ -240,11 +240,9 @@ body:not(.light-theme) .stars-container {
 @keyframes starTwinkle {
   0%, 100% {
     opacity: 0.3;
-    transform: scale(1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.2);
   }
 }
 
@@ -252,22 +250,18 @@ body:not(.light-theme) .stars-container {
 @keyframes starSparkle {
   0%, 100% {
     opacity: 0.5;
-    transform: scale(1);
     filter: brightness(1);
   }
   25% {
     opacity: 1;
-    transform: scale(1.4);
     filter: brightness(2);
   }
   50% {
     opacity: 0.3;
-    transform: scale(0.9);
     filter: brightness(0.8);
   }
   75% {
     opacity: 1;
-    transform: scale(1.3);
     filter: brightness(1.8);
   }
 }
@@ -301,13 +295,11 @@ body:not(.light-theme) .stars-container {
 @keyframes starPulseGlow {
   0%, 90%, 100% {
     opacity: 0.4;
-    transform: scale(1);
     box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
     filter: brightness(1);
   }
   95% {
     opacity: 1;
-    transform: scale(2);
     box-shadow: 
       0 0 20px rgba(255, 255, 255, 1),
       0 0 40px rgba(255, 255, 255, 0.8),
@@ -350,6 +342,38 @@ body:not(.light-theme) .stars-container {
   width: 2.2px;
   height: 2.2px;
 }
+
+/* Additional randomization to avoid synchronous blinking */
+.star:nth-child(12n+1),
+.star:nth-child(12n+7) {
+  animation-duration: 4.4s;
+}
+
+.star:nth-child(12n+2),
+.star:nth-child(12n+8) {
+  animation-duration: 5.6s;
+}
+
+.star:nth-child(12n+3),
+.star:nth-child(12n+9) {
+  animation-duration: 3.8s;
+}
+
+.star:nth-child(12n+4),
+.star:nth-child(12n+10) {
+  animation-duration: 6.9s;
+}
+
+.star:nth-child(12n+5),
+.star:nth-child(12n+11) {
+  animation-duration: 8.3s;
+}
+
+.star:nth-child(12n+6),
+.star:nth-child(12n) {
+  animation-duration: 9.7s;
+}
+
 
 /* Shooting Star System */
 .shooting-star {
