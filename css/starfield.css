@@ -399,16 +399,16 @@ body:not(.light-theme) .stars-container {
   content: '';
   position: absolute;
   top: 50%;
-  right: 100%;
+  left: 100%;
   width: 150px;
   height: 3px;
   background: linear-gradient(90deg, 
-    transparent 0%,
-    rgba(255, 255, 255, 0.05) 10%,
-    rgba(255, 255, 255, 0.2) 30%,
-    rgba(255, 255, 255, 0.5) 60%,
-    rgba(255, 255, 255, 0.8) 85%,
-    rgba(255, 255, 255, 1) 100%
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.8) 15%,
+    rgba(255, 255, 255, 0.5) 40%,
+    rgba(255, 255, 255, 0.2) 70%,
+    rgba(255, 255, 255, 0.05) 90%,
+    transparent 100%
   );
   transform: translateY(-50%);
   border-radius: 50%;
