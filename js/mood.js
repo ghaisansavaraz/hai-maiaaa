@@ -11,6 +11,7 @@ let selectedMoodIds = new Set();
 
 // Book closed state
 let moodBookClosed = true;
+let moodBookAnimating = false;
 
 export function toggleMoodSelectionMode(triggerBtn) {
   try {
@@ -546,11 +547,19 @@ function applyMoodBookState() {
 // Toggle mood book state (open/close)
 export function toggleBookState() {
   try {
+    if (moodBookAnimating) return;
+    moodBookAnimating = true;
+
     moodBookClosed = !moodBookClosed;
     localStorage.setItem(MOOD_LOCK_KEY, JSON.stringify(moodBookClosed));
     applyMoodBookState();
+
+    setTimeout(() => {
+      moodBookAnimating = false;
+    }, 900);
   } catch (e) {
     debugError("Failed to toggle mood journal state:", e);
+    moodBookAnimating = false;
   }
 }
 

@@ -335,21 +335,21 @@
   background: linear-gradient(90deg, #c8c8c8, #b8b8b8) !important;
   border-radius: 18px 0 0 18px;
   box-shadow: inset -4px 0 10px rgba(0,0,0,0.15) !important;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  font-size: 10px;
-  color: rgba(0,0,0,0.45);
-  font-family: "Playfair Display", Georgia, serif;
+  position: relative;
 }
 
-.spine-decoration {
-  font-size: 12px;
-  margin-top: 12px;
-  letter-spacing: 0.4em;
+.book-spine::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: 50%;
+  width: 8px;
+  transform: translateX(-50%);
+  border-left: 1px solid rgba(0,0,0,0.15);
+  border-right: 1px solid rgba(255,255,255,0.4);
+  border-radius: 4px;
+  opacity: 0.8;
 }
 
 .book-front {
