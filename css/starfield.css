@@ -732,16 +732,5 @@ body:not(.light-theme) .day-particles-container {
   }
 }
 
-/* Reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .star,
-  .star-cluster,
-  .cloud,
-  .light-ray,
-  .stars-layer-back,
-  .stars-layer-mid,
-  .stars-layer-front {
-    animation: none !important;
-  }
-}
+/* Duplicate reduced motion block removed - stars must keep animating */
 
