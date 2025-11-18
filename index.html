@@ -30,6 +30,19 @@
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
   <body>
+    <!-- Apply theme immediately to prevent animation initialization issues -->
+    <script>
+      (function() {
+        const hour = new Date().getHours();
+        // Day theme: 5 AM to 6 PM (5-18), Night theme: 6 PM to 5 AM (18-5)
+        if (hour >= 5 && hour < 18) {
+          document.body.classList.add('light-theme');
+        }
+        // Force reflow to ensure animations initialize properly
+        void document.body.offsetHeight;
+      })();
+    </script>
+    
     <!-- Hidden theme toggle button (top-left, for testing) -->
     <button id="themeToggle" class="hidden-theme-toggle" aria-label="Toggle theme" title="Click to toggle day/night mode"></button>
     

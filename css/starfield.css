@@ -93,6 +93,8 @@ body:not(.light-theme) .stars-layer {
   z-index: 1;
   opacity: 0;
   transition: opacity 1s ease;
+  /* Force animations to run even when invisible */
+  animation-play-state: running !important;
 }
 
 body:not(.light-theme) .stars-container {
@@ -111,6 +113,9 @@ body:not(.light-theme) .stars-container {
   border-radius: 50%;
   box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
   animation: starTwinkle 3s ease-in-out infinite;
+  /* Force animations to always run */
+  animation-play-state: running !important;
+  will-change: opacity, filter;
 }
 
 /* Generate random positions for stars */
