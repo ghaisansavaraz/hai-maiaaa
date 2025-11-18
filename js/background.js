@@ -57,11 +57,13 @@ export function toggleTheme() {
     // Switch to dark
     body.classList.remove('light-theme');
     manualThemeOverride = 'dark';
+    body.classList.add('testing-mode'); // mark manual testing active
     debugLog("Manually switched to dark theme");
   } else {
     // Switch to light
     body.classList.add('light-theme');
     manualThemeOverride = 'light';
+    body.classList.add('testing-mode'); // mark manual testing active
     debugLog("Manually switched to light theme");
   }
 }
@@ -69,6 +71,7 @@ export function toggleTheme() {
 // Reset to auto mode
 export function resetThemeToAuto() {
   manualThemeOverride = null;
+  document.body.classList.remove('testing-mode');
   applyTheme();
   debugLog("Reset theme to auto mode");
 }

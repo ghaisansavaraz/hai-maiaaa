@@ -99,6 +99,9 @@ body:not(.light-theme) .stars-container {
   opacity: 1;
 }
 
+/* Force stars visible during testing regardless of theme */
+/* (testing-mode no longer forces stars in day; stars show only in night) */
+
 /* Individual stars */
 .star {
   position: absolute;
@@ -699,6 +702,18 @@ body.light-theme .star-cluster {
 body:not(.light-theme) .day-particles-container {
   opacity: 0 !important;
   display: none;
+}
+
+/* Respect reduced motion for background elements, but keep stars animating */
+@media (prefers-reduced-motion: reduce) {
+  .star-cluster,
+  .cloud,
+  .light-ray,
+  .stars-layer-back,
+  .stars-layer-mid,
+  .stars-layer-front {
+    animation: none !important;
+  }
 }
 
 /* Reduced motion preferences */
