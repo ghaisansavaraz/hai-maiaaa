@@ -347,51 +347,57 @@ body:not(.light-theme) .stars-container {
   height: 2.2px;
 }
 
-/* Additional randomization to avoid synchronous blinking */
+/* Additional randomization to avoid synchronous blinking - using prime numbers */
 .stars-container .star { 
   animation-delay: 0s;
 }
-.star:nth-child(12n+1)  { animation-delay: -0.17s; }
-.star:nth-child(12n+2)  { animation-delay: -0.41s; }
-.star:nth-child(12n+3)  { animation-delay: -0.83s; }
-.star:nth-child(12n+4)  { animation-delay: -0.57s; }
-.star:nth-child(12n+5)  { animation-delay: -0.12s; }
-.star:nth-child(12n+6)  { animation-delay: -0.26s; }
-.star:nth-child(12n+7)  { animation-delay: -0.69s; }
-.star:nth-child(12n+8)  { animation-delay: -0.94s; }
-.star:nth-child(12n+9)  { animation-delay: -0.33s; }
-.star:nth-child(12n+10) { animation-delay: -0.48s; }
-.star:nth-child(12n+11) { animation-delay: -0.05s; }
-.star:nth-child(12n)    { animation-delay: -0.77s; }
-.star:nth-child(12n+1),
-.star:nth-child(12n+7) {
-  animation-duration: 4.4s;
-}
 
-.star:nth-child(12n+2),
-.star:nth-child(12n+8) {
-  animation-duration: 5.6s;
-}
+/* Layer 1: Base delays using prime 17 */
+.star:nth-child(17n+1)  { animation-delay: -0.13s; }
+.star:nth-child(17n+2)  { animation-delay: -0.31s; }
+.star:nth-child(17n+3)  { animation-delay: -0.67s; }
+.star:nth-child(17n+4)  { animation-delay: -0.89s; }
+.star:nth-child(17n+5)  { animation-delay: -1.12s; }
+.star:nth-child(17n+6)  { animation-delay: -0.44s; }
+.star:nth-child(17n+7)  { animation-delay: -0.76s; }
+.star:nth-child(17n+8)  { animation-delay: -1.28s; }
+.star:nth-child(17n+9)  { animation-delay: -0.58s; }
+.star:nth-child(17n+10) { animation-delay: -0.21s; }
+.star:nth-child(17n+11) { animation-delay: -0.95s; }
+.star:nth-child(17n+12) { animation-delay: -1.43s; }
+.star:nth-child(17n+13) { animation-delay: -0.37s; }
+.star:nth-child(17n+14) { animation-delay: -1.06s; }
+.star:nth-child(17n+15) { animation-delay: -0.82s; }
+.star:nth-child(17n+16) { animation-delay: -0.49s; }
+.star:nth-child(17n)    { animation-delay: -1.21s; }
 
-.star:nth-child(12n+3),
-.star:nth-child(12n+9) {
-  animation-duration: 3.8s;
-}
+/* Layer 2: Duration variations using prime 13 */
+.star:nth-child(13n+1)  { animation-duration: 3.2s; }
+.star:nth-child(13n+2)  { animation-duration: 4.7s; }
+.star:nth-child(13n+3)  { animation-duration: 5.9s; }
+.star:nth-child(13n+4)  { animation-duration: 7.3s; }
+.star:nth-child(13n+5)  { animation-duration: 4.1s; }
+.star:nth-child(13n+6)  { animation-duration: 6.4s; }
+.star:nth-child(13n+7)  { animation-duration: 8.6s; }
+.star:nth-child(13n+8)  { animation-duration: 5.2s; }
+.star:nth-child(13n+9)  { animation-duration: 7.8s; }
+.star:nth-child(13n+10) { animation-duration: 4.5s; }
+.star:nth-child(13n+11) { animation-duration: 6.1s; }
+.star:nth-child(13n+12) { animation-duration: 9.2s; }
+.star:nth-child(13n)    { animation-duration: 5.7s; }
 
-.star:nth-child(12n+4),
-.star:nth-child(12n+10) {
-  animation-duration: 6.9s;
-}
-
-.star:nth-child(12n+5),
-.star:nth-child(12n+11) {
-  animation-duration: 8.3s;
-}
-
-.star:nth-child(12n+6),
-.star:nth-child(12n) {
-  animation-duration: 9.7s;
-}
+/* Layer 3: Additional offset using prime 11 */
+.star:nth-child(11n+1)  { animation-delay: -0.09s; }
+.star:nth-child(11n+2)  { animation-delay: -0.24s; }
+.star:nth-child(11n+3)  { animation-delay: -0.53s; }
+.star:nth-child(11n+4)  { animation-delay: -0.71s; }
+.star:nth-child(11n+5)  { animation-delay: -0.36s; }
+.star:nth-child(11n+6)  { animation-delay: -0.87s; }
+.star:nth-child(11n+7)  { animation-delay: -0.15s; }
+.star:nth-child(11n+8)  { animation-delay: -0.62s; }
+.star:nth-child(11n+9)  { animation-delay: -0.98s; }
+.star:nth-child(11n+10) { animation-delay: -0.41s; }
+.star:nth-child(11n)    { animation-delay: -0.79s; }
 
 
 /* Shooting Star System */
