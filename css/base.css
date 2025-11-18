@@ -20,10 +20,10 @@
   --gradient-primary: linear-gradient(135deg, rgba(255,160,195,0.1), rgba(190,160,255,0.1));
   --gradient-secondary: linear-gradient(135deg, rgba(140,180,255,0.1), rgba(255,200,160,0.1));
   
-  /* Dynamic background variables */
+  /* Dynamic background variables - Pure black */
   --bg-primary: #000000;
-  --bg-secondary: #111111;
-  --bg-gradient: linear-gradient(135deg, #000000, #111111);
+  --bg-secondary: #000000;
+  --bg-gradient: #000000;
   --accent-color: rgba(255,255,255,0.1);
   --star-color: rgba(255,255,255,0.8);
   
@@ -46,7 +46,7 @@
   }
 }
 
-/* Robust black background */
+/* Robust black background - Pure black */
 body {
   font-family: var(--font-stack);
   margin: 0;
@@ -55,12 +55,19 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   background: #000000 !important;
+  background-color: #000000 !important;
   color: #ffffff;
   position: relative;
   padding: 0;
   transition: color 0.5s ease;
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
+}
+
+/* Force pure black on html as well */
+html {
+  background: #000000 !important;
+  background-color: #000000 !important;
 }
 
 /* Light theme - white background with black dashboard */
@@ -71,14 +78,15 @@ body.light-theme {
   -webkit-color-scheme: light !important;
 }
 
-/* AGGRESSIVE OVERRIDE - Force dark mode and prevent light vignette */
+/* AGGRESSIVE OVERRIDE - Force pure black background */
 * {
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
 }
 
 html, body {
-  background: var(--bg-gradient) !important;
+  background: #000000 !important;
+  background-color: #000000 !important;
   color: #fff !important;
   color-scheme: dark !important;
   -webkit-color-scheme: dark !important;
@@ -94,9 +102,10 @@ body {
   -webkit-backdrop-filter: none !important;
 }
 
-/* Override any light mode browser defaults */
+/* Override any light mode browser defaults - Pure black */
 html {
-  background: var(--bg-gradient) !important;
+  background: #000000 !important;
+  background-color: #000000 !important;
   filter: none !important;
 }
 

@@ -211,6 +211,31 @@ body:not(.light-theme) .stars-container {
 .star-98 { top: 81%; left: 87%; animation-delay: 1.6s; }
 .star-99 { top: 91%; left: 9%; animation-delay: 0.3s; }
 .star-100 { top: 4%; left: 49%; animation-delay: 1.7s; }
+.star-101 { top: 15%; left: 53%; animation-delay: 0.9s; }
+.star-102 { top: 35%; left: 25%; animation-delay: 1.4s; }
+.star-103 { top: 55%; left: 75%; animation-delay: 2.2s; }
+.star-104 { top: 8%; left: 68%; animation-delay: 0.7s; }
+.star-105 { top: 24%; left: 16%; animation-delay: 1.8s; }
+.star-106 { top: 44%; left: 94%; animation-delay: 0.5s; }
+.star-107 { top: 64%; left: 48%; animation-delay: 2.4s; }
+.star-108 { top: 84%; left: 32%; animation-delay: 1.0s; }
+.star-109 { top: 12%; left: 84%; animation-delay: 1.5s; }
+.star-110 { top: 48%; left: 6%; animation-delay: 2.0s; }
+.star-111 { top: 68%; left: 68%; animation-delay: 0.8s; }
+.star-112 { top: 88%; left: 44%; animation-delay: 1.3s; }
+.star-113 { top: 2%; left: 22%; animation-delay: 2.1s; }
+.star-114 { top: 38%; left: 58%; animation-delay: 0.6s; }
+.star-115 { top: 58%; left: 98%; animation-delay: 1.9s; }
+.star-116 { top: 78%; left: 14%; animation-delay: 0.4s; }
+.star-117 { top: 98%; left: 76%; animation-delay: 2.3s; }
+.star-118 { top: 26%; left: 42%; animation-delay: 1.2s; }
+.star-119 { top: 46%; left: 86%; animation-delay: 0.9s; }
+.star-120 { top: 72%; left: 24%; animation-delay: 1.6s; }
+.star-121 { top: 18%; left: 92%; animation-delay: 2.5s; }
+.star-122 { top: 52%; left: 36%; animation-delay: 0.7s; }
+.star-123 { top: 92%; left: 64%; animation-delay: 1.4s; }
+.star-124 { top: 6%; left: 14%; animation-delay: 2.2s; }
+.star-125 { top: 62%; left: 54%; animation-delay: 1.1s; }
 
 @keyframes starTwinkle {
   0%, 100% {
@@ -247,6 +272,28 @@ body:not(.light-theme) .stars-container {
   }
 }
 
+/* Aggressive blink - Very rapid on/off */
+@keyframes starBlinkAggressive {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+    filter: brightness(0.5);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    opacity: 1;
+    transform: scale(1.5);
+    filter: brightness(3);
+    box-shadow: 
+      0 0 15px rgba(255, 255, 255, 1),
+      0 0 30px rgba(255, 255, 255, 0.6);
+  }
+  20%, 40%, 60%, 80% {
+    opacity: 0.1;
+    transform: scale(0.7);
+    filter: brightness(0.3);
+  }
+}
+
 /* Star pulse with glow effect */
 @keyframes starPulseGlow {
   0%, 90%, 100% {
@@ -268,23 +315,36 @@ body:not(.light-theme) .stars-container {
 }
 
 /* Apply different behaviors to stars */
-.star:nth-child(4n+1) {
+.star:nth-child(6n+1) {
   animation: starSparkle 2.5s ease-in-out infinite;
 }
 
-.star:nth-child(4n+2) {
+.star:nth-child(6n+2) {
   animation: starTwinkle 3s ease-in-out infinite;
 }
 
-.star:nth-child(4n+3) {
+.star:nth-child(6n+3) {
   animation: starSparkle 3.5s ease-in-out infinite;
   animation-delay: 1s;
 }
 
-.star:nth-child(4n) {
+.star:nth-child(6n+4) {
   animation: starPulseGlow 8s ease-in-out infinite;
   width: 3px;
   height: 3px;
+}
+
+.star:nth-child(6n+5) {
+  animation: starBlinkAggressive 2s linear infinite;
+  width: 2.5px;
+  height: 2.5px;
+}
+
+.star:nth-child(6n) {
+  animation: starBlinkAggressive 1.8s linear infinite;
+  animation-delay: 0.5s;
+  width: 2.5px;
+  height: 2.5px;
 }
 
 /* Shooting Star System */
