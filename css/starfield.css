@@ -247,95 +247,110 @@ body:not(.light-theme) .stars-container {
 
 @keyframes starTwinkle {
   0%, 100% {
-    opacity: 0.2;
-    filter: brightness(0.7);
+    opacity: 0.3;
+    filter: brightness(0.8);
   }
-  25% {
-    opacity: 0.5;
-    filter: brightness(1.3);
+  20% {
+    opacity: 0.4;
+    filter: brightness(0.95);
+  }
+  40% {
+    opacity: 0.65;
+    filter: brightness(1.2);
   }
   50% {
-    opacity: 1;
-    filter: brightness(2.2);
+    opacity: 0.8;
+    filter: brightness(1.4);
   }
-  75% {
-    opacity: 0.5;
-    filter: brightness(1.3);
+  60% {
+    opacity: 0.65;
+    filter: brightness(1.2);
+  }
+  80% {
+    opacity: 0.4;
+    filter: brightness(0.95);
   }
 }
 
 /* Star sparkle effect (more visible blinking) */
 @keyframes starSparkle {
   0%, 100% {
-    opacity: 0.3;
-    filter: brightness(0.7);
+    opacity: 0.35;
+    filter: brightness(0.85);
   }
-  12.5% {
-    opacity: 0.6;
-    filter: brightness(1.4);
+  15% {
+    opacity: 0.5;
+    filter: brightness(1.05);
   }
   25% {
-    opacity: 1;
-    filter: brightness(2.5);
+    opacity: 0.7;
+    filter: brightness(1.3);
   }
-  37.5% {
-    opacity: 0.5;
-    filter: brightness(1.2);
+  35% {
+    opacity: 0.55;
+    filter: brightness(1.1);
   }
   50% {
-    opacity: 0.2;
-    filter: brightness(0.6);
+    opacity: 0.3;
+    filter: brightness(0.75);
   }
-  62.5% {
-    opacity: 0.6;
-    filter: brightness(1.5);
+  65% {
+    opacity: 0.55;
+    filter: brightness(1.1);
   }
   75% {
-    opacity: 1;
-    filter: brightness(2.3);
+    opacity: 0.75;
+    filter: brightness(1.35);
   }
-  87.5% {
+  85% {
     opacity: 0.5;
-    filter: brightness(1.1);
+    filter: brightness(1.05);
   }
 }
 
 /* Minimalist visible blink - soft cadence */
 @keyframes starBlinkVisible {
   0%, 100% {
-    opacity: 0.25;
-    filter: brightness(0.7);
+    opacity: 0.3;
+    filter: brightness(0.8);
     box-shadow:
       0 0 4px rgba(255, 255, 255, 0.4),
       0 0 10px rgba(255, 255, 255, 0.2);
   }
-  30% {
-    opacity: 0.5;
-    filter: brightness(1.1);
+  25% {
+    opacity: 0.45;
+    filter: brightness(0.95);
+    box-shadow:
+      0 0 5px rgba(255, 255, 255, 0.45),
+      0 0 11px rgba(255, 255, 255, 0.22);
+  }
+  40% {
+    opacity: 0.6;
+    filter: brightness(1.15);
     box-shadow:
       0 0 6px rgba(255, 255, 255, 0.5),
-      0 0 12px rgba(255, 255, 255, 0.25);
+      0 0 14px rgba(255, 255, 255, 0.25);
   }
-  45% {
+  50% {
     opacity: 0.75;
-    filter: brightness(1.5);
+    filter: brightness(1.3);
     box-shadow:
       0 0 8px rgba(255, 255, 255, 0.6),
-      0 0 16px rgba(255, 255, 255, 0.3);
+      0 0 18px rgba(255, 255, 255, 0.3);
   }
   60% {
-    opacity: 1;
-    filter: brightness(2);
+    opacity: 0.6;
+    filter: brightness(1.15);
     box-shadow:
-      0 0 12px rgba(255, 255, 255, 0.8),
-      0 0 24px rgba(255, 255, 255, 0.4);
+      0 0 6px rgba(255, 255, 255, 0.5),
+      0 0 14px rgba(255, 255, 255, 0.25);
   }
   75% {
-    opacity: 0.7;
-    filter: brightness(1.4);
+    opacity: 0.45;
+    filter: brightness(0.95);
     box-shadow:
-      0 0 8px rgba(255, 255, 255, 0.6),
-      0 0 16px rgba(255, 255, 255, 0.3);
+      0 0 5px rgba(255, 255, 255, 0.45),
+      0 0 11px rgba(255, 255, 255, 0.22);
   }
 }
 
@@ -346,65 +361,64 @@ body:not(.light-theme) .stars-container {
     box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
     filter: brightness(0.8);
   }
-  85% {
-    opacity: 0.3;
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
-    filter: brightness(0.8);
+  80% {
+    opacity: 0.35;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    filter: brightness(0.85);
   }
-  90% {
-    opacity: 0.6;
+  88% {
+    opacity: 0.5;
     box-shadow: 
-      0 0 12px rgba(255, 255, 255, 0.9),
-      0 0 24px rgba(255, 255, 255, 0.6);
-    filter: brightness(1.8);
+      0 0 8px rgba(255, 255, 255, 0.85),
+      0 0 16px rgba(255, 255, 255, 0.5);
+    filter: brightness(1.15);
   }
-  95% {
-    opacity: 1;
-    box-shadow: 
-      0 0 25px rgba(255, 255, 255, 1),
-      0 0 50px rgba(255, 255, 255, 0.9),
-      0 0 75px rgba(255, 255, 255, 0.7),
-      0 0 100px rgba(255, 255, 255, 0.5);
-    filter: brightness(3.5);
-  }
-  98% {
+  93% {
     opacity: 0.7;
     box-shadow: 
-      0 0 15px rgba(255, 255, 255, 0.95),
-      0 0 30px rgba(255, 255, 255, 0.7);
-    filter: brightness(2.2);
+      0 0 12px rgba(255, 255, 255, 0.9),
+      0 0 24px rgba(255, 255, 255, 0.6),
+      0 0 36px rgba(255, 255, 255, 0.4);
+    filter: brightness(1.5);
+  }
+  96% {
+    opacity: 0.55;
+    box-shadow: 
+      0 0 10px rgba(255, 255, 255, 0.85),
+      0 0 20px rgba(255, 255, 255, 0.55);
+    filter: brightness(1.25);
   }
 }
 
 /* Apply different behaviors to stars */
 .star:nth-child(6n+1) {
-  animation: starSparkle 2.5s ease-in-out infinite;
+  animation: starSparkle 5s ease-in-out infinite;
 }
 
 .star:nth-child(6n+2) {
-  animation: starTwinkle 3s ease-in-out infinite;
+  animation: starTwinkle 6s ease-in-out infinite;
 }
 
 .star:nth-child(6n+3) {
-  animation: starSparkle 3.5s ease-in-out infinite;
-  animation-delay: 1s;
+  animation: starSparkle 7s ease-in-out infinite;
+  animation-delay: 1.5s;
 }
 
 .star:nth-child(6n+4) {
-  animation: starPulseGlow 8s ease-in-out infinite;
+  animation: starPulseGlow 12s ease-in-out infinite;
   width: 2.4px;
   height: 2.4px;
 }
 
 .star:nth-child(6n+5) {
-  animation: starBlinkVisible 8s ease-in-out infinite;
-  animation-delay: 1s;
+  animation: starBlinkVisible 10s ease-in-out infinite;
+  animation-delay: 1.5s;
   width: 2.2px;
   height: 2.2px;
 }
 
 .star:nth-child(6n) {
-  animation: starBlinkVisible 10s ease-in-out infinite;
+  animation: starBlinkVisible 14s ease-in-out infinite;
   width: 2.2px;
   height: 2.2px;
 }
@@ -434,19 +448,19 @@ body:not(.light-theme) .stars-container {
 .star:nth-child(17n)    { animation-delay: -1.21s; }
 
 /* Layer 2: Duration variations using prime 13 */
-.star:nth-child(13n+1)  { animation-duration: 3.2s; }
-.star:nth-child(13n+2)  { animation-duration: 4.7s; }
-.star:nth-child(13n+3)  { animation-duration: 5.9s; }
-.star:nth-child(13n+4)  { animation-duration: 7.3s; }
-.star:nth-child(13n+5)  { animation-duration: 4.1s; }
-.star:nth-child(13n+6)  { animation-duration: 6.4s; }
-.star:nth-child(13n+7)  { animation-duration: 8.6s; }
-.star:nth-child(13n+8)  { animation-duration: 5.2s; }
-.star:nth-child(13n+9)  { animation-duration: 7.8s; }
-.star:nth-child(13n+10) { animation-duration: 4.5s; }
-.star:nth-child(13n+11) { animation-duration: 6.1s; }
-.star:nth-child(13n+12) { animation-duration: 9.2s; }
-.star:nth-child(13n)    { animation-duration: 5.7s; }
+.star:nth-child(13n+1)  { animation-duration: 6.2s; }
+.star:nth-child(13n+2)  { animation-duration: 8.4s; }
+.star:nth-child(13n+3)  { animation-duration: 10.6s; }
+.star:nth-child(13n+4)  { animation-duration: 12.8s; }
+.star:nth-child(13n+5)  { animation-duration: 7.5s; }
+.star:nth-child(13n+6)  { animation-duration: 9.7s; }
+.star:nth-child(13n+7)  { animation-duration: 13.9s; }
+.star:nth-child(13n+8)  { animation-duration: 8.8s; }
+.star:nth-child(13n+9)  { animation-duration: 11.4s; }
+.star:nth-child(13n+10) { animation-duration: 7.1s; }
+.star:nth-child(13n+11) { animation-duration: 9.3s; }
+.star:nth-child(13n+12) { animation-duration: 14.5s; }
+.star:nth-child(13n)    { animation-duration: 10.2s; }
 
 /* Layer 3: Additional offset using prime 11 */
 .star:nth-child(11n+1)  { animation-delay: -0.09s; }
