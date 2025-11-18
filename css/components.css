@@ -345,9 +345,10 @@
   color: rgba(255, 255, 255, 0.6);
   font-size: 18px;
   font-weight: 300;
-  border-color: rgba(255, 107, 107, 0.15);
-  box-shadow: 0 0 10px rgba(255,107,107,0.25),
-              0 0 18px rgba(255,107,107,0.15);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 10px rgba(255,107,107,0.18),
+              0 0 18px rgba(255,107,107,0.1);
+  filter: drop-shadow(0 0 12px rgba(255,107,107,0.2));
   animation: deletePulse 2.4s ease-in-out infinite;
 }
 
@@ -1223,7 +1224,7 @@ body.light-theme .mood-category:not(:disabled) {
   border: 1px solid rgba(255,255,255,0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* allow glow to show outside card */
   display: flex;
   align-items: center;
   gap: 12px;
