@@ -204,3 +204,45 @@
   }
 }
 
+/* Book animations */
+@keyframes bookCoverOpen {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-175deg);
+  }
+}
+
+@keyframes bookCoverClose {
+  from {
+    transform: rotateY(-175deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes claspUnlock {
+  0% {
+    transform: translateY(-50%) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-50%) rotate(-12deg) scale(1.05);
+  }
+  100% {
+    transform: translateY(-50%) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes pageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

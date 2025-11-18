@@ -256,44 +256,64 @@
           <div class="dashboard-column">
             
             <!-- Mood Section -->
-            <section id="moodSection" class="dashboard-card">
-              <div class="card-header">
-                <h2 class="card-title">Mood</h2>
-                <div class="card-subtitle">How are you feeling today?</div>
-                <button id="lockMood" class="btn-lock" aria-label="Lock mood journal" title="Lock journal">
-                  <svg class="lock-icon" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                    <path class="lock-body" d="M19 11H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2z" fill="currentColor"/>
-                    <path class="lock-shackle" d="M7 11V7c0-2.76 2.24-5 5-5s5 2.24 5 5v4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    <circle class="lock-keyhole" cx="12" cy="16" r="1.5" fill="rgba(0,0,0,0.4)"/>
-                  </svg>
-                </button>
-                <button id="clearMood" class="btn-trash" aria-label="Delete moods" title="Delete moods">
-                  <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 32 32'%3e%3cpath fill='white' d='M27 6.25H5a.75.75 0 0 0 0 1.5h1.25V26A1.75 1.75 0 0 0 8 27.75h16A1.75 1.75 0 0 0 25.75 26V7.75H27a.75.75 0 1 0 0-1.5M24.25 26a.25.25 0 0 1-.25.25H8a.25.25 0 0 1-.25-.25V7.75h16.5zm-14-23a.75.75 0 0 1 .75-.75h10a.75.75 0 1 1 0 1.5H11a.75.75 0 0 1-.75-.75'/%3e%3c/svg%3e" alt="" width="20" height="20" class="icon-trash" />
-                </button>
-              </div>
-              <div class="card-content">
-                
-                <!-- Mood Input -->
-                <div class="mood-input-container">
-                  <input id="moodInput" class="mood-input" type="text" placeholder="How are you feeling?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                  
-                  <!-- Category Buttons -->
-                  <div class="mood-categories">
-                    <button class="mood-category happy" data-category="Happy" disabled>Happy</button>
-                    <button class="mood-category calm" data-category="Calm" disabled>Calm</button>
-                    <button class="mood-category tired" data-category="Tired" disabled>Tired</button>
-                    <button class="mood-category sad" data-category="Sad" disabled>Sad</button>
+            <section id="moodSection" class="mood-book">
+              <div class="book-shell">
+                <!-- Book Cover (closed) -->
+                <div class="book-cover" id="moodBookCover">
+                  <div class="book-spine">
+                    <div class="spine-text">Mood Journal</div>
+                    <div class="spine-decoration">✧</div>
                   </div>
-                  
-                  <div id="moodTags" class="mood-tags"></div>
+                  <div class="book-front">
+                    <div class="cover-emboss">
+                      <div class="emboss-title">Mood</div>
+                      <div class="emboss-subtitle">Journal</div>
+                      <div class="emboss-decoration">✶</div>
+                    </div>
+                    <button id="clearMood" class="btn-trash cover-trash" aria-label="Delete moods" title="Delete moods">
+                      <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 32 32'%3e%3cpath fill='white' d='M27 6.25H5a.75.75 0 0 0 0 1.5h1.25V26A1.75 1.75 0 0 0 8 27.75h16A1.75 1.75 0 0 0 25.75 26V7.75H27a.75.75 0 1 0 0-1.5M24.25 26a.25.25 0 0 1-.25.25H8a.25.25 0 0 1-.25-.25V7.75h16.5zm-14-23a.75.75 0 0 1 .75-.75h10a.75.75 0 1 1 0 1.5H11a.75.75 0 0 1-.75-.75'/%3e%3c/svg%3e" alt="" width="20" height="20" class="icon-trash" />
+                    </button>
+                  </div>
+                  <button class="book-clasp" id="moodBookClasp" aria-label="Open mood journal" title="Open journal">
+                    <svg class="clasp-lock" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+                      <circle cx="16" cy="16" r="14" class="clasp-base"/>
+                      <path d="M21 14h-1v-2a4 4 0 0 0-8 0v2h-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1zm-7-2a2 2 0 0 1 4 0v2h-4zm2 8a1 1 0 1 1 1-1 1 1 0 0 1-1 1z" class="clasp-lock-path"/>
+                    </svg>
+                  </button>
                 </div>
-                
-                <!-- Mood Analytics -->
-                <div id="moodAnalytics" class="mood-analytics">
-                  <div class="mood-stat mood-stat-most">Most felt today: <span>—</span></div>
-                  <div class="mood-stat mood-stat-range">Today's range: <span>—</span></div>
+
+                <!-- Book Interior -->
+                <div class="book-interior">
+                  <div class="book-page book-page-left">
+                    <div class="page-header">
+                      <div class="page-title">Dear Maia</div>
+                      <div class="page-date" id="moodPageDate"></div>
+                    </div>
+                    <div class="page-content">
+                      <div class="mood-input-container">
+                        <input id="moodInput" class="mood-input" type="text" placeholder="What would you like to write today?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                        <div class="mood-categories">
+                          <button class="mood-category happy" data-category="Happy" disabled>Happy</button>
+                          <button class="mood-category calm" data-category="Calm" disabled>Calm</button>
+                          <button class="mood-category tired" data-category="Tired" disabled>Tired</button>
+                          <button class="mood-category sad" data-category="Sad" disabled>Sad</button>
+                        </div>
+                      </div>
+                      <div id="moodAnalytics" class="mood-analytics">
+                        <div class="mood-stat mood-stat-most">Most felt today: <span>—</span></div>
+                        <div class="mood-stat mood-stat-range">Today's range: <span>—</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="book-page book-page-right">
+                    <div class="page-content-scroll">
+                      <div class="page-scroll-shadow"></div>
+                      <div class="page-scroll-content">
+                        <div id="moodTags" class="mood-tags mood-tags-book"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
               </div>
             </section>
 

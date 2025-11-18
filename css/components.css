@@ -278,207 +278,333 @@
   }
 }
 
-/* Lock Button - Vintage Brass Clasp Style */
-.btn-lock {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(6px) scale(0.95);
-  filter: blur(2px);
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
-              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
-              filter 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s;
-  margin-right: 8px;
-}
-
-.btn-lock .lock-icon {
-  display: block;
-  color: #d4af37; /* Brass color */
-  opacity: 0.7;
-  transition: opacity 0.25s ease, 
-              filter 0.25s ease, 
-              transform 0.25s ease;
-  filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.3));
-}
-
-.dashboard-card:hover .btn-lock,
-.dashboard-card.active .btn-lock {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
-}
-
-.btn-lock:hover .lock-icon {
-  opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6)) 
-          drop-shadow(0 0 16px rgba(212, 175, 55, 0.4));
-  transform: scale(1.05);
-}
-
-.btn-lock:active .lock-icon {
-  transform: scale(0.95);
-}
-
-/* Locked state styling */
-#moodSection.locked {
+/* Mood Book Layout */
+.mood-book {
   position: relative;
-  background: 
-    linear-gradient(135deg, rgba(139, 90, 43, 0.15), rgba(101, 67, 33, 0.12)),
-    linear-gradient(45deg, rgba(120, 81, 45, 0.1), rgba(92, 64, 32, 0.08)) !important;
-  border-color: rgba(212, 175, 55, 0.2) !important;
+  width: 100%;
+  min-height: 520px;
+  perspective: 1600px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
 }
 
-/* Leather texture effect when locked */
-#moodSection.locked::before {
-  content: '';
+.book-shell {
+  position: relative;
+  width: min(780px, 100%);
+  height: 520px;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-shell.open {
+  transform: translateX(-10px);
+}
+
+.book-cover {
   position: absolute;
   inset: 0;
-  background: 
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.02) 2px,
-      rgba(0, 0, 0, 0.02) 4px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.02) 2px,
-      rgba(0, 0, 0, 0.02) 4px
-    );
-  border-radius: 16px;
+  background: linear-gradient(130deg, #f5f5f5, #e7e7e7);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+}
+
+.book-shell.open .book-cover {
+  transform: rotateY(-175deg);
   pointer-events: none;
-  opacity: 0.3;
+  animation: bookCoverOpen 1.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Content blur when locked */
-#moodSection.locked .card-content {
-  filter: blur(12px);
-  opacity: 0.3;
-  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.mood-book.book-closed .book-cover {
+  animation: bookCoverClose 0.9s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Lock overlay */
-.lock-overlay {
-  position: absolute;
-  inset: 0;
+.book-spine {
+  width: 46px;
+  background: linear-gradient(90deg, #c8c8c8, #b8b8b8);
+  border-radius: 18px 0 0 18px;
+  box-shadow: inset -4px 0 10px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 10px;
+  color: rgba(0,0,0,0.45);
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.spine-decoration {
+  font-size: 12px;
+  margin-top: 12px;
+  letter-spacing: 0.4em;
+}
+
+.book-front {
+  flex: 1;
+  position: relative;
+  border-radius: 0 18px 18px 0;
+  background: linear-gradient(150deg, #f9f9f9, #dedede);
+  overflow: hidden;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px;
-  z-index: 100;
-  pointer-events: none;
-  animation: lockOverlayFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.lock-overlay-icon {
-  color: #d4af37;
-  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6))
-          drop-shadow(0 0 24px rgba(212, 175, 55, 0.4));
-  animation: lockIconFloat 3s ease-in-out infinite;
-}
-
-.lock-overlay-text {
-  margin-top: 16px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 18px;
-  font-weight: 300;
-  color: #d4af37;
-  letter-spacing: 0.15em;
+.cover-emboss {
+  text-align: center;
+  color: rgba(0,0,0,0.5);
   text-transform: uppercase;
-  text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+  letter-spacing: 0.3em;
+  font-family: "Playfair Display", Georgia, serif;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
 }
 
-/* Unlocking animation */
-.lock-overlay.unlocking {
-  animation: lockOverlayFadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+.emboss-title {
+  font-size: 28px;
+  margin-bottom: 4px;
+  letter-spacing: 0.4em;
 }
 
-.lock-overlay.unlocking .lock-overlay-icon {
-  animation: lockIconUnlock 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+.emboss-subtitle {
+  font-size: 14px;
+  letter-spacing: 0.5em;
 }
 
-/* Lock animations */
-@keyframes lockOverlayFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.emboss-decoration {
+  margin-top: 16px;
+  font-size: 18px;
 }
 
-@keyframes lockOverlayFadeOut {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.05);
-  }
+.cover-trash {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes lockIconFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes lockIconUnlock {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-10px) rotate(15deg);
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-20px) rotate(30deg);
-    opacity: 0;
-  }
-}
-
-/* Lock icon state changes */
-#moodSection.locked .btn-lock .lock-icon {
-  color: #ffd700; /* Brighter gold when locked */
+.cover-trash:hover {
   opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))
-          drop-shadow(0 0 16px rgba(255, 215, 0, 0.4));
 }
 
-/* Rotate shackle when unlocked */
-#moodSection:not(.locked) .btn-lock .lock-shackle {
-  transform-origin: 12px 11px;
-  transform: rotate(-45deg) translateY(-2px);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.book-clasp {
+  position: absolute;
+  right: -28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, #d4af37, #b8922a);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease, filter 0.4s ease;
+  z-index: 5;
+  animation: claspUnlock 4s ease-in-out infinite;
 }
 
-#moodSection.locked .btn-lock .lock-shackle {
-  transform: rotate(0deg) translateY(0);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.book-shell.open .book-clasp {
+  animation: none;
+}
+
+.book-clasp:hover {
+  transform: translateY(-50%) scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(212,175,55,0.6));
+}
+
+.clasp-base {
+  fill: url(#brassGradient);
+}
+
+.clasp-lock-path {
+  fill: rgba(0,0,0,0.5);
+}
+
+.book-interior {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #fefefe 0%, #f4f4f4 50%, #fefefe 100%);
+  border-radius: 18px;
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  display: flex;
+  gap: 0;
+}
+
+.book-interior::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.15), transparent);
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px rgba(0,0,0,0.25);
+}
+
+.book-shell.open .book-interior {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.book-shell.open .book-page {
+  animation: pageReveal 0.6s ease forwards;
+}
+
+.book-page {
+  width: 50%;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-page-left {
+  background: linear-gradient(180deg, rgba(0,0,0,0.03), transparent);
+  border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+.book-page-right {
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.02));
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 22px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.7);
+}
+
+.page-date {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-content-scroll {
+  position: relative;
+  flex: 1;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.85);
+  overflow: hidden;
+}
+
+.page-scroll-content {
+  height: 100%;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.page-scroll-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.page-scroll-content::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
+.page-scroll-content::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+}
+
+.page-content-scroll::before,
+.page-content-scroll::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18px;
+  pointer-events: none;
+}
+
+.page-content-scroll::before {
+  top: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), transparent);
+}
+
+.page-content-scroll::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(255,255,255,0.9), transparent);
+}
+
+.mood-tags-book .mood-tag {
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: none;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.mood-book.book-closed .book-interior {
+  pointer-events: none;
+}
+
+.mood-book.book-closed .book-cover {
+  pointer-events: auto;
+}
+
+.mood-book .mood-categories {
+  opacity: 1;
+  max-height: none;
+  transform: none;
+  filter: none;
+  pointer-events: auto;
+  margin-top: 20px;
+}
+
+.mood-book .mood-input {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  background: rgba(0,0,0,0.03);
+  border-color: rgba(0,0,0,0.08);
+  color: #111;
+}
+
+.mood-book .mood-input::placeholder {
+  color: rgba(0,0,0,0.4);
+}
+
+.mood-book .mood-analytics {
+  border-top: 1px dashed rgba(0,0,0,0.1);
+}
+
+.mood-book .mood-tag {
+  color: #222;
 }
 
 /* Icon Button Base Style */

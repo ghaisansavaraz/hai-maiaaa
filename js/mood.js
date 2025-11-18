@@ -2,15 +2,15 @@
 
 import { MOOD_STORAGE_KEY, debugLog, debugError } from './config.js';
 
-// Lock state storage key
+// Book state storage key (reuse legacy lock key for compatibility)
 const MOOD_LOCK_KEY = "maiaaa_mood_locked_v1";
 
 // Selection mode state
 let moodSelectionMode = false;
 let selectedMoodIds = new Set();
 
-// Lock state
-let moodLocked = false;
+// Book closed state
+let moodBookClosed = true;
 
 export function toggleMoodSelectionMode(triggerBtn) {
   try {
@@ -501,114 +501,74 @@ export function initMoodEventListeners() {
   });
 }
 
-// Toggle mood lock state
-export function toggleMoodLock() {
+function updateMoodBookDate() {
+  const pageDate = document.getElementById("moodPageDate");
+  if (!pageDate) return;
+  const now = new Date();
+  pageDate.textContent = now.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
+  });
+}
+
+function applyMoodBookState() {
+  const section = document.getElementById("moodSection");
+  if (!section) return;
+
+  const bookShell = section.querySelector(".book-shell");
+  const bookCover = section.querySelector(".book-cover");
+  const bookInterior = section.querySelector(".book-interior");
+  const claspButton = document.getElementById("moodBookClasp");
+
+  const isClosed = moodBookClosed;
+
+  section.classList.toggle("open", !isClosed);
+  section.classList.toggle("book-closed", isClosed);
+  bookShell?.classList.toggle("open", !isClosed);
+  bookCover?.classList.toggle("open", !isClosed);
+  bookInterior?.classList.toggle("open", !isClosed);
+
+  if (claspButton) {
+    claspButton.setAttribute(
+      "aria-label",
+      isClosed ? "Open mood journal" : "Close mood journal"
+    );
+    claspButton.setAttribute(
+      "title",
+      isClosed ? "Open journal" : "Close journal"
+    );
+  }
+
+  debugLog(`Mood journal ${isClosed ? "closed" : "opened"}`);
+}
+
+// Toggle mood book state (open/close)
+export function toggleBookState() {
   try {
-    moodLocked = !moodLocked;
-    
-    // Save to localStorage
-    localStorage.setItem(MOOD_LOCK_KEY, JSON.stringify(moodLocked));
-    
-    // Update UI
-    const section = document.getElementById("moodSection");
-    const lockBtn = document.getElementById("lockMood");
-    const content = section.querySelector(".card-content");
-    
-    if (moodLocked) {
-      // Lock the section
-      section.classList.add("locked");
-      if (lockBtn) {
-        lockBtn.setAttribute("aria-label", "Unlock mood journal");
-        lockBtn.setAttribute("title", "Unlock journal");
-      }
-      
-      // Disable all interactions
-      if (content) {
-        content.style.pointerEvents = "none";
-      }
-      
-      // Create lock overlay
-      const overlay = document.createElement("div");
-      overlay.className = "lock-overlay";
-      overlay.innerHTML = `
-        <svg class="lock-overlay-icon" viewBox="0 0 24 24" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
-          <path class="lock-body" d="M19 11H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2z" fill="currentColor"/>
-          <path class="lock-shackle" d="M7 11V7c0-2.76 2.24-5 5-5s5 2.24 5 5v4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <circle class="lock-keyhole" cx="12" cy="16" r="1.5" fill="rgba(0,0,0,0.4)"/>
-        </svg>
-        <div class="lock-overlay-text">Locked</div>
-      `;
-      section.appendChild(overlay);
-      
-      debugLog("Mood journal locked");
-    } else {
-      // Unlock the section
-      section.classList.remove("locked");
-      if (lockBtn) {
-        lockBtn.setAttribute("aria-label", "Lock mood journal");
-        lockBtn.setAttribute("title", "Lock journal");
-      }
-      
-      // Re-enable interactions
-      if (content) {
-        content.style.pointerEvents = "auto";
-      }
-      
-      // Remove lock overlay
-      const overlay = section.querySelector(".lock-overlay");
-      if (overlay) {
-        overlay.classList.add("unlocking");
-        setTimeout(() => overlay.remove(), 600);
-      }
-      
-      debugLog("Mood journal unlocked");
-    }
+    moodBookClosed = !moodBookClosed;
+    localStorage.setItem(MOOD_LOCK_KEY, JSON.stringify(moodBookClosed));
+    applyMoodBookState();
   } catch (e) {
-    debugError("Failed to toggle mood lock:", e);
+    debugError("Failed to toggle mood journal state:", e);
   }
 }
 
-// Load mood lock state from localStorage
-export function loadMoodLockState() {
+// Load mood book state from localStorage
+export function loadMoodBookState() {
   try {
     const stored = localStorage.getItem(MOOD_LOCK_KEY);
-    if (stored) {
-      moodLocked = JSON.parse(stored);
-      
-      if (moodLocked) {
-        // Apply locked state
-        const section = document.getElementById("moodSection");
-        const lockBtn = document.getElementById("lockMood");
-        const content = section.querySelector(".card-content");
-        
-        section.classList.add("locked");
-        if (lockBtn) {
-          lockBtn.setAttribute("aria-label", "Unlock mood journal");
-          lockBtn.setAttribute("title", "Unlock journal");
-        }
-        
-        if (content) {
-          content.style.pointerEvents = "none";
-        }
-        
-        // Create lock overlay
-        const overlay = document.createElement("div");
-        overlay.className = "lock-overlay";
-        overlay.innerHTML = `
-          <svg class="lock-overlay-icon" viewBox="0 0 24 24" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
-            <path class="lock-body" d="M19 11H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2z" fill="currentColor"/>
-            <path class="lock-shackle" d="M7 11V7c0-2.76 2.24-5 5-5s5 2.24 5 5v4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <circle class="lock-keyhole" cx="12" cy="16" r="1.5" fill="rgba(0,0,0,0.4)"/>
-          </svg>
-          <div class="lock-overlay-text">Locked</div>
-        `;
-        section.appendChild(overlay);
-        
-        debugLog("Mood journal loaded as locked");
-      }
+    if (stored !== null) {
+      moodBookClosed = JSON.parse(stored);
+    } else {
+      moodBookClosed = true; // Closed by default for privacy
     }
   } catch (e) {
-    debugError("Failed to load mood lock state:", e);
+    debugError("Failed to parse mood book state:", e);
+    moodBookClosed = true;
+  } finally {
+    updateMoodBookDate();
+    applyMoodBookState();
   }
 }
 

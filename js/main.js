@@ -3,7 +3,7 @@
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
 import { DynamicBackground, applyTheme, toggleTheme } from './background.js';
 import { startTimeDisplay } from './clock.js';
-import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode, toggleMoodLock, loadMoodLockState } from './mood.js';
+import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode, toggleBookState, loadMoodBookState } from './mood.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar } from './shootingstar.js';
@@ -136,7 +136,7 @@ function initEditorKey() {
   }
 }
 
-// Clear mood button and lock button
+// Clear mood button and book clasp
 function initClearButtons() {
   const clearMoodBtn = document.getElementById("clearMood");
   if (clearMoodBtn) {
@@ -147,12 +147,12 @@ function initClearButtons() {
     });
   }
   
-  const lockMoodBtn = document.getElementById("lockMood");
-  if (lockMoodBtn) {
-    console.log("[Maiaaa] Lock button wired for mood journal");
-    lockMoodBtn.addEventListener("click", () => {
-      console.log("[Maiaaa] Lock clicked - toggling lock state");
-      toggleMoodLock();
+  const bookClaspBtn = document.getElementById("moodBookClasp");
+  if (bookClaspBtn) {
+    console.log("[Maiaaa] Book clasp wired for mood journal");
+    bookClaspBtn.addEventListener("click", () => {
+      console.log("[Maiaaa] Clasp clicked - toggling book state");
+      toggleBookState();
     });
   }
   
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize all components
     loadMoods();
-    loadMoodLockState(); // Load lock state after moods are loaded
+    loadMoodBookState(); // Load book state after moods are loaded
     loadReminders();
     loadTasks();
     renderLetters();
