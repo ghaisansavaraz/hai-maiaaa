@@ -289,7 +289,7 @@
 .mood-book {
   position: relative;
   width: 100%;
-  max-width: 720px;
+  max-width: 640px;
   min-height: 520px;
   perspective: 1600px;
   display: flex;
@@ -298,8 +298,8 @@
 
 .book-shell {
   position: relative;
-  width: min(720px, 90vw);
-  height: 520px;
+  width: min(640px, 88vw);
+  height: 500px;
   transform-style: preserve-3d;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

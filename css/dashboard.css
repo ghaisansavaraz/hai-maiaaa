@@ -142,8 +142,8 @@ body.light-theme #moonIconContainer {
 }
 
 .dashboard-grid.book-open {
-  grid-template-columns: 1.35fr 0.9fr;
-  gap: 48px;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 36px;
 }
 
 .dashboard-grid .dashboard-column {
@@ -151,7 +151,7 @@ body.light-theme #moonIconContainer {
 }
 
 .dashboard-grid.book-open .dashboard-column:last-child {
-  transform: translateX(20px);
+  transform: translateX(14px);
 }
 
 .dashboard-column {
