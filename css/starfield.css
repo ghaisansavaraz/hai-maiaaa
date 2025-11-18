@@ -272,7 +272,7 @@ body:not(.light-theme) .stars-container {
   }
 }
 
-/* Minimalist visible blink - soft but noticeable */
+/* Minimalist visible blink - soft cadence */
 @keyframes starBlinkVisible {
   0%, 100% {
     opacity: 0.25;
@@ -282,18 +282,18 @@ body:not(.light-theme) .stars-container {
       0 0 10px rgba(255, 255, 255, 0.2);
   }
   45% {
-    opacity: 0.75;
-    filter: brightness(1.2);
+    opacity: 0.65;
+    filter: brightness(1.15);
     box-shadow:
-      0 0 8px rgba(255, 255, 255, 0.5),
-      0 0 18px rgba(255, 255, 255, 0.3);
+      0 0 6px rgba(255, 255, 255, 0.45),
+      0 0 14px rgba(255, 255, 255, 0.25);
   }
-  55% {
-    opacity: 1;
-    filter: brightness(1.8);
+  60% {
+    opacity: 0.85;
+    filter: brightness(1.4);
     box-shadow:
-      0 0 12px rgba(255, 255, 255, 0.9),
-      0 0 26px rgba(255, 255, 255, 0.5);
+      0 0 10px rgba(255, 255, 255, 0.7),
+      0 0 20px rgba(255, 255, 255, 0.35);
   }
 }
 
@@ -338,15 +338,15 @@ body:not(.light-theme) .stars-container {
 }
 
 .star:nth-child(6n+5) {
-  animation: starBlinkVisible 5s ease-in-out infinite;
-  animation-delay: 0.5s;
+  animation: starBlinkVisible 8s ease-in-out infinite;
+  animation-delay: 1s;
   width: 2.2px;
   height: 2.2px;
 }
 
 .star:nth-child(6n) {
-  animation: starBlinkVisible 6s ease-in-out infinite;
-  animation-delay: 1s;
+  animation: starBlinkVisible 10s ease-in-out infinite;
+  animation-delay: 2s;
   width: 2.2px;
   height: 2.2px;
 }
