@@ -63,10 +63,10 @@ body {
   -webkit-color-scheme: dark;
 }
 
-/* Force pure black on html as well */
+/* Root background follows theme (white in day, black in night) */
 html {
-  background: #000000;
-  background-color: #000000;
+  background: #ffffff;
+  background-color: #ffffff;
 }
 
 /* Light theme - white background with black dashboard */
