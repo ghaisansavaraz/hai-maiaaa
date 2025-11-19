@@ -51,23 +51,22 @@ body {
   font-family: var(--font-stack);
   margin: 0;
   min-height: 100vh;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #000000 !important;
-  background-color: #000000 !important;
+  background: #000000;
+  background-color: #000000;
   color: #ffffff;
   position: relative;
   padding: 0;
   transition: color 0.5s ease;
-  color-scheme: dark !important;
-  -webkit-color-scheme: dark !important;
+  color-scheme: dark;
+  -webkit-color-scheme: dark;
 }
 
 /* Force pure black on html as well */
 html {
-  background: #000000 !important;
-  background-color: #000000 !important;
+  background: #000000;
+  background-color: #000000;
 }
 
 /* Light theme - white background with black dashboard */
@@ -78,13 +77,6 @@ body.light-theme {
   -webkit-color-scheme: light !important;
 }
 
-html, body {
-  background: #000000 !important;
-  background-color: #000000 !important;
-  color: #fff !important;
-  color-scheme: dark;
-  -webkit-color-scheme: dark;
-}
 
 /* Prevent any browser default styling that causes light vignette */
 body {
