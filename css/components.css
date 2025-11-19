@@ -294,6 +294,8 @@
   perspective: 1600px;
   display: flex;
   justify-content: center;
+  color-scheme: light;
+  -webkit-color-scheme: light;
 }
 
 .book-shell {
@@ -610,15 +612,16 @@
 }
 
 .mood-tags-book .mood-tag {
-  background: rgba(0,0,0,0.04);
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: none;
+  background: #f8f7f4 !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
   font-family: "Playfair Display", Georgia, serif;
   width: 100%;
   margin: 0;
   padding: 10px 8px 6px;
   align-items: flex-start;
   box-sizing: border-box;
+  color: #0f0f0f;
 }
 
 .mood-book.book-closed .book-interior {
@@ -654,9 +657,9 @@
   opacity: 1 !important;
   pointer-events: auto !important;
   transform: none !important;
-  background: rgba(0,0,0,0.02);
-  border-color: rgba(0,0,0,0.08);
-  color: #111;
+  background: #fdfdf8 !important;
+  border-color: rgba(0,0,0,0.12) !important;
+  color: #0f0f0f !important;
 }
 
 .mood-book .mood-input::placeholder {
