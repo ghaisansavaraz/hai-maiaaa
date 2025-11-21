@@ -174,11 +174,11 @@
 @keyframes memoAppear {
   from {
     opacity: 0;
-    transform: translateY(10px) rotate(-1deg) scale(0.95);
+    transform: translateY(12px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0) rotate(var(--memo-rotation, -0.5deg)) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 

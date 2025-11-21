@@ -293,7 +293,7 @@
 .mood-book {
   position: relative;
   width: 100%;
-  max-width: 640px;
+  max-width: 620px;
   min-height: 520px;
   perspective: 1600px;
   display: flex;
@@ -304,7 +304,7 @@
 
 .book-shell {
   position: relative;
-  width: min(640px, 88vw);
+  width: min(620px, 88vw);
   height: 500px;
   transform-style: preserve-3d;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1552,14 +1552,13 @@ body.light-theme .mood-category:not(:disabled) {
 
 .memos-and-tasks-card .card-content.memos-tasks-content {
   display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  grid-template-rows: 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
   gap: 32px;
-  padding: 20px;
+  padding: 24px;
   flex: 1;
-  min-height: 0;
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .memos-column,
@@ -1568,10 +1567,21 @@ body.light-theme .mood-category:not(:disabled) {
   flex-direction: column;
   gap: 16px;
   min-width: 0;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 8px;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
+}
+
+.memos-column::-webkit-scrollbar,
+.tasks-column::-webkit-scrollbar,
+.memos-column::-webkit-scrollbar-track,
+.tasks-column::-webkit-scrollbar-track,
+.memos-column::-webkit-scrollbar-thumb,
+.tasks-column::-webkit-scrollbar-thumb,
+.memos-column::-webkit-scrollbar-thumb:hover,
+.tasks-column::-webkit-scrollbar-thumb:hover {
+  display: none;
 }
 
 .memos-column::-webkit-scrollbar,
@@ -1669,37 +1679,22 @@ body.light-theme .column-title {
 }
 
 .reminder-card {
-  padding: 12px 14px;
-  border-radius: 4px;
-  background: #e8e8e8;
-  background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(0,0,0,0.03) 31px, rgba(0,0,0,0.03) 32px),
-    linear-gradient(180deg, #e8e8e8 0%, #e0e0e0 100%);
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: #f8f7f3;
   border: 1px solid rgba(0,0,0,0.08);
-  border-top: 2px solid rgba(0,0,0,0.1);
-  box-shadow: 
-    0 2px 8px rgba(0,0,0,0.15),
-    0 1px 3px rgba(0,0,0,0.1),
-    inset 0 -1px 0 rgba(255,255,255,0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: visible;
   display: flex;
   align-items: flex-start;
   gap: 10px;
   opacity: 0;
-  transform: rotate(-0.5deg);
-  animation: memoAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: memoAppear 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   max-width: 100%;
   margin-bottom: 10px;
-}
-
-.reminder-card:nth-child(even) {
-  transform: rotate(0.3deg);
-}
-
-.reminder-card:nth-child(3n) {
-  transform: rotate(-0.2deg);
+  transform: none;
 }
 
 .reminder-card::before {
@@ -1713,7 +1708,7 @@ body.light-theme .column-title {
 }
 
 .reminder-card:hover {
-  transform: translateY(-3px) rotate(0deg) scale(1.02);
+  transform: translateY(-3px);
   box-shadow: 
     0 4px 12px rgba(0,0,0,0.2),
     0 2px 6px rgba(0,0,0,0.15),
@@ -1722,7 +1717,7 @@ body.light-theme .column-title {
 }
 
 .reminder-card:hover .reminder-text {
-  color: #1a1a1a;
+  color: #111;
 }
 
 .reminder-card.removing {
@@ -1737,9 +1732,9 @@ body.light-theme .column-title {
 }
 
 .reminder-text {
-  font-size: 13px;
-  font-weight: 400;
-  color: #2a2a2a;
+  font-size: 14px;
+  font-weight: 500;
+  color: #101010;
   line-height: 1.5;
   margin: 0;
   word-wrap: break-word;

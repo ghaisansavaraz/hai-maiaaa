@@ -983,10 +983,10 @@ body.light-theme #moonIconContainer {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 40px;
+  gap: 48px;
   margin-bottom: 48px;
   width: 100%;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .dashboard-column {
@@ -994,7 +994,9 @@ body.light-theme #moonIconContainer {
   flex-direction: column;
   gap: 24px;
   transition: transform 0.5s ease;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  width: auto;
+  max-width: 100%;
 }
 
 /* Dashboard Cards - More transparent for star visibility */
