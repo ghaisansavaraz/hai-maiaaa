@@ -1308,31 +1308,26 @@ body.light-theme .mood-category:not(:disabled) {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 0;
+  transform: translateY(-10px) scale(0.98);
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), 
+              max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  filter: blur(4px);
+  margin-bottom: 0;
+}
+
+.memos-and-tasks-card:hover .task-controls,
+.memos-and-tasks-card.active .task-controls {
   opacity: 1;
   pointer-events: auto;
-  max-height: none;
-  transform: none;
-  transition: opacity 0.3s ease;
-  overflow: visible;
-  filter: none;
+  max-height: 500px;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
   margin-bottom: 12px;
-}
-
-.memos-and-tasks-card .task-controls {
-  opacity: 1;
-  pointer-events: auto;
-  max-height: none;
-  transform: none;
-  filter: none;
-}
-
-.dashboard-card:hover .task-controls,
-.dashboard-card.active .task-controls {
-  opacity: 1;
-  pointer-events: auto;
-  max-height: none;
-  transform: none;
-  filter: none;
 }
 
 .deadline-controls {
@@ -1555,18 +1550,14 @@ body.light-theme .mood-category:not(:disabled) {
   align-self: flex-start;
 }
 
-.memos-and-tasks-card .card-content {
-  display: flex;
+.memos-and-tasks-card .card-content.memos-tasks-content {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: 1fr;
   gap: 24px;
   padding: 0;
   flex: 1;
   min-height: 0;
-}
-
-.memos-tasks-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
   width: 100%;
   height: 100%;
 }
@@ -1628,31 +1619,26 @@ body.light-theme .column-title {
   gap: 10px; 
   width: 100%; 
   justify-content: flex-start;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 0;
+  transform: translateY(-10px) scale(0.98);
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), 
+              max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  filter: blur(4px);
+  margin-bottom: 0;
+}
+
+.memos-and-tasks-card:hover .reminder-controls,
+.memos-and-tasks-card.active .reminder-controls {
   opacity: 1;
   pointer-events: auto;
-  max-height: none;
-  transform: none;
-  transition: opacity 0.3s ease;
-  overflow: visible;
-  filter: none;
+  max-height: 500px;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
   margin-bottom: 12px;
-}
-
-.memos-and-tasks-card .reminder-controls {
-  opacity: 1;
-  pointer-events: auto;
-  max-height: none;
-  transform: none;
-  filter: none;
-}
-
-.dashboard-card:hover .reminder-controls,
-.dashboard-card.active .reminder-controls {
-  opacity: 1;
-  pointer-events: auto;
-  max-height: none;
-  transform: none;
-  filter: none;
 }
 
 .reminder-input { 
