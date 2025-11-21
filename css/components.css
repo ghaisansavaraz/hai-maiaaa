@@ -1382,10 +1382,11 @@ body.light-theme .mood-category:not(:disabled) {
   position: relative;
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px;
-  align-items: stretch;
-  padding: 8px 8px 24px;
+  grid-template-columns: repeat(2, minmax(320px, 1fr));
+  gap: 40px;
+  align-items: flex-start;
+  padding: 56px 24px 24px;
+  box-sizing: border-box;
 }
 
 .productivity-column {
@@ -1393,14 +1394,18 @@ body.light-theme .mood-category:not(:disabled) {
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .reminders-column {
   padding-right: 24px;
+  border-right: 1px dashed rgba(255,255,255,0.08);
 }
 
 .tasks-column {
   padding-left: 24px;
+  border-left: 1px dashed rgba(255,255,255,0.08);
 }
 
 .column-top {
@@ -1492,7 +1497,7 @@ body.light-theme .mood-category:not(:disabled) {
 .timeline-overlay {
   pointer-events: none;
   position: absolute;
-  top: 32px;
+  top: 40px;
   bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
@@ -1500,24 +1505,25 @@ body.light-theme .mood-category:not(:disabled) {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 0;
 }
 
 .timeline-header {
   position: absolute;
-  top: -18px;
+  top: -32px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 8px;
   background: rgba(0,0,0,0.45);
-  padding: 4px 16px;
+  padding: 6px 18px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.1);
   backdrop-filter: blur(12px);
   text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  letter-spacing: 0.18em;
 }
 
 .timeline-title {
@@ -1547,6 +1553,7 @@ body.light-theme .mood-category:not(:disabled) {
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  text-align: center;
 }
 
 .timeline-dot {
@@ -1582,10 +1589,25 @@ body.light-theme .mood-category:not(:disabled) {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.45);
+}
+
+@media (max-width: 1200px) {
+  .productivity-grid {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 48px 16px 16px;
+  }
+  .reminders-column,
+  .tasks-column {
+    padding: 0;
+    border: none;
+  }
+  .timeline-overlay {
+    display: none;
+  }
 }
 
 .deadline-controls {
