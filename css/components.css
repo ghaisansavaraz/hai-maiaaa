@@ -1545,7 +1545,8 @@ body.light-theme .mood-category:not(:disabled) {
 
 .memos-and-tasks-card {
   width: 100%;
-  max-width: 1200px;
+  min-width: 640px;
+  max-width: 1400px;
   min-height: 500px;
   height: 500px;
   display: flex;
