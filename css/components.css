@@ -1747,7 +1747,11 @@ body.light-theme .mood-category:not(:disabled) {
 .dashboard-card .card-subtitle,
 .dashboard-card .mood-tag-text,
 .dashboard-card .task-text,
-.dashboard-card .reminder-text,
+.dashboard-card .reminder-text {
+  opacity: 1 !important;
+  color: inherit !important;
+}
+
 .reminder-list { 
   list-style: none; 
   padding: 0; 
