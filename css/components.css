@@ -1356,7 +1356,8 @@ body.light-theme .mood-category:not(:disabled) {
   border: 1px solid rgba(255,255,255,0.1);
   transition: all var(--transition-normal);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  min-width: 0;
 }
 
 /* Selection overlays (reusable) */
@@ -1550,13 +1551,14 @@ body.light-theme .mood-category:not(:disabled) {
   display: flex;
   flex-direction: column;
   align-self: flex-start;
+  padding: 16px !important;
 }
 
 .memos-and-tasks-card .card-content.memos-tasks-content {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
   gap: 40px;
-  padding: 24px;
+  padding: 12px;
   flex: 1;
   width: 100%;
   height: 100%;
@@ -1569,10 +1571,12 @@ body.light-theme .mood-category:not(:disabled) {
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+  width: 100%;
   height: auto;
   max-height: none;
   overflow: visible;
-  padding-right: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .memos-column::-webkit-scrollbar,
@@ -1694,9 +1698,11 @@ body.light-theme .column-title {
   gap: 10px;
   opacity: 0;
   animation: memoAppear 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  max-width: 100%;
+  width: 100%;
+  min-width: 0;
   margin-bottom: 10px;
   transform: none;
+  box-sizing: border-box;
 }
 
 .reminder-card::before {
@@ -1729,8 +1735,9 @@ body.light-theme .column-title {
 .reminder-card-content {
   flex: 1;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   text-align: left;
+  width: 100%;
 }
 
 .reminder-text {
@@ -1743,7 +1750,8 @@ body.light-theme .column-title {
   word-break: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;
-  max-width: 100%;
+  width: 100%;
+  min-width: 0;
   transition: color 0.3s ease;
   cursor: text;
   text-align: left;
