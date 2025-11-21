@@ -12,6 +12,7 @@ let selectedMoodIds = new Set();
 // Book closed state
 let moodBookClosed = true;
 let moodBookAnimating = false;
+const BOOK_TRANSITION_DURATION = 1400;
 
 export function toggleMoodSelectionMode(triggerBtn) {
   try {
@@ -143,61 +144,6 @@ function formatTimeAgo(timestamp) {
   return then.toLocaleDateString();
 }
 
-// Calculate mood analytics with category breakdown
-function calculateMoodAnalytics(moods) {
-  if (moods.length === 0) return null;
-  
-  const today = new Date().toDateString();
-  const todayMoods = moods.filter(m => new Date(m.timestamp).toDateString() === today);
-  
-  // Category counts
-  const categoryCounts = {};
-  todayMoods.forEach(m => {
-    categoryCounts[m.category] = (categoryCounts[m.category] || 0) + 1;
-  });
-  
-  // Most felt category
-  const mostFeltCategory = Object.keys(categoryCounts).length > 0 
-    ? Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])[0]
-    : null;
-  
-  return {
-    mostFeltCategory: mostFeltCategory ? mostFeltCategory[0] : null,
-    mostFeltCount: mostFeltCategory ? mostFeltCategory[1] : 0,
-    rangeToday: todayMoods.length,
-    totalMoods: moods.length,
-    categoryCounts
-  };
-}
-
-// Update mood analytics display with category breakdown
-function updateMoodAnalytics(moods) {
-  const analytics = document.getElementById("moodAnalytics");
-  if (!analytics) return;
-  
-  const stats = calculateMoodAnalytics(moods);
-  if (!stats) {
-    analytics.style.display = "none";
-    return;
-  }
-  
-  analytics.style.display = "flex";
-  
-  const mostFeltEl = analytics.querySelector(".mood-stat-most");
-  const rangeEl = analytics.querySelector(".mood-stat-range");
-  
-  if (mostFeltEl && stats.mostFeltCategory) {
-    mostFeltEl.innerHTML = `Most felt: <span>${stats.mostFeltCategory} (${stats.mostFeltCount})</span>`;
-  }
-  
-  if (rangeEl) {
-    const categoryText = Object.entries(stats.categoryCounts)
-      .map(([cat, count]) => `${count} ${cat}`)
-      .join(', ');
-    rangeEl.innerHTML = `Today: <span>${categoryText || 'No moods yet'}</span>`;
-  }
-}
-
 // Cycle mood intensity
 function cycleMoodIntensity(id) {
   try {
@@ -259,8 +205,7 @@ export function loadMoods() {
       moodTags.appendChild(emptyState);
       
       // Hide analytics
-      const analytics = document.getElementById("moodAnalytics");
-      if (analytics) analytics.style.display = "none";
+        if (analytics) analytics.style.display = "none";
       return;
     }
     
@@ -399,8 +344,7 @@ export function initMoodEventListeners() {
       
       debugLog(`Input changed, hasText: ${hasText}`);
       
-      // Show category buttons, hide mood tags and analytics during input
-      const analyticsContainer = document.getElementById("moodAnalytics");
+      // Show category buttons while typing
       
       if (hasText) {
         // Show categories
@@ -410,14 +354,10 @@ export function initMoodEventListeners() {
           debugLog("Category container classes:", categoryContainer.className);
         }
         
-        // Hide mood tags and analytics
+        // Hide mood tags while typing
         if (moodTagsContainer) {
           moodTagsContainer.classList.add("hidden");
           debugLog("✓ Hidden mood tags");
-        }
-        if (analyticsContainer) {
-          analyticsContainer.classList.add("hidden");
-          debugLog("✓ Hidden analytics");
         }
         
         // Enable category buttons with animation restart
@@ -439,9 +379,8 @@ export function initMoodEventListeners() {
           categoryContainer.classList.remove("visible");
         }
         
-        // Show mood tags and analytics
+        // Show mood tags
         if (moodTagsContainer) moodTagsContainer.classList.remove("hidden");
-        if (analyticsContainer) analyticsContainer.classList.remove("hidden");
         
         // Disable category buttons
         categoryButtons.forEach(btn => {
@@ -487,11 +426,9 @@ export function initMoodEventListeners() {
         btn.disabled = true;
       });
       
-      // Hide category buttons, show mood tags and analytics
-      const analyticsContainer = document.getElementById("moodAnalytics");
+      // Hide category buttons and show mood tags
       if (categoryContainer) categoryContainer.classList.remove("visible");
       if (moodTagsContainer) moodTagsContainer.classList.remove("hidden");
-      if (analyticsContainer) analyticsContainer.classList.remove("hidden");
       
       // Visual feedback
       button.style.transform = "scale(0.95)";
@@ -563,13 +500,17 @@ export function toggleBookState() {
     if (moodBookAnimating) return;
     moodBookAnimating = true;
 
+    const section = document.getElementById("moodSection");
+    if (section) section.classList.add("book-transitioning");
+
     moodBookClosed = !moodBookClosed;
     localStorage.setItem(MOOD_LOCK_KEY, JSON.stringify(moodBookClosed));
     applyMoodBookState();
 
     setTimeout(() => {
       moodBookAnimating = false;
-    }, 900);
+      if (section) section.classList.remove("book-transitioning");
+    }, BOOK_TRANSITION_DURATION);
   } catch (e) {
     debugError("Failed to toggle mood journal state:", e);
     moodBookAnimating = false;

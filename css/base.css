@@ -63,10 +63,18 @@ body {
   -webkit-color-scheme: dark;
 }
 
-/* Root background follows theme (white in day, black in night) */
+/* Root background defaults to night sky */
 html {
+  background: #000000;
+  background-color: #000000;
+}
+
+/* Light theme root override */
+html.light-theme {
   background: #ffffff;
   background-color: #ffffff;
+  color-scheme: light;
+  -webkit-color-scheme: light;
 }
 
 /* Light theme - white background with black dashboard */

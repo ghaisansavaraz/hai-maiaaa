@@ -286,6 +286,10 @@
   margin-bottom: 32px;
 }
 
+#moodSection.book-transitioning .book-shell {
+  pointer-events: none;
+}
+
 .mood-book {
   position: relative;
   width: 100%;
@@ -664,10 +668,6 @@
 
 .mood-book .mood-input::placeholder {
   color: rgba(0,0,0,0.4);
-}
-
-.mood-book .mood-analytics {
-  border-top: 1px dashed rgba(0,0,0,0.1);
 }
 
 .mood-book .mood-tag {
@@ -1276,39 +1276,6 @@ body.light-theme .mood-category:not(:disabled) {
     0 0 15px rgba(255,255,255,0.1);
 }
 
-.mood-analytics {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  transition: opacity 0.3s ease, max-height 0.3s ease;
-}
-
-.mood-analytics.hidden {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  padding-top: 0;
-  margin-top: 0;
-  border-top: none;
-}
-
-.mood-stat {
-  font-size: 12px;
-  font-weight: 300;
-  color: rgba(255,255,255,0.6);
-  letter-spacing: 0.05em;
-  text-align: center;
-}
-
-.mood-stat span {
-  color: rgba(255,255,255,0.9);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
 .mood-empty-state {
   display: flex;
   flex-direction: column;
@@ -1765,7 +1732,6 @@ body.light-theme .mood-category:not(:disabled) {
 .dashboard-card .mood-tags,
 .dashboard-card .tasks-container,
 .dashboard-card .reminder-cards,
-.dashboard-card .mood-analytics,
 .dashboard-card .coming-soon,
 .dashboard-card .card-title,
 .dashboard-card .card-subtitle,
@@ -1781,8 +1747,7 @@ body.light-theme .mood-category:not(:disabled) {
 .dashboard-card .card-subtitle,
 .dashboard-card .mood-tag-text,
 .dashboard-card .task-text,
-.dashboard-card .reminder-text,
-.dashboard-card .mood-stat {
+.dashboard-card .reminder-text {
   opacity: 1 !important;
   color: inherit !important;
 }
