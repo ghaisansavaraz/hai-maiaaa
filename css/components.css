@@ -1542,7 +1542,7 @@ body.light-theme .mood-category:not(:disabled) {
 
 .memos-and-tasks-card {
   width: 100%;
-  max-width: 750px;
+  max-width: 900px;
   min-height: 500px;
   height: 500px;
   display: flex;
@@ -1554,8 +1554,8 @@ body.light-theme .mood-category:not(:disabled) {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   grid-template-rows: 1fr;
-  gap: 24px;
-  padding: 0;
+  gap: 32px;
+  padding: 20px;
   flex: 1;
   min-height: 0;
   width: 100%;
