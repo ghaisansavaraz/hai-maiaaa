@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clock Animation Test</title>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .test-container {
+      text-align: center;
+      padding: 40px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+
+    .clock {
+      font-size: 72px;
+      font-weight: 200;
+      letter-spacing: 0.1em;
+      display: flex;
+      gap: 0.1em;
+      justify-content: center;
+    }
+
+    /* Individual digit containers */
+    .time-digit {
+      display: inline-block;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .time-digit.flipping {
+      animation: particleFade 0.6s ease-out;
+    }
+
+    /* Animation definition */
+    @keyframes particleFade {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(0.95) translateY(-3px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .info {
+      margin-top: 30px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    .highlight {
+      color: #4CAF50;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🎯 Clock Digit Flip Animation Test</h1>
+    <div id="clock" class="clock">--:--:--</div>
+    <div class="info">
+      Watch the digits change every second.<br>
+      <span class="highlight">The changing digit will fade and lift slightly.</span><br>
+      <br>
+      Wait for the seconds to flip (happens every 1 second).<br>
+      At :59, you'll see multiple digits flip at once!
+    </div>
+  </div>
+
+  <script>
+    let lastTime = '';
+
+    function updateClock() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }).replace(/:/g, ' ');
+
+      const clockElement = document.getElementById('clock');
+      const timeArray = timeString.split(' ');
+      const lastTimeArray = lastTime.split(' ');
+      
+      clockElement.innerHTML = '';
+      
+      timeArray.forEach((timePart, partIndex) => {
+        const partContainer = document.createElement('div');
+        partContainer.style.display = 'flex';
+        partContainer.style.gap = '0.05em';
+        
+        for (let i = 0; i < timePart.length; i++) {
+          const digitSpan = document.createElement('span');
+          digitSpan.className = 'time-digit';
+          digitSpan.textContent = timePart[i];
+          
+          // Check if this digit changed
+          if (lastTime && lastTimeArray[partIndex] && lastTimeArray[partIndex][i] !== timePart[i]) {
+            digitSpan.classList.add('flipping');
+            console.log('Flipping digit:', timePart[i], 'at position', i);
+            setTimeout(() => {
+              digitSpan.classList.remove('flipping');
+            }, 600);
+          }
+          
+          partContainer.appendChild(digitSpan);
+        }
+        
+        clockElement.appendChild(partContainer);
+        
+        // Add colon between time parts
+        if (partIndex < timeArray.length - 1) {
+          const colonSpan = document.createElement('span');
+          colonSpan.textContent = ':';
+          colonSpan.style.margin = '0 0.1em';
+          clockElement.appendChild(colonSpan);
+        }
+      });
+      
+      lastTime = timeString;
+    }
+
+    // Update immediately and then every second
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
+

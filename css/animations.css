@@ -1,0 +1,248 @@
+/* Animation Definitions */
+
+/* Card appearance animations */
+@keyframes cardAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tag animations */
+@keyframes tagAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tagBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes tagDrift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(2px); }
+}
+
+@keyframes tagSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tagDrop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(2px); }
+}
+
+/* Category button animations */
+@keyframes categorySlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Mood category shimmer effects */
+@keyframes happyShimmer {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)) 
+            drop-shadow(0 0 30px rgba(255,255,255,0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.55)) 
+            drop-shadow(0 0 40px rgba(255,255,255,0.3));
+  }
+}
+
+@keyframes calmRadiance {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.25)) 
+            drop-shadow(0 0 24px rgba(255,255,255,0.12));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(255,255,255,0.35)) 
+            drop-shadow(0 0 32px rgba(255,255,255,0.18));
+  }
+}
+
+@keyframes tiredFade {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.15)) 
+            drop-shadow(0 0 16px rgba(255,255,255,0.08));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.22)) 
+            drop-shadow(0 0 20px rgba(255,255,255,0.12));
+  }
+}
+
+@keyframes sadGlow {
+  0%, 100% {
+    filter: drop-shadow(0 4px 12px rgba(255,255,255,0.2)) 
+            drop-shadow(0 6px 24px rgba(255,255,255,0.1));
+  }
+  50% {
+    filter: drop-shadow(0 5px 16px rgba(255,255,255,0.3)) 
+            drop-shadow(0 8px 32px rgba(255,255,255,0.15));
+  }
+}
+
+/* Selection pulse animation */
+@keyframes selectionPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255,107,107,0.4), 
+                0 0 30px rgba(255,107,107,0.2);
+    border-color: rgba(255,107,107,0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255,107,107,0.6), 
+                0 0 45px rgba(255,107,107,0.35);
+    border-color: rgba(255,107,107,0.8);
+  }
+}
+
+/* Delete button pulse */
+@keyframes deletePulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255,107,107,0.3), 
+                0 0 20px rgba(255,107,107,0.15);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255,107,107,0.5), 
+                0 0 35px rgba(255,107,107,0.25);
+  }
+}
+
+/* Particle fade animation - Custom blur effect */
+@keyframes particleFade {
+  0% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.2;
+    filter: blur(8px);
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+}
+
+/* Slide in/out animations */
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutFade {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Float animation */
+@keyframes floatGentle {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-8px); 
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Book animations */
+@keyframes bookCoverOpen {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-175deg);
+  }
+}
+
+@keyframes bookCoverClose {
+  from {
+    transform: rotateY(-175deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes claspUnlock {
+  0% {
+    transform: translateY(-50%) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-50%) rotate(-12deg) scale(1.05);
+  }
+  100% {
+    transform: translateY(-50%) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes pageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
