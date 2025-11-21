@@ -5,18 +5,6 @@ import { debugLog } from './config.js';
 // Manual override state
 let manualThemeOverride = null; // null = auto, 'light' = day, 'dark' = night
 
-function setThemeClass(isLight) {
-  const body = document.body;
-  const root = document.documentElement;
-  if (isLight) {
-    body.classList.add('light-theme');
-    root.classList.add('light-theme');
-  } else {
-    body.classList.remove('light-theme');
-    root.classList.remove('light-theme');
-  }
-}
-
 export class DynamicBackground {
   constructor() {
     this.init();
@@ -34,24 +22,31 @@ export class DynamicBackground {
 
 // Apply theme based on time of day or manual override
 export function applyTheme() {
+  const body = document.body;
+  
   // Check if manual override is set
   if (manualThemeOverride === 'light') {
-    setThemeClass(true);
+    body.classList.add('light-theme');
     debugLog("Applied light theme (manual override)");
     return;
   } else if (manualThemeOverride === 'dark') {
-    setThemeClass(false);
+    body.classList.remove('light-theme');
     debugLog("Applied dark theme (manual override)");
     return;
   }
   
   // Auto mode - based on time
   const hour = new Date().getHours();
-  const isDay = hour >= 5 && hour < 18;
-  setThemeClass(isDay);
-  debugLog(isDay ? "Applied light theme (day mode - auto)" : "Applied dark theme (night mode - auto)");
+  // Day theme: 5 AM to 6 PM (5-18)
+  // Night theme: 6 PM to 5 AM (18-5)
+  if (hour >= 5 && hour < 18) {
+    body.classList.add('light-theme');
+    debugLog("Applied light theme (day mode - auto)");
+  } else {
+    body.classList.remove('light-theme');
+    debugLog("Applied dark theme (night mode - auto)");
+  }
 }
-
 
 // Toggle theme manually (for testing)
 export function toggleTheme() {
@@ -60,19 +55,18 @@ export function toggleTheme() {
   
   if (isCurrentlyLight) {
     // Switch to dark
-    setThemeClass(false);
+    body.classList.remove('light-theme');
     manualThemeOverride = 'dark';
     body.classList.add('testing-mode'); // mark manual testing active
     debugLog("Manually switched to dark theme");
   } else {
     // Switch to light
-    setThemeClass(true);
+    body.classList.add('light-theme');
     manualThemeOverride = 'light';
     body.classList.add('testing-mode'); // mark manual testing active
     debugLog("Manually switched to light theme");
   }
 }
-
 
 // Reset to auto mode
 export function resetThemeToAuto() {
