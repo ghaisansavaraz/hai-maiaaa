@@ -1573,22 +1573,13 @@ body.light-theme .mood-category:not(:disabled) {
   gap: 16px;
   min-width: 0;
   width: 100%;
-  height: auto;
-  max-height: none;
-  overflow: visible;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0;
+  padding-right: 8px;
   box-sizing: border-box;
-}
-
-.memos-column::-webkit-scrollbar,
-.tasks-column::-webkit-scrollbar,
-.memos-column::-webkit-scrollbar-track,
-.tasks-column::-webkit-scrollbar-track,
-.memos-column::-webkit-scrollbar-thumb,
-.tasks-column::-webkit-scrollbar-thumb,
-.memos-column::-webkit-scrollbar-thumb:hover,
-.tasks-column::-webkit-scrollbar-thumb:hover {
-  display: none;
 }
 
 .memos-column::-webkit-scrollbar,
