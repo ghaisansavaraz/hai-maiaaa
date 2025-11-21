@@ -2,6 +2,8 @@
 
 import { debugLog, debugError } from './config.js';
 
+let lastTime = ''; // Track time changes for individual digit flipping
+
 export function updateTime() {
   debugLog("updateTime called");
   
@@ -17,15 +19,54 @@ export function updateTime() {
   try {
     const now = new Date();
     
+    // Update time (HH MM SS) - no colons for minimalist look
     const timeString = now.toLocaleTimeString('en-US', {
       hour12: false,
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit'
-    });
+    }).replace(/:/g, ' ');
     
     if (headerCurrentTime) {
-      headerCurrentTime.textContent = timeString;
+      // Create individual digit containers and flip only changing digits
+      const timeArray = timeString.split(' ');
+      const lastTimeArray = lastTime.split(' ');
+      
+      headerCurrentTime.innerHTML = '';
+      
+      timeArray.forEach((timePart, partIndex) => {
+        const partContainer = document.createElement('div');
+        partContainer.style.display = 'flex';
+        partContainer.style.gap = '0.05em';
+        
+        for (let i = 0; i < timePart.length; i++) {
+          const digitSpan = document.createElement('span');
+          digitSpan.className = 'time-digit';
+          digitSpan.textContent = timePart[i];
+          
+          // Check if this digit changed
+          if (lastTime && lastTimeArray[partIndex] && lastTimeArray[partIndex][i] !== timePart[i]) {
+            digitSpan.classList.add('flipping');
+            setTimeout(() => {
+              digitSpan.classList.remove('flipping');
+            }, 600);
+          }
+          
+          partContainer.appendChild(digitSpan);
+        }
+        
+        headerCurrentTime.appendChild(partContainer);
+        
+        // Add space between time parts (except last)
+        if (partIndex < timeArray.length - 1) {
+          const spaceSpan = document.createElement('span');
+          spaceSpan.textContent = ' ';
+          spaceSpan.style.margin = '0 0.1em';
+          headerCurrentTime.appendChild(spaceSpan);
+        }
+      });
+      
+      lastTime = timeString;
       debugLog("Header time updated:", timeString);
     }
     

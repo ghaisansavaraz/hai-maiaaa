@@ -1,7 +1,6 @@
 /* Task Management System */
 
 import { TASKS_STORAGE_KEY, debugError } from './config.js';
-import { setTasksData, sortTasksForDisplay, registerTaskRefreshHandler } from './productivity.js';
 
 let tasks = [];
 
@@ -45,7 +44,6 @@ export function loadTasks() {
   try {
     const stored = localStorage.getItem(TASKS_STORAGE_KEY);
     tasks = stored ? JSON.parse(stored) : [];
-    setTasksData(tasks);
     renderTasks();
   } catch (e) {
     console.error("Failed to load tasks:", e);
@@ -56,7 +54,6 @@ export function loadTasks() {
 function saveTasks() {
   try {
     localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks));
-    setTasksData(tasks);
   } catch (e) {
     console.error("Failed to save tasks:", e);
   }
@@ -133,9 +130,8 @@ function renderTasks() {
   if (!tasksContainer) return;
   
   tasksContainer.innerHTML = "";
-  const orderedTasks = sortTasksForDisplay(tasks);
-
-  orderedTasks.forEach(task => {
+  
+  tasks.forEach(task => {
     const taskItem = document.createElement("div");
     taskItem.className = `task-item ${task.completed ? 'completed' : ''} ${tasksSelectionMode ? 'selectable' : ''} ${selectedTaskIds.has(String(task.id)) ? 'selected' : ''}`;
     
@@ -236,7 +232,4 @@ export function clearTasks() {
 window.toggleTask = toggleTask;
 window.deleteTask = deleteTask;
 window.addTask = addTask;
-
-registerTaskRefreshHandler(() => renderTasks());
-window.refreshTasks = renderTasks;
 

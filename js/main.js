@@ -7,7 +7,6 @@ import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode, toggleBookS
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar } from './shootingstar.js';
-import { initProductivityMeta } from './productivity.js';
 
 let dynamicBackground = null;
 
@@ -238,7 +237,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize all components
     loadMoods();
     loadMoodBookState(); // Load book state after moods are loaded
-    initProductivityMeta();
     loadReminders();
     loadTasks();
     renderLetters();
