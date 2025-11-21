@@ -980,13 +980,13 @@ body.light-theme #moonIconContainer {
 
 /* Dashboard Grid Layout */
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: auto auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   gap: 40px;
   margin-bottom: 48px;
   width: 100%;
-  justify-content: center;
-  align-items: start;
+  flex-wrap: wrap;
 }
 
 .dashboard-column {
@@ -994,14 +994,7 @@ body.light-theme #moonIconContainer {
   flex-direction: column;
   gap: 24px;
   transition: transform 0.5s ease;
-  width: fit-content;
-  max-width: 100%;
-}
-
-.dashboard-column {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  flex: 0 0 auto;
 }
 
 /* Dashboard Cards - More transparent for star visibility */
