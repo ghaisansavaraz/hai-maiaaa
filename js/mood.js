@@ -203,9 +203,6 @@ export function loadMoods() {
         <div class="mood-empty-text">How is Maia feeling?</div>
       `;
       moodTags.appendChild(emptyState);
-      
-      // Hide analytics
-        if (analytics) analytics.style.display = "none";
       return;
     }
     
@@ -295,9 +292,6 @@ export function loadMoods() {
       
       moodTags.appendChild(tag);
     });
-    
-    // Update analytics
-    updateMoodAnalytics(moods);
     
   } catch (e) { 
     debugError("Failed to load moods:", e);
