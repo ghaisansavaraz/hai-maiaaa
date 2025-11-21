@@ -1804,25 +1804,42 @@ body.light-theme .mood-category {
               </div>
             </section>
 
-            <!-- Tasks Section -->
-            <section id="tasksSection" class="dashboard-card">
+            <!-- Memos and Tasks Section -->
+            <section id="memosAndTasksSection" class="dashboard-card memos-and-tasks-card">
               <div class="card-header">
-                <h2 class="card-title">Tasks</h2>
-                <div class="card-subtitle">Maia's affairs</div>
+                <div class="card-header-content">
+                  <h2 class="card-title">Memos & Tasks</h2>
+                  <div class="card-subtitle">Notes and affairs</div>
+                </div>
                 <button id="clearTasks" class="btn-trash" aria-label="Delete tasks" title="Delete tasks">
                   <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 32 32'%3e%3cpath fill='white' d='M27 6.25H5a.75.75 0 0 0 0 1.5h1.25V26A1.75 1.75 0 0 0 8 27.75h16A1.75 1.75 0 0 0 25.75 26V7.75H27a.75.75 0 1 0 0-1.5M24.25 26a.25.25 0 0 1-.25.25H8a.25.25 0 0 1-.25-.25V7.75h16.5zm-14-23a.75.75 0 0 1 .75-.75h10a.75.75 0 1 1 0 1.5H11a.75.75 0 0 1-.75-.75'/%3e%3c/svg%3e" alt="" width="20" height="20" class="icon-trash" />
                 </button>
               </div>
-              <div class="card-content">
-                <div class="task-controls">
-                  <input id="taskText" class="task-input" type="text" placeholder="What's my Maia about to do?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                  <div class="deadline-controls">
-                    <input id="taskDeadlineDate" class="deadline-date" type="date" autocomplete="off" />
-                    <input id="taskDeadlineTime" class="deadline-time" type="time" autocomplete="off" />
+              <div class="card-content memos-tasks-content">
+                <div class="memos-column">
+                  <div class="column-header">
+                    <h3 class="column-title">Memos</h3>
                   </div>
-                  <button id="addTask" class="btn-primary">Add Task</button>
+                  <div class="reminder-controls">
+                    <input id="reminderText" class="reminder-input" type="text" placeholder="Write a memo..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <button id="addReminder" class="btn-primary">Add</button>
+                  </div>
+                  <div id="reminderList" class="reminder-cards" aria-live="polite"></div>
                 </div>
-                <div id="tasksContainer" class="tasks-container"></div>
+                <div class="tasks-column">
+                  <div class="column-header">
+                    <h3 class="column-title">Tasks</h3>
+                  </div>
+                  <div class="task-controls">
+                    <input id="taskText" class="task-input" type="text" placeholder="What's my Maia about to do?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <div class="deadline-controls">
+                      <input id="taskDeadlineDate" class="deadline-date" type="date" autocomplete="off" />
+                      <input id="taskDeadlineTime" class="deadline-time" type="time" autocomplete="off" />
+                    </div>
+                    <button id="addTask" class="btn-primary">Add Task</button>
+                  </div>
+                  <div id="tasksContainer" class="tasks-container"></div>
+                </div>
               </div>
             </section>
 
@@ -1830,21 +1847,6 @@ body.light-theme .mood-category {
 
           <!-- Right Column -->
           <div class="dashboard-column">
-            
-            <!-- Reminders Section -->
-            <section id="remindersSection" class="dashboard-card">
-              <div class="card-header">
-                <h2 class="card-title">Reminders</h2>
-                <div class="card-subtitle">Important notes</div>
-              </div>
-              <div class="card-content">
-                <div class="reminder-controls">
-                  <input id="reminderText" class="reminder-input" type="text" placeholder="Write a reminder..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                  <button id="addReminder" class="btn-primary">Add</button>
-                </div>
-                <div id="reminderList" class="reminder-cards" aria-live="polite"></div>
-              </div>
-            </section>
 
             <!-- Letters Section -->
             <section id="lettersSection" class="dashboard-card">

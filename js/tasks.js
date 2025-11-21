@@ -98,7 +98,7 @@ export function toggleTasksSelectionMode(triggerBtn) {
   if (!tasksSelectionMode) {
     tasksSelectionMode = true;
     selectedTaskIds.clear();
-    const section = document.getElementById("tasksSection");
+    const section = document.getElementById("memosAndTasksSection");
     if (section) section.classList.add("selection-mode");
     if (triggerBtn) triggerBtn.classList.add("is-selection-mode");
   } else {
@@ -108,7 +108,7 @@ export function toggleTasksSelectionMode(triggerBtn) {
         saveTasks();
         tasksSelectionMode = false;
         selectedTaskIds.clear();
-        const section = document.getElementById("tasksSection");
+        const section = document.getElementById("memosAndTasksSection");
         if (section) section.classList.remove("selection-mode");
         if (triggerBtn) triggerBtn.classList.remove("is-selection-mode");
         renderTasks();
@@ -118,7 +118,7 @@ export function toggleTasksSelectionMode(triggerBtn) {
     // Cancel selection mode if nothing selected or not confirmed
     tasksSelectionMode = false;
     selectedTaskIds.clear();
-    const section = document.getElementById("tasksSection");
+    const section = document.getElementById("memosAndTasksSection");
     if (section) section.classList.remove("selection-mode");
     if (triggerBtn) triggerBtn.classList.remove("is-selection-mode");
   }
