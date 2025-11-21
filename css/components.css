@@ -293,7 +293,7 @@
 .mood-book {
   position: relative;
   width: 100%;
-  max-width: 620px;
+  max-width: 640px;
   min-height: 520px;
   perspective: 1600px;
   display: flex;
@@ -304,7 +304,7 @@
 
 .book-shell {
   position: relative;
-  width: min(620px, 88vw);
+  width: min(640px, 88vw);
   height: 500px;
   transform-style: preserve-3d;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1542,7 +1542,7 @@ body.light-theme .mood-category:not(:disabled) {
 
 .memos-and-tasks-card {
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   min-height: 500px;
   height: 500px;
   display: flex;
@@ -1734,7 +1734,7 @@ body.light-theme .column-title {
 .reminder-text {
   font-size: 14px;
   font-weight: 500;
-  color: #101010;
+  color: #1a1a1a !important;
   line-height: 1.5;
   margin: 0;
   word-wrap: break-word;
@@ -1749,7 +1749,7 @@ body.light-theme .column-title {
 }
 
 .reminder-text:hover {
-  color: #1a1a1a;
+  color: #000000 !important;
 }
 
 .reminder-text-input {
