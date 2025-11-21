@@ -1529,6 +1529,8 @@ body.light-theme .mood-category:not(:disabled) {
   background: rgba(255,255,255,0.08);
   border-radius: 8px;
   white-space: nowrap;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .task-item.overdue .task-deadline {
@@ -1542,7 +1544,7 @@ body.light-theme .mood-category:not(:disabled) {
 
 .memos-and-tasks-card {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   min-height: 500px;
   height: 500px;
   display: flex;
@@ -1553,7 +1555,7 @@ body.light-theme .mood-category:not(:disabled) {
 .memos-and-tasks-card .card-content.memos-tasks-content {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-  gap: 32px;
+  gap: 40px;
   padding: 24px;
   flex: 1;
   width: 100%;
@@ -1865,10 +1867,15 @@ body.light-theme .column-title {
   color: inherit !important;
 }
 
-.dashboard-card .task-text,
-.dashboard-card .reminder-text {
+.dashboard-card .task-text {
   opacity: 1 !important;
   color: inherit !important;
+  text-align: left;
+}
+
+.dashboard-card .reminder-text {
+  opacity: 1 !important;
+  color: #1a1a1a !important;
   text-align: left;
 }
 
