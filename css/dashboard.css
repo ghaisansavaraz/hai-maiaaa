@@ -135,15 +135,14 @@ body.light-theme #moonIconContainer {
 /* Dashboard Grid Layout */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.1fr);
+  gap: 36px;
   margin-bottom: 48px;
   justify-content: center;
 }
 
 .dashboard-column {
   width: 100%;
-  max-width: 620px;
   margin: 0 auto;
   transition: transform 0.5s ease;
 }
