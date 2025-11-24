@@ -626,13 +626,13 @@
   padding: 12px 8px 10px;
   background: transparent !important;
   border: none !important;
-  border-bottom: 1px solid rgba(0,0,0,0.12);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
   border-radius: 0 !important;
   box-shadow: none !important;
   font-family: "Playfair Display", Georgia, serif;
   align-items: flex-start;
   box-sizing: border-box;
-  color: #0f0f0f;
+  color: #1a150f;
   cursor: pointer;
   gap: 6px;
   opacity: 1 !important;
@@ -647,30 +647,44 @@
 .mood-tags-book .mood-tag-text {
   font-size: 15px;
   text-align: left;
+  line-height: 1.6;
 }
 
 .mood-tags-book .mood-category-label,
 .mood-tags-book .mood-timestamp {
   text-align: left;
   width: 100%;
+  color: rgba(0,0,0,0.45);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.mood-tags-book .mood-category-label {
+  margin-top: 4px;
+}
+
+.mood-tags-book .mood-timestamp {
+  margin-top: 2px;
 }
 
 .mood-tags-book .mood-tag:hover {
-  background: rgba(0,0,0,0.02) !important;
+  background: rgba(0,0,0,0.03) !important;
 }
 
 body:not(.light-theme) .mood-tags-book .mood-tag {
   color: #f5f5f5;
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: transparent !important;
 }
 
 body:not(.light-theme) .mood-tags-book .mood-tag:hover {
-  background: rgba(255,255,255,0.03) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: #ffffff;
 }
 
 body:not(.light-theme) .mood-tags-book .mood-category-label,
 body:not(.light-theme) .mood-tags-book .mood-timestamp {
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.7);
 }
 
 .mood-book.book-closed .book-interior {
