@@ -150,7 +150,9 @@ function initClearButtons() {
   const bookClaspBtn = document.getElementById("moodBookClasp");
   if (bookClaspBtn) {
     console.log("[Maiaaa] Book keyhole wired for mood journal");
-    bookClaspBtn.addEventListener("click", () => {
+    bookClaspBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       console.log("[Maiaaa] Keyhole clicked - toggling book state");
       toggleBookState();
     });

@@ -1745,9 +1745,18 @@ body.light-theme .mood-category:not(:disabled) {
 /* Ensure all text is fully visible on transparent cards */
 .dashboard-card .card-title,
 .dashboard-card .card-subtitle,
-.dashboard-card .mood-tag-text,
+.dashboard-card .mood-tag-text {
+  opacity: 1 !important;
+  color: inherit !important;
+}
+
 .dashboard-card .task-text,
-.dashboard-card .reminder-text,
+.dashboard-card .reminder-text {
+  opacity: 1 !important;
+  color: inherit !important;
+  text-align: left;
+}
+
 .reminder-list { 
   list-style: none; 
   padding: 0; 
@@ -1756,7 +1765,7 @@ body.light-theme .mood-category:not(:disabled) {
   display: flex; 
   flex-direction: column; 
   gap: 8px; 
-  align-items: center; 
+  align-items: flex-start; 
 }
 
 .reminder-list li { 
