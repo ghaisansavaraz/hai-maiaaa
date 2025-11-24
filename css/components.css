@@ -671,20 +671,17 @@
   background: rgba(0,0,0,0.03) !important;
 }
 
-body:not(.light-theme) .mood-tags-book .mood-tag {
-  color: #f5f5f5;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  background: transparent !important;
+.mood-tags-book::before,
+.mood-tags-book::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: rgba(0,0,0,0.08);
 }
 
-body:not(.light-theme) .mood-tags-book .mood-tag:hover {
-  background: rgba(255,255,255,0.04) !important;
-  color: #ffffff;
-}
-
-body:not(.light-theme) .mood-tags-book .mood-category-label,
-body:not(.light-theme) .mood-tags-book .mood-timestamp {
-  color: rgba(255,255,255,0.7);
+.mood-tags-book .mood-tag + .mood-tag {
+  border-top: 1px solid rgba(0,0,0,0.08);
 }
 
 .mood-book.book-closed .book-interior {
