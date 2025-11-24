@@ -161,6 +161,7 @@ function initClearButtons() {
   const bookSpine = document.querySelector(".book-spine");
   if (bookSpine) {
     bookSpine.addEventListener("click", (e) => {
+      e.preventDefault();
       e.stopPropagation();
       const section = document.getElementById("moodSection");
       if (section && !section.classList.contains("book-closed")) {

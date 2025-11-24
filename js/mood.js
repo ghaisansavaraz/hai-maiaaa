@@ -13,7 +13,6 @@ let selectedMoodIds = new Set();
 let moodBookClosed = true;
 let moodBookAnimating = false;
 const BOOK_TRANSITION_DURATION = 1400;
-let lastBookToggleTime = 0;
 
 export function toggleMoodSelectionMode(triggerBtn) {
   try {
@@ -492,16 +491,13 @@ function applyMoodBookState() {
 // Toggle mood book state (open/close)
 export function toggleBookState() {
   try {
-    const now = Date.now();
-    if (now - lastBookToggleTime < BOOK_TRANSITION_DURATION) {
-      return;
-    }
-    lastBookToggleTime = now;
     if (moodBookAnimating) return;
     moodBookAnimating = true;
 
     const section = document.getElementById("moodSection");
+    const claspButton = document.getElementById("moodBookClasp");
     if (section) section.classList.add("book-transitioning");
+    if (claspButton) claspButton.setAttribute("disabled", "disabled");
 
     moodBookClosed = !moodBookClosed;
     localStorage.setItem(MOOD_LOCK_KEY, JSON.stringify(moodBookClosed));
@@ -509,12 +505,14 @@ export function toggleBookState() {
 
     setTimeout(() => {
       moodBookAnimating = false;
-      lastBookToggleTime = Date.now();
       if (section) section.classList.remove("book-transitioning");
+      if (claspButton) claspButton.removeAttribute("disabled");
     }, BOOK_TRANSITION_DURATION);
   } catch (e) {
     debugError("Failed to toggle mood journal state:", e);
     moodBookAnimating = false;
+    const claspButton = document.getElementById("moodBookClasp");
+    if (claspButton) claspButton.removeAttribute("disabled");
   }
 }
 
