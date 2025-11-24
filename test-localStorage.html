@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalStorage Test - Hai Maiaaa</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      background: #000;
+      color: #fff;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .test-section {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .success {
+      background: rgba(76,175,80,0.1);
+      border-color: rgba(76,175,80,0.3);
+    }
+    .error {
+      background: rgba(255,107,107,0.1);
+      border-color: rgba(255,107,107,0.3);
+    }
+    .warning {
+      background: rgba(255,193,7,0.1);
+      border-color: rgba(255,193,7,0.3);
+    }
+    h1 { margin-top: 0; }
+    h2 { color: rgba(255,255,255,0.9); }
+    button {
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background: rgba(255,255,255,0.15);
+    }
+    pre {
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 LocalStorage Compatibility Test</h1>
+  <p>Testing localStorage data compatibility with the Hai Maiaaa application</p>
+
+  <div class="test-section">
+    <h2>Storage Keys</h2>
+    <div id="storageKeys"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Reminders Data</h2>
+    <div id="remindersTest"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Mood Data</h2>
+    <div id="moodTest"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Tasks Data</h2>
+    <div id="tasksTest"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test Actions</h2>
+    <button onclick="createSampleData()">Create Sample Data</button>
+    <button onclick="clearAllData()">Clear All Data</button>
+    <button onclick="runTests()">Re-run Tests</button>
+  </div>
+
+  <script type="module">
+    // Storage keys from config
+    const STORAGE_KEY = "maiaaa_reminders_v1";
+    const MOOD_STORAGE_KEY = "maiaaa_mood_v1";
+    const TASKS_STORAGE_KEY = "maiaaa_tasks_v1";
+
+    function displayResult(elementId, title, status, message, data = null) {
+      const el = document.getElementById(elementId);
+      const resultDiv = document.createElement('div');
+      resultDiv.className = `test-result ${status}`;
+      resultDiv.innerHTML = `
+        <strong>${title}</strong>: ${message}
+        ${data ? `<pre>${JSON.stringify(data, null, 2)}</pre>` : ''}
+      `;
+      el.appendChild(resultDiv);
+    }
+
+    function clearResults() {
+      ['storageKeys', 'remindersTest', 'moodTest', 'tasksTest'].forEach(id => {
+        document.getElementById(id).innerHTML = '';
+      });
+    }
+
+    window.runTests = function() {
+      clearResults();
+
+      // Test 1: Check localStorage availability
+      try {
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+        displayResult('storageKeys', 'localStorage Available', 'success', 'localStorage is accessible');
+      } catch (e) {
+        displayResult('storageKeys', 'localStorage Unavailable', 'error', e.message);
+        return;
+      }
+
+      // Test 2: List all storage keys
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('maiaaa_'));
+      displayResult('storageKeys', 'Found Keys', keys.length > 0 ? 'success' : 'warning', 
+        keys.length > 0 ? `Found ${keys.length} key(s)` : 'No data found', keys);
+
+      // Test 3: Reminders
+      try {
+        const reminders = localStorage.getItem(STORAGE_KEY);
+        if (reminders) {
+          const parsed = JSON.parse(reminders);
+          if (Array.isArray(parsed)) {
+            displayResult('remindersTest', 'Reminders Format', 'success', 
+              `${parsed.length} reminder(s) found - Format is valid`, parsed);
+          } else {
+            displayResult('remindersTest', 'Reminders Format', 'error', 
+              'Invalid format: Expected array', parsed);
+          }
+        } else {
+          displayResult('remindersTest', 'Reminders', 'warning', 'No reminders data found');
+        }
+      } catch (e) {
+        displayResult('remindersTest', 'Reminders Error', 'error', e.message);
+      }
+
+      // Test 4: Mood
+      try {
+        const mood = localStorage.getItem(MOOD_STORAGE_KEY);
+        if (mood) {
+          const parsed = JSON.parse(mood);
+          if (Array.isArray(parsed)) {
+            // Check if it's old format (strings) or new format (objects)
+            if (parsed.length > 0) {
+              if (typeof parsed[0] === 'string') {
+                displayResult('moodTest', 'Mood Format', 'warning', 
+                  `${parsed.length} mood(s) in OLD STRING FORMAT - Will be auto-migrated`, parsed);
+              } else if (typeof parsed[0] === 'object' && parsed[0].mood) {
+                const hasCategory = parsed[0].hasOwnProperty('category');
+                displayResult('moodTest', 'Mood Format', hasCategory ? 'success' : 'warning', 
+                  hasCategory 
+                    ? `${parsed.length} mood(s) in NEW FORMAT with categories` 
+                    : `${parsed.length} mood(s) in OBJECT FORMAT (missing categories - will be auto-migrated)`, 
+                  parsed);
+              } else {
+                displayResult('moodTest', 'Mood Format', 'error', 
+                  'Invalid mood object format', parsed);
+              }
+            } else {
+              displayResult('moodTest', 'Mood Format', 'success', 'Empty mood array (valid)');
+            }
+          } else {
+            displayResult('moodTest', 'Mood Format', 'error', 
+              'Invalid format: Expected array', parsed);
+          }
+        } else {
+          displayResult('moodTest', 'Mood', 'warning', 'No mood data found');
+        }
+      } catch (e) {
+        displayResult('moodTest', 'Mood Error', 'error', e.message);
+      }
+
+      // Test 5: Tasks
+      try {
+        const tasks = localStorage.getItem(TASKS_STORAGE_KEY);
+        if (tasks) {
+          const parsed = JSON.parse(tasks);
+          if (Array.isArray(parsed)) {
+            // Validate task structure
+            const validTasks = parsed.every(t => 
+              t.hasOwnProperty('id') && 
+              t.hasOwnProperty('text') && 
+              t.hasOwnProperty('completed')
+            );
+            displayResult('tasksTest', 'Tasks Format', validTasks ? 'success' : 'error', 
+              validTasks 
+                ? `${parsed.length} task(s) found - Format is valid` 
+                : 'Some tasks have invalid format', 
+              parsed);
+          } else {
+            displayResult('tasksTest', 'Tasks Format', 'error', 
+              'Invalid format: Expected array', parsed);
+          }
+        } else {
+          displayResult('tasksTest', 'Tasks', 'warning', 'No tasks data found');
+        }
+      } catch (e) {
+        displayResult('tasksTest', 'Tasks Error', 'error', e.message);
+      }
+    }
+
+    window.createSampleData = function() {
+      // Create sample reminders
+      const sampleReminders = [
+        "Buy groceries for dinner",
+        "Call mom this weekend",
+        "Finish project report by Friday"
+      ];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleReminders));
+
+      // Create sample moods (new format with categories)
+      const sampleMoods = [
+        {
+          id: Date.now(),
+          mood: "Feeling great today!",
+          category: "Happy",
+          intensity: "strong",
+          note: "Had a wonderful morning",
+          timestamp: new Date().toISOString()
+        },
+        {
+          id: Date.now() + 1,
+          mood: "Relaxed and peaceful",
+          category: "Calm",
+          intensity: "medium",
+          note: "",
+          timestamp: new Date(Date.now() - 3600000).toISOString()
+        }
+      ];
+      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(sampleMoods));
+
+      // Create sample tasks
+      const sampleTasks = [
+        {
+          id: Date.now().toString(),
+          text: "Complete project documentation",
+          deadline: new Date(Date.now() + 86400000).toISOString(),
+          completed: false,
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: (Date.now() + 1).toString(),
+          text: "Review pull requests",
+          deadline: null,
+          completed: false,
+          createdAt: new Date().toISOString()
+        }
+      ];
+      localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(sampleTasks));
+
+      alert('Sample data created!');
+      runTests();
+    }
+
+    window.clearAllData = function() {
+      if (confirm('Are you sure you want to clear ALL data? This cannot be undone!')) {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(MOOD_STORAGE_KEY);
+        localStorage.removeItem(TASKS_STORAGE_KEY);
+        alert('All data cleared!');
+        runTests();
+      }
+    }
+
+    // Run tests on load
+    runTests();
+  </script>
+</body>
+</html>
+
