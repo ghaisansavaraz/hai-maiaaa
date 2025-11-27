@@ -79,6 +79,19 @@ function deleteSelectedMoods() {
   }
 }
 
+// Delete individual mood entry
+function deleteMoodEntry(moodId) {
+  try {
+    const moods = migrateMoodData();
+    const updated = moods.filter(m => m.id !== moodId);
+    localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(updated));
+    loadMoods();
+    debugLog(`Deleted mood entry: ${moodId}`);
+  } catch (e) {
+    debugError("Failed to delete mood entry:", e);
+  }
+}
+
 // Data migration: Convert old string array to new object format with categories
 function migrateMoodData() {
   try {
@@ -233,6 +246,28 @@ export function loadMoods() {
       timestamp.className = "mood-timestamp";
       timestamp.textContent = formatTimeAgo(moodData.timestamp);
       tag.appendChild(timestamp);
+      
+      // Delete button (eraser icon)
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "mood-delete-btn";
+      deleteBtn.setAttribute("aria-label", "Delete entry");
+      deleteBtn.setAttribute("title", "Delete entry");
+      deleteBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Eraser shape -->
+          <rect x="2" y="6" width="12" height="6" rx="1" fill="currentColor" opacity="0.7"/>
+          <rect x="2" y="6" width="12" height="2" fill="currentColor"/>
+          <!-- Eraser tip/edge -->
+          <path d="M2 6 L8 2 L14 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      `;
+      deleteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm("Delete this journal entry?")) {
+          deleteMoodEntry(moodData.id);
+        }
+      });
+      tag.appendChild(deleteBtn);
       
       // Note indicator
       if (moodData.note) {

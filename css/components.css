@@ -667,6 +667,53 @@
   margin-top: 2px;
 }
 
+/* Delete button (eraser) for journal entries */
+.mood-tags-book .mood-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.mood-tags-book .mood-tag {
+  position: relative;
+}
+
+.mood-tags-book .mood-tag:hover .mood-delete-btn {
+  opacity: 1;
+}
+
+.mood-tags-book .mood-delete-btn:hover {
+  opacity: 1 !important;
+}
+
+.mood-tags-book .mood-delete-btn svg {
+  width: 16px;
+  height: 16px;
+  color: rgba(0, 0, 0, 0.5);
+  transition: color 0.2s ease;
+}
+
+.mood-tags-book .mood-delete-btn:hover svg {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.mood-tags-book .mood-delete-btn:active svg {
+  color: rgba(0, 0, 0, 1);
+  transform: scale(0.9);
+}
+
 .mood-tags-book .mood-tag:hover {
   background: rgba(0,0,0,0.03) !important;
 }
