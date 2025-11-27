@@ -722,6 +722,16 @@
   color: #0f0f0f !important;
 }
 
+/* Ensure mood input has dark text in light theme (journal background is white) */
+body.light-theme .mood-book .mood-input {
+  color: #0f0f0f !important;
+  background: #fdfdf8 !important;
+}
+
+body.light-theme .mood-book .mood-input::placeholder {
+  color: rgba(0,0,0,0.4) !important;
+}
+
 .mood-book .mood-input::placeholder {
   color: rgba(0,0,0,0.4);
 }

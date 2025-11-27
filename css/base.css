@@ -77,12 +77,12 @@ html.light-theme {
   -webkit-color-scheme: light;
 }
 
-/* Light theme - white background with black dashboard */
+/* Light theme - white background with white text (background stays black) */
 body.light-theme {
-  background: #ffffff !important;
-  color: #000000 !important;
-  color-scheme: light !important;
-  -webkit-color-scheme: light !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  color-scheme: dark !important;
+  -webkit-color-scheme: dark !important;
 }
 
 
