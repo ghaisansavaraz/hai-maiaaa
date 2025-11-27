@@ -77,12 +77,12 @@ html.light-theme {
   -webkit-color-scheme: light;
 }
 
-/* Light theme - white background with white text (background stays black) */
+/* Light theme - white background, but text stays white (no inversion) */
 body.light-theme {
-  background: #000000 !important;
+  background: #ffffff !important;
   color: #ffffff !important;
-  color-scheme: dark !important;
-  -webkit-color-scheme: dark !important;
+  color-scheme: light !important;
+  -webkit-color-scheme: light !important;
 }
 
 
