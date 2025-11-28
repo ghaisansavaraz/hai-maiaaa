@@ -9,6 +9,15 @@ import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar } from './shootingstar.js';
 
 let dynamicBackground = null;
+let zenModeActive = false;
+let zenModeTimeoutId = null;
+let zenAudioElement = null;
+
+const DAY_START_HOUR = 5;
+const DAY_END_HOUR = 18;
+const ZEN_DAY_AUTO_EXIT_HOUR = 20;
+const ZEN_NIGHT_AUTO_EXIT_HOUR = 8;
+const ZEN_CHIME_PATH = 'assets/Wind chime Zen/Wind chime, Hai Maiaaa.mp3';
 
 // Show dashboard
 function showDashboard() {
@@ -44,6 +53,139 @@ function revealSections() {
       section.style.transform = "translateY(0) scale(1)";
       debugLog(`Revealed section ${index + 1}`);
     }, index * 150);
+  });
+}
+
+function isDaytimeHour(date = new Date()) {
+  const hour = date.getHours();
+  return hour >= DAY_START_HOUR && hour < DAY_END_HOUR;
+}
+
+function clearZenModeTimeout() {
+  if (zenModeTimeoutId) {
+    clearTimeout(zenModeTimeoutId);
+    zenModeTimeoutId = null;
+  }
+}
+
+function scheduleZenModeAutoExit() {
+  clearZenModeTimeout();
+  const now = new Date();
+  const target = new Date(now);
+
+  if (isDaytimeHour(now)) {
+    target.setHours(ZEN_DAY_AUTO_EXIT_HOUR, 0, 0, 0);
+  } else {
+    target.setHours(ZEN_NIGHT_AUTO_EXIT_HOUR, 0, 0, 0);
+  }
+
+  if (target <= now) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  const delay = Math.max(target.getTime() - now.getTime(), 0);
+  zenModeTimeoutId = window.setTimeout(() => {
+    console.log('[Maiaaa] Zen mode auto-exiting at scheduled boundary');
+    exitZenMode(true);
+  }, delay);
+
+  console.log('[Maiaaa] Zen mode auto-exit scheduled for', target.toString());
+}
+
+function ensureZenAudio() {
+  if (!zenAudioElement) {
+    zenAudioElement = new Audio(ZEN_CHIME_PATH);
+    zenAudioElement.preload = 'auto';
+    zenAudioElement.loop = false;
+    zenAudioElement.addEventListener('ended', () => {
+      zenAudioElement.pause();
+      zenAudioElement.currentTime = 0;
+    });
+  }
+  return zenAudioElement;
+}
+
+function playZenChime() {
+  try {
+    const audio = ensureZenAudio();
+    audio.currentTime = 0;
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.catch((err) => console.warn('[Maiaaa] Zen chime playback blocked:', err));
+    }
+  } catch (error) {
+    console.warn('[Maiaaa] Unable to play zen chime:', error);
+  }
+}
+
+function stopZenChime() {
+  if (zenAudioElement) {
+    zenAudioElement.pause();
+    zenAudioElement.currentTime = 0;
+  }
+}
+
+function setMoonPressedState(isPressed) {
+  const moon = document.getElementById('moonIconContainer');
+  if (moon) {
+    moon.setAttribute('aria-pressed', String(isPressed));
+    moon.setAttribute('aria-label', isPressed ? 'Exit zen mode' : 'Enter zen mode');
+  }
+}
+
+function enterZenMode() {
+  if (zenModeActive) return;
+  zenModeActive = true;
+  document.body.classList.add('zen-mode');
+  setMoonPressedState(true);
+  scheduleZenModeAutoExit();
+  playZenChime();
+  console.log('[Maiaaa] Zen mode enabled');
+}
+
+function exitZenMode(autoTriggered = false) {
+  if (!zenModeActive && !document.body.classList.contains('zen-mode')) {
+    setMoonPressedState(false);
+    return;
+  }
+  zenModeActive = false;
+  document.body.classList.remove('zen-mode');
+  setMoonPressedState(false);
+  clearZenModeTimeout();
+  stopZenChime();
+  console.log(`[Maiaaa] Zen mode disabled${autoTriggered ? ' (auto)' : ''}`);
+}
+
+function toggleZenMode() {
+  if (zenModeActive) {
+    exitZenMode(false);
+  } else {
+    enterZenMode();
+  }
+}
+
+function initZenModeToggle() {
+  const moon = document.getElementById('moonIconContainer');
+  if (!moon) return;
+
+  document.body.classList.remove('zen-mode');
+  zenModeActive = false;
+  setMoonPressedState(false);
+
+  const handleToggle = () => {
+    toggleZenMode();
+  };
+
+  moon.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleToggle();
+  });
+
+  moon.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleToggle();
+    }
   });
 }
 
@@ -251,6 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initClearButtons();
     initEditorKey();
     initThemeToggle();
+    initZenModeToggle();
     
     // Force re-render tasks to remove any old flower elements from cache
     loadTasks();

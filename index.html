@@ -973,9 +973,14 @@ body.light-theme .header-time-greeting {
   text-shadow: 0 0 20px rgba(0,0,0,0.15) !important;
 }
 
-/* Hide moon and its label during day (light theme) */
+/* Subtle moon visibility during day (for zen mode access) */
 body.light-theme #moonIconContainer {
-  display: none !important;
+  opacity: 0.35;
+}
+
+body.light-theme #moonIconContainer:hover,
+body.light-theme #moonIconContainer:focus-visible {
+  opacity: 0.6;
 }
 
 /* Dashboard Grid Layout */
@@ -1541,7 +1546,11 @@ body.light-theme .mood-category {
     <button id="themeToggle" class="hidden-theme-toggle" aria-label="Toggle theme" title="Click to toggle day/night mode"></button>
     
     <!-- Moon icon (top-right, fixed) -->
-    <div id="moonIconContainer" aria-hidden="true">
+    <div id="moonIconContainer"
+         role="button"
+         tabindex="0"
+         aria-label="Enter zen mode"
+         aria-pressed="false">
       <svg id="moonSvg" viewBox="0 0 100 100" aria-label="Moon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="shape-rendering:geometricPrecision">
         <defs>
           <clipPath id="moonDisc">

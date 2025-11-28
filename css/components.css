@@ -1887,3 +1887,63 @@ body.light-theme .mood-category:not(:disabled) {
   background: rgba(255,255,255,0.02); 
   font-weight: 300; 
 }
+
+/* === ZEN MODE (moon toggle) === */
+body.zen-mode .center.dashboard-active {
+  justify-content: center !important;
+  align-items: center !important;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+body.zen-mode #dashboardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  min-height: 70vh;
+  padding: 20px 0;
+}
+
+body.zen-mode .dashboard-header {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+body.zen-mode .header-clock {
+  gap: 24px;
+}
+
+body.zen-mode .header-current-time {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  letter-spacing: 0.15em;
+}
+
+body.zen-mode .header-current-date,
+body.zen-mode .header-time-greeting {
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  letter-spacing: 0.35em;
+}
+
+body.zen-mode .dashboard-grid {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, max-height 0.4s ease, transform 0.4s ease;
+}
+
+body.zen-mode .dashboard-card,
+body.zen-mode .dashboard-column,
+body.zen-mode .dashboard-section,
+body.zen-mode #moodSection,
+body.zen-mode #remindersSection,
+body.zen-mode #tasksSection,
+body.zen-mode #lettersSection {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
