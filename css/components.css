@@ -1952,15 +1952,15 @@ body.zen-mode .header-time-greeting {
 
 body.zen-mode.zen-bloom .header-current-time {
   text-shadow:
-    0 0 55px rgba(255,255,255,0.65),
-    0 0 130px rgba(255,255,255,0.8);
+    0 0 75px rgba(255,255,255,0.85),
+    0 0 160px rgba(255,255,255,0.95);
 }
 
 body.zen-mode.zen-bloom .header-current-date,
 body.zen-mode.zen-bloom .header-time-greeting {
   text-shadow:
-    0 0 32px rgba(255,255,255,0.4),
-    0 0 70px rgba(255,255,255,0.5);
+    0 0 48px rgba(255,255,255,0.55),
+    0 0 96px rgba(255,255,255,0.65);
 }
 
 body.zen-mode #moonIconContainer {
@@ -1968,6 +1968,19 @@ body.zen-mode #moonIconContainer {
 }
 
 body.zen-mode.zen-bloom #moonIconContainer {
+  filter: saturate(0.85) hue-rotate(210deg) brightness(1.1) contrast(1.05)
+    drop-shadow(0 2px 8px rgba(150,180,255,0.6))
+    drop-shadow(0 6px 20px rgba(150,180,255,0.75))
+    drop-shadow(0 12px 32px rgba(150,180,255,0.6))
+    drop-shadow(0 18px 48px rgba(150,180,255,0.4));
+}
+
+#moonIconContainer {
+  transition: filter 1.2s ease;
+}
+
+#moonIconContainer:hover,
+#moonIconContainer:focus-visible {
   filter: saturate(0.85) hue-rotate(210deg) brightness(1.1) contrast(1.05)
     drop-shadow(0 2px 8px rgba(150,180,255,0.6))
     drop-shadow(0 6px 20px rgba(150,180,255,0.75))
@@ -1996,4 +2009,34 @@ body.zen-mode #lettersSection {
   pointer-events: none;
   transform: translateY(32px);
   transition: opacity 1.3s ease, transform 1.3s ease;
+}
+
+/* Star brightness bloom during zen mode */
+.star {
+  transition: box-shadow 1.2s ease, filter 1.2s ease;
+}
+
+.stars-layer-back,
+.stars-layer-mid,
+.stars-layer-front {
+  transition: filter 1.2s ease, opacity 1.2s ease;
+}
+
+body.zen-mode.zen-bloom .star {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 1),
+              0 0 16px rgba(255, 255, 255, 0.9),
+              0 0 24px rgba(255, 255, 255, 0.6);
+  filter: brightness(1.8);
+}
+
+body.zen-mode.zen-bloom .stars-layer-back {
+  filter: brightness(1.6) contrast(1.2);
+}
+
+body.zen-mode.zen-bloom .stars-layer-mid {
+  filter: brightness(1.7) contrast(1.2);
+}
+
+body.zen-mode.zen-bloom .stars-layer-front {
+  filter: brightness(1.8) contrast(1.2);
 }
