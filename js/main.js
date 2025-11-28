@@ -171,6 +171,7 @@ function initZenModeToggle() {
   document.body.classList.remove('zen-mode');
   zenModeActive = false;
   setMoonPressedState(false);
+  console.log('[Maiaaa] Zen toggle ready');
 
   const handleToggle = () => {
     toggleZenMode();
@@ -393,7 +394,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initClearButtons();
     initEditorKey();
     initThemeToggle();
-    initZenModeToggle();
     
     // Force re-render tasks to remove any old flower elements from cache
     loadTasks();
@@ -410,6 +410,8 @@ document.addEventListener("DOMContentLoaded", () => {
     debugLog("Application initialized successfully");
   } catch (e) {
     debugError("Initialization failed:", e);
+  } finally {
+    initZenModeToggle();
   }
 });
 

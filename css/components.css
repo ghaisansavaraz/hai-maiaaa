@@ -1906,34 +1906,14 @@ body.zen-mode #dashboardContent {
   padding: 20px 0;
 }
 
-body.zen-mode .dashboard-header {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-body.zen-mode .header-clock {
-  gap: 24px;
-}
-
-body.zen-mode .header-current-time {
-  font-size: clamp(3rem, 7vw, 5.5rem);
-  letter-spacing: 0.15em;
-}
-
-body.zen-mode .header-current-date,
-body.zen-mode .header-time-greeting {
-  font-size: clamp(1rem, 2vw, 1.6rem);
-  letter-spacing: 0.35em;
-}
-
 body.zen-mode .dashboard-grid {
   opacity: 0;
   max-height: 0;
+  margin-bottom: 0;
   overflow: hidden;
   pointer-events: none;
-  transform: translateY(20px);
-  transition: opacity 0.4s ease, max-height 0.4s ease, transform 0.4s ease;
+  transform: translateY(32px);
+  transition: opacity 0.75s ease, max-height 0.75s ease, transform 0.75s ease, margin 0.75s ease;
 }
 
 body.zen-mode .dashboard-card,
@@ -1945,5 +1925,6 @@ body.zen-mode #tasksSection,
 body.zen-mode #lettersSection {
   opacity: 0;
   pointer-events: none;
-  transform: translateY(20px);
+  transform: translateY(32px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
 }

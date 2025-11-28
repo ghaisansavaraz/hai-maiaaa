@@ -990,6 +990,8 @@ body.light-theme #moonIconContainer:focus-visible {
   gap: 32px;
   margin-bottom: 48px;
   justify-content: center;
+  max-height: 2000px;
+  transition: max-height 0.75s ease, opacity 0.75s ease, transform 0.75s ease;
 }
 
 .dashboard-column {
@@ -1015,7 +1017,12 @@ body.light-theme #moonIconContainer:focus-visible {
   border: 1px solid rgba(255,255,255,0.1) !important;
   border-radius: 16px;
   padding: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s ease,
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -1249,9 +1256,6 @@ body.light-theme .mood-category {
 /* (Legacy light theme .time-greeting styles removed) */
 
 /* --- Moon Icon (Top-Right) --- */
-:root {
-}
-
 #moonIconContainer {
   position: fixed;
   top: 56px;
