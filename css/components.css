@@ -568,6 +568,10 @@
   background: rgba(255,255,255,0.97) !important;
   overflow: hidden;
   padding: 0;
+  color-scheme: light;
+  -webkit-color-scheme: light;
+  isolation: isolate;
+  mix-blend-mode: normal;
 }
 
 .page-scroll-content {
@@ -594,24 +598,10 @@
   border-radius: 8px;
 }
 
+/* Remove top/bottom fade overlays – ensures full height is usable */
 .page-content-scroll::before,
 .page-content-scroll::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 18px;
-  pointer-events: none;
-}
-
-.page-content-scroll::before {
-  top: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.9), transparent) !important;
-}
-
-.page-content-scroll::after {
-  bottom: 0;
-  background: linear-gradient(0deg, rgba(255,255,255,0.9), transparent) !important;
+  display: none;
 }
 
 .mood-tags-book {
@@ -638,7 +628,15 @@
   opacity: 1 !important;
   transform: none !important;
   animation: none !important;
+  mix-blend-mode: normal;
 }
+.mood-tags-book,
+.mood-tags-book .mood-tag,
+.mood-tags-book .mood-tag * {
+  color: #1a150f !important;
+  mix-blend-mode: normal;
+}
+
 
 .mood-tags-book .mood-tag:last-child {
   border-bottom: none;

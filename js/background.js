@@ -38,7 +38,7 @@ function setThemeClass(isLight) {
 export function applyTheme() {
   const body = document.body;
   if (!body) return;
-
+  
   // Check if manual override is set
   if (manualThemeOverride === 'light') {
     setThemeClass(true);
