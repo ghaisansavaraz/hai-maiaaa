@@ -568,22 +568,22 @@ body:not(.light-theme) .stars-container {
 @keyframes shootingStarFall {
   0% {
     opacity: 0;
-    transform: translate(0, 0) rotate(-45deg);
+    transform: translate3d(0, 0, 0) rotate(-45deg);
     filter: brightness(1.5) drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
   }
   8% {
     opacity: 1;
-    transform: translate(-80px, 80px) rotate(-45deg);
+    transform: translate3d(-5vw, 5vh, 0) rotate(-45deg);
     filter: brightness(1.8) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
   }
   75% {
     opacity: 1;
-    transform: translate(-750px, 750px) rotate(-45deg);
+    transform: translate3d(-40vw, 40vh, 0) rotate(-45deg);
     filter: brightness(2) drop-shadow(0 0 12px rgba(255, 255, 255, 1));
   }
   85% {
     opacity: 1;
-    transform: translate(-850px, 850px) rotate(-45deg);
+    transform: translate3d(-70vw, 70vh, 0) rotate(-45deg);
     filter: brightness(5.5) 
            drop-shadow(0 0 45px rgba(255, 255, 255, 1))
            drop-shadow(0 0 85px rgba(255, 255, 255, 1))
@@ -592,7 +592,7 @@ body:not(.light-theme) .stars-container {
   }
   92% {
     opacity: 1;
-    transform: translate(-920px, 920px) rotate(-45deg);
+    transform: translate3d(-90vw, 90vh, 0) rotate(-45deg);
     filter: brightness(4) 
            drop-shadow(0 0 35px rgba(255, 255, 255, 1))
            drop-shadow(0 0 70px rgba(255, 255, 255, 0.9))
@@ -600,7 +600,7 @@ body:not(.light-theme) .stars-container {
   }
   100% {
     opacity: 0;
-    transform: translate(-105vw, 105vh) rotate(-45deg);
+    transform: translate3d(-110vw, 110vh, 0) rotate(-45deg);
     filter: brightness(2) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6));
   }
 }
