@@ -1894,6 +1894,7 @@ body.zen-mode .center.dashboard-active {
   align-items: center !important;
   padding-top: 60px;
   padding-bottom: 60px;
+  transform: translateY(40px);
 }
 
 body.zen-mode #dashboardContent {
@@ -1903,7 +1904,32 @@ body.zen-mode #dashboardContent {
   justify-content: center;
   gap: 32px;
   min-height: 70vh;
-  padding: 20px 0;
+  padding: 60px 0 40px;
+}
+
+body.zen-mode .dashboard-header {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+body.zen-mode .header-clock {
+  gap: 14px;
+}
+
+body.zen-mode .header-time-container {
+  gap: 6px;
+}
+
+body.zen-mode .header-current-time {
+  font-size: clamp(52px, 9vw, 86px);
+  letter-spacing: 0.12em;
+}
+
+body.zen-mode .header-current-date,
+body.zen-mode .header-time-greeting {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  letter-spacing: 0.2em;
 }
 
 body.zen-mode .dashboard-grid {
@@ -1913,7 +1939,7 @@ body.zen-mode .dashboard-grid {
   overflow: hidden;
   pointer-events: none;
   transform: translateY(32px);
-  transition: opacity 0.75s ease, max-height 0.75s ease, transform 0.75s ease, margin 0.75s ease;
+  transition: opacity 1.3s ease, max-height 1.3s ease, transform 1.3s ease, margin 1.3s ease;
 }
 
 body.zen-mode .dashboard-card,
@@ -1926,5 +1952,5 @@ body.zen-mode #lettersSection {
   opacity: 0;
   pointer-events: none;
   transform: translateY(32px);
-  transition: opacity 0.75s ease, transform 0.75s ease;
+  transition: opacity 1.3s ease, transform 1.3s ease;
 }
