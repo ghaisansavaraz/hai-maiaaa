@@ -1930,8 +1930,7 @@ body.zen-mode .header-current-time {
   transition: text-shadow 1.2s ease, color 1.2s ease;
 }
 
-body.zen-mode .header-current-date,
-body.zen-mode .header-time-greeting {
+body.zen-mode .header-current-date {
   font-size: clamp(1rem, 2vw, 1.4rem);
   letter-spacing: 0.2em;
   text-shadow:
@@ -1939,6 +1938,16 @@ body.zen-mode .header-time-greeting {
     0 0 40px rgba(255,255,255,0.25);
   transition: text-shadow 1.2s ease, color 1.2s ease;
   margin-top: 4px;
+}
+
+body.zen-mode .header-time-greeting {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  letter-spacing: 0.2em;
+  text-shadow:
+    0 0 20px rgba(255,255,255,0.18),
+    0 0 40px rgba(255,255,255,0.25);
+  transition: text-shadow 1.2s ease, color 1.2s ease;
+  margin-top: -4px;
 }
 
 body.zen-mode.zen-bloom .header-current-time {
@@ -1952,6 +1961,18 @@ body.zen-mode.zen-bloom .header-time-greeting {
   text-shadow:
     0 0 32px rgba(255,255,255,0.4),
     0 0 70px rgba(255,255,255,0.5);
+}
+
+body.zen-mode #moonIconContainer {
+  transition: filter 1.2s ease;
+}
+
+body.zen-mode.zen-bloom #moonIconContainer {
+  filter: saturate(0.85) hue-rotate(210deg) brightness(1.1) contrast(1.05)
+    drop-shadow(0 2px 8px rgba(150,180,255,0.6))
+    drop-shadow(0 6px 20px rgba(150,180,255,0.75))
+    drop-shadow(0 12px 32px rgba(150,180,255,0.6))
+    drop-shadow(0 18px 48px rgba(150,180,255,0.4));
 }
 
 body.zen-mode .dashboard-grid {

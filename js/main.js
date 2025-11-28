@@ -1,3 +1,4 @@
+const ZEN_BLOOM_DURATION = 6000;
 /* Main Application Entry Point - PULSING ANIMATIONS v6 */
 
 import { EDITOR_CODE, LETTERS_DATA, MOOD_STORAGE_KEY, TASKS_STORAGE_KEY, debugLog, debugError } from './config.js';
@@ -86,7 +87,7 @@ function startZenBloom() {
   clearZenBloomTimeout();
   zenBloomTimeoutId = window.setTimeout(() => {
     stopZenBloom();
-  }, 5000);
+  }, ZEN_BLOOM_DURATION);
 }
 
 function scheduleZenModeAutoExit() {
