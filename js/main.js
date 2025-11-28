@@ -6,12 +6,13 @@ import { startTimeDisplay } from './clock.js';
 import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode, toggleBookState, loadMoodBookState } from './mood.js';
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
-import { initShootingStar } from './shootingstar.js';
+import { initShootingStar, triggerShootingStar } from './shootingstar.js';
 
 let dynamicBackground = null;
 let zenModeActive = false;
 let zenModeTimeoutId = null;
 let zenAudioElement = null;
+let zenBloomTimeoutId = null;
 
 const DAY_START_HOUR = 5;
 const DAY_END_HOUR = 18;
@@ -68,6 +69,26 @@ function clearZenModeTimeout() {
   }
 }
 
+function clearZenBloomTimeout() {
+  if (zenBloomTimeoutId) {
+    clearTimeout(zenBloomTimeoutId);
+    zenBloomTimeoutId = null;
+  }
+}
+
+function stopZenBloom() {
+  clearZenBloomTimeout();
+  document.body.classList.remove('zen-bloom');
+}
+
+function startZenBloom() {
+  document.body.classList.add('zen-bloom');
+  clearZenBloomTimeout();
+  zenBloomTimeoutId = window.setTimeout(() => {
+    stopZenBloom();
+  }, 5000);
+}
+
 function scheduleZenModeAutoExit() {
   clearZenModeTimeout();
   const now = new Date();
@@ -100,6 +121,7 @@ function ensureZenAudio() {
     zenAudioElement.addEventListener('ended', () => {
       zenAudioElement.pause();
       zenAudioElement.currentTime = 0;
+      stopZenBloom();
     });
   }
   return zenAudioElement;
@@ -110,11 +132,16 @@ function playZenChime() {
     const audio = ensureZenAudio();
     audio.currentTime = 0;
     const playPromise = audio.play();
+    startZenBloom();
     if (playPromise && typeof playPromise.then === 'function') {
-      playPromise.catch((err) => console.warn('[Maiaaa] Zen chime playback blocked:', err));
+      playPromise.catch((err) => {
+        console.warn('[Maiaaa] Zen chime playback blocked:', err);
+        stopZenBloom();
+      });
     }
   } catch (error) {
     console.warn('[Maiaaa] Unable to play zen chime:', error);
+    stopZenBloom();
   }
 }
 
@@ -123,6 +150,7 @@ function stopZenChime() {
     zenAudioElement.pause();
     zenAudioElement.currentTime = 0;
   }
+  stopZenBloom();
 }
 
 function setMoonPressedState(isPressed) {
@@ -140,6 +168,7 @@ function enterZenMode() {
   setMoonPressedState(true);
   scheduleZenModeAutoExit();
   playZenChime();
+  triggerShootingStar();
   console.log('[Maiaaa] Zen mode enabled');
 }
 
@@ -153,6 +182,7 @@ function exitZenMode(autoTriggered = false) {
   setMoonPressedState(false);
   clearZenModeTimeout();
   stopZenChime();
+  stopZenBloom();
   console.log(`[Maiaaa] Zen mode disabled${autoTriggered ? ' (auto)' : ''}`);
 }
 

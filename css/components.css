@@ -1914,22 +1914,44 @@ body.zen-mode .dashboard-header {
 }
 
 body.zen-mode .header-clock {
-  gap: 14px;
+  gap: 18px;
 }
 
 body.zen-mode .header-time-container {
-  gap: 6px;
+  gap: 12px;
 }
 
 body.zen-mode .header-current-time {
   font-size: clamp(52px, 9vw, 86px);
   letter-spacing: 0.12em;
+  text-shadow:
+    0 0 35px rgba(255,255,255,0.35),
+    0 0 80px rgba(255,255,255,0.45);
+  transition: text-shadow 1.2s ease, color 1.2s ease;
 }
 
 body.zen-mode .header-current-date,
 body.zen-mode .header-time-greeting {
   font-size: clamp(1rem, 2vw, 1.4rem);
   letter-spacing: 0.2em;
+  text-shadow:
+    0 0 20px rgba(255,255,255,0.18),
+    0 0 40px rgba(255,255,255,0.25);
+  transition: text-shadow 1.2s ease, color 1.2s ease;
+  margin-top: 4px;
+}
+
+body.zen-mode.zen-bloom .header-current-time {
+  text-shadow:
+    0 0 55px rgba(255,255,255,0.65),
+    0 0 130px rgba(255,255,255,0.8);
+}
+
+body.zen-mode.zen-bloom .header-current-date,
+body.zen-mode.zen-bloom .header-time-greeting {
+  text-shadow:
+    0 0 32px rgba(255,255,255,0.4),
+    0 0 70px rgba(255,255,255,0.5);
 }
 
 body.zen-mode .dashboard-grid {
