@@ -225,6 +225,7 @@ function switchToDashboard(viewName) {
   
   if (viewName === 'main') {
     // Show main dashboard
+    document.body.classList.remove('pinterest-view');
     pinterestDashboard.classList.remove('active');
     setTimeout(() => {
       mainDashboard.classList.add('visible');
@@ -234,6 +235,7 @@ function switchToDashboard(viewName) {
     }, 300);
   } else if (viewName === 'pinterest') {
     // Show pinterest dashboard
+    document.body.classList.add('pinterest-view');
     mainDashboard.classList.remove('visible');
     if (centerContainer) {
       centerContainer.classList.remove('dashboard-active');

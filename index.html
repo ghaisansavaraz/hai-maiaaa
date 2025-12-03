@@ -1901,26 +1901,34 @@ body.light-theme .mood-category {
   <!-- Pinterest Dashboard -->
   <div id="pinterestDashboard" class="pinterest-dashboard">
     <div class="pinterest-container">
-      <!-- Category Sidebar -->
-      <aside id="pinterestSidebar" class="pinterest-sidebar">
-        <div class="sidebar-header">
-          <h2>Categories</h2>
-        </div>
-        <div class="sidebar-content">
-          <!-- Categories will be rendered here -->
-        </div>
-      </aside>
+      <!-- Clock Header -->
+      <header class="pinterest-clock-header">
+        <div id="pinterestClockTime" class="pinterest-clock-time">00:00:00</div>
+      </header>
 
-      <!-- Main Content Area -->
-      <main id="pinterestContent" class="pinterest-content">
-        <!-- Category Notes -->
-        <div id="categoryNotes" class="category-notes-container"></div>
-        
-        <!-- Image Grid -->
-        <div id="pinterestImageGrid" class="pinterest-image-grid">
-          <div class="no-content">Select a category or create one to get started</div>
-        </div>
-      </main>
+      <!-- Content Wrapper -->
+      <div class="pinterest-content-wrapper">
+        <!-- Category Sidebar -->
+        <aside id="pinterestSidebar" class="pinterest-sidebar">
+          <div class="sidebar-header">
+            <h2>Categories</h2>
+          </div>
+          <div class="sidebar-content">
+            <!-- Categories will be rendered here -->
+          </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="pinterestContent" class="pinterest-content">
+          <!-- Category Notes -->
+          <div id="categoryNotes" class="category-notes-container"></div>
+          
+          <!-- Image Grid -->
+          <div id="pinterestImageGrid" class="pinterest-image-grid">
+            <div class="no-content">Select a category or create one to get started</div>
+          </div>
+        </main>
+      </div>
     </div>
 
     <!-- Add Button -->

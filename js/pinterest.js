@@ -288,7 +288,9 @@ export function renderImageGrid(categoryId) {
         <img src="${escapeHtml(imageUrl)}" 
              alt="Image ${index + 1}" 
              loading="lazy"
-             onerror="this.parentElement.classList.add('image-error')" />
+             crossorigin="anonymous"
+             referrerpolicy="no-referrer"
+             onerror="this.parentElement.classList.add('image-error'); this.style.display='none';" />
         <button class="image-delete-btn" 
                 data-image-url="${escapeHtml(imageUrl)}"
                 aria-label="Delete image"
@@ -424,6 +426,19 @@ export function handleAddFormSubmit(e) {
   toggleAddForm(false);
 }
 
+// Update Pinterest clock
+function updatePinterestClock() {
+  const clockElement = document.getElementById('pinterestClockTime');
+  if (!clockElement) return;
+
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+}
+
 // Initialize Pinterest board
 export function initPinterestBoard() {
   loadPinterestData();
@@ -450,6 +465,10 @@ export function initPinterestBoard() {
       cancelBtn.addEventListener('click', () => toggleAddForm(false));
     }
   }
+  
+  // Start clock update
+  updatePinterestClock();
+  setInterval(updatePinterestClock, 1000);
   
   debugLog('Pinterest board initialized');
 }
