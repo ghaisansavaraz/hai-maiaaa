@@ -1898,7 +1898,83 @@ body.light-theme .mood-category {
     </main>
   </div>
 
+  <!-- Pinterest Dashboard -->
+  <div id="pinterestDashboard" class="pinterest-dashboard">
+    <div class="pinterest-container">
+      <!-- Category Sidebar -->
+      <aside id="pinterestSidebar" class="pinterest-sidebar">
+        <div class="sidebar-header">
+          <h2>Categories</h2>
+        </div>
+        <div class="sidebar-content">
+          <!-- Categories will be rendered here -->
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main id="pinterestContent" class="pinterest-content">
+        <!-- Category Notes -->
+        <div id="categoryNotes" class="category-notes-container"></div>
+        
+        <!-- Image Grid -->
+        <div id="pinterestImageGrid" class="pinterest-image-grid">
+          <div class="no-content">Select a category or create one to get started</div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Add Button -->
+    <button id="addPinterestButton" class="pinterest-add-btn" aria-label="Add category or image">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+
+    <!-- Add Form -->
+    <div id="addPinterestForm" class="pinterest-add-form">
+      <form>
+        <h3>Add to Board</h3>
+        <div class="form-group">
+          <label for="categoryName">Category Name (optional if adding to existing)</label>
+          <input type="text" name="categoryName" id="categoryName" placeholder="e.g., Travel Inspiration" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="categoryNotes">Category Notes (optional)</label>
+          <textarea name="categoryNotes" id="categoryNotes" rows="3" placeholder="Add notes about this category..." autocomplete="off"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="imageUrl">Image URL</label>
+          <input type="url" name="imageUrl" id="imageUrl" placeholder="https://example.com/image.jpg" required autocomplete="off" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Add</button>
+          <button type="button" class="btn-secondary form-cancel-btn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Image Preview Modal -->
+  <div id="imagePreviewModal" class="image-preview-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close preview">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img class="preview-image" src="" alt="Preview" />
+    </div>
+  </div>
+
+  <!-- Edge Navigation Triggers -->
+  <div id="edgeNavLeft" class="edge-nav-trigger edge-nav-left" role="button" tabindex="0" aria-label="Switch dashboard view"></div>
+  <div id="edgeNavRight" class="edge-nav-trigger edge-nav-right" role="button" tabindex="0" aria-label="Switch dashboard view"></div>
+
   <!-- JavaScript Modules -->
+  <script type="module" src="js/pinterest.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

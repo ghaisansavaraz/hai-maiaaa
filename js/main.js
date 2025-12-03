@@ -8,6 +8,7 @@ import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode, toggleBookS
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar, triggerShootingStar } from './shootingstar.js';
+import { initPinterestBoard } from './pinterest.js';
 
 let dynamicBackground = null;
 let zenModeActive = false;
@@ -15,11 +16,20 @@ let zenModeTimeoutId = null;
 let zenAudioElement = null;
 let zenBloomTimeoutId = null;
 
+// Pinterest dashboard view state
+let currentView = 'main'; // 'main' or 'pinterest'
+let inactivityTimeoutId = null;
+let lastActivityTime = Date.now();
+
 const DAY_START_HOUR = 5;
 const DAY_END_HOUR = 18;
 const ZEN_DAY_AUTO_EXIT_HOUR = 20;
 const ZEN_NIGHT_AUTO_EXIT_HOUR = 8;
 const ZEN_CHIME_PATH = 'assets/Wind chime Zen/Wind chime, Hai Maiaaa.mp3';
+
+// Inactivity timeouts (in milliseconds)
+const MAIN_DASHBOARD_INACTIVITY = 10 * 60 * 1000; // 10 minutes
+const PINTEREST_DASHBOARD_INACTIVITY = 5 * 60 * 1000; // 5 minutes
 
 // Show dashboard
 function showDashboard() {
@@ -193,6 +203,121 @@ function toggleZenMode() {
   } else {
     enterZenMode();
   }
+}
+
+// ===== PINTEREST DASHBOARD VIEW SWITCHING =====
+
+function switchToDashboard(viewName) {
+  if (currentView === viewName) return;
+  
+  debugLog(`Switching to ${viewName} dashboard`);
+  
+  const mainDashboard = document.getElementById('dashboard');
+  const pinterestDashboard = document.getElementById('pinterestDashboard');
+  const centerContainer = document.querySelector('.center');
+  
+  if (!mainDashboard || !pinterestDashboard) {
+    debugError('Dashboard elements not found');
+    return;
+  }
+  
+  currentView = viewName;
+  
+  if (viewName === 'main') {
+    // Show main dashboard
+    pinterestDashboard.classList.remove('active');
+    setTimeout(() => {
+      mainDashboard.classList.add('visible');
+      if (centerContainer) {
+        centerContainer.classList.add('dashboard-active');
+      }
+    }, 300);
+  } else if (viewName === 'pinterest') {
+    // Show pinterest dashboard
+    mainDashboard.classList.remove('visible');
+    if (centerContainer) {
+      centerContainer.classList.remove('dashboard-active');
+    }
+    setTimeout(() => {
+      pinterestDashboard.classList.add('active');
+    }, 300);
+  }
+  
+  // Reset inactivity timer
+  resetInactivityTimer();
+}
+
+function initEdgeNavigation() {
+  const edgeNavLeft = document.getElementById('edgeNavLeft');
+  const edgeNavRight = document.getElementById('edgeNavRight');
+  
+  if (!edgeNavLeft || !edgeNavRight) {
+    debugError('Edge navigation elements not found');
+    return;
+  }
+  
+  const handleEdgeClick = () => {
+    const targetView = currentView === 'main' ? 'pinterest' : 'main';
+    switchToDashboard(targetView);
+  };
+  
+  edgeNavLeft.addEventListener('click', handleEdgeClick);
+  edgeNavRight.addEventListener('click', handleEdgeClick);
+  
+  // Keyboard support
+  [edgeNavLeft, edgeNavRight].forEach(edge => {
+    edge.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleEdgeClick();
+      }
+    });
+  });
+  
+  debugLog('Edge navigation initialized');
+}
+
+function resetInactivityTimer() {
+  lastActivityTime = Date.now();
+  
+  if (inactivityTimeoutId) {
+    clearTimeout(inactivityTimeoutId);
+    inactivityTimeoutId = null;
+  }
+  
+  const timeout = currentView === 'main' 
+    ? MAIN_DASHBOARD_INACTIVITY 
+    : PINTEREST_DASHBOARD_INACTIVITY;
+  
+  inactivityTimeoutId = setTimeout(() => {
+    const targetView = currentView === 'main' ? 'pinterest' : 'main';
+    debugLog(`Inactivity timeout reached, switching to ${targetView}`);
+    switchToDashboard(targetView);
+  }, timeout);
+}
+
+function initInactivityTimer() {
+  // Track user activity
+  const activityEvents = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart', 'click'];
+  
+  let throttleTimeout = null;
+  const throttledReset = () => {
+    if (!throttleTimeout) {
+      throttleTimeout = setTimeout(() => {
+        resetInactivityTimer();
+        throttleTimeout = null;
+      }, 1000); // Throttle to once per second
+    }
+  };
+  
+  activityEvents.forEach(event => {
+    document.addEventListener(event, throttledReset, { passive: true });
+  });
+  
+  // Start initial timer
+  resetInactivityTimer();
+  
+  debugLog('Inactivity timer initialized');
 }
 
 function initZenModeToggle() {
@@ -434,6 +559,15 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize shooting star system
     initShootingStar();
+    
+    // Initialize Pinterest board
+    initPinterestBoard();
+    
+    // Initialize edge navigation
+    initEdgeNavigation();
+    
+    // Initialize inactivity timer
+    initInactivityTimer();
     
     // Show dashboard immediately
     showDashboard();

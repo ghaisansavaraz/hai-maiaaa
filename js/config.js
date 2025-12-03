@@ -4,6 +4,7 @@
 export const STORAGE_KEY = "maiaaa_reminders_v1";
 export const MOOD_STORAGE_KEY = "maiaaa_mood_v1";
 export const TASKS_STORAGE_KEY = "maiaaa_tasks_v1";
+export const PINTEREST_STORAGE_KEY = "maiaaa_pinterest_v1";
 
 // Editor configuration
 export const EDITOR_CODE = "gesanlove";
