@@ -2055,11 +2055,11 @@ body.pinterest-view .center {
 .edge-nav-trigger {
   position: fixed;
   top: 0;
-  width: 50px;
+  width: 30px;
   height: 100vh;
   z-index: 10001;
   opacity: 0;
-  transition: opacity 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  transition: opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   pointer-events: auto;
   background: transparent;
@@ -2067,52 +2067,46 @@ body.pinterest-view .center {
 
 .edge-nav-left {
   left: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.02), transparent);
 }
 
 .edge-nav-right {
   right: 0;
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.02), transparent);
 }
 
-.edge-nav-trigger:hover,
-.edge-nav-trigger:focus-visible {
+.edge-nav-trigger:hover {
   opacity: 1;
 }
 
-/* Light theme glow */
-.light-theme .edge-nav-left:hover,
-.light-theme .edge-nav-left:focus-visible {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.5), transparent);
-  box-shadow: inset 40px 0 60px -20px rgba(255, 255, 255, 1),
-              20px 0 40px 0 rgba(255, 255, 255, 0.6);
+/* Light theme glow - left edge only */
+.light-theme .edge-nav-left:hover {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.6), transparent);
+  box-shadow: inset 30px 0 50px -10px rgba(255, 255, 255, 1),
+              15px 0 30px -5px rgba(255, 255, 255, 0.7);
 }
 
-.light-theme .edge-nav-right:hover,
-.light-theme .edge-nav-right:focus-visible {
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.5), transparent);
-  box-shadow: inset -40px 0 60px -20px rgba(255, 255, 255, 1),
-              -20px 0 40px 0 rgba(255, 255, 255, 0.6);
+/* Light theme glow - right edge only */
+.light-theme .edge-nav-right:hover {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.6), transparent);
+  box-shadow: inset -30px 0 50px -10px rgba(255, 255, 255, 1),
+              -15px 0 30px -5px rgba(255, 255, 255, 0.7);
 }
 
-/* Dark theme glow */
-body:not(.light-theme) .edge-nav-left:hover,
-body:not(.light-theme) .edge-nav-left:focus-visible {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
-  box-shadow: inset 40px 0 60px -20px rgba(255, 255, 255, 0.4),
-              20px 0 40px 0 rgba(255, 255, 255, 0.3);
+/* Dark theme glow - left edge only */
+body:not(.light-theme) .edge-nav-left:hover {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.2), transparent);
+  box-shadow: inset 30px 0 50px -10px rgba(255, 255, 255, 0.5),
+              15px 0 30px -5px rgba(255, 255, 255, 0.4);
 }
 
-body:not(.light-theme) .edge-nav-right:hover,
-body:not(.light-theme) .edge-nav-right:focus-visible {
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
-  box-shadow: inset -40px 0 60px -20px rgba(255, 255, 255, 0.4),
-              -20px 0 40px 0 rgba(255, 255, 255, 0.3);
+/* Dark theme glow - right edge only */
+body:not(.light-theme) .edge-nav-right:hover {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.2), transparent);
+  box-shadow: inset -30px 0 50px -10px rgba(255, 255, 255, 0.5),
+              -15px 0 30px -5px rgba(255, 255, 255, 0.4);
 }
 
 .edge-nav-trigger:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.3);
-  outline-offset: -2px;
+  outline: none;
 }
 
 /* Pinterest Dashboard Container */

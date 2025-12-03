@@ -245,8 +245,8 @@ function switchToDashboard(viewName) {
     }, 300);
   }
   
-  // Reset inactivity timer
-  resetInactivityTimer();
+  // Reset inactivity timer - DISABLED (manual switching only)
+  // resetInactivityTimer();
 }
 
 function initEdgeNavigation() {
@@ -568,8 +568,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize edge navigation
     initEdgeNavigation();
     
-    // Initialize inactivity timer
-    initInactivityTimer();
+    // Initialize inactivity timer - DISABLED (manual switching only)
+    // initInactivityTimer();
     
     // Show dashboard immediately
     showDashboard();
