@@ -283,14 +283,18 @@ export function renderImageGrid(categoryId) {
   }
 
   const imagesHtml = category.images.map((imageUrl, index) => {
+    // Determine if we should use CORS (only for known safe hosts)
+    const safeCorsHosts = /imgur\.com|cloudinary\.com|unsplash\.com|pexels\.com|pixabay\.com/i;
+    const useCors = safeCorsHosts.test(imageUrl);
+    const corsAttr = useCors ? 'crossorigin="anonymous"' : '';
+    
     return `
       <div class="pinterest-image-card" data-image-index="${index}">
         <img src="${escapeHtml(imageUrl)}" 
              alt="Image ${index + 1}" 
              loading="lazy"
-             crossorigin="anonymous"
-             referrerpolicy="no-referrer"
-             onerror="this.parentElement.classList.add('image-error'); this.style.display='none';" />
+             ${corsAttr}
+             onerror="this.parentElement.classList.add('image-error');" />
         <button class="image-delete-btn" 
                 data-image-url="${escapeHtml(imageUrl)}"
                 aria-label="Delete image"
@@ -386,14 +390,53 @@ export function toggleAddForm(show = null) {
   }
 }
 
+// Validate URL
+function isValidImageUrl(url) {
+  if (!url || !url.trim()) return false;
+  
+  const trimmedUrl = url.trim();
+  
+  // Check if it's a data URL (base64)
+  if (trimmedUrl.startsWith('data:image/')) return true;
+  
+  // Check if it looks like a URL (has protocol or starts with //)
+  const urlPattern = /^(https?:\/\/|\/\/)/i;
+  if (!urlPattern.test(trimmedUrl)) {
+    // Try to help by adding https://
+    return false;
+  }
+  
+  // Check if it has common image extensions or is from known image hosts
+  const imagePattern = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)(\?.*)?$/i;
+  const knownHosts = /imgur\.com|cloudinary\.com|unsplash\.com|pexels\.com|pixabay\.com|ibb\.co|postimg\.cc|i\.redd\.it/i;
+  
+  return imagePattern.test(trimmedUrl) || knownHosts.test(trimmedUrl);
+}
+
 // Handle form submission
 export function handleAddFormSubmit(e) {
   e.preventDefault();
   
   const form = e.target;
   const categoryName = form.querySelector('input[name="categoryName"]')?.value;
-  const imageUrl = form.querySelector('input[name="imageUrl"]')?.value;
+  let imageUrl = form.querySelector('input[name="imageUrl"]')?.value;
   const categoryNotes = form.querySelector('textarea[name="categoryNotes"]')?.value;
+  
+  // Validate and clean URL
+  if (imageUrl && imageUrl.trim()) {
+    imageUrl = imageUrl.trim();
+    
+    // Auto-add https:// if missing
+    if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://') && !imageUrl.startsWith('data:')) {
+      imageUrl = 'https://' + imageUrl;
+    }
+    
+    // Validate URL
+    if (!isValidImageUrl(imageUrl)) {
+      alert('Please enter a valid image URL. Make sure it:\n• Starts with https://\n• Ends with an image extension (.jpg, .png, etc.)\n• Or is from a known image hosting service (Imgur, Cloudinary, etc.)');
+      return;
+    }
+  }
   
   // Check if we're adding to existing category or creating new one
   let activeCategory = getActiveCategory();
@@ -401,14 +444,14 @@ export function handleAddFormSubmit(e) {
   if (categoryName && categoryName.trim()) {
     // Create new category
     const newCategory = createCategory(categoryName, categoryNotes);
-    if (newCategory && imageUrl && imageUrl.trim()) {
+    if (newCategory && imageUrl) {
       addImageToCategory(newCategory.id, imageUrl);
     }
     if (newCategory) {
       setActiveCategory(newCategory.id);
       activeCategory = newCategory;
     }
-  } else if (activeCategory && imageUrl && imageUrl.trim()) {
+  } else if (activeCategory && imageUrl) {
     // Add to active category
     addImageToCategory(activeCategory.id, imageUrl);
   } else {
