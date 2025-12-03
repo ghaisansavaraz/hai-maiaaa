@@ -2055,54 +2055,70 @@ body.pinterest-view .center {
 .edge-nav-trigger {
   position: fixed;
   top: 0;
-  width: 30px;
+  width: 40px;
   height: 100vh;
   z-index: 10001;
   opacity: 0;
-  transition: opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  transition: opacity 0.4s ease, background 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
   cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
   background: transparent;
+  transform: scaleX(0);
+  transform-origin: left;
 }
 
 .edge-nav-left {
   left: 0;
+  transform-origin: left;
 }
 
 .edge-nav-right {
   right: 0;
+  transform-origin: right;
 }
 
+/* Show triggers based on hover */
 .edge-nav-trigger:hover {
   opacity: 1;
+  pointer-events: auto;
+  transform: scaleX(1);
+}
+
+/* Always enable pointer events in hover area */
+.edge-nav-left {
+  pointer-events: auto;
+}
+
+.edge-nav-right {
+  pointer-events: auto;
 }
 
 /* Light theme glow - left edge only */
 .light-theme .edge-nav-left:hover {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.6), transparent);
-  box-shadow: inset 30px 0 50px -10px rgba(255, 255, 255, 1),
-              15px 0 30px -5px rgba(255, 255, 255, 0.7);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
+  box-shadow: inset 25px 0 40px -5px rgba(255, 255, 255, 1),
+              10px 0 25px -3px rgba(255, 255, 255, 0.8);
 }
 
 /* Light theme glow - right edge only */
 .light-theme .edge-nav-right:hover {
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.6), transparent);
-  box-shadow: inset -30px 0 50px -10px rgba(255, 255, 255, 1),
-              -15px 0 30px -5px rgba(255, 255, 255, 0.7);
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
+  box-shadow: inset -25px 0 40px -5px rgba(255, 255, 255, 1),
+              -10px 0 25px -3px rgba(255, 255, 255, 0.8);
 }
 
 /* Dark theme glow - left edge only */
 body:not(.light-theme) .edge-nav-left:hover {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.2), transparent);
-  box-shadow: inset 30px 0 50px -10px rgba(255, 255, 255, 0.5),
-              15px 0 30px -5px rgba(255, 255, 255, 0.4);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+  box-shadow: inset 25px 0 40px -5px rgba(255, 255, 255, 0.6),
+              10px 0 25px -3px rgba(255, 255, 255, 0.5);
 }
 
 /* Dark theme glow - right edge only */
 body:not(.light-theme) .edge-nav-right:hover {
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.2), transparent);
-  box-shadow: inset -30px 0 50px -10px rgba(255, 255, 255, 0.5),
-              -15px 0 30px -5px rgba(255, 255, 255, 0.4);
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+  box-shadow: inset -25px 0 40px -5px rgba(255, 255, 255, 0.6),
+              -10px 0 25px -3px rgba(255, 255, 255, 0.5);
 }
 
 .edge-nav-trigger:focus-visible {
