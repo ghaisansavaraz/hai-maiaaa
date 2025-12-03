@@ -2058,39 +2058,19 @@ body.pinterest-view .center {
   width: 40px;
   height: 100vh;
   z-index: 10001;
-  opacity: 0;
-  transition: opacity 0.4s ease, background 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  pointer-events: none;
+  pointer-events: auto;
   background: transparent;
-  transform: scaleX(0);
-  transform-origin: left;
+  box-shadow: none;
 }
 
 .edge-nav-left {
   left: 0;
-  transform-origin: left;
 }
 
 .edge-nav-right {
   right: 0;
-  transform-origin: right;
-}
-
-/* Show triggers based on hover */
-.edge-nav-trigger:hover {
-  opacity: 1;
-  pointer-events: auto;
-  transform: scaleX(1);
-}
-
-/* Always enable pointer events in hover area */
-.edge-nav-left {
-  pointer-events: auto;
-}
-
-.edge-nav-right {
-  pointer-events: auto;
 }
 
 /* Light theme glow - left edge only */
