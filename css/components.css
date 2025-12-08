@@ -2052,13 +2052,14 @@ body.pinterest-view .center {
 }
 
 /* Edge Navigation Triggers */
+/* Edge Navigation Triggers */
 .edge-nav-trigger {
   position: fixed;
   top: 0;
-  width: 40px;
+  width: 30px;
   height: 100vh;
   z-index: 10001;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.25s ease;
   cursor: pointer;
   pointer-events: auto;
   background: transparent;
@@ -2073,32 +2074,34 @@ body.pinterest-view .center {
   right: 0;
 }
 
-/* Light theme glow - left edge only */
+/* Light theme glow - single clean band */
 .light-theme .edge-nav-left:hover {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
-  box-shadow: inset 25px 0 40px -5px rgba(255, 255, 255, 1),
-              10px 0 25px -3px rgba(255, 255, 255, 0.8);
+  background: linear-gradient(to right,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 100%);
 }
 
-/* Light theme glow - right edge only */
 .light-theme .edge-nav-right:hover {
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
-  box-shadow: inset -25px 0 40px -5px rgba(255, 255, 255, 1),
-              -10px 0 25px -3px rgba(255, 255, 255, 0.8);
+  background: linear-gradient(to left,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 100%);
 }
 
-/* Dark theme glow - left edge only */
+/* Dark theme glow - single clean band */
 body:not(.light-theme) .edge-nav-left:hover {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
-  box-shadow: inset 25px 0 40px -5px rgba(255, 255, 255, 0.6),
-              10px 0 25px -3px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to right,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.06) 60%,
+    transparent 100%);
 }
 
-/* Dark theme glow - right edge only */
 body:not(.light-theme) .edge-nav-right:hover {
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
-  box-shadow: inset -25px 0 40px -5px rgba(255, 255, 255, 0.6),
-              -10px 0 25px -3px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to left,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.06) 60%,
+    transparent 100%);
 }
 
 .edge-nav-trigger:focus-visible {
