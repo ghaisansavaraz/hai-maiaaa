@@ -62,12 +62,12 @@ function getRoseFlowerSVG(colors) {
         <stop offset="100%" stop-color="${colors.accent}"/>
       </radialGradient>
     </defs>
-    <ellipse cx="0" cy="-4" rx="18" ry="16" fill="url(#roseGrad)" opacity="0.5" class="petal" style="--petal-rotation:0deg;--petal-delay:0"/>
-    <ellipse cx="-8" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.6" class="petal" style="--petal-rotation:-25deg;--petal-delay:1"/>
-    <ellipse cx="8" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.6" class="petal" style="--petal-rotation:25deg;--petal-delay:2"/>
-    <ellipse cx="-4" cy="-6" rx="11" ry="10" fill="${colors.secondary}" opacity="0.7" class="petal" style="--petal-rotation:-15deg;--petal-delay:3"/>
-    <ellipse cx="4" cy="-6" rx="11" ry="10" fill="${colors.secondary}" opacity="0.7" class="petal" style="--petal-rotation:15deg;--petal-delay:4"/>
-    <ellipse cx="0" cy="-5" rx="7" ry="7" fill="${colors.secondary}" opacity="0.8" class="petal" style="--petal-rotation:0deg;--petal-delay:5"/>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-4" rx="18" ry="16" fill="url(#roseGrad)" opacity="0.5"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-25)"><ellipse cx="-8" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.6"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(25)"><ellipse cx="8" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.6"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(-15)"><ellipse cx="-4" cy="-6" rx="11" ry="10" fill="${colors.secondary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(15)"><ellipse cx="4" cy="-6" rx="11" ry="10" fill="${colors.secondary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:5"><ellipse cx="0" cy="-5" rx="7" ry="7" fill="${colors.secondary}" opacity="0.8"/></g>
     <circle cx="0" cy="-4" r="4" fill="${colors.center}" opacity="0.6"/>
     <path d="M-6,-4 Q-4,-8 0,-6 Q4,-8 6,-4" fill="none" stroke="${colors.accent}" stroke-width="0.4" opacity="0.3"/>
   </g>`;
@@ -75,12 +75,12 @@ function getRoseFlowerSVG(colors) {
 
 function getTulipFlowerSVG(colors) {
   return `<g class="flower-head">
-    <ellipse cx="0" cy="-10" rx="10" ry="18" fill="${colors.primary}" opacity="0.5" class="petal" style="--petal-rotation:0deg;--petal-delay:0"/>
-    <ellipse cx="-6" cy="-8" rx="8" ry="16" fill="${colors.primary}" opacity="0.6" class="petal" style="--petal-rotation:-12deg;--petal-delay:1"/>
-    <ellipse cx="6" cy="-8" rx="8" ry="16" fill="${colors.primary}" opacity="0.6" class="petal" style="--petal-rotation:12deg;--petal-delay:2"/>
-    <ellipse cx="-3" cy="-10" rx="6" ry="14" fill="${colors.secondary}" opacity="0.7" class="petal" style="--petal-rotation:-6deg;--petal-delay:3"/>
-    <ellipse cx="3" cy="-10" rx="6" ry="14" fill="${colors.secondary}" opacity="0.7" class="petal" style="--petal-rotation:6deg;--petal-delay:4"/>
-    <ellipse cx="0" cy="-10" rx="4" ry="12" fill="${colors.secondary}" opacity="0.8" class="petal" style="--petal-rotation:0deg;--petal-delay:5"/>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-10" rx="10" ry="18" fill="${colors.primary}" opacity="0.5"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-12)"><ellipse cx="-6" cy="-8" rx="8" ry="16" fill="${colors.primary}" opacity="0.6"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(12)"><ellipse cx="6" cy="-8" rx="8" ry="16" fill="${colors.primary}" opacity="0.6"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(-6)"><ellipse cx="-3" cy="-10" rx="6" ry="14" fill="${colors.secondary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(6)"><ellipse cx="3" cy="-10" rx="6" ry="14" fill="${colors.secondary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:5"><ellipse cx="0" cy="-10" rx="4" ry="12" fill="${colors.secondary}" opacity="0.8"/></g>
     <circle cx="0" cy="-6" r="3" fill="${colors.center}" opacity="0.5"/>
   </g>`;
 }
@@ -89,7 +89,7 @@ function getDaisyFlowerSVG(colors) {
   const petals = [];
   for (let i = 0; i < 14; i++) {
     const angle = (i * 360) / 14;
-    petals.push(`<ellipse cx="0" cy="-14" rx="3.5" ry="10" fill="${colors.primary}" opacity="0.7" class="petal" style="--petal-rotation:${angle}deg;--petal-delay:${i}"/>`);
+    petals.push(`<g class="petal" style="--petal-delay:${i}" transform="rotate(${angle})"><ellipse cx="0" cy="-14" rx="3.5" ry="10" fill="${colors.primary}" opacity="0.7"/></g>`);
   }
   return `<g class="flower-head">
     ${petals.join('\n    ')}
@@ -102,14 +102,14 @@ function getDaisyFlowerSVG(colors) {
 
 function getPeonyFlowerSVG(colors) {
   return `<g class="flower-head">
-    <ellipse cx="-10" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.4" class="petal" style="--petal-rotation:-20deg;--petal-delay:0"/>
-    <ellipse cx="10" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.4" class="petal" style="--petal-rotation:20deg;--petal-delay:1"/>
-    <ellipse cx="0" cy="-8" rx="15" ry="11" fill="${colors.primary}" opacity="0.45" class="petal" style="--petal-rotation:0deg;--petal-delay:2"/>
-    <ellipse cx="-6" cy="-4" rx="11" ry="10" fill="${colors.secondary}" opacity="0.55" class="petal" style="--petal-rotation:-10deg;--petal-delay:3"/>
-    <ellipse cx="6" cy="-4" rx="11" ry="10" fill="${colors.secondary}" opacity="0.55" class="petal" style="--petal-rotation:10deg;--petal-delay:4"/>
-    <ellipse cx="-3" cy="-6" rx="9" ry="8" fill="${colors.secondary}" opacity="0.65" class="petal" style="--petal-rotation:-5deg;--petal-delay:5"/>
-    <ellipse cx="3" cy="-6" rx="9" ry="8" fill="${colors.secondary}" opacity="0.65" class="petal" style="--petal-rotation:5deg;--petal-delay:6"/>
-    <ellipse cx="0" cy="-5" rx="6" ry="6" fill="${colors.accent}" opacity="0.5" class="petal" style="--petal-rotation:0deg;--petal-delay:7"/>
+    <g class="petal" style="--petal-delay:0" transform="rotate(-20)"><ellipse cx="-10" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.4"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(20)"><ellipse cx="10" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.4"/></g>
+    <g class="petal" style="--petal-delay:2"><ellipse cx="0" cy="-8" rx="15" ry="11" fill="${colors.primary}" opacity="0.45"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(-10)"><ellipse cx="-6" cy="-4" rx="11" ry="10" fill="${colors.secondary}" opacity="0.55"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(10)"><ellipse cx="6" cy="-4" rx="11" ry="10" fill="${colors.secondary}" opacity="0.55"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(-5)"><ellipse cx="-3" cy="-6" rx="9" ry="8" fill="${colors.secondary}" opacity="0.65"/></g>
+    <g class="petal" style="--petal-delay:6" transform="rotate(5)"><ellipse cx="3" cy="-6" rx="9" ry="8" fill="${colors.secondary}" opacity="0.65"/></g>
+    <g class="petal" style="--petal-delay:7"><ellipse cx="0" cy="-5" rx="6" ry="6" fill="${colors.accent}" opacity="0.5"/></g>
     <circle cx="0" cy="-4" r="4" fill="${colors.center}" opacity="0.5"/>
   </g>`;
 }
@@ -124,7 +124,7 @@ function getRanunculusFlowerSVG(colors) {
     for (let i = 0; i < count; i++) {
       const angle = (i * 360) / count + ring * 15;
       const color = ring === 0 ? colors.primary : ring === 1 ? colors.secondary : colors.accent;
-      layers.push(`<ellipse cx="0" cy="${-r + 2}" rx="4" ry="${r * 0.6}" fill="${color}" opacity="${opacity}" class="petal" style="--petal-rotation:${angle}deg;--petal-delay:${delayIdx++}"/>`);
+      layers.push(`<g class="petal" style="--petal-delay:${delayIdx++}" transform="rotate(${angle})"><ellipse cx="0" cy="${-r + 2}" rx="4" ry="${r * 0.6}" fill="${color}" opacity="${opacity}"/></g>`);
     }
   }
   return `<g class="flower-head">
@@ -144,7 +144,7 @@ function getFlowerSVG(type, variation = 0) {
     default: head = getRoseFlowerSVG(colors);
   }
   const stem = getStemSVG(type, variation);
-  return `<svg viewBox="-30 -30 60 100" xmlns="http://www.w3.org/2000/svg" class="flower-svg flower-${type}" aria-hidden="true">
+  return `<svg viewBox="-35 -35 70 110" xmlns="http://www.w3.org/2000/svg" class="flower-svg flower-${type}" aria-hidden="true">
     ${stem}
     ${head}
   </svg>`;
@@ -450,7 +450,7 @@ function handleBloom(noteId, cardElement) {
       note.bloomed = true;
       saveValentineData();
       renderGarden();
-    }, 900);
+    }, 700);
   } else {
     // Re-bloom: close then allow re-open
     note.bloomed = false;
