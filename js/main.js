@@ -9,7 +9,7 @@ import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './t
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar, triggerShootingStar } from './shootingstar.js';
 import { initPinterestBoard } from './pinterest.js';
-import { loadLetters, initLettersBook, initLettersEventListeners } from './letters.js';
+import { loadLetters, initLettersEventListeners } from './letters.js';
 
 let dynamicBackground = null;
 let zenModeActive = false;
@@ -511,7 +511,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMoodBookState(); // Load book state after moods are loaded
     loadReminders();
     loadTasks();
-    initLettersBook(); // Initialize letters book state
     loadLetters(); // Load and render letters
     
     // Initialize event listeners

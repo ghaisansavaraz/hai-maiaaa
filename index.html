@@ -1834,42 +1834,34 @@ body.light-theme .mood-category {
             </section>
 
             <!-- Letters Section -->
-            <section id="lettersSection" class="letters-book">
-              <div class="letters-book-shell">
-                <!-- Book Cover (closed) -->
-                <div class="letters-book-cover">
-                  <div class="letters-book-spine"></div>
-                  <div class="letters-book-front">
-                    <div class="cover-emboss">
-                      <div class="emboss-title">LETTERS</div>
-                      <div class="emboss-subtitle">FROM GESAN</div>
-                      <div class="emboss-decoration">✉</div>
-                    </div>
-                  </div>
-                  <button class="book-keyhole" id="lettersBookClasp" aria-label="Open letters book" title="Open letters">
-                    <div class="keyhole-ring">
-                      <div class="keyhole-slot"></div>
-                      <div class="keyhole-circle"></div>
-                    </div>
-                  </button>
-                </div>
-
-                <!-- Book Interior -->
-                <div class="letters-book-interior">
-                  <div class="letters-book-page">
-                    <div class="page-header">
-                      <div class="page-title">Letters for You</div>
-                    </div>
-                    <div class="letters-scroll-container">
-                      <div class="page-scroll-shadow"></div>
-                      <div class="letters-scroll-content">
-                        <div id="lettersContainer" class="letters-container"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <section id="lettersSection" class="dashboard-card">
+              <div class="card-header">
+                <h2 class="card-title">Letters</h2>
+                <div class="card-subtitle">Messages from Gesan</div>
+              </div>
+              <div class="card-content">
+                <div id="lettersContainer" class="letters-container"></div>
               </div>
             </section>
+
+            <!-- Letter Modal -->
+            <div id="letterModal" class="letter-modal">
+              <div class="letter-modal-content">
+                <div class="letter-modal-header">
+                  <div class="letter-modal-header-text">
+                    <h2 class="letter-modal-title"></h2>
+                    <span class="letter-modal-date"></span>
+                  </div>
+                  <button class="letter-modal-close" aria-label="Close letter">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+                <div class="letter-modal-body"></div>
+              </div>
+            </div>
 
           </div>
 

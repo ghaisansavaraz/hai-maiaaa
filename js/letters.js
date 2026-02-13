@@ -1,12 +1,6 @@
-/* Letters Book Management */
+/* Letters Card System with Modal */
 
 import { LETTERS_DATA, debugLog, debugError } from './config.js';
-
-// Book state management
-const LETTERS_LOCK_KEY = "maiaaa_letters_lock_v1";
-const BOOK_TRANSITION_DURATION = 1200;
-let lettersBookClosed = true;
-let lettersBookAnimating = false;
 
 // Load letters from config
 export function loadLetters() {
@@ -18,7 +12,7 @@ export function loadLetters() {
   }
 }
 
-// Render letters in the book
+// Render letters as cards
 function renderLetters() {
   const lettersContainer = document.getElementById("lettersContainer");
   if (!lettersContainer) return;
@@ -35,19 +29,28 @@ function renderLetters() {
   }
   
   LETTERS_DATA.forEach((letter, index) => {
-    const letterPaper = document.createElement("div");
-    letterPaper.className = "letter-paper";
-    letterPaper.style.animationDelay = `${index * 0.15}s`;
+    const letterCard = document.createElement("div");
+    letterCard.className = "letter-card";
+    letterCard.style.animationDelay = `${index * 0.15}s`;
+    letterCard.dataset.letterId = letter.id;
     
-    letterPaper.innerHTML = `
-      <div class="letter-paper-header">
-        <h3 class="letter-paper-title">${escapeHtml(letter.title)}</h3>
-        <span class="letter-paper-date">${escapeHtml(letter.date)}</span>
+    // Truncate content for preview
+    const previewContent = letter.content.length > 120 
+      ? letter.content.substring(0, 120) + "..." 
+      : letter.content;
+    
+    letterCard.innerHTML = `
+      <button class="letter-card-ribbon" aria-label="Open letter" data-letter-id="${letter.id}">
+        <span class="ribbon-icon">🎀</span>
+      </button>
+      <div class="letter-card-header">
+        <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
+        <span class="letter-card-date">${escapeHtml(letter.date)}</span>
       </div>
-      <div class="letter-paper-content">${escapeHtml(letter.content)}</div>
+      <div class="letter-card-content">${escapeHtml(previewContent)}</div>
     `;
     
-    lettersContainer.appendChild(letterPaper);
+    lettersContainer.appendChild(letterCard);
   });
   
   debugLog(`Rendered ${LETTERS_DATA.length} letters`);
@@ -60,134 +63,126 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Apply book state (open/closed)
-function applyLettersBookState() {
-  const section = document.getElementById("lettersSection");
-  if (!section) return;
-
-  const bookShell = section.querySelector(".letters-book-shell");
-  const bookCover = section.querySelector(".letters-book-cover");
-  const bookInterior = section.querySelector(".letters-book-interior");
-  const claspButton = document.getElementById("lettersBookClasp");
-  const bookSpine = section.querySelector(".letters-book-spine");
-
-  const isClosed = lettersBookClosed;
-
-  section.classList.toggle("open", !isClosed);
-  section.classList.toggle("book-closed", isClosed);
-  bookShell?.classList.toggle("open", !isClosed);
-  bookCover?.classList.toggle("open", !isClosed);
-  bookInterior?.classList.toggle("open", !isClosed);
-
-  if (claspButton) {
-    claspButton.setAttribute(
-      "aria-label",
-      isClosed ? "Open letters book" : "Close letters book"
-    );
-    claspButton.setAttribute(
-      "title",
-      isClosed ? "Open letters" : "Close letters"
-    );
-  }
-
-  if (bookSpine) {
-    if (!isClosed) {
-      bookSpine.setAttribute("role", "button");
-      bookSpine.setAttribute("tabindex", "0");
-      bookSpine.setAttribute("aria-label", "Close letters book");
-    } else {
-      bookSpine.removeAttribute("role");
-      bookSpine.removeAttribute("tabindex");
-      bookSpine.removeAttribute("aria-label");
-    }
-  }
-
-  debugLog(`Letters book ${isClosed ? "closed" : "opened"}`);
+// Open letter modal
+function openLetterModal(letterId) {
+  const letter = LETTERS_DATA.find(l => l.id === letterId);
+  if (!letter) return;
+  
+  const modal = document.getElementById("letterModal");
+  const modalTitle = modal.querySelector(".letter-modal-title");
+  const modalDate = modal.querySelector(".letter-modal-date");
+  const modalBody = modal.querySelector(".letter-modal-body");
+  
+  // Set content
+  modalTitle.textContent = letter.title;
+  modalDate.textContent = letter.date;
+  modalBody.textContent = letter.content;
+  
+  // Show modal
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden";
+  
+  debugLog(`Opened letter modal: ${letter.title}`);
 }
 
-// Toggle book state (open/close)
-export function toggleLettersBookState() {
-  try {
-    if (lettersBookAnimating) return;
-    lettersBookAnimating = true;
-
-    const section = document.getElementById("lettersSection");
-    const claspButton = document.getElementById("lettersBookClasp");
-    if (section) section.classList.add("book-transitioning");
-    if (claspButton) claspButton.setAttribute("disabled", "disabled");
-
-    lettersBookClosed = !lettersBookClosed;
-    localStorage.setItem(LETTERS_LOCK_KEY, JSON.stringify(lettersBookClosed));
-    applyLettersBookState();
-
-    setTimeout(() => {
-      lettersBookAnimating = false;
-      if (section) section.classList.remove("book-transitioning");
-      if (claspButton) claspButton.removeAttribute("disabled");
-    }, BOOK_TRANSITION_DURATION);
-  } catch (e) {
-    debugError("Failed to toggle letters book state:", e);
-    lettersBookAnimating = false;
-    const claspButton = document.getElementById("lettersBookClasp");
-    if (claspButton) claspButton.removeAttribute("disabled");
-  }
+// Close letter modal
+function closeLetterModal() {
+  const modal = document.getElementById("letterModal");
+  modal.classList.remove("active");
+  document.body.style.overflow = "";
+  
+  debugLog("Closed letter modal");
 }
 
-// Load book state from localStorage
-function loadLettersBookState() {
-  try {
-    const stored = localStorage.getItem(LETTERS_LOCK_KEY);
-    if (stored !== null) {
-      lettersBookClosed = JSON.parse(stored);
-    }
-  } catch (e) {
-    debugError("Failed to load letters book state:", e);
-    lettersBookClosed = true;
-  }
+// Animate ribbon untie
+function animateRibbonUntie(ribbonElement) {
+  ribbonElement.classList.add("untying");
+  setTimeout(() => {
+    ribbonElement.classList.remove("untying");
+  }, 300);
 }
 
-// Initialize letters book
-export function initLettersBook() {
-  try {
-    loadLettersBookState();
-    applyLettersBookState();
-    debugLog("Letters book initialized");
-  } catch (e) {
-    debugError("Failed to initialize letters book:", e);
-  }
+// Initialize card interactions (3D tilt effect)
+function initCardInteractions() {
+  const cards = document.querySelectorAll(".letter-card");
+  
+  cards.forEach(card => {
+    card.addEventListener("mousemove", handleCardMouseMove);
+    card.addEventListener("mouseleave", handleCardMouseLeave);
+  });
+}
+
+// Handle card mouse move for 3D tilt
+function handleCardMouseMove(e) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (window.innerWidth < 768) return; // Disable on mobile
+  
+  const card = e.currentTarget;
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  
+  const rotateX = (y - centerY) / centerY * -5; // Max 5deg
+  const rotateY = (x - centerX) / centerX * 5;
+  
+  card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+}
+
+// Handle card mouse leave
+function handleCardMouseLeave(e) {
+  const card = e.currentTarget;
+  card.style.transform = "";
 }
 
 // Initialize event listeners
 export function initLettersEventListeners() {
   try {
-    const claspButton = document.getElementById("lettersBookClasp");
-    const section = document.getElementById("lettersSection");
-    
-    if (claspButton) {
-      claspButton.addEventListener("click", (e) => {
+    // Ribbon button clicks (delegated)
+    document.addEventListener("click", (e) => {
+      const ribbonButton = e.target.closest(".letter-card-ribbon");
+      if (ribbonButton) {
         e.stopPropagation();
-        toggleLettersBookState();
+        const letterId = ribbonButton.dataset.letterId;
+        animateRibbonUntie(ribbonButton);
+        setTimeout(() => {
+          openLetterModal(letterId);
+        }, 300);
+      }
+    });
+    
+    // Modal close button
+    const closeButton = document.querySelector(".letter-modal-close");
+    if (closeButton) {
+      closeButton.addEventListener("click", closeLetterModal);
+    }
+    
+    // Modal backdrop click
+    const modal = document.getElementById("letterModal");
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeLetterModal();
+        }
       });
     }
     
-    if (section) {
-      const bookSpine = section.querySelector(".letters-book-spine");
-      if (bookSpine) {
-        bookSpine.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (!lettersBookClosed) {
-            toggleLettersBookState();
-          }
-        });
-        
-        bookSpine.addEventListener("keydown", (e) => {
-          if ((e.key === "Enter" || e.key === " ") && !lettersBookClosed) {
-            e.preventDefault();
-            toggleLettersBookState();
-          }
-        });
+    // Escape key to close modal
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const modal = document.getElementById("letterModal");
+        if (modal && modal.classList.contains("active")) {
+          closeLetterModal();
+        }
       }
-    }
+    });
+    
+    // Initialize card interactions after render
+    setTimeout(() => {
+      initCardInteractions();
+    }, 100);
     
     debugLog("Letters event listeners initialized");
   } catch (e) {
