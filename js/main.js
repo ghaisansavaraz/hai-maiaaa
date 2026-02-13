@@ -9,6 +9,7 @@ import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './t
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar, triggerShootingStar } from './shootingstar.js';
 import { initPinterestBoard } from './pinterest.js';
+import { loadLetters, initLettersBook, initLettersEventListeners } from './letters.js';
 
 let dynamicBackground = null;
 let zenModeActive = false;
@@ -348,39 +349,6 @@ function initZenModeToggle() {
   });
 }
 
-// Letters system
-function renderLetters() {
-  const lettersContainer = document.getElementById("lettersContainer");
-  if (!lettersContainer) return;
-  
-  lettersContainer.innerHTML = "";
-  
-  LETTERS_DATA.forEach((letter, index) => {
-    const envelopeCard = document.createElement("div");
-    envelopeCard.className = "envelope-card";
-    envelopeCard.style.animationDelay = `${index * 0.1}s`;
-    
-    envelopeCard.innerHTML = `
-      <div class="envelope">
-        <div class="envelope-front">
-          <div class="envelope-icon">${letter.icon}</div>
-          <h3 class="envelope-title">${letter.title}</h3>
-          <div class="envelope-date">${letter.date}</div>
-        </div>
-        <div class="envelope-back">
-          <div class="envelope-content">${letter.content}</div>
-        </div>
-      </div>
-    `;
-    
-    envelopeCard.addEventListener("click", () => {
-      envelopeCard.classList.toggle("flipped");
-    });
-    
-    lettersContainer.appendChild(envelopeCard);
-  });
-}
-
 // Card Activation System (Show/Hide Controls)
 function initCardActivation() {
   const cards = document.querySelectorAll('.dashboard-card');
@@ -543,12 +511,14 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMoodBookState(); // Load book state after moods are loaded
     loadReminders();
     loadTasks();
-    renderLetters();
+    initLettersBook(); // Initialize letters book state
+    loadLetters(); // Load and render letters
     
     // Initialize event listeners
     initMoodEventListeners();
     initReminderEventListeners();
     initTaskEventListeners();
+    initLettersEventListeners();
     initClearButtons();
     initEditorKey();
     initThemeToggle();
