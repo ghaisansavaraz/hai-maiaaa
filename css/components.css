@@ -2787,33 +2787,33 @@ body:not(.light-theme) .edge-nav-right:hover {
   padding: 28px;
   border-radius: 18px;
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08)),
-    radial-gradient(circle at top right, rgba(255,160,195,0.1), transparent);
+    linear-gradient(135deg, rgba(230,230,230,0.95), rgba(210,210,210,0.9)),
+    linear-gradient(45deg, rgba(240,240,240,0.9), rgba(220,220,220,0.85));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(200,200,200,0.5);
   box-shadow: 
     0 4px 20px rgba(0,0,0,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.1);
+    inset 0 1px 0 rgba(255,255,255,0.3);
   transform-style: preserve-3d;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
   animation: letterSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  cursor: default;
+  cursor: pointer;
   overflow: visible;
 }
 
 /* Card hover effects */
-.letter-card:hover {
+.letter-card.wrapped:hover {
   transform: translateY(-4px) scale(1.02);
-  border-color: rgba(255,255,255,0.35);
+  border-color: rgba(180,180,180,0.6);
   box-shadow: 
     0 12px 40px rgba(0,0,0,0.25),
-    0 0 30px rgba(255,255,255,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.15);
+    0 0 30px rgba(255,255,255,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.4);
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.1)),
-    radial-gradient(circle at top right, rgba(255,160,195,0.15), transparent);
+    linear-gradient(135deg, rgba(240,240,240,0.98), rgba(220,220,220,0.95)),
+    linear-gradient(45deg, rgba(250,250,250,0.95), rgba(230,230,230,0.9));
 }
 
 /* Card top highlight */
@@ -2824,30 +2824,164 @@ body:not(.light-theme) .edge-nav-right:hover {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
 }
 
-/* Shimmer effect on hover */
-.letter-card::after {
-  content: '';
+/* Ribbon Wrapper */
+.ribbon-wrapper {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(255,255,255,0.1) 50%,
-    transparent 70%
-  );
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+.letter-card.unwrapped .ribbon-wrapper {
+  opacity: 0;
   pointer-events: none;
 }
 
-.letter-card:hover::after {
-  transform: translateX(100%);
+/* Horizontal Ribbons */
+.ribbon-horizontal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(180deg, 
+    rgba(220,220,220,0.95) 0%,
+    rgba(200,200,200,0.9) 50%,
+    rgba(180,180,180,0.85) 100%
+  );
+  box-shadow: 
+    0 2px 8px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.4),
+    inset 0 -1px 0 rgba(0,0,0,0.1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ribbon-top {
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 18px 18px 0 0;
+}
+
+.ribbon-bottom {
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 0 0 18px 18px;
+}
+
+/* Vertical Ribbons */
+.ribbon-vertical {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(90deg, 
+    rgba(210,210,210,0.95) 0%,
+    rgba(190,190,190,0.9) 50%,
+    rgba(170,170,170,0.85) 100%
+  );
+  box-shadow: 
+    2px 0 8px rgba(0,0,0,0.15),
+    inset 1px 0 0 rgba(255,255,255,0.4),
+    inset -1px 0 0 rgba(0,0,0,0.1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ribbon-left {
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 18px 0 0 18px;
+}
+
+.ribbon-right {
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0 18px 18px 0;
+}
+
+/* Ribbon Bow */
+.ribbon-bow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ribbon-bow::before,
+.ribbon-bow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 40px;
+  background: linear-gradient(135deg, 
+    rgba(200,200,200,0.95) 0%,
+    rgba(180,180,180,0.9) 50%,
+    rgba(160,160,160,0.85) 100%
+  );
+  border-radius: 50% 50% 50% 0;
+  box-shadow: 
+    0 2px 8px rgba(0,0,0,0.2),
+    inset 1px 1px 0 rgba(255,255,255,0.4);
+}
+
+.ribbon-bow::before {
+  transform: translate(-80%, -50%) rotate(-45deg);
+}
+
+.ribbon-bow::after {
+  transform: translate(-20%, -50%) rotate(45deg) scaleX(-1);
+}
+
+/* Center knot */
+.ribbon-bow {
+  background: radial-gradient(circle, 
+    rgba(190,190,190,0.95) 0%,
+    rgba(170,170,170,0.9) 50%,
+    rgba(150,150,150,0.85) 100%
+  );
+  border-radius: 50%;
+  box-shadow: 
+    0 3px 10px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* Unfolding Animation */
+.letter-card.unfolding .ribbon-top {
+  transform: translateY(-200%);
+  opacity: 0;
+}
+
+.letter-card.unfolding .ribbon-bottom {
+  transform: translateY(200%);
+  opacity: 0;
+}
+
+.letter-card.unfolding .ribbon-left {
+  transform: translateX(-200%);
+  opacity: 0;
+}
+
+.letter-card.unfolding .ribbon-right {
+  transform: translateX(200%);
+  opacity: 0;
+}
+
+.letter-card.unfolding .ribbon-bow {
+  transform: translate(-50%, -50%) scale(0) rotate(360deg);
+  opacity: 0;
+}
+
+/* Card Inner Container */
+.letter-card-inner {
+  position: relative;
+  z-index: 1;
 }
 
 /* Card Header */
@@ -2855,9 +2989,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(150,150,150,0.3);
 }
 
 /* Card Title */
@@ -2866,8 +2999,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: rgba(255,255,255,0.95);
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  color: rgba(80,80,80,0.95);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
   margin: 0;
 }
 
@@ -2876,7 +3009,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
+  color: rgba(120,120,120,0.8);
   font-weight: 500;
   position: relative;
 }
@@ -2888,80 +3021,29 @@ body:not(.light-theme) .edge-nav-right:hover {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(150,150,150,0.4), transparent);
 }
 
-/* Card Content */
+/* Card Content - Hidden when wrapped */
 .letter-card-content {
   font-size: 15px;
   line-height: 1.8;
-  color: rgba(255,255,255,0.85);
+  color: rgba(90,90,90,0.9);
   white-space: pre-wrap;
   word-wrap: break-word;
-  opacity: 0.9;
-  transition: opacity 0.3s ease;
+  margin-top: 16px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.letter-card:hover .letter-card-content {
+.letter-card.unwrapped .letter-card-content {
   opacity: 1;
+  max-height: 500px;
 }
 
-/* Ribbon Button */
-.letter-card-ribbon {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2;
-  padding: 0;
-}
-
-.letter-card-ribbon:hover {
-  transform: scale(1.1) rotate(5deg);
-  background: rgba(255,255,255,0.15);
-  border-color: rgba(255,255,255,0.3);
-  box-shadow: 0 0 20px rgba(255,255,255,0.3);
-}
-
-.letter-card-ribbon:active {
-  transform: scale(0.95);
-}
-
-.ribbon-icon {
-  font-size: 24px;
-  display: block;
-  line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-}
-
-/* Ribbon untie animation */
-.letter-card-ribbon.untying {
-  animation: ribbonUntie 0.3s ease forwards;
-}
-
-@keyframes ribbonUntie {
-  0% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2) rotate(180deg);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(0.8) rotate(360deg);
-    opacity: 0;
-  }
-}
+/* Remove old ribbon button styles - now using ribbon wrapper */
 
 /* No Letters Message */
 .no-letters {
@@ -2974,7 +3056,7 @@ body:not(.light-theme) .edge-nav-right:hover {
 
 .no-letters p {
   font-size: 15px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(120,120,120,0.7);
   text-align: center;
   margin: 0;
 }
@@ -3033,15 +3115,15 @@ body:not(.light-theme) .edge-nav-right:hover {
   width: min(90vw, 700px);
   max-height: 85vh;
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08)),
-    radial-gradient(circle at top right, rgba(255,160,195,0.12), transparent);
+    linear-gradient(135deg, rgba(240,240,240,0.98), rgba(220,220,220,0.95)),
+    linear-gradient(45deg, rgba(250,250,250,0.95), rgba(230,230,230,0.9));
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(200,200,200,0.5);
   border-radius: 20px;
   box-shadow: 
     0 20px 60px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    inset 0 1px 0 rgba(255,255,255,0.5);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -3059,7 +3141,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   justify-content: space-between;
   align-items: flex-start;
   padding: 32px 40px 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(180,180,180,0.3);
   flex-shrink: 0;
 }
 
@@ -3073,8 +3155,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   font-size: 28px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: rgba(255,255,255,0.95);
-  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  color: rgba(70,70,70,0.95);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
   margin: 0 0 8px 0;
 }
 
@@ -3082,7 +3164,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
+  color: rgba(120,120,120,0.8);
   font-weight: 500;
 }
 
@@ -3091,8 +3173,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(200,200,200,0.3);
+  border: 1px solid rgba(180,180,180,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3103,16 +3185,16 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 .letter-modal-close:hover {
-  background: rgba(255,255,255,0.15);
-  border-color: rgba(255,255,255,0.3);
+  background: rgba(180,180,180,0.4);
+  border-color: rgba(160,160,160,0.5);
   transform: scale(1.1) rotate(90deg);
-  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
 }
 
 .letter-modal-close svg {
   width: 20px;
   height: 20px;
-  color: rgba(255,255,255,0.9);
+  color: rgba(80,80,80,0.9);
 }
 
 /* Modal Body */
@@ -3122,7 +3204,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   padding: 32px 40px;
   font-size: 16px;
   line-height: 1.8;
-  color: rgba(255,255,255,0.9);
+  color: rgba(80,80,80,0.95);
   white-space: pre-wrap;
   word-wrap: break-word;
 }
@@ -3132,44 +3214,44 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 .letter-modal-body::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.1);
+  background: rgba(200,200,200,0.2);
   border-radius: 10px;
 }
 
 .letter-modal-body::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
+  background: rgba(180,180,180,0.4);
   border-radius: 10px;
   transition: background 0.3s ease;
 }
 
 .letter-modal-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(160,160,160,0.5);
 }
 
-/* Light Theme Adjustments */
+/* Light Theme - Same white/gray colors */
 body.light-theme .letter-card {
   background: 
-    linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.18)),
-    radial-gradient(circle at top right, rgba(255,160,195,0.15), transparent);
-  border-color: rgba(0,0,0,0.2);
+    linear-gradient(135deg, rgba(230,230,230,0.95), rgba(210,210,210,0.9)),
+    linear-gradient(45deg, rgba(240,240,240,0.9), rgba(220,220,220,0.85));
+  border-color: rgba(200,200,200,0.5);
   box-shadow: 
-    0 4px 20px rgba(0,0,0,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.15);
+    0 4px 20px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
-body.light-theme .letter-card:hover {
-  border-color: rgba(0,0,0,0.3);
+body.light-theme .letter-card.wrapped:hover {
+  border-color: rgba(180,180,180,0.6);
   box-shadow: 
-    0 12px 40px rgba(0,0,0,0.3),
-    0 0 30px rgba(255,255,255,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    0 12px 40px rgba(0,0,0,0.25),
+    0 0 30px rgba(255,255,255,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 body.light-theme .letter-modal-content {
   background: 
-    linear-gradient(135deg, rgba(0,0,0,0.28), rgba(0,0,0,0.2)),
-    radial-gradient(circle at top right, rgba(255,160,195,0.15), transparent);
-  border-color: rgba(0,0,0,0.3);
+    linear-gradient(135deg, rgba(240,240,240,0.98), rgba(220,220,220,0.95)),
+    linear-gradient(45deg, rgba(250,250,250,0.95), rgba(230,230,230,0.9));
+  border-color: rgba(200,200,200,0.5);
 }
 
 /* Zen Mode - Hide Letters */
@@ -3192,15 +3274,17 @@ body.zen-mode #lettersSection {
     font-size: 14px;
   }
   
-  .letter-card-ribbon {
-    width: 38px;
-    height: 38px;
-    top: 16px;
-    right: 16px;
+  .ribbon-horizontal {
+    height: 30px;
   }
   
-  .ribbon-icon {
-    font-size: 20px;
+  .ribbon-vertical {
+    width: 30px;
+  }
+  
+  .ribbon-bow {
+    width: 50px;
+    height: 50px;
   }
   
   .letter-modal-content {
@@ -3226,7 +3310,7 @@ body.zen-mode #lettersSection {
     transform-style: flat !important;
   }
   
-  .letter-card:hover {
+  .letter-card.wrapped:hover {
     transform: translateY(-2px) scale(1.01) !important;
   }
 }

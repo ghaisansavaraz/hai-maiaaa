@@ -30,25 +30,35 @@ function renderLetters() {
   
   LETTERS_DATA.forEach((letter, index) => {
     const letterCard = document.createElement("div");
-    letterCard.className = "letter-card";
+    letterCard.className = "letter-card wrapped";
     letterCard.style.animationDelay = `${index * 0.15}s`;
     letterCard.dataset.letterId = letter.id;
     
-    // Truncate content for preview
-    const previewContent = letter.content.length > 120 
-      ? letter.content.substring(0, 120) + "..." 
-      : letter.content;
-    
     letterCard.innerHTML = `
-      <button class="letter-card-ribbon" aria-label="Open letter" data-letter-id="${letter.id}">
-        <span class="ribbon-icon">🎀</span>
-      </button>
-      <div class="letter-card-header">
-        <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
-        <span class="letter-card-date">${escapeHtml(letter.date)}</span>
+      <div class="ribbon-wrapper">
+        <div class="ribbon-horizontal ribbon-top"></div>
+        <div class="ribbon-horizontal ribbon-bottom"></div>
+        <div class="ribbon-vertical ribbon-left"></div>
+        <div class="ribbon-vertical ribbon-right"></div>
+        <div class="ribbon-bow"></div>
       </div>
-      <div class="letter-card-content">${escapeHtml(previewContent)}</div>
+      <div class="letter-card-inner">
+        <div class="letter-card-header">
+          <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
+          <span class="letter-card-date">${escapeHtml(letter.date)}</span>
+        </div>
+      </div>
     `;
+    
+    // Add click handler to the card itself
+    letterCard.addEventListener("click", function() {
+      if (this.classList.contains("wrapped")) {
+        animateRibbonUnfold(this);
+        setTimeout(() => {
+          openLetterModal(letter.id);
+        }, 800);
+      }
+    });
     
     lettersContainer.appendChild(letterCard);
   });
@@ -94,12 +104,15 @@ function closeLetterModal() {
   debugLog("Closed letter modal");
 }
 
-// Animate ribbon untie
-function animateRibbonUntie(ribbonElement) {
-  ribbonElement.classList.add("untying");
+// Animate ribbon unfold
+function animateRibbonUnfold(cardElement) {
+  cardElement.classList.add("unfolding");
+  cardElement.classList.remove("wrapped");
+  
   setTimeout(() => {
-    ribbonElement.classList.remove("untying");
-  }, 300);
+    cardElement.classList.add("unwrapped");
+    cardElement.classList.remove("unfolding");
+  }, 800);
 }
 
 // Initialize card interactions (3D tilt effect)
@@ -140,19 +153,6 @@ function handleCardMouseLeave(e) {
 // Initialize event listeners
 export function initLettersEventListeners() {
   try {
-    // Ribbon button clicks (delegated)
-    document.addEventListener("click", (e) => {
-      const ribbonButton = e.target.closest(".letter-card-ribbon");
-      if (ribbonButton) {
-        e.stopPropagation();
-        const letterId = ribbonButton.dataset.letterId;
-        animateRibbonUntie(ribbonButton);
-        setTimeout(() => {
-          openLetterModal(letterId);
-        }, 300);
-      }
-    });
-    
     // Modal close button
     const closeButton = document.querySelector(".letter-modal-close");
     if (closeButton) {
