@@ -40,7 +40,6 @@ function renderLetters() {
         <div class="envelope-body">
           <div class="envelope-content">
             <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
-            <span class="letter-card-date">${escapeHtml(letter.date)}</span>
           </div>
         </div>
       </div>
@@ -76,12 +75,10 @@ function openLetterModal(letterId) {
   
   const modal = document.getElementById("letterModal");
   const modalTitle = modal.querySelector(".letter-modal-title");
-  const modalDate = modal.querySelector(".letter-modal-date");
   const modalBody = modal.querySelector(".letter-modal-body");
   
   // Set content
   modalTitle.textContent = letter.title;
-  modalDate.textContent = letter.date;
   modalBody.textContent = letter.content;
   
   // Show modal
