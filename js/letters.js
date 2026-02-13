@@ -86,11 +86,6 @@ function openLetterModal(letterId) {
   document.body.style.overflow = "hidden";
   
   debugLog(`Opened letter modal: ${letter.title}`);
-  
-  // Auto-close after 5 seconds
-  setTimeout(() => {
-    closeLetterModal();
-  }, 5000);
 }
 
 // Close letter modal
