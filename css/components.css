@@ -2333,7 +2333,6 @@ body:not(.light-theme) .edge-nav-right:hover {
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  transform: translateZ(0);
 }
 
 .flower-svg {
@@ -2343,23 +2342,23 @@ body:not(.light-theme) .edge-nav-right:hover {
   overflow: visible;
 }
 
-.flower-svg .petal {
-  transform-origin: 0 0;
-  animation: petalBloom 0.6s ease-out both;
-  animation-delay: calc(var(--petal-delay, 0) * 0.04s);
-  will-change: transform, opacity;
+.flower-svg .flower-head {
+  transform-origin: center;
 }
 
-.flower-card.bloomed .flower-svg .petal {
-  will-change: auto;
+.flower-svg .petal {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: petalBloom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(var(--petal-delay, 0) * 0.035s);
 }
 
 @keyframes petalBloom {
-  from {
+  0% {
     opacity: 0;
-    transform: scale(0.1);
+    transform: scale(0.2);
   }
-  to {
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -2981,9 +2980,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   }
   
   .flower-svg .petal {
-    animation: none;
-    opacity: 1;
-    transform: scale(1);
+    animation-duration: 0.001s;
+    animation-delay: 0s !important;
   }
   
   .flower-letter {

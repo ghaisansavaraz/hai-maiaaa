@@ -53,16 +53,16 @@ function getStemSVG(type, variation) {
   </g>`;
 }
 
-function getRoseFlowerSVG(colors) {
+function getRoseFlowerSVG(colors, uniqueId = '') {
   return `<g class="flower-head">
     <defs>
-      <radialGradient id="roseGrad" cx="50%" cy="40%">
+      <radialGradient id="roseGrad${uniqueId}" cx="50%" cy="40%">
         <stop offset="0%" stop-color="${colors.secondary}"/>
         <stop offset="60%" stop-color="${colors.primary}"/>
         <stop offset="100%" stop-color="${colors.accent}"/>
       </radialGradient>
     </defs>
-    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-4" rx="18" ry="16" fill="url(#roseGrad)" opacity="0.5"/></g>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-4" rx="18" ry="16" fill="url(#roseGrad${uniqueId})" opacity="0.5"/></g>
     <g class="petal" style="--petal-delay:1" transform="rotate(-25)"><ellipse cx="-8" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.6"/></g>
     <g class="petal" style="--petal-delay:2" transform="rotate(25)"><ellipse cx="8" cy="-2" rx="14" ry="12" fill="${colors.primary}" opacity="0.6"/></g>
     <g class="petal" style="--petal-delay:3" transform="rotate(-15)"><ellipse cx="-4" cy="-6" rx="11" ry="10" fill="${colors.secondary}" opacity="0.7"/></g>
@@ -135,13 +135,14 @@ function getRanunculusFlowerSVG(colors) {
 
 function getFlowerSVG(type, variation = 0) {
   const colors = FLOWER_COLORS[type] || FLOWER_COLORS.rose;
+  const uniqueId = `_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
   let head;
   switch (type) {
     case 'tulip': head = getTulipFlowerSVG(colors); break;
     case 'daisy': head = getDaisyFlowerSVG(colors); break;
     case 'peony': head = getPeonyFlowerSVG(colors); break;
     case 'ranunculus': head = getRanunculusFlowerSVG(colors); break;
-    default: head = getRoseFlowerSVG(colors);
+    default: head = getRoseFlowerSVG(colors, uniqueId);
   }
   const stem = getStemSVG(type, variation);
   return `<svg viewBox="-35 -35 70 110" xmlns="http://www.w3.org/2000/svg" class="flower-svg flower-${type}" aria-hidden="true">
