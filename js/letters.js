@@ -35,27 +35,24 @@ function renderLetters() {
     letterCard.dataset.letterId = letter.id;
     
     letterCard.innerHTML = `
-      <div class="letter-card-title-wrapper">
-        <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
-        <span class="letter-card-date">${escapeHtml(letter.date)}</span>
+      <div class="envelope-wrapper">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body">
+          <div class="envelope-content">
+            <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
+            <span class="letter-card-date">${escapeHtml(letter.date)}</span>
+          </div>
+        </div>
       </div>
-      <div class="ribbon-wrapper">
-        <div class="ribbon-horizontal ribbon-top"></div>
-        <div class="ribbon-horizontal ribbon-bottom"></div>
-        <div class="ribbon-vertical ribbon-left"></div>
-        <div class="ribbon-vertical ribbon-right"></div>
-        <div class="ribbon-bow"></div>
-      </div>
-      <div class="letter-card-inner"></div>
     `;
     
     // Add click handler to the card itself
     letterCard.addEventListener("click", function() {
       if (this.classList.contains("wrapped")) {
-        animateRibbonUnfold(this);
+        animateEnvelopeOpen(this);
         setTimeout(() => {
           openLetterModal(letter.id);
-        }, 600);
+        }, 800);
       }
     });
     
@@ -105,18 +102,35 @@ function closeLetterModal() {
   modal.classList.remove("active");
   document.body.style.overflow = "";
   
+  // Re-wrap all envelopes
+  const cards = document.querySelectorAll(".letter-card.unwrapped");
+  cards.forEach(card => {
+    animateEnvelopeClose(card);
+  });
+  
   debugLog("Closed letter modal");
 }
 
-// Animate ribbon unfold
-function animateRibbonUnfold(cardElement) {
-  cardElement.classList.add("unfolding");
+// Animate envelope open
+function animateEnvelopeOpen(cardElement) {
+  cardElement.classList.add("opening");
   cardElement.classList.remove("wrapped");
   
   setTimeout(() => {
     cardElement.classList.add("unwrapped");
-    cardElement.classList.remove("unfolding");
-  }, 600);
+    cardElement.classList.remove("opening");
+  }, 800);
+}
+
+// Animate envelope close
+function animateEnvelopeClose(cardElement) {
+  cardElement.classList.add("closing");
+  cardElement.classList.remove("unwrapped");
+  
+  setTimeout(() => {
+    cardElement.classList.add("wrapped");
+    cardElement.classList.remove("closing");
+  }, 800);
 }
 
 // Initialize card interactions (3D tilt effect)
