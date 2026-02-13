@@ -3009,6 +3009,7 @@ body.zen-mode .valentine-dashboard {
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
+  display: none !important;
 }
 
 /* Letters Container */
