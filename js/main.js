@@ -8,7 +8,7 @@ import { loadMoods, initMoodEventListeners, toggleMoodSelectionMode, toggleBookS
 import { loadTasks, initTaskEventListeners, toggleTasksSelectionMode } from './tasks.js';
 import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar, triggerShootingStar } from './shootingstar.js';
-import { initPinterestBoard } from './pinterest.js';
+import { initValentineGarden } from './valentine.js';
 import { loadLetters, initLettersEventListeners } from './letters.js';
 
 let dynamicBackground = null;
@@ -17,8 +17,8 @@ let zenModeTimeoutId = null;
 let zenAudioElement = null;
 let zenBloomTimeoutId = null;
 
-// Pinterest dashboard view state
-let currentView = 'main'; // 'main' or 'pinterest'
+// Valentine dashboard view state
+let currentView = 'main'; // 'main' or 'valentine'
 let inactivityTimeoutId = null;
 let lastActivityTime = Date.now();
 
@@ -30,7 +30,7 @@ const ZEN_CHIME_PATH = 'assets/Wind chime Zen/Wind chime, Hai Maiaaa.mp3';
 
 // Inactivity timeouts (in milliseconds)
 const MAIN_DASHBOARD_INACTIVITY = 10 * 60 * 1000; // 10 minutes
-const PINTEREST_DASHBOARD_INACTIVITY = 5 * 60 * 1000; // 5 minutes
+const VALENTINE_DASHBOARD_INACTIVITY = 5 * 60 * 1000; // 5 minutes
 
 // Show dashboard
 function showDashboard() {
@@ -206,7 +206,7 @@ function toggleZenMode() {
   }
 }
 
-// ===== PINTEREST DASHBOARD VIEW SWITCHING =====
+// ===== VALENTINE DASHBOARD VIEW SWITCHING =====
 
 function switchToDashboard(viewName) {
   if (currentView === viewName) return;
@@ -214,10 +214,10 @@ function switchToDashboard(viewName) {
   debugLog(`Switching to ${viewName} dashboard`);
   
   const mainDashboard = document.getElementById('dashboard');
-  const pinterestDashboard = document.getElementById('pinterestDashboard');
+  const valentineDashboard = document.getElementById('pinterestDashboard');
   const centerContainer = document.querySelector('.center');
   
-  if (!mainDashboard || !pinterestDashboard) {
+  if (!mainDashboard || !valentineDashboard) {
     debugError('Dashboard elements not found');
     return;
   }
@@ -227,27 +227,24 @@ function switchToDashboard(viewName) {
   if (viewName === 'main') {
     // Show main dashboard
     document.body.classList.remove('pinterest-view');
-    pinterestDashboard.classList.remove('active');
+    valentineDashboard.classList.remove('active');
     setTimeout(() => {
       mainDashboard.classList.add('visible');
       if (centerContainer) {
         centerContainer.classList.add('dashboard-active');
       }
     }, 300);
-  } else if (viewName === 'pinterest') {
-    // Show pinterest dashboard
+  } else if (viewName === 'valentine') {
+    // Show valentine dashboard
     document.body.classList.add('pinterest-view');
     mainDashboard.classList.remove('visible');
     if (centerContainer) {
       centerContainer.classList.remove('dashboard-active');
     }
     setTimeout(() => {
-      pinterestDashboard.classList.add('active');
+      valentineDashboard.classList.add('active');
     }, 300);
   }
-  
-  // Reset inactivity timer - DISABLED (manual switching only)
-  // resetInactivityTimer();
 }
 
 function initEdgeNavigation() {
@@ -260,7 +257,7 @@ function initEdgeNavigation() {
   }
   
   const handleEdgeClick = () => {
-    const targetView = currentView === 'main' ? 'pinterest' : 'main';
+    const targetView = currentView === 'main' ? 'valentine' : 'main';
     switchToDashboard(targetView);
   };
   
@@ -290,10 +287,10 @@ function resetInactivityTimer() {
   
   const timeout = currentView === 'main' 
     ? MAIN_DASHBOARD_INACTIVITY 
-    : PINTEREST_DASHBOARD_INACTIVITY;
+    : VALENTINE_DASHBOARD_INACTIVITY;
   
   inactivityTimeoutId = setTimeout(() => {
-    const targetView = currentView === 'main' ? 'pinterest' : 'main';
+    const targetView = currentView === 'main' ? 'valentine' : 'main';
     debugLog(`Inactivity timeout reached, switching to ${targetView}`);
     switchToDashboard(targetView);
   }, timeout);
@@ -531,8 +528,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize shooting star system
     initShootingStar();
     
-    // Initialize Pinterest board
-    initPinterestBoard();
+    // Initialize Valentine garden
+    initValentineGarden();
     
     // Initialize edge navigation
     initEdgeNavigation();

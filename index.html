@@ -11,6 +11,11 @@
   <!-- black/white flower favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚘</text></svg>">
 
+  <!-- Serif font for Valentine Garden -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
   <!-- SF Pro / system stack (no external download) -->
         <style>
           /* Apple system font stack */
@@ -1907,41 +1912,44 @@ body.light-theme .mood-category {
     </main>
   </div>
 
-  <!-- Pinterest Dashboard -->
-  <div id="pinterestDashboard" class="pinterest-dashboard">
-    <div class="pinterest-container">
+  <!-- Valentine Dashboard -->
+  <div id="pinterestDashboard" class="valentine-dashboard">
+    <div class="valentine-container">
+
       <!-- Clock Header -->
-      <header class="pinterest-clock-header">
-        <div id="pinterestClockTime" class="pinterest-clock-time">00:00:00</div>
+      <header class="valentine-clock-header">
+        <div id="valentineClockTime" class="valentine-clock-time">00:00:00</div>
+        <h2 class="valentine-title">For Maia</h2>
       </header>
 
-      <!-- Content Wrapper -->
-      <div class="pinterest-content-wrapper">
-        <!-- Category Sidebar -->
-        <aside id="pinterestSidebar" class="pinterest-sidebar">
-          <div class="sidebar-header">
-            <h2>Categories</h2>
-          </div>
-          <div class="sidebar-content">
-            <!-- Categories will be rendered here -->
-          </div>
-        </aside>
+      <!-- View Toggle -->
+      <nav class="valentine-view-toggle" role="tablist" aria-label="Valentine view">
+        <button id="viewTabGarden" class="view-tab active" role="tab" aria-selected="true" aria-controls="valentineGarden" tabindex="0">Garden</button>
+        <button id="viewTabAlbum" class="view-tab" role="tab" aria-selected="false" aria-controls="valentineAlbum" tabindex="0">Album</button>
+      </nav>
 
-        <!-- Main Content Area -->
-        <main id="pinterestContent" class="pinterest-content">
-          <!-- Category Notes -->
-          <div id="categoryNotes" class="category-notes-container"></div>
-          
-          <!-- Image Grid -->
-          <div id="pinterestImageGrid" class="pinterest-image-grid">
-            <div class="no-content">Select a category or create one to get started</div>
-          </div>
-        </main>
+      <!-- Garden View -->
+      <div id="valentineGarden" class="valentine-view active" role="tabpanel" aria-labelledby="viewTabGarden">
+        <div id="gardenCanvas" class="garden-canvas"></div>
+      </div>
+
+      <!-- Album View -->
+      <div id="valentineAlbum" class="valentine-view" role="tabpanel" aria-labelledby="viewTabAlbum">
+        <div id="albumBook" class="album-book"></div>
+        <div class="album-nav">
+          <button id="albumPrev" class="album-nav-btn" aria-label="Previous page" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span id="albumPageInfo" class="album-page-info"></span>
+          <button id="albumNext" class="album-nav-btn" aria-label="Next page" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Add Button -->
-    <button id="addPinterestButton" class="pinterest-add-btn" aria-label="Add category or image">
+    <button id="valentineAddBtn" class="valentine-add-btn" aria-label="Add a love note">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -1949,41 +1957,18 @@ body.light-theme .mood-category {
     </button>
 
     <!-- Add Form -->
-    <div id="addPinterestForm" class="pinterest-add-form">
-      <form>
-        <h3>Add to Board</h3>
+    <div id="valentineAddForm" class="valentine-add-form">
+      <form id="valentineAddFormInner">
+        <h3>Plant a Love Note</h3>
         <div class="form-group">
-          <label for="categoryName">Category Name (optional if adding to existing)</label>
-          <input type="text" name="categoryName" id="categoryName" placeholder="e.g., Travel Inspiration" autocomplete="off" />
-        </div>
-        <div class="form-group">
-          <label for="categoryNotes">Category Notes (optional)</label>
-          <textarea name="categoryNotes" id="categoryNotes" rows="3" placeholder="Add notes about this category..." autocomplete="off"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="imageUrl">Image URL</label>
-          <input type="text" name="imageUrl" id="imageUrl" placeholder="https://i.imgur.com/example.jpg" required autocomplete="off" />
-          <small class="form-hint">Use direct image links from Imgur, Cloudinary, or other CORS-friendly hosts</small>
+          <label for="valentineNoteInput">Your note</label>
+          <input type="text" id="valentineNoteInput" class="valentine-note-input" placeholder="Write a love note..." required autocomplete="off" maxlength="200" />
         </div>
         <div class="form-actions">
-          <button type="submit" class="btn-primary">Add</button>
-          <button type="button" class="btn-secondary form-cancel-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Plant</button>
+          <button type="button" class="btn-secondary valentine-cancel-btn">Cancel</button>
         </div>
       </form>
-    </div>
-  </div>
-
-  <!-- Image Preview Modal -->
-  <div id="imagePreviewModal" class="image-preview-modal">
-    <div class="modal-backdrop"></div>
-    <div class="modal-content">
-      <button class="modal-close" aria-label="Close preview">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <img class="preview-image" src="" alt="Preview" />
     </div>
   </div>
 
@@ -1992,7 +1977,7 @@ body.light-theme .mood-category {
   <div id="edgeNavRight" class="edge-nav-trigger edge-nav-right" role="button" tabindex="0" aria-label="Switch dashboard view"></div>
 
   <!-- JavaScript Modules -->
-  <script type="module" src="js/pinterest.js"></script>
+  <script type="module" src="js/valentine.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
