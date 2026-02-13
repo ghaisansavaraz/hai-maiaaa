@@ -35,6 +35,10 @@ function renderLetters() {
     letterCard.dataset.letterId = letter.id;
     
     letterCard.innerHTML = `
+      <div class="letter-card-title-wrapper">
+        <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
+        <span class="letter-card-date">${escapeHtml(letter.date)}</span>
+      </div>
       <div class="ribbon-wrapper">
         <div class="ribbon-horizontal ribbon-top"></div>
         <div class="ribbon-horizontal ribbon-bottom"></div>
@@ -42,12 +46,7 @@ function renderLetters() {
         <div class="ribbon-vertical ribbon-right"></div>
         <div class="ribbon-bow"></div>
       </div>
-      <div class="letter-card-inner">
-        <div class="letter-card-header">
-          <h3 class="letter-card-title">${escapeHtml(letter.title)}</h3>
-          <span class="letter-card-date">${escapeHtml(letter.date)}</span>
-        </div>
-      </div>
+      <div class="letter-card-inner"></div>
     `;
     
     // Add click handler to the card itself
@@ -56,7 +55,7 @@ function renderLetters() {
         animateRibbonUnfold(this);
         setTimeout(() => {
           openLetterModal(letter.id);
-        }, 800);
+        }, 600);
       }
     });
     
@@ -93,6 +92,11 @@ function openLetterModal(letterId) {
   document.body.style.overflow = "hidden";
   
   debugLog(`Opened letter modal: ${letter.title}`);
+  
+  // Auto-close after 5 seconds
+  setTimeout(() => {
+    closeLetterModal();
+  }, 5000);
 }
 
 // Close letter modal
@@ -112,7 +116,7 @@ function animateRibbonUnfold(cardElement) {
   setTimeout(() => {
     cardElement.classList.add("unwrapped");
     cardElement.classList.remove("unfolding");
-  }, 800);
+  }, 600);
 }
 
 // Initialize card interactions (3D tilt effect)

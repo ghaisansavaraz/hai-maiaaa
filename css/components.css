@@ -2785,6 +2785,7 @@ body:not(.light-theme) .edge-nav-right:hover {
 .letter-card {
   position: relative;
   padding: 28px;
+  padding-top: 80px; /* Space for title above */
   border-radius: 18px;
   background: 
     linear-gradient(135deg, rgba(230,230,230,0.95), rgba(210,210,210,0.9)),
@@ -2801,6 +2802,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   animation: letterSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   cursor: pointer;
   overflow: visible;
+  margin-top: 50px; /* Space for title */
 }
 
 /* Card hover effects */
@@ -2841,22 +2843,22 @@ body:not(.light-theme) .edge-nav-right:hover {
   pointer-events: none;
 }
 
-/* Horizontal Ribbons */
+/* Horizontal Ribbons - Smaller */
 .ribbon-horizontal {
   position: absolute;
   left: 0;
   right: 0;
-  height: 40px;
+  height: 24px;
   background: linear-gradient(180deg, 
     rgba(220,220,220,0.95) 0%,
     rgba(200,200,200,0.9) 50%,
     rgba(180,180,180,0.85) 100%
   );
   box-shadow: 
-    0 2px 8px rgba(0,0,0,0.15),
+    0 2px 6px rgba(0,0,0,0.15),
     inset 0 1px 0 rgba(255,255,255,0.4),
     inset 0 -1px 0 rgba(0,0,0,0.1);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .ribbon-top {
@@ -2871,22 +2873,22 @@ body:not(.light-theme) .edge-nav-right:hover {
   border-radius: 0 0 18px 18px;
 }
 
-/* Vertical Ribbons */
+/* Vertical Ribbons - Smaller */
 .ribbon-vertical {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 40px;
+  width: 24px;
   background: linear-gradient(90deg, 
     rgba(210,210,210,0.95) 0%,
     rgba(190,190,190,0.9) 50%,
     rgba(170,170,170,0.85) 100%
   );
   box-shadow: 
-    2px 0 8px rgba(0,0,0,0.15),
+    2px 0 6px rgba(0,0,0,0.15),
     inset 1px 0 0 rgba(255,255,255,0.4),
     inset -1px 0 0 rgba(0,0,0,0.1);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .ribbon-left {
@@ -2901,15 +2903,15 @@ body:not(.light-theme) .edge-nav-right:hover {
   border-radius: 0 18px 18px 0;
 }
 
-/* Ribbon Bow */
+/* Ribbon Bow - Smaller */
 .ribbon-bow {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 40px;
+  height: 40px;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .ribbon-bow::before,
@@ -2918,8 +2920,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 30px;
-  height: 40px;
+  width: 20px;
+  height: 28px;
   background: linear-gradient(135deg, 
     rgba(200,200,200,0.95) 0%,
     rgba(180,180,180,0.9) 50%,
@@ -2927,7 +2929,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   );
   border-radius: 50% 50% 50% 0;
   box-shadow: 
-    0 2px 8px rgba(0,0,0,0.2),
+    0 2px 6px rgba(0,0,0,0.2),
     inset 1px 1px 0 rgba(255,255,255,0.4);
 }
 
@@ -2952,76 +2954,76 @@ body:not(.light-theme) .edge-nav-right:hover {
     inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
-/* Unfolding Animation */
+/* Unfolding Animation - Improved */
 .letter-card.unfolding .ribbon-top {
-  transform: translateY(-200%);
+  transform: translateY(-150%) scale(0.8);
   opacity: 0;
 }
 
 .letter-card.unfolding .ribbon-bottom {
-  transform: translateY(200%);
+  transform: translateY(150%) scale(0.8);
   opacity: 0;
 }
 
 .letter-card.unfolding .ribbon-left {
-  transform: translateX(-200%);
+  transform: translateX(-150%) scale(0.8);
   opacity: 0;
 }
 
 .letter-card.unfolding .ribbon-right {
-  transform: translateX(200%);
+  transform: translateX(150%) scale(0.8);
   opacity: 0;
 }
 
 .letter-card.unfolding .ribbon-bow {
-  transform: translate(-50%, -50%) scale(0) rotate(360deg);
+  transform: translate(-50%, -50%) scale(0) rotate(720deg);
   opacity: 0;
+}
+
+.letter-card.unfolding .ribbon-wrapper {
+  opacity: 0;
+}
+
+/* Title Wrapper - Outside ribbon */
+.letter-card-title-wrapper {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Card Title - Journal Cover Font */
+.letter-card-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(80,80,80,0.95);
+  text-shadow: 0 2px 4px rgba(255,255,255,0.8);
+  margin: 0 0 4px 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* Card Date */
+.letter-card-date {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(120,120,120,0.8);
+  font-weight: 400;
+  display: block;
+  margin-top: 4px;
 }
 
 /* Card Inner Container */
 .letter-card-inner {
   position: relative;
   z-index: 1;
-}
-
-/* Card Header */
-.letter-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(150,150,150,0.3);
-}
-
-/* Card Title */
-.letter-card-title {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: rgba(80,80,80,0.95);
-  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-  margin: 0;
-}
-
-/* Card Date */
-.letter-card-date {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(120,120,120,0.8);
-  font-weight: 500;
-  position: relative;
-}
-
-.letter-card-date::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(150,150,150,0.4), transparent);
+  min-height: 60px;
 }
 
 /* Card Content - Hidden when wrapped */
@@ -3264,10 +3266,22 @@ body.zen-mode #lettersSection {
 @media (max-width: 768px) {
   .letter-card {
     padding: 20px;
+    padding-top: 70px;
+    margin-top: 40px;
+  }
+  
+  .letter-card-title-wrapper {
+    top: -40px;
   }
   
   .letter-card-title {
-    font-size: 18px;
+    font-size: 16px;
+    letter-spacing: 0.3em;
+  }
+  
+  .letter-card-date {
+    font-size: 10px;
+    letter-spacing: 0.2em;
   }
   
   .letter-card-content {
@@ -3275,16 +3289,22 @@ body.zen-mode #lettersSection {
   }
   
   .ribbon-horizontal {
-    height: 30px;
+    height: 20px;
   }
   
   .ribbon-vertical {
-    width: 30px;
+    width: 20px;
   }
   
   .ribbon-bow {
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .ribbon-bow::before,
+  .ribbon-bow::after {
+    width: 16px;
+    height: 22px;
   }
   
   .letter-modal-content {
