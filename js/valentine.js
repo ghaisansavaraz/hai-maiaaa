@@ -87,9 +87,13 @@ function getTulipFlowerSVG(colors) {
 
 function getDaisyFlowerSVG(colors) {
   const petals = [];
+  const r = 14;
   for (let i = 0; i < 14; i++) {
-    const angle = (i * 360) / 14;
-    petals.push(`<g transform="rotate(${angle})"><g class="petal" style="--petal-delay:${i}"><ellipse cx="0" cy="-14" rx="3.5" ry="10" fill="${colors.primary}" opacity="0.7"/></g></g>`);
+    const angleDeg = (i * 360) / 14;
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const tx = Math.sin(angleRad) * r;
+    const ty = -Math.cos(angleRad) * r;
+    petals.push(`<g transform="translate(${tx.toFixed(2)}, ${ty.toFixed(2)}) rotate(${angleDeg})"><g class="petal" style="--petal-delay:${i}"><ellipse cx="0" cy="0" rx="3.5" ry="10" fill="${colors.primary}" opacity="0.7"/></g></g>`);
   }
   return `<g class="flower-head">
     ${petals.join('\n    ')}
@@ -120,11 +124,15 @@ function getRanunculusFlowerSVG(colors) {
   for (let ring = 0; ring < 3; ring++) {
     const count = 8 - ring * 2;
     const r = 16 - ring * 4;
+    const ry = r * 0.6;
     const opacity = 0.4 + ring * 0.15;
     for (let i = 0; i < count; i++) {
-      const angle = (i * 360) / count + ring * 15;
+      const angleDeg = (i * 360) / count + ring * 15;
+      const angleRad = (angleDeg * Math.PI) / 180;
+      const tx = Math.sin(angleRad) * r;
+      const ty = -Math.cos(angleRad) * r;
       const color = ring === 0 ? colors.primary : ring === 1 ? colors.secondary : colors.accent;
-      layers.push(`<g transform="rotate(${angle})"><g class="petal" style="--petal-delay:${delayIdx++}"><ellipse cx="0" cy="${-r + 2}" rx="4" ry="${r * 0.6}" fill="${color}" opacity="${opacity}"/></g></g>`);
+      layers.push(`<g transform="translate(${tx}, ${ty}) rotate(${angleDeg})"><g class="petal" style="--petal-delay:${delayIdx++}"><ellipse cx="0" cy="0" rx="4" ry="${ry}" fill="${color}" opacity="${opacity}"/></g></g>`);
     }
   }
   return `<g class="flower-head">
@@ -281,6 +289,11 @@ function loadValentineData() {
     debugError('Error loading Valentine data:', error);
     valentineData = { notes: [] };
   }
+  if (!Array.isArray(valentineData.notes)) valentineData.notes = [];
+  if (!Array.isArray(valentineData.flowerDeck) || valentineData.flowerDeckIndex == null) {
+    valentineData.flowerDeck = null;
+    valentineData.flowerDeckIndex = FLOWER_TYPES.length;
+  }
 }
 
 function saveValentineData() {
@@ -296,8 +309,23 @@ function generateId() {
   return `note_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
 }
 
-function getRandomFlowerType() {
-  return FLOWER_TYPES[Math.floor(Math.random() * FLOWER_TYPES.length)];
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getNextFlowerType() {
+  if (!valentineData.flowerDeck || valentineData.flowerDeckIndex >= FLOWER_TYPES.length) {
+    valentineData.flowerDeck = shuffleArray([...FLOWER_TYPES]);
+    valentineData.flowerDeckIndex = 0;
+  }
+  const type = valentineData.flowerDeck[valentineData.flowerDeckIndex];
+  valentineData.flowerDeckIndex++;
+  return type;
 }
 
 // ===== NOTE CRUD =====
@@ -308,7 +336,7 @@ function addNote(text) {
     id: generateId(),
     text: text.trim(),
     createdAt: Date.now(),
-    flowerType: getRandomFlowerType(),
+    flowerType: getNextFlowerType(),
     bloomed: false
   };
   valentineData.notes.push(note);
