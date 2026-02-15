@@ -1080,7 +1080,7 @@ body #moodSection .mood-categories.visible .mood-category:not(:disabled) {
     linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  color: rgba(255,255,255,0.6);
+  color: rgba(0,0,0,0.85);
   cursor: pointer;
   font-size: 13px;
   font-weight: 300;
@@ -1124,7 +1124,7 @@ body #moodSection .mood-categories.visible .mood-category:not(:disabled) {
   cursor: not-allowed;
   filter: none !important;
   animation: none !important;
-  color: rgba(255,255,255,0.4);
+  color: rgba(0,0,0,0.4);
   border-color: rgba(255,255,255,0.08);
   background: 
     linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
@@ -1132,7 +1132,7 @@ body #moodSection .mood-categories.visible .mood-category:not(:disabled) {
 }
 
 .mood-category:not(:disabled) {
-  color: rgba(255,255,255,0.95);
+  color: rgba(0,0,0,0.95);
   border-color: rgba(255,255,255,0.25);
   cursor: pointer;
 }
@@ -1194,7 +1194,7 @@ body #moodSection .mood-categories.visible .mood-category:not(:disabled) {
 }
 
 body.light-theme .mood-category:not(:disabled) {
-  color: rgba(255,255,255,0.95) !important;
+  color: rgba(0,0,0,0.95) !important;
   border-color: rgba(255,255,255,0.25) !important;
 }
 
