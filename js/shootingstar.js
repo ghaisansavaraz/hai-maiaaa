@@ -33,7 +33,7 @@ export function triggerShootingStar2() {
   void el.offsetWidth;
   el.classList.add('active');
   debugLog('✨ Shooting star 2 (reverse) triggered!');
-  setTimeout(() => el.classList.remove('active'), 2100);
+  setTimeout(() => el.classList.remove('active'), 1350);
 }
 
 // Initialize shooting star system
