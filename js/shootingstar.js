@@ -46,11 +46,11 @@ export function initShootingStar() {
     debugLog('🌠 Boot shooting star launched!');
   }, 2000);
 
-  // Second star on boot: slight time gap after the first (e.g. 1.4s after first trigger = 3.4s from load)
+  // Second star on boot: longer gap after the first (3.2s after first trigger = 5.2s from load)
   setTimeout(() => {
     triggerShootingStar2();
     debugLog('🌠 Boot shooting star 2 (reverse) launched!');
-  }, 3400);
+  }, 5200);
 
   // Original star: every 30–90s
   function scheduleNextShootingStar() {
