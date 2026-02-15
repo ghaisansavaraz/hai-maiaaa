@@ -2,64 +2,78 @@
 
 import { debugLog } from './config.js';
 
-// Trigger shooting star
+function isShootingStarDarkMode() {
+  return !document.body.classList.contains('light-theme');
+}
+
+// Trigger shooting star (original: top-right → bottom-left)
 export function triggerShootingStar() {
   const shootingStar = document.getElementById('shootingStar');
   if (!shootingStar) {
     debugLog('Shooting star element not found');
     return;
   }
-  
-  // Only trigger in dark mode
-  const isDarkMode = !document.body.classList.contains('light-theme');
-  if (!isDarkMode) {
+  if (!isShootingStarDarkMode()) {
     debugLog('Skipping shooting star (day mode)');
     return;
   }
-  
-  // Remove active class if it exists (reset)
   shootingStar.classList.remove('active');
-  
-  // Force reflow to restart animation
   void shootingStar.offsetWidth;
-  
-  // Add active class to trigger animation
   shootingStar.classList.add('active');
-  
   debugLog('✨ Shooting star triggered!');
-  
-  // Remove active class after animation completes
-  setTimeout(() => {
-    shootingStar.classList.remove('active');
-  }, 2500);
+  setTimeout(() => shootingStar.classList.remove('active'), 2500);
+}
+
+// Trigger shooting star 2 (left → right, faster, brighter, rarer)
+export function triggerShootingStar2() {
+  const el = document.getElementById('shootingStar2');
+  if (!el) return;
+  if (!isShootingStarDarkMode()) return;
+  el.classList.remove('active');
+  void el.offsetWidth;
+  el.classList.add('active');
+  debugLog('✨ Shooting star 2 (reverse) triggered!');
+  setTimeout(() => el.classList.remove('active'), 2100);
 }
 
 // Initialize shooting star system
 export function initShootingStar() {
   debugLog('Initializing shooting star system...');
-  
-  // Trigger on boot (after 2 seconds delay for better effect)
+
+  // First star on boot (after 2s)
   setTimeout(() => {
     triggerShootingStar();
     debugLog('🌠 Boot shooting star launched!');
   }, 2000);
-  
-  // Trigger periodically (random interval between 30-90 seconds)
+
+  // Second star on boot: slight time gap after the first (e.g. 1.4s after first trigger = 3.4s from load)
+  setTimeout(() => {
+    triggerShootingStar2();
+    debugLog('🌠 Boot shooting star 2 (reverse) launched!');
+  }, 3400);
+
+  // Original star: every 30–90s
   function scheduleNextShootingStar() {
-    const minInterval = 30000; // 30 seconds
-    const maxInterval = 90000; // 90 seconds
-    const randomInterval = Math.random() * (maxInterval - minInterval) + minInterval;
-    
+    const randomInterval = Math.random() * (90000 - 30000) + 30000;
     setTimeout(() => {
       triggerShootingStar();
       debugLog(`Next shooting star in ${Math.round(randomInterval / 1000)}s`);
-      scheduleNextShootingStar(); // Schedule next one
+      scheduleNextShootingStar();
     }, randomInterval);
   }
-  
-  // Start the periodic scheduling
   scheduleNextShootingStar();
-  
+
+  // Second star: more rare (e.g. 90–200s)
+  function scheduleNextShootingStar2() {
+    const randomInterval = Math.random() * (200000 - 90000) + 90000;
+    setTimeout(() => {
+      triggerShootingStar2();
+      debugLog(`Next shooting star 2 in ${Math.round(randomInterval / 1000)}s`);
+      scheduleNextShootingStar2();
+    }, randomInterval);
+  }
+  scheduleNextShootingStar2();
+
   debugLog('Shooting star system initialized ✓');
 }
 

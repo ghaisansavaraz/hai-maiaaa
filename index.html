@@ -657,6 +657,130 @@ body:not(.light-theme) .stars-container {
   animation: shootingStarGlowPulse 3s ease-out forwards;
 }
 
+/* Shooting Star 2: left-to-right, faster, brighter glow, rarer */
+.shooting-star-reverse {
+  top: -50px;
+  right: auto;
+  left: -50px;
+  filter: brightness(1.8);
+}
+
+/* Trail on the left (behind star when moving right) */
+.shooting-star-reverse::before {
+  left: auto;
+  right: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 10%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0.8) 85%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  box-shadow: 
+    0 0 12px rgba(255, 255, 255, 0.7),
+    0 0 24px rgba(255, 255, 255, 0.4);
+}
+
+/* Brighter background glow */
+.shooting-star-reverse::after {
+  width: 56px;
+  height: 56px;
+  background: radial-gradient(circle,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 25%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    transparent 100%
+  );
+}
+
+@keyframes shootingStarFallReverse {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(45deg);
+    filter: brightness(1.8) drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+  }
+  6% {
+    opacity: 1;
+    transform: translate3d(60px, 60px, 0) rotate(45deg);
+    filter: brightness(2.2) drop-shadow(0 0 12px rgba(255, 255, 255, 1));
+  }
+  75% {
+    opacity: 1;
+    transform: translate3d(750px, 750px, 0) rotate(45deg);
+    filter: brightness(6) 
+           drop-shadow(0 0 55px rgba(255, 255, 255, 1))
+           drop-shadow(0 0 100px rgba(255, 255, 255, 1))
+           drop-shadow(0 0 150px rgba(255, 255, 255, 0.95))
+           drop-shadow(0 0 200px rgba(255, 255, 255, 0.8));
+  }
+  85% {
+    opacity: 1;
+    transform: translate3d(850px, 850px, 0) rotate(45deg);
+    filter: brightness(5) 
+           drop-shadow(0 0 45px rgba(255, 255, 255, 1))
+           drop-shadow(0 0 90px rgba(255, 255, 255, 0.95))
+           drop-shadow(0 0 130px rgba(255, 255, 255, 0.8));
+  }
+  92% {
+    opacity: 1;
+    transform: translate3d(920px, 920px, 0) rotate(45deg);
+    filter: brightness(3.5) drop-shadow(0 0 35px rgba(255, 255, 255, 0.95));
+  }
+  95% {
+    opacity: 1;
+    transform: translate3d(calc(100vw + 100px), calc(100vh + 100px), 0) rotate(45deg);
+    filter: brightness(3.5) drop-shadow(0 0 30px rgba(255, 255, 255, 0.9));
+  }
+  98% {
+    opacity: 1;
+    transform: translate3d(calc(100vw + 300px), calc(100vh + 300px), 0) rotate(45deg);
+    filter: brightness(3) drop-shadow(0 0 24px rgba(255, 255, 255, 0.85));
+  }
+  99.5% {
+    opacity: 1;
+    transform: translate3d(calc(100vw + 400px), calc(100vh + 400px), 0) rotate(45deg);
+    filter: brightness(2.5) drop-shadow(0 0 20px rgba(255, 255, 255, 0.75));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(100vw + 500px), calc(100vh + 500px), 0) rotate(45deg);
+    filter: brightness(2) drop-shadow(0 0 18px rgba(255, 255, 255, 0.6));
+  }
+}
+
+@keyframes shootingStarGlowPulseReverse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(4.5);
+  }
+  85% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(3.5);
+  }
+  92% {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) scale(3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+.shooting-star-reverse.active {
+  animation: shootingStarFallReverse 1.85s ease-out forwards;
+}
+
+.shooting-star-reverse.active::after {
+  animation: shootingStarGlowPulseReverse 1.85s ease-out forwards;
+}
+
 /* Star clusters */
 .star-cluster {
   position: fixed;
@@ -1755,8 +1879,10 @@ body.light-theme .mood-category {
     <div class="star-cluster cluster-4"></div>
     <div class="star-cluster cluster-5"></div>
     
-    <!-- Shooting Star -->
+    <!-- Shooting Star (top-right → bottom-left) -->
     <div class="shooting-star" id="shootingStar"></div>
+    <!-- Shooting Star 2 (top-left → bottom-right, faster, brighter, rarer) -->
+    <div class="shooting-star shooting-star-reverse" id="shootingStar2"></div>
     
   <!-- central area -->
   <div id="center" class="center dashboard-active">
