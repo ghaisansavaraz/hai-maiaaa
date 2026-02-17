@@ -2890,6 +2890,13 @@ body:not(.light-theme) .edge-nav-right:hover {
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.flower-card:hover .flower-add-photo-btn,
+.pressed-specimen:hover .flower-add-photo-btn {
+  opacity: 1;
 }
 
 .flower-add-photo-btn span {
