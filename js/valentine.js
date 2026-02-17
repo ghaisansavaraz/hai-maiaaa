@@ -679,7 +679,10 @@ function renderFlowerImages(note, forGarden = true) {
   const imgs = note.images || [];
   const canAdd = imgs.length < MAX_IMAGES_PER_NOTE;
   const smallClass = forGarden ? 'flower-thumb' : 'specimen-thumb';
-  let html = '<div class="flower-images-attached">';
+  const classes = ['flower-images-attached'];
+  if (imgs.length === 0) classes.push('no-images');
+  else if (imgs.length === 1) classes.push('single-image');
+  let html = `<div class="${classes.join(' ')}">`;
   imgs.forEach((src, i) => {
     html += `<img class="${smallClass} flower-image-clickable" src="${src}" alt="Photo ${i + 1}" data-note-id="${note.id}" data-img-index="${i}" />`;
   });
@@ -710,12 +713,22 @@ function openFlowerDetailModal(noteId) {
   dateEl.textContent = note.exclusive ? dateStr : dateStr;
 
   imagesEl.innerHTML = '';
-  (note.images || []).forEach((src, i) => {
+  const imgs = note.images || [];
+  imgs.forEach((src, i) => {
     const wrap = document.createElement('div');
     wrap.className = 'flower-modal-image-wrap';
     wrap.innerHTML = `<img src="${src}" alt="Photo ${i + 1}" /><button type="button" class="flower-modal-remove-img" data-note-id="${note.id}" data-img-index="${i}" aria-label="Remove photo">&times;</button>`;
     imagesEl.appendChild(wrap);
   });
+  imagesEl.classList.remove('modal-images-one', 'modal-images-two', 'modal-images-none');
+  if (imgs.length === 0) imagesEl.classList.add('modal-images-none');
+  else if (imgs.length === 1) imagesEl.classList.add('modal-images-one');
+  else if (imgs.length === 2) imagesEl.classList.add('modal-images-two');
+
+  const contentEl = modal.querySelector('.flower-modal-content');
+  if (contentEl) {
+    contentEl.classList.toggle('modal-has-images', imgs.length > 0);
+  }
 
   modal.classList.add('active');
   modal.dataset.openNoteId = noteId;

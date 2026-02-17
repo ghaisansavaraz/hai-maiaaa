@@ -2824,6 +2824,20 @@ body:not(.light-theme) .edge-nav-right:hover {
   align-items: center;
 }
 
+.flower-images-attached.no-images {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  min-height: 0;
+}
+
+.flower-images-attached.single-image {
+  justify-content: center;
+  width: 100%;
+}
+
 .flower-thumb,
 .specimen-thumb {
   width: 28px;
@@ -2921,6 +2935,15 @@ body:not(.light-theme) .edge-nav-right:hover {
   max-height: 90vh;
   padding-left: 5vw;
   justify-content: flex-start;
+}
+
+.flower-modal-content.modal-has-images {
+  align-items: center;
+}
+
+.flower-modal-images.modal-images-one {
+  align-items: center;
+  justify-content: center;
 }
 
 .flower-modal-left {
