@@ -2778,6 +2778,189 @@ body:not(.light-theme) .edge-nav-right:hover {
   color: rgba(255,100,100,1);
 }
 
+/* Flower Images */
+.flower-images-group {
+  margin-top: 16px;
+}
+
+.flower-images-group label {
+  margin-bottom: 8px;
+}
+
+.flower-images-preview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.flower-image-preview-item {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.flower-image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.flower-image-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.flower-choose-photos-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.flower-choose-photos-btn:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.flower-choose-photos-btn input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.flower-images-attached {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.flower-thumb,
+.specimen-thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+
+.specimen-thumb {
+  width: 48px;
+  height: 48px;
+  margin-top: 6px;
+}
+
+.flower-image-clickable {
+  transition: opacity 0.2s;
+}
+
+.flower-image-clickable:hover {
+  opacity: 0.9;
+}
+
+.flower-add-photo-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px dashed rgba(255,255,255,0.35);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.flower-add-photo-btn span {
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+}
+
+.flower-add-photo-btn:hover {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+}
+
+.flower-add-photo-btn:hover span {
+  color: rgba(255,255,255,0.7);
+}
+
+.flower-add-photo-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.pressed-specimen .flower-images-attached {
+  margin-top: 8px;
+}
+
+/* Fullscreen Image Modal */
+.flower-image-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.flower-image-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.flower-image-modal img {
+  max-width: 95vw;
+  max-height: 95vh;
+  object-fit: contain;
+}
+
+.flower-image-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.flower-image-modal-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
 /* Specimen Placeholder */
 .specimen-placeholder {
   min-height: 200px;

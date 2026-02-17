@@ -39,6 +39,8 @@ const FLOWER_NAMES = {
   simple_b: 'Primrose'
 };
 
+const MAX_IMAGES_PER_NOTE = 2;
+
 // Exclusive flowers from Gesan (pre-planted, always bloomed)
 const EXCLUSIVE_FLOWERS = [
   {
@@ -47,6 +49,7 @@ const EXCLUSIVE_FLOWERS = [
     flowerType: 'orchid',
     bloomed: true,
     exclusive: true,
+    images: [],
     createdAt: new Date(2026, 1, 14).getTime()
   },
   {
@@ -55,6 +58,7 @@ const EXCLUSIVE_FLOWERS = [
     flowerType: 'simple_a',
     bloomed: true,
     exclusive: true,
+    images: [],
     createdAt: new Date(2026, 1, 15).getTime()
   },
   {
@@ -63,6 +67,7 @@ const EXCLUSIVE_FLOWERS = [
     flowerType: 'simple_b',
     bloomed: true,
     exclusive: true,
+    images: [],
     createdAt: new Date(2026, 1, 17).getTime()
   }
 ];
@@ -529,6 +534,10 @@ function loadValentineData() {
     return existing ? { ...ef, ...existing, exclusive: true, bloomed: true } : ef;
   });
   valentineData.notes = [...exclusiveOrdered, ...userNotes];
+
+  valentineData.notes.forEach(n => {
+    if (!Array.isArray(n.images)) n.images = [];
+  });
 }
 
 function saveValentineData() {
@@ -565,20 +574,67 @@ function getNextFlowerType() {
 
 // ===== NOTE CRUD =====
 
-function addNote(text) {
+function addNote(text, images = []) {
   if (!text || !text.trim()) return null;
   const note = {
     id: generateId(),
     text: text.trim(),
     createdAt: Date.now(),
     flowerType: getNextFlowerType(),
-    bloomed: false
+    bloomed: false,
+    images: (images || []).slice(0, MAX_IMAGES_PER_NOTE)
   };
   valentineData.notes.push(note);
   firstVisit = false;
   saveValentineData();
   debugLog('Note added:', note.id, note.flowerType);
   return note;
+}
+
+function addImagesToNote(noteId, newImages) {
+  const note = valentineData.notes.find(n => n.id === noteId);
+  if (!note) return false;
+  if (!Array.isArray(note.images)) note.images = [];
+  const toAdd = newImages.slice(0, MAX_IMAGES_PER_NOTE - note.images.length);
+  note.images.push(...toAdd);
+  saveValentineData();
+  return true;
+}
+
+function removeImageFromNote(noteId, index) {
+  const note = valentineData.notes.find(n => n.id === noteId);
+  if (!note || !Array.isArray(note.images)) return false;
+  note.images.splice(index, 1);
+  saveValentineData();
+  return true;
+}
+
+function resizeImageAsBase64(file, maxW = 400, maxH = 400, quality = 0.85) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width;
+        let h = img.height;
+        if (w > maxW || h > maxH) {
+          const r = Math.min(maxW / w, maxH / h);
+          w = Math.round(w * r);
+          h = Math.round(h * r);
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => resolve(null);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
 }
 
 function deleteNote(id) {
@@ -615,6 +671,38 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+// ===== FLOWER IMAGES =====
+
+function renderFlowerImages(note, forGarden = true) {
+  const imgs = note.images || [];
+  const canAdd = imgs.length < MAX_IMAGES_PER_NOTE;
+  const smallClass = forGarden ? 'flower-thumb' : 'specimen-thumb';
+  let html = '<div class="flower-images-attached">';
+  imgs.forEach((src, i) => {
+    html += `<img class="${smallClass} flower-image-clickable" src="${src}" alt="Photo ${i + 1}" data-note-id="${note.id}" data-img-index="${i}" />`;
+  });
+  if (canAdd) {
+    html += `<label class="flower-add-photo-btn" title="Add photo"><input type="file" accept="image/*" class="flower-add-photo-input" data-note-id="${note.id}" multiple/><span>+</span></label>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function openImageFullscreen(src) {
+  const modal = document.getElementById('flowerImageModal');
+  const img = document.getElementById('flowerImageModalImg');
+  if (!modal || !img) return;
+  img.src = src;
+  modal.classList.add('active');
+  modal.focus();
+}
+
+function closeImageFullscreen() {
+  const modal = document.getElementById('flowerImageModal');
+  if (!modal) return;
+  modal.classList.remove('active');
 }
 
 // ===== GARDEN RENDER =====
@@ -666,28 +754,30 @@ function renderGarden() {
       const dateClass = note.exclusive ? 'flower-date given-date' : 'flower-date';
 
       if (note.exclusive) {
-        // Bouquet: glowing text, species, "From Gesan", date below
         const speciesInfo = `<div class="flower-species"><span class="flower-species-latin">${flowerLabel}</span><span class="flower-species-common">${flowerName}</span></div>`;
+        const imagesHtml = renderFlowerImages(note, true);
         card.innerHTML = `
           <div class="flower-bloom-container bouquet-container">
             ${getBouquetSVG(note.flowerType, index)}
             <div class="flower-letter-exclusive">
               <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
+              ${imagesHtml}
             </div>
           </div>
           ${speciesInfo}
           <div class="exclusive-label">From Gesan</div>
           <div class="${dateClass}">${formatDate(note.createdAt)}</div>`;
       } else {
-        // Normal flower: tag-style letter, no species in garden
         const deleteBtn = `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>`;
+        const imagesHtml = renderFlowerImages(note, true);
         card.innerHTML = `
           <div class="flower-bloom-container">
             ${getFlowerSVG(note.flowerType, index)}
             <div class="flower-letter">
               <p class="flower-letter-text">${escapeHtml(note.text)}</p>
+              ${imagesHtml}
             </div>
           </div>
           <div class="${dateClass}">${datePrefix} ${formatDate(note.createdAt)}</div>
@@ -701,9 +791,9 @@ function renderGarden() {
         <div class="flower-date">Planted ${formatDate(note.createdAt)}</div>`;
     }
 
-    // Click to bloom/re-bloom (exclusive flowers can't be closed)
     card.addEventListener('click', (e) => {
       if (e.target.closest('.flower-delete-btn')) return;
+      if (e.target.closest('.flower-images-attached')) return;
       if (!note.exclusive) {
         handleBloom(note.id, card);
       }
@@ -722,7 +812,6 @@ function renderGarden() {
     canvas.appendChild(card);
   });
 
-  // Attach delete handlers
   canvas.querySelectorAll('.flower-delete-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -732,6 +821,37 @@ function renderGarden() {
         renderGarden();
         renderAlbum();
       }
+    });
+  });
+
+  canvas.querySelectorAll('.flower-image-clickable').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (el.src) openImageFullscreen(el.src);
+    });
+  });
+
+  canvas.querySelectorAll('.flower-add-photo-input').forEach(input => {
+    input.addEventListener('change', async (e) => {
+      e.stopPropagation();
+      const noteId = input.dataset.noteId;
+      const files = Array.from(input.files || []);
+      const note = valentineData.notes.find(n => n.id === noteId);
+      if (!note || !files.length) return;
+      const remaining = MAX_IMAGES_PER_NOTE - (note.images || []).length;
+      const toProcess = files.slice(0, remaining);
+      const base64List = [];
+      for (const file of toProcess) {
+        if (!file.type.startsWith('image/')) continue;
+        const base64 = await resizeImageAsBase64(file);
+        if (base64) base64List.push(base64);
+      }
+      if (base64List.length) {
+        addImagesToNote(noteId, base64List);
+        renderGarden();
+        renderAlbum();
+      }
+      input.value = '';
     });
   });
 }
@@ -808,7 +928,6 @@ function renderAlbum() {
 
   albumContainer.innerHTML = `<div class="album-spine"></div><div class="album-spread">${leftPage}${rightPage}</div>`;
 
-  // Attach delete handlers for album
   albumContainer.querySelectorAll('.specimen-delete-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -818,6 +937,37 @@ function renderAlbum() {
         renderGarden();
         renderAlbum();
       }
+    });
+  });
+
+  albumContainer.querySelectorAll('.flower-image-clickable').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (el.src) openImageFullscreen(el.src);
+    });
+  });
+
+  albumContainer.querySelectorAll('.flower-add-photo-input').forEach(input => {
+    input.addEventListener('change', async (e) => {
+      e.stopPropagation();
+      const noteId = input.dataset.noteId;
+      const files = Array.from(input.files || []);
+      const note = valentineData.notes.find(n => n.id === noteId);
+      if (!note || !files.length) return;
+      const remaining = MAX_IMAGES_PER_NOTE - (note.images || []).length;
+      const toProcess = files.slice(0, remaining);
+      const base64List = [];
+      for (const file of toProcess) {
+        if (!file.type.startsWith('image/')) continue;
+        const base64 = await resizeImageAsBase64(file);
+        if (base64) base64List.push(base64);
+      }
+      if (base64List.length) {
+        addImagesToNote(noteId, base64List);
+        renderGarden();
+        renderAlbum();
+      }
+      input.value = '';
     });
   });
 
@@ -832,6 +982,7 @@ function renderSpecimen(note, variation) {
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     </button>`;
   const exclusiveFrom = note.exclusive ? '<span class="specimen-from">From Gesan</span>' : '';
+  const imagesHtml = (note.images || []).length ? renderFlowerImages(note, false) : '';
   return `<div class="pressed-specimen${note.exclusive ? ' exclusive-specimen' : ''}" data-note-id="${note.id}" role="article" aria-label="${flowerLabel}: ${escapeHtml(note.text)}">
     <div class="specimen-flower">
       ${getPressedFlowerSVG(note.flowerType, variation)}
@@ -843,6 +994,7 @@ function renderSpecimen(note, variation) {
       <span class="specimen-date">${note.exclusive ? formatDate(note.createdAt) : datePrefix + formatDate(note.createdAt)}</span>
     </div>
     <p class="specimen-note">${escapeHtml(note.text)}</p>
+    ${imagesHtml}
     ${deleteBtn}
   </div>`;
 }
@@ -898,6 +1050,8 @@ function switchValentineView(view) {
 
 // ===== ADD FORM =====
 
+let pendingFormImages = [];
+
 function toggleAddForm(show) {
   const form = document.getElementById('valentineAddForm');
   const btn = document.getElementById('valentineAddBtn');
@@ -913,10 +1067,43 @@ function toggleAddForm(show) {
       input.value = '';
       input.focus();
     }
+    pendingFormImages = [];
+    const imgInput = document.getElementById('valentineImageInput');
+    if (imgInput) imgInput.value = '';
+    renderFormImagePreview();
   } else {
     form.classList.remove('active');
     btn.classList.remove('hidden');
   }
+}
+
+function renderFormImagePreview() {
+  const container = document.getElementById('valentineImagePreview');
+  if (!container) return;
+  container.innerHTML = '';
+  pendingFormImages.forEach((src, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'flower-image-preview-item';
+    wrap.innerHTML = `<img src="${src}" alt="Preview ${i + 1}"/><button type="button" class="flower-image-remove" data-index="${i}" aria-label="Remove photo">×</button>`;
+    container.appendChild(wrap);
+  });
+}
+
+async function handleFormImageSelect(e) {
+  const input = e.target;
+  const files = Array.from(input.files || []);
+  const remaining = MAX_IMAGES_PER_NOTE - pendingFormImages.length;
+  const toProcess = files.slice(0, remaining);
+  for (const file of toProcess) {
+    if (!file.type.startsWith('image/')) continue;
+    const base64 = await resizeImageAsBase64(file);
+    if (base64) {
+      pendingFormImages.push(base64);
+      if (pendingFormImages.length >= MAX_IMAGES_PER_NOTE) break;
+    }
+  }
+  input.value = '';
+  renderFormImagePreview();
 }
 
 function handleFormSubmit(e) {
@@ -927,8 +1114,9 @@ function handleFormSubmit(e) {
   const text = input.value.trim();
   if (!text) return;
 
-  addNote(text);
+  addNote(text, pendingFormImages);
   input.value = '';
+  pendingFormImages = [];
   toggleAddForm(false);
   renderGarden();
   renderAlbum();
@@ -986,6 +1174,34 @@ export function initValentineGarden() {
   const form = document.getElementById('valentineAddFormInner');
   if (form) {
     form.addEventListener('submit', handleFormSubmit);
+  }
+
+  const imgInput = document.getElementById('valentineImageInput');
+  if (imgInput) {
+    imgInput.addEventListener('change', handleFormImageSelect);
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.flower-image-remove')) {
+      const btn = e.target.closest('.flower-image-remove');
+      const idx = parseInt(btn.dataset.index, 10);
+      if (!isNaN(idx)) {
+        pendingFormImages.splice(idx, 1);
+        renderFormImagePreview();
+      }
+    }
+  });
+
+  const modal = document.getElementById('flowerImageModal');
+  if (modal) {
+    const closeBtn = modal.querySelector('.flower-image-modal-close');
+    if (closeBtn) closeBtn.addEventListener('click', closeImageFullscreen);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeImageFullscreen();
+    });
+    modal.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeImageFullscreen();
+    });
   }
 
   const cancelBtn = document.querySelector('.valentine-cancel-btn');
