@@ -189,36 +189,59 @@ function getRanunculusFlowerSVG(colors) {
 function getOrchidFlowerSVG(colors) {
   return `<g class="flower-head">
     <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-8" rx="14" ry="18" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="11" ry="15" fill="${colors.secondary}" opacity="0.5"/></g>
     <g class="petal" style="--petal-delay:1" transform="rotate(-35)"><ellipse cx="-6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-35)"><ellipse cx="-6" cy="-7" rx="7" ry="11" fill="${colors.accent}" opacity="0.4"/></g>
     <g class="petal" style="--petal-delay:2" transform="rotate(35)"><ellipse cx="6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(35)"><ellipse cx="6" cy="-7" rx="7" ry="11" fill="${colors.accent}" opacity="0.4"/></g>
     <g class="petal" style="--petal-delay:3"><path d="M-8,-2 Q-10,-8 -6,-12 Q0,-10 6,-12 Q10,-8 8,-2 Q4,0 0,2 Q-4,0 -8,-2" fill="${colors.accent}" opacity="0.75"/></g>
+    <g class="petal" style="--petal-delay:3"><path d="M-6,-3 Q-8,-7 -4,-10 Q0,-8 4,-10 Q8,-7 6,-3 Q3,-1 0,0 Q-3,-1 -6,-3" fill="${colors.primary}" opacity="0.5"/></g>
     <circle cx="0" cy="-4" r="3" fill="${colors.center}" opacity="0.95"/>
     <ellipse cx="0" cy="-3" rx="2" ry="4" fill="${colors.primary}" opacity="0.7"/>
+    <ellipse cx="-1" cy="-4" rx="1" ry="2" fill="${colors.secondary}" opacity="0.6"/>
+    <ellipse cx="1" cy="-4" rx="1" ry="2" fill="${colors.secondary}" opacity="0.6"/>
   </g>`;
 }
 
 function getSimpleAFlowerSVG(colors) {
   return `<g class="flower-head">
-    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-6" rx="8" ry="10" fill="${colors.primary}" opacity="0.6"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(-25)"><ellipse cx="-4" cy="-5" rx="6" ry="8" fill="${colors.secondary}" opacity="0.7"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(25)"><ellipse cx="4" cy="-5" rx="6" ry="8" fill="${colors.secondary}" opacity="0.7"/></g>
-    <circle cx="0" cy="-4" r="3" fill="${colors.center}" opacity="0.6"/>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-6" rx="8" ry="10" fill="${colors.primary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-7" rx="6" ry="8" fill="${colors.secondary}" opacity="0.4"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-25)"><ellipse cx="-4" cy="-5" rx="6" ry="8" fill="${colors.secondary}" opacity="0.75"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-25)"><ellipse cx="-4" cy="-6" rx="4" ry="6" fill="${colors.accent}" opacity="0.4"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(25)"><ellipse cx="4" cy="-5" rx="6" ry="8" fill="${colors.secondary}" opacity="0.75"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(25)"><ellipse cx="4" cy="-6" rx="4" ry="6" fill="${colors.accent}" opacity="0.4"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(-50)"><ellipse cx="-2" cy="-4" rx="5" ry="7" fill="${colors.primary}" opacity="0.5"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(50)"><ellipse cx="2" cy="-4" rx="5" ry="7" fill="${colors.primary}" opacity="0.5"/></g>
+    <circle cx="0" cy="-4" r="3.5" fill="${colors.center}" opacity="0.7"/>
+    <circle cx="0" cy="-4" r="2" fill="${colors.primary}" opacity="0.4"/>
   </g>`;
 }
 
 function getSimpleBFlowerSVG(colors) {
   const petals = [];
+  const innerPetals = [];
   for (let i = 0; i < 5; i++) {
     const angleDeg = (i * 360) / 5;
     const angleRad = (angleDeg * Math.PI) / 180;
     const r = 10;
     const tx = Math.sin(angleRad) * r;
     const ty = -Math.cos(angleRad) * r;
-    petals.push(`<g transform="translate(${tx.toFixed(2)}, ${ty.toFixed(2)}) rotate(${angleDeg})"><g class="petal" style="--petal-delay:${i}"><ellipse cx="0" cy="0" rx="4" ry="7" fill="${colors.primary}" opacity="0.6"/></g></g>`);
+    petals.push(`<g transform="translate(${tx.toFixed(2)}, ${ty.toFixed(2)}) rotate(${angleDeg})"><g class="petal" style="--petal-delay:${i}"><ellipse cx="0" cy="0" rx="4" ry="7" fill="${colors.primary}" opacity="0.75"/></g></g>`);
+    petals.push(`<g transform="translate(${tx.toFixed(2)}, ${ty.toFixed(2)}) rotate(${angleDeg})"><g class="petal" style="--petal-delay:${i}"><ellipse cx="0" cy="0" rx="3" ry="5" fill="${colors.secondary}" opacity="0.5"/></g></g>`);
+    
+    const innerAngleDeg = angleDeg + 36;
+    const innerAngleRad = (innerAngleDeg * Math.PI) / 180;
+    const innerR = 6;
+    const innerTx = Math.sin(innerAngleRad) * innerR;
+    const innerTy = -Math.cos(innerAngleRad) * innerR;
+    innerPetals.push(`<g transform="translate(${innerTx.toFixed(2)}, ${innerTy.toFixed(2)}) rotate(${innerAngleDeg})"><g class="petal" style="--petal-delay:${i + 5}"><ellipse cx="0" cy="0" rx="2.5" ry="4" fill="${colors.accent}" opacity="0.6"/></g></g>`);
   }
   return `<g class="flower-head">
     ${petals.join('\n    ')}
-    <circle cx="0" cy="0" r="4" fill="${colors.center}" opacity="0.7"/>
+    ${innerPetals.join('\n    ')}
+    <circle cx="0" cy="0" r="4" fill="${colors.center}" opacity="0.8"/>
+    <circle cx="0" cy="0" r="2.5" fill="${colors.primary}" opacity="0.5"/>
   </g>`;
 }
 
@@ -251,37 +274,37 @@ function getBouquetSVG(type, variation = 0) {
   switch (type) {
     case 'orchid':
       flowers = `
-        <g transform="translate(-15, -5) scale(0.85)">
+        <g transform="translate(-18, -8) scale(0.9) rotate(-8)">
           ${getOrchidFlowerSVG(colors)}
         </g>
-        <g transform="translate(0, 0) scale(1)">
+        <g transform="translate(0, -2) scale(1)">
           ${getOrchidFlowerSVG(colors)}
         </g>
-        <g transform="translate(18, -3) scale(0.9) rotate(15)">
+        <g transform="translate(20, -6) scale(0.95) rotate(12)">
           ${getOrchidFlowerSVG(colors)}
         </g>`;
       break;
     case 'simple_a':
       flowers = `
-        <g transform="translate(-12, -2) scale(0.9)">
+        <g transform="translate(-16, -6) scale(0.95) rotate(-10)">
           ${getSimpleAFlowerSVG(colors)}
         </g>
-        <g transform="translate(0, 0) scale(1.1)">
+        <g transform="translate(0, -2) scale(1)">
           ${getSimpleAFlowerSVG(colors)}
         </g>
-        <g transform="translate(14, -4) scale(0.85) rotate(20)">
+        <g transform="translate(18, -5) scale(0.9) rotate(15)">
           ${getSimpleAFlowerSVG(colors)}
         </g>`;
       break;
     case 'simple_b':
       flowers = `
-        <g transform="translate(-14, -3) scale(0.85)">
+        <g transform="translate(-17, -7) scale(0.9) rotate(-12)">
           ${getSimpleBFlowerSVG(colors)}
         </g>
-        <g transform="translate(0, 0) scale(1)">
+        <g transform="translate(0, -3) scale(1)">
           ${getSimpleBFlowerSVG(colors)}
         </g>
-        <g transform="translate(16, -2) scale(0.9) rotate(-15)">
+        <g transform="translate(19, -6) scale(0.95) rotate(10)">
           ${getSimpleBFlowerSVG(colors)}
         </g>`;
       break;
@@ -292,14 +315,16 @@ function getBouquetSVG(type, variation = 0) {
   // Multiple stems fanning out for bouquet
   const stems = `
     <g class="bouquet-stems">
-      <line x1="0" y1="8" x2="-4" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="0" y1="8" x2="0" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="0" y1="8" x2="5" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-      <ellipse cx="-8" cy="40" rx="6" ry="3" transform="rotate(-25 -8 40)" fill="#6a8a5a" opacity="0.6"/>
-      <ellipse cx="10" cy="45" rx="5" ry="2.5" transform="rotate(20 10 45)" fill="#6a8a5a" opacity="0.5"/>
+      <line x1="0" y1="10" x2="-5" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="10" x2="0" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="10" x2="6" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+      <ellipse cx="-10" cy="38" rx="6" ry="3" transform="rotate(-28 -10 38)" fill="#6a8a5a" opacity="0.6"/>
+      <ellipse cx="12" cy="42" rx="5" ry="2.5" transform="rotate(25 12 42)" fill="#6a8a5a" opacity="0.55"/>
+      <ellipse cx="-6" cy="50" rx="4" ry="2" transform="rotate(-35 -6 50)" fill="#6a8a5a" opacity="0.5"/>
+      <ellipse cx="8" cy="52" rx="4.5" ry="2.2" transform="rotate(30 8 52)" fill="#6a8a5a" opacity="0.5"/>
     </g>`;
 
-  // Subtle paper backing behind the bouquet (flowers stay prominent)
+  // Paper backing positioned directly behind flower heads
   const paper = `
     <defs>
       <linearGradient id="paperGrad${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -309,11 +334,11 @@ function getBouquetSVG(type, variation = 0) {
       </linearGradient>
     </defs>
     <g class="bouquet-paper">
-      <path d="M-26,24 Q-28,10 -20,-8 Q-12,-18 0,-20 Q12,-18 20,-8 Q28,10 26,24 Q18,30 0,32 Q-18,30 -26,24 Z" 
-        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.4"/>
-      <path d="M-20,26 Q-22,30 -18,34 L0,38 L18,34 Q22,30 20,26" 
-        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.3"/>
-      <path d="M-16,36 Q0,42 16,36" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
+      <path d="M-28,10 Q-30,-5 -22,-18 Q-14,-26 0,-28 Q14,-26 22,-18 Q30,-5 28,10 Q20,18 0,20 Q-20,18 -28,10 Z" 
+        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.45"/>
+      <path d="M-22,12 Q-24,16 -20,22 L0,26 L20,22 Q24,16 22,12" 
+        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
+      <path d="M-18,24 Q0,30 18,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
     </g>`;
 
   return `<svg viewBox="-38 -38 76 120" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-${type}" aria-hidden="true">
@@ -637,11 +662,11 @@ function renderGarden() {
     if (note.bloomed) {
       const flowerLabel = FLOWER_LABELS[note.flowerType] || note.flowerType;
       const flowerName = FLOWER_NAMES[note.flowerType] || note.flowerType.charAt(0).toUpperCase() + note.flowerType.slice(1).replace('_', ' ');
-      const datePrefix = note.exclusive ? 'Given' : 'Planted';
+      const datePrefix = note.exclusive ? '' : 'Planted ';
       const dateClass = note.exclusive ? 'flower-date given-date' : 'flower-date';
 
       if (note.exclusive) {
-        // Bouquet: glowing text, species, "From Gesan", no tags
+        // Bouquet: glowing text, species, "From Gesan", date below
         const speciesInfo = `<div class="flower-species"><span class="flower-species-latin">${flowerLabel}</span><span class="flower-species-common">${flowerName}</span></div>`;
         card.innerHTML = `
           <div class="flower-bloom-container bouquet-container">
@@ -652,7 +677,7 @@ function renderGarden() {
           </div>
           ${speciesInfo}
           <div class="exclusive-label">From Gesan</div>
-          <div class="${dateClass}">${datePrefix} ${formatDate(note.createdAt)}</div>`;
+          <div class="${dateClass}">${formatDate(note.createdAt)}</div>`;
       } else {
         // Normal flower: tag-style letter, no species in garden
         const deleteBtn = `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
@@ -802,7 +827,7 @@ function renderAlbum() {
 function renderSpecimen(note, variation) {
   const flowerLabel = FLOWER_LABELS[note.flowerType] || note.flowerType;
   const flowerName = FLOWER_NAMES[note.flowerType] || note.flowerType;
-  const datePrefix = note.exclusive ? 'Given' : 'Planted';
+  const datePrefix = note.exclusive ? '' : 'Planted ';
   const deleteBtn = note.exclusive ? '' : `<button class="specimen-delete-btn" data-note-id="${note.id}" aria-label="Delete specimen" title="Delete specimen">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     </button>`;
@@ -815,7 +840,7 @@ function renderSpecimen(note, variation) {
       <span class="specimen-species">${flowerLabel}</span>
       <span class="specimen-common">${flowerName}</span>
       ${exclusiveFrom}
-      <span class="specimen-date">${datePrefix} ${formatDate(note.createdAt)}</span>
+      <span class="specimen-date">${note.exclusive ? formatDate(note.createdAt) : datePrefix + formatDate(note.createdAt)}</span>
     </div>
     <p class="specimen-note">${escapeHtml(note.text)}</p>
     ${deleteBtn}
