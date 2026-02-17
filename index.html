@@ -2123,10 +2123,17 @@ body.light-theme .mood-category {
       </form>
     </div>
 
-    <!-- Fullscreen Image Modal -->
-    <div id="flowerImageModal" class="flower-image-modal" role="dialog" aria-modal="true" aria-label="View photo" tabindex="-1">
+    <!-- Fullscreen Flower Detail Modal -->
+    <div id="flowerImageModal" class="flower-image-modal" role="dialog" aria-modal="true" aria-label="Flower detail" tabindex="-1">
       <button class="flower-image-modal-close" aria-label="Close">&times;</button>
-      <img id="flowerImageModalImg" src="" alt="Flower photo" />
+      <div class="flower-modal-content">
+        <div class="flower-modal-left">
+          <div id="flowerModalFlower" class="flower-modal-flower"></div>
+          <p id="flowerModalNote" class="flower-modal-note"></p>
+          <div id="flowerModalDate" class="flower-modal-date"></div>
+        </div>
+        <div id="flowerModalImages" class="flower-modal-images"></div>
+      </div>
     </div>
   </div>
 

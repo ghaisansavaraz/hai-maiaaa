@@ -690,19 +690,58 @@ function renderFlowerImages(note, forGarden = true) {
   return html;
 }
 
-function openImageFullscreen(src) {
+function openFlowerDetailModal(noteId) {
+  const note = valentineData.notes.find(n => n.id === noteId);
+  if (!note) return;
+
   const modal = document.getElementById('flowerImageModal');
-  const img = document.getElementById('flowerImageModalImg');
-  if (!modal || !img) return;
-  img.src = src;
+  const flowerEl = document.getElementById('flowerModalFlower');
+  const noteEl = document.getElementById('flowerModalNote');
+  const dateEl = document.getElementById('flowerModalDate');
+  const imagesEl = document.getElementById('flowerModalImages');
+  if (!modal || !flowerEl || !noteEl || !dateEl || !imagesEl) return;
+
+  const flowerLabel = FLOWER_LABELS[note.flowerType] || note.flowerType;
+  const flowerName = FLOWER_NAMES[note.flowerType] || note.flowerType;
+  const dateStr = note.exclusive ? formatDate(note.createdAt) : 'Planted ' + formatDate(note.createdAt);
+
+  flowerEl.innerHTML = note.exclusive ? getBouquetSVG(note.flowerType, 0) : getFlowerSVG(note.flowerType, 0);
+  noteEl.textContent = note.text;
+  dateEl.textContent = note.exclusive ? dateStr : dateStr;
+
+  imagesEl.innerHTML = '';
+  (note.images || []).forEach((src, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'flower-modal-image-wrap';
+    wrap.innerHTML = `<img src="${src}" alt="Photo ${i + 1}" /><button type="button" class="flower-modal-remove-img" data-note-id="${note.id}" data-img-index="${i}" aria-label="Remove photo">&times;</button>`;
+    imagesEl.appendChild(wrap);
+  });
+
   modal.classList.add('active');
+  modal.dataset.openNoteId = noteId;
   modal.focus();
+
+  imagesEl.querySelectorAll('.flower-modal-remove-img').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.noteId;
+      const idx = parseInt(btn.dataset.imgIndex, 10);
+      removeImageFromNote(id, idx);
+      openFlowerDetailModal(id);
+      if ((valentineData.notes.find(n => n.id === id)?.images || []).length === 0) {
+        closeImageFullscreen();
+      }
+      renderGarden();
+      renderAlbum();
+    });
+  });
 }
 
 function closeImageFullscreen() {
   const modal = document.getElementById('flowerImageModal');
   if (!modal) return;
   modal.classList.remove('active');
+  delete modal.dataset.openNoteId;
 }
 
 // ===== GARDEN RENDER =====
@@ -759,9 +798,9 @@ function renderGarden() {
         card.innerHTML = `
           <div class="flower-bloom-container bouquet-container">
             ${getBouquetSVG(note.flowerType, index)}
-            <div class="flower-letter-exclusive">
+            ${imagesHtml}
+            <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
               <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
-              ${imagesHtml}
             </div>
           </div>
           ${speciesInfo}
@@ -775,9 +814,9 @@ function renderGarden() {
         card.innerHTML = `
           <div class="flower-bloom-container">
             ${getFlowerSVG(note.flowerType, index)}
-            <div class="flower-letter">
+            ${imagesHtml}
+            <div class="flower-letter flower-note-clickable" data-note-id="${note.id}">
               <p class="flower-letter-text">${escapeHtml(note.text)}</p>
-              ${imagesHtml}
             </div>
           </div>
           <div class="${dateClass}">${datePrefix} ${formatDate(note.createdAt)}</div>
@@ -794,7 +833,9 @@ function renderGarden() {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.flower-delete-btn')) return;
       if (e.target.closest('.flower-images-attached')) return;
-      if (!note.exclusive) {
+      if (e.target.closest('.flower-note-clickable') && note.bloomed) {
+        openFlowerDetailModal(note.id);
+      } else if (!note.bloomed && !note.exclusive) {
         handleBloom(note.id, card);
       }
     });
@@ -827,7 +868,8 @@ function renderGarden() {
   canvas.querySelectorAll('.flower-image-clickable').forEach(el => {
     el.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (el.src) openImageFullscreen(el.src);
+      const noteId = el.dataset.noteId;
+      if (noteId) openFlowerDetailModal(noteId);
     });
   });
 
@@ -943,7 +985,16 @@ function renderAlbum() {
   albumContainer.querySelectorAll('.flower-image-clickable').forEach(el => {
     el.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (el.src) openImageFullscreen(el.src);
+      const noteId = el.dataset.noteId;
+      if (noteId) openFlowerDetailModal(noteId);
+    });
+  });
+
+  albumContainer.querySelectorAll('.pressed-specimen').forEach(spec => {
+    spec.addEventListener('click', (e) => {
+      if (e.target.closest('.specimen-delete-btn') || e.target.closest('.flower-add-photo-btn') || e.target.closest('.flower-add-photo-input')) return;
+      const noteId = spec.dataset.noteId;
+      if (noteId) openFlowerDetailModal(noteId);
     });
   });
 
@@ -982,19 +1033,19 @@ function renderSpecimen(note, variation) {
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     </button>`;
   const exclusiveFrom = note.exclusive ? '<span class="specimen-from">From Gesan</span>' : '';
-  const imagesHtml = (note.images || []).length ? renderFlowerImages(note, false) : '';
+  const imagesHtml = renderFlowerImages(note, false);
   return `<div class="pressed-specimen${note.exclusive ? ' exclusive-specimen' : ''}" data-note-id="${note.id}" role="article" aria-label="${flowerLabel}: ${escapeHtml(note.text)}">
     <div class="specimen-flower">
       ${getPressedFlowerSVG(note.flowerType, variation)}
     </div>
+    ${imagesHtml}
     <div class="specimen-label">
       <span class="specimen-species">${flowerLabel}</span>
       <span class="specimen-common">${flowerName}</span>
       ${exclusiveFrom}
       <span class="specimen-date">${note.exclusive ? formatDate(note.createdAt) : datePrefix + formatDate(note.createdAt)}</span>
     </div>
-    <p class="specimen-note">${escapeHtml(note.text)}</p>
-    ${imagesHtml}
+    <p class="specimen-note flower-note-clickable" data-note-id="${note.id}">${escapeHtml(note.text)}</p>
     ${deleteBtn}
   </div>`;
 }
