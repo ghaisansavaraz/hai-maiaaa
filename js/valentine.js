@@ -12,7 +12,7 @@ const FLOWER_COLORS = {
   daisy: { primary: '#f0e0e6', secondary: '#e8d0d8', accent: '#d4b8c2', center: '#d4b870' },
   peony: { primary: '#e8b8c8', secondary: '#d4a0b0', accent: '#c088a0', center: '#c9a84c' },
   ranunculus: { primary: '#e8c8d8', secondary: '#d8b0c0', accent: '#c898a8', center: '#b8a060' },
-  orchid: { primary: '#c8a0d8', secondary: '#b088c0', accent: '#9870a8', center: '#d4c870' },
+  orchid: { primary: '#d8b0e8', secondary: '#c090d8', accent: '#a870c0', center: '#e8d870' },
   simple_a: { primary: '#b8d8e8', secondary: '#a0c0d4', accent: '#88a8c0', center: '#c9c84c' },
   simple_b: { primary: '#e8d8b8', secondary: '#d4c0a0', accent: '#c0a888', center: '#c9b84c' }
 };
@@ -188,12 +188,12 @@ function getRanunculusFlowerSVG(colors) {
 
 function getOrchidFlowerSVG(colors) {
   return `<g class="flower-head">
-    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-8" rx="14" ry="18" fill="${colors.primary}" opacity="0.6"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(-35)"><ellipse cx="-6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.7"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(35)"><ellipse cx="6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.7"/></g>
-    <g class="petal" style="--petal-delay:3"><path d="M-8,-2 Q-10,-8 -6,-12 Q0,-10 6,-12 Q10,-8 8,-2 Q4,0 0,2 Q-4,0 -8,-2" fill="${colors.accent}" opacity="0.5"/></g>
-    <circle cx="0" cy="-4" r="3" fill="${colors.center}" opacity="0.7"/>
-    <ellipse cx="0" cy="-3" rx="2" ry="4" fill="${colors.primary}" opacity="0.4"/>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-8" rx="14" ry="18" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-35)"><ellipse cx="-6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(35)"><ellipse cx="6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:3"><path d="M-8,-2 Q-10,-8 -6,-12 Q0,-10 6,-12 Q10,-8 8,-2 Q4,0 0,2 Q-4,0 -8,-2" fill="${colors.accent}" opacity="0.75"/></g>
+    <circle cx="0" cy="-4" r="3" fill="${colors.center}" opacity="0.95"/>
+    <ellipse cx="0" cy="-3" rx="2" ry="4" fill="${colors.primary}" opacity="0.7"/>
   </g>`;
 }
 
@@ -299,7 +299,7 @@ function getBouquetSVG(type, variation = 0) {
       <ellipse cx="10" cy="45" rx="5" ry="2.5" transform="rotate(20 10 45)" fill="#6a8a5a" opacity="0.5"/>
     </g>`;
 
-  // Wrapping paper behind the bouquet
+  // Subtle paper backing behind the bouquet (flowers stay prominent)
   const paper = `
     <defs>
       <linearGradient id="paperGrad${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -309,11 +309,11 @@ function getBouquetSVG(type, variation = 0) {
       </linearGradient>
     </defs>
     <g class="bouquet-paper">
-      <path d="M-28,20 Q-30,5 -22,-10 Q-15,-20 0,-22 Q15,-20 22,-10 Q30,5 28,20 Q20,28 0,30 Q-20,28 -28,20 Z" 
-        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.6)" stroke-width="0.6" opacity="0.85"/>
-      <path d="M-22,22 Q-24,26 -20,32 L0,36 L20,32 Q24,26 22,22" 
-        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.5)" stroke-width="0.4" opacity="0.7"/>
-      <path d="M-18,34 Q0,40 18,34" fill="none" stroke="rgba(200,185,165,0.3)" stroke-width="0.3"/>
+      <path d="M-26,24 Q-28,10 -20,-8 Q-12,-18 0,-20 Q12,-18 20,-8 Q28,10 26,24 Q18,30 0,32 Q-18,30 -26,24 Z" 
+        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.4"/>
+      <path d="M-20,26 Q-22,30 -18,34 L0,38 L18,34 Q22,30 20,26" 
+        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.3"/>
+      <path d="M-16,36 Q0,42 16,36" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
     </g>`;
 
   return `<svg viewBox="-38 -38 76 120" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-${type}" aria-hidden="true">
@@ -612,7 +612,8 @@ function renderGarden() {
   }
 
   canvas.innerHTML = '';
-  valentineData.notes.forEach((note, index) => {
+  const notesByDate = [...valentineData.notes].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+  notesByDate.forEach((note, index) => {
     const card = document.createElement('div');
     card.className = `flower-card ${note.bloomed ? 'bloomed' : 'seed'}`;
     if (note.exclusive) {
