@@ -2819,7 +2819,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-top: 6px;
+  margin-top: 2px;
   justify-content: center;
   align-items: center;
 }
@@ -2859,6 +2859,13 @@ body:not(.light-theme) .edge-nav-right:hover {
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.flower-card:hover .flower-add-photo-btn,
+.pressed-specimen:hover .flower-add-photo-btn {
+  opacity: 1;
 }
 
 .flower-add-photo-btn span {
@@ -2883,7 +2890,7 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 .pressed-specimen .flower-images-attached {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 
@@ -2908,10 +2915,12 @@ body:not(.light-theme) .edge-nav-right:hover {
 
 .flower-modal-content {
   display: flex;
-  gap: 32px;
+  gap: 40px;
   align-items: flex-start;
-  max-width: 90vw;
+  max-width: 95vw;
   max-height: 90vh;
+  padding-left: 5vw;
+  justify-content: flex-start;
 }
 
 .flower-modal-left {
@@ -2919,6 +2928,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
+  margin-right: 0;
 }
 
 .flower-modal-flower {
@@ -2952,14 +2962,16 @@ body:not(.light-theme) .edge-nav-right:hover {
 .flower-modal-images {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 320px;
+  gap: 16px;
+  max-width: 480px;
+  flex: 1;
 }
 
 .flower-modal-image-wrap {
   position: relative;
-  max-width: 280px;
-  max-height: 280px;
+  max-width: 420px;
+  max-height: 420px;
+  min-width: 300px;
 }
 
 .flower-modal-image-wrap img {
