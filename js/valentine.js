@@ -47,7 +47,7 @@ const EXCLUSIVE_FLOWERS = [
     flowerType: 'orchid',
     bloomed: true,
     exclusive: true,
-    createdAt: Date.now()
+    createdAt: new Date(2026, 1, 14).getTime()
   },
   {
     id: 'exclusive_simple_a',
@@ -55,7 +55,7 @@ const EXCLUSIVE_FLOWERS = [
     flowerType: 'simple_a',
     bloomed: true,
     exclusive: true,
-    createdAt: Date.now()
+    createdAt: new Date(2026, 1, 15).getTime()
   },
   {
     id: 'exclusive_simple_b',
@@ -63,7 +63,7 @@ const EXCLUSIVE_FLOWERS = [
     flowerType: 'simple_b',
     bloomed: true,
     exclusive: true,
-    createdAt: Date.now()
+    createdAt: new Date(2026, 1, 17).getTime()
   }
 ];
 
@@ -245,10 +245,9 @@ function getFlowerSVG(type, variation = 0) {
 
 function getBouquetSVG(type, variation = 0) {
   const colors = FLOWER_COLORS[type] || FLOWER_COLORS.rose;
-  const uniqueId = `_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+  const uniqueId = `bq_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
   let flowers = '';
   
-  // Create 3 flowers in a bouquet arrangement
   switch (type) {
     case 'orchid':
       flowers = `
@@ -290,9 +289,36 @@ function getBouquetSVG(type, variation = 0) {
       return getFlowerSVG(type, variation);
   }
   
-  const stem = getStemSVG(type, variation);
-  return `<svg viewBox="-35 -35 70 110" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-${type}" aria-hidden="true">
-    ${stem}
+  // Multiple stems fanning out for bouquet
+  const stems = `
+    <g class="bouquet-stems">
+      <line x1="0" y1="8" x2="-4" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="8" x2="0" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="8" x2="5" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+      <ellipse cx="-8" cy="40" rx="6" ry="3" transform="rotate(-25 -8 40)" fill="#6a8a5a" opacity="0.6"/>
+      <ellipse cx="10" cy="45" rx="5" ry="2.5" transform="rotate(20 10 45)" fill="#6a8a5a" opacity="0.5"/>
+    </g>`;
+
+  // Wrapping paper behind the bouquet
+  const paper = `
+    <defs>
+      <linearGradient id="paperGrad${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#faf6f0"/>
+        <stop offset="50%" stop-color="#f5efe6"/>
+        <stop offset="100%" stop-color="#ede5d8"/>
+      </linearGradient>
+    </defs>
+    <g class="bouquet-paper">
+      <path d="M-28,20 Q-30,5 -22,-10 Q-15,-20 0,-22 Q15,-20 22,-10 Q30,5 28,20 Q20,28 0,30 Q-20,28 -28,20 Z" 
+        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.6)" stroke-width="0.6" opacity="0.85"/>
+      <path d="M-22,22 Q-24,26 -20,32 L0,36 L20,32 Q24,26 22,22" 
+        fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.5)" stroke-width="0.4" opacity="0.7"/>
+      <path d="M-18,34 Q0,40 18,34" fill="none" stroke="rgba(200,185,165,0.3)" stroke-width="0.3"/>
+    </g>`;
+
+  return `<svg viewBox="-38 -38 76 120" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-${type}" aria-hidden="true">
+    ${stems}
+    ${paper}
     <g class="flower-head bouquet-head">
       ${flowers}
     </g>
@@ -470,13 +496,14 @@ function loadValentineData() {
     valentineData.flowerDeckIndex = FLOWER_TYPES.length;
   }
   
-  // Add exclusive flowers if not already present
-  EXCLUSIVE_FLOWERS.forEach(exclusiveFlower => {
-    const exists = valentineData.notes.some(note => note.id === exclusiveFlower.id);
-    if (!exists) {
-      valentineData.notes.unshift(exclusiveFlower);
-    }
+  // Ensure exclusive flowers are present and always at the top in order
+  const exclusiveIds = new Set(EXCLUSIVE_FLOWERS.map(f => f.id));
+  const userNotes = valentineData.notes.filter(n => !exclusiveIds.has(n.id));
+  const exclusiveOrdered = EXCLUSIVE_FLOWERS.map(ef => {
+    const existing = valentineData.notes.find(n => n.id === ef.id);
+    return existing ? { ...ef, ...existing, exclusive: true, bloomed: true } : ef;
   });
+  valentineData.notes = [...exclusiveOrdered, ...userNotes];
 }
 
 function saveValentineData() {
@@ -609,22 +636,37 @@ function renderGarden() {
     if (note.bloomed) {
       const flowerLabel = FLOWER_LABELS[note.flowerType] || note.flowerType;
       const flowerName = FLOWER_NAMES[note.flowerType] || note.flowerType.charAt(0).toUpperCase() + note.flowerType.slice(1).replace('_', ' ');
-      const speciesInfo = `<div class="flower-species">${flowerLabel} · ${flowerName}</div>`;
-      const exclusiveLabel = note.exclusive ? '<div class="exclusive-label">From Gesan</div>' : '';
-      const deleteBtn = note.exclusive ? '' : `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </button>`;
-      card.innerHTML = `
-        <div class="flower-bloom-container">
-          ${note.exclusive ? getBouquetSVG(note.flowerType, index) : getFlowerSVG(note.flowerType, index)}
-          <div class="flower-letter">
-            <p class="flower-letter-text">${escapeHtml(note.text)}</p>
+      const datePrefix = note.exclusive ? 'Given' : 'Planted';
+      const dateClass = note.exclusive ? 'flower-date given-date' : 'flower-date';
+
+      if (note.exclusive) {
+        // Bouquet: glowing text, species, "From Gesan", no tags
+        const speciesInfo = `<div class="flower-species"><span class="flower-species-latin">${flowerLabel}</span><span class="flower-species-common">${flowerName}</span></div>`;
+        card.innerHTML = `
+          <div class="flower-bloom-container bouquet-container">
+            ${getBouquetSVG(note.flowerType, index)}
+            <div class="flower-letter-exclusive">
+              <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
+            </div>
           </div>
-        </div>
-        ${speciesInfo}
-        ${exclusiveLabel}
-        <div class="flower-date">Planted ${formatDate(note.createdAt)}</div>
-        ${deleteBtn}`;
+          ${speciesInfo}
+          <div class="exclusive-label">From Gesan</div>
+          <div class="${dateClass}">${datePrefix} ${formatDate(note.createdAt)}</div>`;
+      } else {
+        // Normal flower: tag-style letter, no species in garden
+        const deleteBtn = `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>`;
+        card.innerHTML = `
+          <div class="flower-bloom-container">
+            ${getFlowerSVG(note.flowerType, index)}
+            <div class="flower-letter">
+              <p class="flower-letter-text">${escapeHtml(note.text)}</p>
+            </div>
+          </div>
+          <div class="${dateClass}">${datePrefix} ${formatDate(note.createdAt)}</div>
+          ${deleteBtn}`;
+      }
     } else {
       card.innerHTML = `
         <div class="flower-bud-container">
@@ -757,18 +799,25 @@ function renderAlbum() {
 }
 
 function renderSpecimen(note, variation) {
-  return `<div class="pressed-specimen" data-note-id="${note.id}" role="article" aria-label="${FLOWER_LABELS[note.flowerType]}: ${escapeHtml(note.text)}">
+  const flowerLabel = FLOWER_LABELS[note.flowerType] || note.flowerType;
+  const flowerName = FLOWER_NAMES[note.flowerType] || note.flowerType;
+  const datePrefix = note.exclusive ? 'Given' : 'Planted';
+  const deleteBtn = note.exclusive ? '' : `<button class="specimen-delete-btn" data-note-id="${note.id}" aria-label="Delete specimen" title="Delete specimen">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>`;
+  const exclusiveFrom = note.exclusive ? '<span class="specimen-from">From Gesan</span>' : '';
+  return `<div class="pressed-specimen${note.exclusive ? ' exclusive-specimen' : ''}" data-note-id="${note.id}" role="article" aria-label="${flowerLabel}: ${escapeHtml(note.text)}">
     <div class="specimen-flower">
       ${getPressedFlowerSVG(note.flowerType, variation)}
     </div>
     <div class="specimen-label">
-      <span class="specimen-species">${FLOWER_LABELS[note.flowerType]}</span>
-      <span class="specimen-date">${formatDate(note.createdAt)}</span>
+      <span class="specimen-species">${flowerLabel}</span>
+      <span class="specimen-common">${flowerName}</span>
+      ${exclusiveFrom}
+      <span class="specimen-date">${datePrefix} ${formatDate(note.createdAt)}</span>
     </div>
     <p class="specimen-note">${escapeHtml(note.text)}</p>
-    <button class="specimen-delete-btn" data-note-id="${note.id}" aria-label="Delete specimen" title="Delete specimen">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </button>
+    ${deleteBtn}
   </div>`;
 }
 
