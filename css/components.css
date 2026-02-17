@@ -2395,7 +2395,7 @@ body:not(.light-theme) .edge-nav-right:hover {
 /* Letter Inside Flower */
 .flower-letter {
   position: absolute;
-  bottom: -8px;
+  bottom: -32px;
   left: 50%;
   transform: translateX(-50%);
   width: 110px;
