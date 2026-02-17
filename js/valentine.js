@@ -28,6 +28,17 @@ const FLOWER_LABELS = {
   simple_b: 'Primula'
 };
 
+const FLOWER_NAMES = {
+  rose: 'Rose',
+  tulip: 'Tulip',
+  daisy: 'Daisy',
+  peony: 'Peony',
+  ranunculus: 'Ranunculus',
+  orchid: 'Orchid',
+  simple_a: 'Bellflower',
+  simple_b: 'Primrose'
+};
+
 // Exclusive flowers from Gesan (pre-planted, always bloomed)
 const EXCLUSIVE_FLOWERS = [
   {
@@ -229,6 +240,62 @@ function getFlowerSVG(type, variation = 0) {
   return `<svg viewBox="-35 -35 70 110" xmlns="http://www.w3.org/2000/svg" class="flower-svg flower-${type}" aria-hidden="true">
     ${stem}
     ${head}
+  </svg>`;
+}
+
+function getBouquetSVG(type, variation = 0) {
+  const colors = FLOWER_COLORS[type] || FLOWER_COLORS.rose;
+  const uniqueId = `_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+  let flowers = '';
+  
+  // Create 3 flowers in a bouquet arrangement
+  switch (type) {
+    case 'orchid':
+      flowers = `
+        <g transform="translate(-15, -5) scale(0.85)">
+          ${getOrchidFlowerSVG(colors)}
+        </g>
+        <g transform="translate(0, 0) scale(1)">
+          ${getOrchidFlowerSVG(colors)}
+        </g>
+        <g transform="translate(18, -3) scale(0.9) rotate(15)">
+          ${getOrchidFlowerSVG(colors)}
+        </g>`;
+      break;
+    case 'simple_a':
+      flowers = `
+        <g transform="translate(-12, -2) scale(0.9)">
+          ${getSimpleAFlowerSVG(colors)}
+        </g>
+        <g transform="translate(0, 0) scale(1.1)">
+          ${getSimpleAFlowerSVG(colors)}
+        </g>
+        <g transform="translate(14, -4) scale(0.85) rotate(20)">
+          ${getSimpleAFlowerSVG(colors)}
+        </g>`;
+      break;
+    case 'simple_b':
+      flowers = `
+        <g transform="translate(-14, -3) scale(0.85)">
+          ${getSimpleBFlowerSVG(colors)}
+        </g>
+        <g transform="translate(0, 0) scale(1)">
+          ${getSimpleBFlowerSVG(colors)}
+        </g>
+        <g transform="translate(16, -2) scale(0.9) rotate(-15)">
+          ${getSimpleBFlowerSVG(colors)}
+        </g>`;
+      break;
+    default:
+      return getFlowerSVG(type, variation);
+  }
+  
+  const stem = getStemSVG(type, variation);
+  return `<svg viewBox="-35 -35 70 110" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-${type}" aria-hidden="true">
+    ${stem}
+    <g class="flower-head bouquet-head">
+      ${flowers}
+    </g>
   </svg>`;
 }
 
@@ -540,18 +607,22 @@ function renderGarden() {
     card.style.setProperty('--scatter-r', `${rotate}deg`);
 
     if (note.bloomed) {
-      const exclusiveBadge = note.exclusive ? '<div class="exclusive-badge">From Gesan</div>' : '';
+      const flowerLabel = FLOWER_LABELS[note.flowerType] || note.flowerType;
+      const flowerName = FLOWER_NAMES[note.flowerType] || note.flowerType.charAt(0).toUpperCase() + note.flowerType.slice(1).replace('_', ' ');
+      const speciesInfo = `<div class="flower-species">${flowerLabel} · ${flowerName}</div>`;
+      const exclusiveLabel = note.exclusive ? '<div class="exclusive-label">From Gesan</div>' : '';
       const deleteBtn = note.exclusive ? '' : `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </button>`;
       card.innerHTML = `
         <div class="flower-bloom-container">
-          ${getFlowerSVG(note.flowerType, index)}
-          ${exclusiveBadge}
+          ${note.exclusive ? getBouquetSVG(note.flowerType, index) : getFlowerSVG(note.flowerType, index)}
           <div class="flower-letter">
             <p class="flower-letter-text">${escapeHtml(note.text)}</p>
           </div>
         </div>
+        ${speciesInfo}
+        ${exclusiveLabel}
         <div class="flower-date">Planted ${formatDate(note.createdAt)}</div>
         ${deleteBtn}`;
     } else {

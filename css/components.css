@@ -2395,7 +2395,7 @@ body:not(.light-theme) .edge-nav-right:hover {
 /* Letter Inside Flower */
 .flower-letter {
   position: absolute;
-  bottom: -32px;
+  bottom: -50px;
   left: 50%;
   transform: translateX(-50%);
   width: 110px;
@@ -2460,6 +2460,21 @@ body:not(.light-theme) .edge-nav-right:hover {
   opacity: 1;
 }
 
+/* Flower Species Info */
+.flower-species {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.75rem;
+  color: rgba(183,110,121,0.7);
+  text-align: center;
+  margin-top: 4px;
+  font-style: italic;
+  letter-spacing: 0.3px;
+}
+
+.light-theme .flower-species {
+  color: rgba(139,69,87,0.6);
+}
+
 /* Exclusive Flowers */
 .flower-card.exclusive-flower {
   border: 2px solid rgba(200,160,216,0.4);
@@ -2470,20 +2485,18 @@ body:not(.light-theme) .edge-nav-right:hover {
   box-shadow: 0 6px 28px rgba(200,160,216,0.25), 0 0 50px rgba(200,160,216,0.15);
 }
 
-.exclusive-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: linear-gradient(135deg, rgba(200,160,216,0.95), rgba(176,136,192,0.95));
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  z-index: 15;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
+.exclusive-label {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.85rem;
+  color: rgba(200,160,216,0.9);
+  text-align: center;
+  margin-top: 6px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.light-theme .exclusive-label {
+  color: rgba(176,136,192,0.8);
 }
 
 .flower-delete-btn:hover {
