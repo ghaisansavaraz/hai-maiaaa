@@ -11,7 +11,10 @@ const FLOWER_COLORS = {
   tulip: { primary: '#e8a68c', secondary: '#d4846a', accent: '#b06a52', center: '#c9a84c' },
   daisy: { primary: '#f0e0e6', secondary: '#e8d0d8', accent: '#d4b8c2', center: '#d4b870' },
   peony: { primary: '#e8b8c8', secondary: '#d4a0b0', accent: '#c088a0', center: '#c9a84c' },
-  ranunculus: { primary: '#e8c8d8', secondary: '#d8b0c0', accent: '#c898a8', center: '#b8a060' }
+  ranunculus: { primary: '#e8c8d8', secondary: '#d8b0c0', accent: '#c898a8', center: '#b8a060' },
+  orchid: { primary: '#c8a0d8', secondary: '#b088c0', accent: '#9870a8', center: '#d4c870' },
+  simple_a: { primary: '#b8d8e8', secondary: '#a0c0d4', accent: '#88a8c0', center: '#c9c84c' },
+  simple_b: { primary: '#e8d8b8', secondary: '#d4c0a0', accent: '#c0a888', center: '#c9b84c' }
 };
 
 const FLOWER_LABELS = {
@@ -19,8 +22,39 @@ const FLOWER_LABELS = {
   tulip: 'Tulipa',
   daisy: 'Bellis perennis',
   peony: 'Paeonia',
-  ranunculus: 'Ranunculus'
+  ranunculus: 'Ranunculus',
+  orchid: 'Orchidaceae',
+  simple_a: 'Campanula',
+  simple_b: 'Primula'
 };
+
+// Exclusive flowers from Gesan (pre-planted, always bloomed)
+const EXCLUSIVE_FLOWERS = [
+  {
+    id: 'exclusive_orchid',
+    text: 'Lovely love day beautiful Orchids to my lovely beautiful Maia',
+    flowerType: 'orchid',
+    bloomed: true,
+    exclusive: true,
+    createdAt: Date.now()
+  },
+  {
+    id: 'exclusive_simple_a',
+    text: 'To my good girl who takes her vitamins as she should',
+    flowerType: 'simple_a',
+    bloomed: true,
+    exclusive: true,
+    createdAt: Date.now()
+  },
+  {
+    id: 'exclusive_simple_b',
+    text: "Maia, I'm sorry if my words felt harsh to you. That was never how I meant them, I wouldn't treat my kind pretty Maia without kindness.",
+    flowerType: 'simple_b',
+    bloomed: true,
+    exclusive: true,
+    createdAt: Date.now()
+  }
+];
 
 // ===== SVG FLOWER DEFINITIONS =====
 
@@ -141,6 +175,42 @@ function getRanunculusFlowerSVG(colors) {
   </g>`;
 }
 
+function getOrchidFlowerSVG(colors) {
+  return `<g class="flower-head">
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-8" rx="14" ry="18" fill="${colors.primary}" opacity="0.6"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-35)"><ellipse cx="-6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(35)"><ellipse cx="6" cy="-6" rx="10" ry="14" fill="${colors.secondary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:3"><path d="M-8,-2 Q-10,-8 -6,-12 Q0,-10 6,-12 Q10,-8 8,-2 Q4,0 0,2 Q-4,0 -8,-2" fill="${colors.accent}" opacity="0.5"/></g>
+    <circle cx="0" cy="-4" r="3" fill="${colors.center}" opacity="0.7"/>
+    <ellipse cx="0" cy="-3" rx="2" ry="4" fill="${colors.primary}" opacity="0.4"/>
+  </g>`;
+}
+
+function getSimpleAFlowerSVG(colors) {
+  return `<g class="flower-head">
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-6" rx="8" ry="10" fill="${colors.primary}" opacity="0.6"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(-25)"><ellipse cx="-4" cy="-5" rx="6" ry="8" fill="${colors.secondary}" opacity="0.7"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(25)"><ellipse cx="4" cy="-5" rx="6" ry="8" fill="${colors.secondary}" opacity="0.7"/></g>
+    <circle cx="0" cy="-4" r="3" fill="${colors.center}" opacity="0.6"/>
+  </g>`;
+}
+
+function getSimpleBFlowerSVG(colors) {
+  const petals = [];
+  for (let i = 0; i < 5; i++) {
+    const angleDeg = (i * 360) / 5;
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const r = 10;
+    const tx = Math.sin(angleRad) * r;
+    const ty = -Math.cos(angleRad) * r;
+    petals.push(`<g transform="translate(${tx.toFixed(2)}, ${ty.toFixed(2)}) rotate(${angleDeg})"><g class="petal" style="--petal-delay:${i}"><ellipse cx="0" cy="0" rx="4" ry="7" fill="${colors.primary}" opacity="0.6"/></g></g>`);
+  }
+  return `<g class="flower-head">
+    ${petals.join('\n    ')}
+    <circle cx="0" cy="0" r="4" fill="${colors.center}" opacity="0.7"/>
+  </g>`;
+}
+
 function getFlowerSVG(type, variation = 0) {
   const colors = FLOWER_COLORS[type] || FLOWER_COLORS.rose;
   const uniqueId = `_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
@@ -150,6 +220,9 @@ function getFlowerSVG(type, variation = 0) {
     case 'daisy': head = getDaisyFlowerSVG(colors); break;
     case 'peony': head = getPeonyFlowerSVG(colors); break;
     case 'ranunculus': head = getRanunculusFlowerSVG(colors); break;
+    case 'orchid': head = getOrchidFlowerSVG(colors); break;
+    case 'simple_a': head = getSimpleAFlowerSVG(colors); break;
+    case 'simple_b': head = getSimpleBFlowerSVG(colors); break;
     default: head = getRoseFlowerSVG(colors, uniqueId);
   }
   const stem = getStemSVG(type, variation);
@@ -182,6 +255,19 @@ function getBudSVG(type) {
       bud = `<ellipse cx="0" cy="-6" rx="5" ry="9" fill="${colors.primary}"/>
         <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="${colors.secondary}" opacity="0.7"/>
         <ellipse cx="0" cy="-8" rx="2" ry="5" fill="${colors.accent}" opacity="0.6"/>`;
+      break;
+    case 'orchid':
+      bud = `<ellipse cx="0" cy="-7" rx="6" ry="11" fill="${colors.primary}"/>
+        <ellipse cx="0" cy="-8" rx="4" ry="9" fill="${colors.secondary}" opacity="0.7"/>
+        <path d="M-3,-2 Q0,-4 3,-2" fill="${colors.accent}" opacity="0.6"/>`;
+      break;
+    case 'simple_a':
+      bud = `<ellipse cx="0" cy="-6" rx="5" ry="8" fill="${colors.primary}"/>
+        <ellipse cx="0" cy="-7" rx="3" ry="6" fill="${colors.secondary}" opacity="0.7"/>`;
+      break;
+    case 'simple_b':
+      bud = `<ellipse cx="0" cy="-5" rx="5" ry="7" fill="${colors.primary}"/>
+        <circle cx="0" cy="-6" r="3" fill="${colors.secondary}" opacity="0.7"/>`;
       break;
     default: // rose
       bud = `<ellipse cx="0" cy="-6" rx="6" ry="10" fill="${colors.primary}"/>
@@ -241,6 +327,28 @@ function getPressedFlowerSVG(type, variation = 0) {
       head = layers.join('') + `<circle cx="0" cy="0" r="3" fill="${muted.center}"/>`;
       break;
     }
+    case 'orchid':
+      head = `<ellipse cx="0" cy="-8" rx="14" ry="18" fill="${muted.primary}" opacity="0.6"/>
+        <ellipse cx="-6" cy="-6" rx="10" ry="14" fill="${muted.secondary}" transform="rotate(-35)"/>
+        <ellipse cx="6" cy="-6" rx="10" ry="14" fill="${muted.secondary}" transform="rotate(35)"/>
+        <path d="M-8,-2 Q-10,-8 -6,-12 Q0,-10 6,-12 Q10,-8 8,-2 Q4,0 0,2 Q-4,0 -8,-2" fill="${muted.accent}" opacity="0.5"/>
+        <circle cx="0" cy="-4" r="3" fill="${muted.center}"/>`;
+      break;
+    case 'simple_a':
+      head = `<ellipse cx="0" cy="-6" rx="8" ry="10" fill="${muted.primary}" opacity="0.6"/>
+        <ellipse cx="-4" cy="-5" rx="6" ry="8" fill="${muted.secondary}" transform="rotate(-25)"/>
+        <ellipse cx="4" cy="-5" rx="6" ry="8" fill="${muted.secondary}" transform="rotate(25)"/>
+        <circle cx="0" cy="-4" r="3" fill="${muted.center}"/>`;
+      break;
+    case 'simple_b': {
+      const petals = [];
+      for (let i = 0; i < 5; i++) {
+        const a = (i * 360) / 5;
+        petals.push(`<ellipse cx="0" cy="-10" rx="4" ry="7" fill="${muted.primary}" transform="rotate(${a})"/>`);
+      }
+      head = petals.join('') + `<circle cx="0" cy="0" r="4" fill="${muted.center}"/>`;
+      break;
+    }
     default: // rose
       head = `<ellipse cx="0" cy="-2" rx="16" ry="14" fill="${muted.primary}"/>
         <ellipse cx="-4" cy="-3" rx="10" ry="10" fill="${muted.secondary}" transform="rotate(-20)"/>
@@ -294,6 +402,14 @@ function loadValentineData() {
     valentineData.flowerDeck = null;
     valentineData.flowerDeckIndex = FLOWER_TYPES.length;
   }
+  
+  // Add exclusive flowers if not already present
+  EXCLUSIVE_FLOWERS.forEach(exclusiveFlower => {
+    const exists = valentineData.notes.some(note => note.id === exclusiveFlower.id);
+    if (!exists) {
+      valentineData.notes.unshift(exclusiveFlower);
+    }
+  });
 }
 
 function saveValentineData() {
@@ -349,6 +465,11 @@ function addNote(text) {
 function deleteNote(id) {
   const idx = valentineData.notes.findIndex(n => n.id === id);
   if (idx === -1) return false;
+  // Prevent deletion of exclusive flowers
+  if (valentineData.notes[idx].exclusive) {
+    debugLog('Cannot delete exclusive flower:', id);
+    return false;
+  }
   valentineData.notes.splice(idx, 1);
   saveValentineData();
   debugLog('Note deleted:', id);
@@ -400,6 +521,9 @@ function renderGarden() {
   valentineData.notes.forEach((note, index) => {
     const card = document.createElement('div');
     card.className = `flower-card ${note.bloomed ? 'bloomed' : 'seed'}`;
+    if (note.exclusive) {
+      card.classList.add('exclusive-flower');
+    }
     card.setAttribute('data-note-id', note.id);
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
@@ -416,17 +540,20 @@ function renderGarden() {
     card.style.setProperty('--scatter-r', `${rotate}deg`);
 
     if (note.bloomed) {
+      const exclusiveBadge = note.exclusive ? '<div class="exclusive-badge">From Gesan</div>' : '';
+      const deleteBtn = note.exclusive ? '' : `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>`;
       card.innerHTML = `
         <div class="flower-bloom-container">
           ${getFlowerSVG(note.flowerType, index)}
+          ${exclusiveBadge}
           <div class="flower-letter">
             <p class="flower-letter-text">${escapeHtml(note.text)}</p>
           </div>
         </div>
         <div class="flower-date">Planted ${formatDate(note.createdAt)}</div>
-        <button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </button>`;
+        ${deleteBtn}`;
     } else {
       card.innerHTML = `
         <div class="flower-bud-container">
@@ -435,17 +562,21 @@ function renderGarden() {
         <div class="flower-date">Planted ${formatDate(note.createdAt)}</div>`;
     }
 
-    // Click to bloom/re-bloom
+    // Click to bloom/re-bloom (exclusive flowers can't be closed)
     card.addEventListener('click', (e) => {
       if (e.target.closest('.flower-delete-btn')) return;
-      handleBloom(note.id, card);
+      if (!note.exclusive) {
+        handleBloom(note.id, card);
+      }
     });
 
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         if (e.target.closest('.flower-delete-btn')) return;
-        handleBloom(note.id, card);
+        if (!note.exclusive) {
+          handleBloom(note.id, card);
+        }
       }
     });
 
