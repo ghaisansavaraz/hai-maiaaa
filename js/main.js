@@ -340,20 +340,23 @@ function updateMuteButtonUI(muted) {
   if (!muteIcon || !muteBtn) return;
   
   if (muted) {
-    // Show muted icon (speaker with X)
+    // Muted: closed flower bud (quiet / resting)
     muteIcon.innerHTML = `
-      <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
-      <line x1="23" y1="9" x2="17" y2="15"></line>
-      <line x1="17" y1="9" x2="23" y2="15"></line>
+      <path d="M12 5.5 C16 9 16 15 12 18.5 C8 15 8 9 12 5.5 Z"/>
+      <path d="M12 18.5 L12 21 M10.5 19.5 Q12 18.5 13.5 19.5"/>
     `;
     muteBtn.setAttribute('aria-label', 'Unmute audio');
     muteBtn.setAttribute('title', 'Unmute');
     muteBtn.classList.add('muted');
   } else {
-    // Show unmuted icon (speaker with waves)
+    // Unmuted: open flower (blooming / sound on)
     muteIcon.innerHTML = `
-      <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
-      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      <circle cx="12" cy="12" r="2.2"/>
+      <ellipse cx="12" cy="7.2" rx="3" ry="5.2" transform="rotate(0 12 12)"/>
+      <ellipse cx="12" cy="7.2" rx="3" ry="5.2" transform="rotate(72 12 12)"/>
+      <ellipse cx="12" cy="7.2" rx="3" ry="5.2" transform="rotate(144 12 12)"/>
+      <ellipse cx="12" cy="7.2" rx="3" ry="5.2" transform="rotate(216 12 12)"/>
+      <ellipse cx="12" cy="7.2" rx="3" ry="5.2" transform="rotate(288 12 12)"/>
     `;
     muteBtn.setAttribute('aria-label', 'Mute audio');
     muteBtn.setAttribute('title', 'Mute');

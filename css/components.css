@@ -2220,10 +2220,20 @@ body:not(.light-theme) .edge-nav-right:hover {
   transform: scale(0.95);
 }
 
-.valentine-mute-btn svg {
-  width: 20px;
-  height: 20px;
+.valentine-mute-btn svg,
+.valentine-mute-btn .valentine-mute-icon {
+  width: 22px;
+  height: 22px;
   stroke: currentColor;
+  transition: transform 0.25s ease;
+}
+
+.valentine-mute-btn:not(.muted):hover svg {
+  transform: scale(1.08) rotate(-5deg);
+}
+
+.valentine-mute-btn.muted:hover svg {
+  transform: scale(1.05);
 }
 
 .light-theme .valentine-mute-btn {
