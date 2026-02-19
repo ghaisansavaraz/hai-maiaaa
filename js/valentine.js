@@ -678,6 +678,7 @@ function escapeHtml(text) {
 function renderFlowerImages(note, forGarden = true) {
   const imgs = note.images || [];
   const canAdd = imgs.length < MAX_IMAGES_PER_NOTE;
+  if (forGarden && imgs.length === 0) return '';
   const smallClass = forGarden ? 'flower-thumb' : 'specimen-thumb';
   const classes = ['flower-images-attached'];
   if (imgs.length === 0) classes.push('no-images');
@@ -686,7 +687,7 @@ function renderFlowerImages(note, forGarden = true) {
   imgs.forEach((src, i) => {
     html += `<img class="${smallClass} flower-image-clickable" src="${src}" alt="Photo ${i + 1}" data-note-id="${note.id}" data-img-index="${i}" />`;
   });
-  if (canAdd) {
+  if (canAdd && !forGarden) {
     html += `<label class="flower-add-photo-btn" title="Add photo"><input type="file" accept="image/*" class="flower-add-photo-input" data-note-id="${note.id}" multiple/><span>+</span></label>`;
   }
   html += '</div>';
@@ -846,7 +847,7 @@ function renderGarden() {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.flower-delete-btn')) return;
       if (e.target.closest('.flower-images-attached')) return;
-      if (note.bloomed && (e.target.closest('.flower-note-clickable') || e.target.closest('.flower-bloom-container'))) {
+      if (note.bloomed && e.target.closest('.flower-note-clickable')) {
         openFlowerDetailModal(note.id);
       } else if (!note.bloomed && !note.exclusive) {
         handleBloom(note.id, card);
@@ -857,7 +858,10 @@ function renderGarden() {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         if (e.target.closest('.flower-delete-btn')) return;
-        if (!note.exclusive) {
+        if (e.target.closest('.flower-images-attached')) return;
+        if (note.bloomed && e.target.closest('.flower-note-clickable')) {
+          openFlowerDetailModal(note.id);
+        } else if (!note.bloomed && !note.exclusive) {
           handleBloom(note.id, card);
         }
       }

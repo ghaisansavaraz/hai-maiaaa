@@ -2455,10 +2455,6 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 /* Move letter down when add button appears on hover so it’s not covered */
-.flower-card:hover:has(.flower-add-photo-btn) .flower-letter,
-.flower-card:hover:has(.flower-add-photo-btn) .flower-letter-exclusive {
-  margin-top: 36px;
-}
 
 .flower-letter-exclusive .flower-letter-glow {
   opacity: 1;
@@ -2489,10 +2485,6 @@ body:not(.light-theme) .edge-nav-right:hover {
   transition: margin-top 0.2s ease;
 }
 
-/* Move date down when add button appears on hover */
-.flower-card:hover:has(.flower-add-photo-btn) .flower-date {
-  margin-top: 10px;
-}
 
 .light-theme .flower-date {
   color: rgba(60,40,50,0.35);
@@ -2530,10 +2522,6 @@ body:not(.light-theme) .edge-nav-right:hover {
   transition: margin-top 0.2s ease;
 }
 
-/* Move species info down when add button appears on hover */
-.flower-card:hover:has(.flower-add-photo-btn) .flower-species {
-  margin-top: 10px;
-}
 
 .flower-species-latin {
   font-family: "Cormorant Garamond", Georgia, serif;
@@ -2943,15 +2931,6 @@ body:not(.light-theme) .edge-nav-right:hover {
   transform: translateX(-50%);
   margin: 0;
   min-height: 0;
-}
-
-/* Garden: no-images in flow, minimal gap so tag sits close; on hover letter moves and button appears */
-.flower-bloom-container .flower-images-attached.no-images {
-  position: static;
-  transform: none;
-  margin-top: 0;
-  min-height: 0;
-  justify-content: center;
 }
 
 .flower-images-attached.single-image {
