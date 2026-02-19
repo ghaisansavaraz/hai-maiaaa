@@ -686,20 +686,11 @@ function renderFlowerImages(note, forGarden = true) {
   imgs.forEach((src, i) => {
     html += `<img class="${smallClass} flower-image-clickable" src="${src}" alt="Photo ${i + 1}" data-note-id="${note.id}" data-img-index="${i}" />`;
   });
-  // In garden with 0 images, add button is rendered below the flowers (flower-add-photo-below), not here
-  const addButtonInAttached = canAdd && !(forGarden && imgs.length === 0);
-  if (addButtonInAttached) {
+  if (canAdd) {
     html += `<label class="flower-add-photo-btn" title="Add photo"><input type="file" accept="image/*" class="flower-add-photo-input" data-note-id="${note.id}" multiple/><span>+</span></label>`;
   }
   html += '</div>';
   return html;
-}
-
-function getAddPhotoButtonHtml(note) {
-  const imgs = note.images || [];
-  const canAdd = imgs.length < MAX_IMAGES_PER_NOTE;
-  if (!canAdd) return '';
-  return `<label class="flower-add-photo-btn" title="Add photo"><input type="file" accept="image/*" class="flower-add-photo-input" data-note-id="${note.id}" multiple/><span>+</span></label>`;
 }
 
 function openFlowerDetailModal(noteId) {
@@ -817,7 +808,6 @@ function renderGarden() {
       if (note.exclusive) {
         const speciesInfo = `<div class="flower-species"><span class="flower-species-latin">${flowerLabel}</span><span class="flower-species-common">${flowerName}</span></div>`;
         const imagesHtml = renderFlowerImages(note, true);
-        const addPhotoBelow = (note.images || []).length === 0 ? `<div class="flower-add-photo-below">${getAddPhotoButtonHtml(note)}</div>` : '';
         card.innerHTML = `
           <div class="flower-bloom-container bouquet-container">
             ${getBouquetSVG(note.flowerType, index)}
@@ -825,7 +815,6 @@ function renderGarden() {
             <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
               <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
             </div>
-            ${addPhotoBelow}
           </div>
           ${speciesInfo}
           <div class="exclusive-label">From Gesan</div>
@@ -835,7 +824,6 @@ function renderGarden() {
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>`;
         const imagesHtml = renderFlowerImages(note, true);
-        const addPhotoBelow = (note.images || []).length === 0 ? `<div class="flower-add-photo-below">${getAddPhotoButtonHtml(note)}</div>` : '';
         card.innerHTML = `
           <div class="flower-bloom-container">
             ${getFlowerSVG(note.flowerType, index)}
@@ -843,7 +831,6 @@ function renderGarden() {
             <div class="flower-letter flower-note-clickable" data-note-id="${note.id}">
               <p class="flower-letter-text">${escapeHtml(note.text)}</p>
             </div>
-            ${addPhotoBelow}
           </div>
           <div class="${dateClass}">${datePrefix} ${formatDate(note.createdAt)}</div>
           ${deleteBtn}`;
@@ -859,7 +846,6 @@ function renderGarden() {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.flower-delete-btn')) return;
       if (e.target.closest('.flower-images-attached')) return;
-      if (e.target.closest('.flower-add-photo-below')) return;
       if (note.bloomed && (e.target.closest('.flower-note-clickable') || e.target.closest('.flower-bloom-container'))) {
         openFlowerDetailModal(note.id);
       } else if (!note.bloomed && !note.exclusive) {
