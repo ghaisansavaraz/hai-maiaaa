@@ -2450,7 +2450,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   border-radius: 6px;
   padding: 8px 10px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  margin-top: 6px;
+  margin-top: 4px;
   transition: margin-top 0.2s ease;
 }
 
@@ -2567,7 +2567,7 @@ body:not(.light-theme) .edge-nav-right:hover {
 .flower-letter-exclusive {
   width: 140px;
   padding: 6px 6px 4px;
-  margin-top: 6px;
+  margin-top: 4px;
   transition: margin-top 0.2s ease;
 }
 
@@ -2945,12 +2945,12 @@ body:not(.light-theme) .edge-nav-right:hover {
   min-height: 0;
 }
 
-/* Garden: no-images in flow so button sits right below flower, appears on hover */
+/* Garden: no-images in flow, minimal gap so tag sits close; on hover letter moves and button appears */
 .flower-bloom-container .flower-images-attached.no-images {
   position: static;
   transform: none;
-  margin-top: 4px;
-  min-height: 32px;
+  margin-top: 2px;
+  min-height: 0;
   justify-content: center;
 }
 
