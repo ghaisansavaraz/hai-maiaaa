@@ -2454,9 +2454,9 @@ body:not(.light-theme) .edge-nav-right:hover {
   transition: margin-top 0.2s ease;
 }
 
-/* Move letter down when add button appears on hover */
-.flower-card:hover:has(.flower-add-photo-btn) .flower-letter,
-.flower-card:hover:has(.flower-add-photo-btn) .flower-letter-exclusive {
+/* Move letter down when add button (between flower and letter) appears on hover — garden with 1–2 images only */
+.flower-card:hover:has(.flower-images-attached .flower-add-photo-btn) .flower-letter,
+.flower-card:hover:has(.flower-images-attached .flower-add-photo-btn) .flower-letter-exclusive {
   margin-top: 36px;
 }
 
@@ -2489,8 +2489,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   transition: margin-top 0.2s ease;
 }
 
-/* Move date down when add button appears on hover */
-.flower-card:hover:has(.flower-add-photo-btn) .flower-date {
+/* Move date down when add button (in images-attached) appears on hover */
+.flower-card:hover:has(.flower-images-attached .flower-add-photo-btn) .flower-date {
   margin-top: 10px;
 }
 
@@ -2530,8 +2530,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   transition: margin-top 0.2s ease;
 }
 
-/* Move species info down when add button appears on hover */
-.flower-card:hover:has(.flower-add-photo-btn) .flower-species {
+/* Move species info down when add button (in images-attached) appears on hover */
+.flower-card:hover:has(.flower-images-attached .flower-add-photo-btn) .flower-species {
   margin-top: 10px;
 }
 
@@ -3014,8 +3014,22 @@ body:not(.light-theme) .edge-nav-right:hover {
   opacity: 0;
 }
 
+/* Garden: add photo button below the flowers (when 0 images) — always visible */
+.flower-add-photo-below {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  min-height: 32px;
+}
+
+.flower-add-photo-below .flower-add-photo-btn {
+  opacity: 1;
+}
+
 .pressed-specimen .flower-images-attached {
-  margin-top: 4px;
+  margin-top: 6px;
+  margin-bottom: 8px;
 }
 
 
