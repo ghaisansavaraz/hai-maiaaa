@@ -2157,6 +2157,10 @@ body:not(.light-theme) .edge-nav-right:hover {
   text-align: center;
   flex-shrink: 0;
   border-bottom: 1px solid rgba(232,160,191,0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .valentine-clock-time {
@@ -2184,6 +2188,54 @@ body:not(.light-theme) .edge-nav-right:hover {
 
 .light-theme .valentine-title {
   color: rgba(183,110,121,0.6);
+}
+
+/* Valentine Mute Button */
+.valentine-mute-btn {
+  position: absolute;
+  top: 20px;
+  right: 32px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(232,160,191,0.1);
+  border: 1px solid rgba(232,160,191,0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  color: rgba(232,160,191,0.7);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.valentine-mute-btn:hover {
+  background: rgba(232,160,191,0.2);
+  border-color: rgba(232,160,191,0.4);
+  color: rgba(232,160,191,0.9);
+  transform: scale(1.05);
+}
+
+.valentine-mute-btn:active {
+  transform: scale(0.95);
+}
+
+.valentine-mute-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+.light-theme .valentine-mute-btn {
+  background: rgba(183,110,121,0.1);
+  border-color: rgba(183,110,121,0.2);
+  color: rgba(183,110,121,0.6);
+}
+
+.light-theme .valentine-mute-btn:hover {
+  background: rgba(183,110,121,0.2);
+  border-color: rgba(183,110,121,0.4);
+  color: rgba(183,110,121,0.8);
 }
 
 /* View Toggle Tabs */

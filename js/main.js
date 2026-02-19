@@ -21,6 +21,8 @@ let zenBloomTimeoutId = null;
 let currentView = 'main'; // 'main' or 'valentine'
 let inactivityTimeoutId = null;
 let lastActivityTime = Date.now();
+let valentineAudio = null;
+let isValentineAudioMuted = false;
 
 const DAY_START_HOUR = 5;
 const DAY_END_HOUR = 18;
@@ -228,6 +230,8 @@ function switchToDashboard(viewName) {
     // Show main dashboard
     document.body.classList.remove('pinterest-view');
     valentineDashboard.classList.remove('active');
+    // Pause valentine audio when leaving valentine view
+    pauseValentineAudio();
     setTimeout(() => {
       mainDashboard.classList.add('visible');
       if (centerContainer) {
@@ -243,7 +247,117 @@ function switchToDashboard(viewName) {
     }
     setTimeout(() => {
       valentineDashboard.classList.add('active');
+      // Play valentine audio when entering valentine view
+      playValentineAudio();
     }, 300);
+  }
+}
+
+// ===== VALENTINE AUDIO CONTROL =====
+
+function initValentineAudio() {
+  valentineAudio = document.getElementById('valentineBackgroundAudio');
+  const muteBtn = document.getElementById('valentineMuteBtn');
+  const muteIcon = document.getElementById('valentineMuteIcon');
+  const muteWave = document.getElementById('valentineMuteWave');
+  
+  if (!valentineAudio || !muteBtn) {
+    debugError('Valentine audio elements not found');
+    return;
+  }
+  
+  // Load mute state from localStorage
+  const savedMuteState = localStorage.getItem('valentine_audio_muted');
+  if (savedMuteState === 'true') {
+    isValentineAudioMuted = true;
+  }
+  // Update UI to reflect current mute state
+  updateMuteButtonUI(isValentineAudioMuted);
+  
+  // Set initial volume
+  valentineAudio.volume = 0.5;
+  
+  // Handle mute button click
+  muteBtn.addEventListener('click', () => {
+    toggleValentineAudioMute();
+  });
+  
+  // Handle audio errors
+  valentineAudio.addEventListener('error', (e) => {
+    debugError('Valentine audio error:', e);
+  });
+  
+  debugLog('Valentine audio initialized');
+}
+
+function playValentineAudio() {
+  if (!valentineAudio) return;
+  
+  valentineAudio.currentTime = 0;
+  if (!isValentineAudioMuted) {
+    valentineAudio.play().catch(error => {
+      debugError('Error playing valentine audio:', error);
+      // Some browsers require user interaction before playing audio
+      // This is expected behavior
+    });
+  }
+}
+
+function pauseValentineAudio() {
+  if (!valentineAudio) return;
+  valentineAudio.pause();
+}
+
+function toggleValentineAudioMute() {
+  if (!valentineAudio) return;
+  
+  isValentineAudioMuted = !isValentineAudioMuted;
+  
+  if (isValentineAudioMuted) {
+    valentineAudio.pause();
+  } else {
+    // Only play if we're in valentine view
+    if (currentView === 'valentine') {
+      valentineAudio.play().catch(error => {
+        debugError('Error playing valentine audio:', error);
+      });
+    }
+  }
+  
+  // Save mute state to localStorage
+  localStorage.setItem('valentine_audio_muted', isValentineAudioMuted.toString());
+  
+  // Update UI
+  updateMuteButtonUI(isValentineAudioMuted);
+  
+  debugLog('Valentine audio muted:', isValentineAudioMuted);
+}
+
+function updateMuteButtonUI(muted) {
+  const muteIcon = document.getElementById('valentineMuteIcon');
+  const muteBtn = document.getElementById('valentineMuteBtn');
+  
+  if (!muteIcon || !muteBtn) return;
+  
+  if (muted) {
+    // Show muted icon (speaker with X)
+    muteIcon.innerHTML = `
+      <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+      <line x1="23" y1="9" x2="17" y2="15"></line>
+      <line x1="17" y1="9" x2="23" y2="15"></line>
+    `;
+    muteBtn.setAttribute('aria-label', 'Unmute audio');
+    muteBtn.setAttribute('title', 'Unmute');
+    muteBtn.classList.add('muted');
+  } else {
+    // Show unmuted icon (speaker with waves)
+    muteIcon.innerHTML = `
+      <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    `;
+    muteBtn.setAttribute('aria-label', 'Mute audio');
+    muteBtn.setAttribute('title', 'Mute');
+    muteBtn.classList.remove('muted');
   }
 }
 
@@ -530,6 +644,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize Valentine garden
     initValentineGarden();
+    
+    // Initialize Valentine audio
+    initValentineAudio();
     
     // Initialize edge navigation
     initEdgeNavigation();
