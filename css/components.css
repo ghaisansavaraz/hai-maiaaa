@@ -2380,6 +2380,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .bud-svg {
@@ -2412,6 +2414,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   border-radius: 50%;
   animation: waterDrop 0.9s ease-in 3;
   transform: translateX(-50%);
+  pointer-events: none;
 }
 
 @keyframes waterDrop {

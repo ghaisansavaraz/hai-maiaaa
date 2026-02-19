@@ -847,9 +847,15 @@ function renderGarden() {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.flower-delete-btn')) return;
       if (e.target.closest('.flower-images-attached')) return;
+      if (!note.bloomed && !note.exclusive) {
+        handleBloom(note.id, card);
+        return;
+      }
       if (note.bloomed && e.target.closest('.flower-note-clickable')) {
         openFlowerDetailModal(note.id);
-      } else if (!note.bloomed && !note.exclusive) {
+        return;
+      }
+      if (note.bloomed && !note.exclusive && e.target.closest('.flower-bloom-container')) {
         handleBloom(note.id, card);
       }
     });
@@ -859,9 +865,15 @@ function renderGarden() {
         e.preventDefault();
         if (e.target.closest('.flower-delete-btn')) return;
         if (e.target.closest('.flower-images-attached')) return;
+        if (!note.bloomed && !note.exclusive) {
+          handleBloom(note.id, card);
+          return;
+        }
         if (note.bloomed && e.target.closest('.flower-note-clickable')) {
           openFlowerDetailModal(note.id);
-        } else if (!note.bloomed && !note.exclusive) {
+          return;
+        }
+        if (note.bloomed && !note.exclusive) {
           handleBloom(note.id, card);
         }
       }
