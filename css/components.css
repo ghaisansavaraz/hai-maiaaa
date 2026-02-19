@@ -2372,6 +2372,13 @@ body:not(.light-theme) .edge-nav-right:hover {
   padding: 8px 10px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   margin-top: 6px;
+  transition: margin-top 0.2s ease;
+}
+
+/* Move letter down when add button appears on hover */
+.flower-card:hover:has(.flower-add-photo-btn) .flower-letter,
+.flower-card:hover:has(.flower-add-photo-btn) .flower-letter-exclusive {
+  margin-top: 36px;
 }
 
 .flower-letter-exclusive .flower-letter-glow {
@@ -2400,6 +2407,12 @@ body:not(.light-theme) .edge-nav-right:hover {
   white-space: nowrap;
   position: relative;
   z-index: 5;
+  transition: margin-top 0.2s ease;
+}
+
+/* Move date down when add button appears on hover */
+.flower-card:hover:has(.flower-add-photo-btn) .flower-date {
+  margin-top: 10px;
 }
 
 .light-theme .flower-date {
@@ -2435,6 +2448,12 @@ body:not(.light-theme) .edge-nav-right:hover {
   gap: 1px;
   text-align: center;
   margin-top: 6px;
+  transition: margin-top 0.2s ease;
+}
+
+/* Move species info down when add button appears on hover */
+.flower-card:hover:has(.flower-add-photo-btn) .flower-species {
+  margin-top: 10px;
 }
 
 .flower-species-latin {
@@ -2470,6 +2489,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   width: 140px;
   padding: 6px 6px 4px;
   margin-top: 6px;
+  transition: margin-top 0.2s ease;
 }
 
 .flower-letter-glow {
@@ -2654,6 +2674,12 @@ body:not(.light-theme) .edge-nav-right:hover {
   align-items: center;
   gap: 2px;
   margin-top: 8px;
+  transition: margin-top 0.2s ease;
+}
+
+/* Move specimen label down when add button appears on hover */
+.pressed-specimen:hover:has(.flower-add-photo-btn) .specimen-label {
+  margin-top: 12px;
 }
 
 .specimen-species {
@@ -2708,6 +2734,12 @@ body:not(.light-theme) .edge-nav-right:hover {
   text-align: center;
   word-break: break-word;
   max-width: 260px;
+  transition: margin-top 0.2s ease;
+}
+
+/* Move specimen note down when add button appears on hover */
+.pressed-specimen:hover:has(.flower-add-photo-btn) .specimen-note {
+  margin-top: 14px;
 }
 
 .light-theme .specimen-note {
