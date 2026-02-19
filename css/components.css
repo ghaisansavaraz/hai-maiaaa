@@ -2200,8 +2200,8 @@ body:not(.light-theme) .edge-nav-right:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(232,160,191,0.1);
-  border: 1px solid rgba(232,160,191,0.2);
+  background: transparent;
+  border: none;
   border-radius: 50%;
   cursor: pointer;
   color: rgba(232,160,191,0.7);
@@ -2210,9 +2210,7 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 .valentine-mute-btn:hover {
-  background: rgba(232,160,191,0.2);
-  border-color: rgba(232,160,191,0.4);
-  color: rgba(232,160,191,0.9);
+  color: rgba(232,160,191,0.95);
   transform: scale(1.05);
 }
 
@@ -2237,29 +2235,28 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 .light-theme .valentine-mute-btn {
-  background: rgba(183,110,121,0.1);
-  border-color: rgba(183,110,121,0.2);
   color: rgba(183,110,121,0.6);
 }
 
 .light-theme .valentine-mute-btn:hover {
-  background: rgba(183,110,121,0.2);
-  border-color: rgba(183,110,121,0.4);
-  color: rgba(183,110,121,0.8);
+  color: rgba(183,110,121,0.85);
 }
 
 /* View Toggle Tabs */
 .valentine-view-toggle {
   display: flex;
   justify-content: center;
-  gap: 4px;
+  gap: 8px;
   padding: 12px 32px 8px;
   flex-shrink: 0;
 }
 
 .view-tab {
-  padding: 8px 28px;
-  border: 1px solid rgba(232,160,191,0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border: none;
   border-radius: 20px;
   background: transparent;
   color: rgba(255,255,255,0.5);
@@ -2271,15 +2268,33 @@ body:not(.light-theme) .edge-nav-right:hover {
   transition: all 0.3s ease;
 }
 
+.view-tab .view-tab-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  transition: transform 0.25s ease;
+}
+
 .view-tab:hover {
-  color: rgba(255,255,255,0.7);
-  border-color: rgba(232,160,191,0.25);
+  color: rgba(255,255,255,0.75);
+}
+
+.view-tab:hover .view-tab-icon {
+  transform: scale(1.08);
+}
+
+.view-tab.view-tab-garden:hover .view-tab-icon {
+  transform: scale(1.08) rotate(-3deg);
 }
 
 .view-tab.active {
-  background: rgba(232,160,191,0.15);
-  color: rgba(255,255,255,0.9);
-  border-color: rgba(232,160,191,0.35);
+  background: rgba(232,160,191,0.12);
+  color: rgba(255,255,255,0.92);
+}
+
+.view-tab.active .view-tab-icon {
+  color: rgba(232,160,191,0.95);
 }
 
 .view-tab:focus-visible {
@@ -2288,18 +2303,20 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 .light-theme .view-tab {
-  color: rgba(60,40,50,0.4);
-  border-color: rgba(183,110,121,0.15);
+  color: rgba(60,40,50,0.45);
 }
 
 .light-theme .view-tab:hover {
-  color: rgba(60,40,50,0.6);
+  color: rgba(60,40,50,0.65);
 }
 
 .light-theme .view-tab.active {
   background: rgba(183,110,121,0.1);
-  color: rgba(60,40,50,0.85);
-  border-color: rgba(183,110,121,0.3);
+  color: rgba(60,40,50,0.88);
+}
+
+.light-theme .view-tab.active .view-tab-icon {
+  color: rgba(183,110,121,0.8);
 }
 
 /* Valentine Views */
