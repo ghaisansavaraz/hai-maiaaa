@@ -2254,47 +2254,46 @@ body:not(.light-theme) .edge-nav-right:hover {
 .view-tab {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 20px;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   background: transparent;
   color: rgba(255,255,255,0.5);
-  font-family: var(--font-stack);
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 0.06em;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .view-tab .view-tab-icon {
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   flex-shrink: 0;
   stroke: currentColor;
   transition: transform 0.25s ease;
 }
 
 .view-tab:hover {
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.82);
 }
 
 .view-tab:hover .view-tab-icon {
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
 .view-tab.view-tab-garden:hover .view-tab-icon {
-  transform: scale(1.08) rotate(-3deg);
+  transform: scale(1.06) rotate(-4deg);
 }
 
 .view-tab.active {
-  background: rgba(232,160,191,0.12);
-  color: rgba(255,255,255,0.92);
+  background: rgba(232,160,191,0.14);
+  color: rgba(255,255,255,0.95);
+  box-shadow: 0 0 0 1px rgba(232,160,191,0.2);
 }
 
 .view-tab.active .view-tab-icon {
-  color: rgba(232,160,191,0.95);
+  color: rgba(232,160,191,0.98);
 }
 
 .view-tab:focus-visible {
@@ -2316,7 +2315,20 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 .light-theme .view-tab.active .view-tab-icon {
-  color: rgba(183,110,121,0.8);
+  color: rgba(183,110,121,0.85);
+}
+
+/* Hide label if present (icon-only tabs) */
+.view-tab .view-tab-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Valentine Views */
