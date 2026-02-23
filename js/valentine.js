@@ -760,7 +760,7 @@ function closeImageFullscreen() {
 
 // ===== GARDEN RENDER =====
 
-function renderGarden() {
+function renderGarden(justBloomedId = null) {
   const canvas = document.getElementById('gardenCanvas');
   if (!canvas) return;
 
@@ -880,6 +880,17 @@ function renderGarden() {
     });
 
     canvas.appendChild(card);
+
+    if (justBloomedId && note.id === justBloomedId && note.bloomed) {
+      card.classList.add('bloom-in');
+      const bloomEl = card.querySelector('.flower-bloom-container');
+      const removeBloomIn = () => {
+        card.classList.remove('bloom-in');
+        if (bloomEl) bloomEl.removeEventListener('animationend', removeBloomIn);
+      };
+      if (bloomEl) bloomEl.addEventListener('animationend', removeBloomIn);
+      setTimeout(() => card.classList.remove('bloom-in'), 800);
+    }
   });
 
   canvas.querySelectorAll('.flower-delete-btn').forEach(btn => {
@@ -939,7 +950,7 @@ function handleBloom(noteId, cardElement) {
       cardElement.classList.remove('watering');
       note.bloomed = true;
       saveValentineData();
-      renderGarden();
+      renderGarden(note.id);
     }, 700);
   } else {
     // Re-bloom: close then allow re-open

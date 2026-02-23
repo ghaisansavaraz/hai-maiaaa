@@ -2423,6 +2423,48 @@ body:not(.light-theme) .edge-nav-right:hover {
   100% { opacity: 0; transform: translateX(-50%) translateY(40px); }
 }
 
+/* Bloom-in animation (after watering) */
+.flower-card.bloom-in .flower-bloom-container {
+  animation: bloomIn 0.7s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  opacity: 0;
+  transform-origin: center bottom;
+}
+
+.flower-card.bloom-in .flower-letter,
+.flower-card.bloom-in .flower-letter-exclusive {
+  animation: bloomInLetter 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) 0.25s forwards;
+  opacity: 0;
+}
+
+.flower-card.bloom-in .flower-date,
+.flower-card.bloom-in .flower-species,
+.flower-card.bloom-in .exclusive-label {
+  animation: bloomInLetter 0.4s ease 0.4s forwards;
+  opacity: 0;
+}
+
+@keyframes bloomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.75) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes bloomInLetter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Bloomed State */
 .flower-bloom-container {
   width: 100px;
@@ -3527,6 +3569,17 @@ body:not(.light-theme) .edge-nav-right:hover {
   
   .flower-card.watering::after {
     display: none;
+  }
+
+  .flower-card.bloom-in .flower-bloom-container,
+  .flower-card.bloom-in .flower-letter,
+  .flower-card.bloom-in .flower-letter-exclusive,
+  .flower-card.bloom-in .flower-date,
+  .flower-card.bloom-in .flower-species,
+  .flower-card.bloom-in .exclusive-label {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
 
