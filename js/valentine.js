@@ -14,7 +14,8 @@ const FLOWER_COLORS = {
   ranunculus: { primary: '#e8c8d8', secondary: '#d8b0c0', accent: '#c898a8', center: '#b8a060' },
   orchid: { primary: '#d8b0e8', secondary: '#c090d8', accent: '#a870c0', center: '#e8d870' },
   simple_a: { primary: '#b8d8e8', secondary: '#a0c0d4', accent: '#88a8c0', center: '#c9c84c' },
-  simple_b: { primary: '#e8d8b8', secondary: '#d4c0a0', accent: '#c0a888', center: '#c9b84c' }
+  simple_b: { primary: '#e8d8b8', secondary: '#d4c0a0', accent: '#c0a888', center: '#c9b84c' },
+  mixed_bouquet: { primary: '#e8c8d8', secondary: '#d8b0c0', accent: '#c898a8', center: '#d4b870' }
 };
 
 const FLOWER_LABELS = {
@@ -25,7 +26,8 @@ const FLOWER_LABELS = {
   ranunculus: 'Ranunculus',
   orchid: 'Orchidaceae',
   simple_a: 'Campanula',
-  simple_b: 'Primula'
+  simple_b: 'Primula',
+  mixed_bouquet: 'Mixed Bouquet'
 };
 
 const FLOWER_NAMES = {
@@ -36,7 +38,8 @@ const FLOWER_NAMES = {
   ranunculus: 'Ranunculus',
   orchid: 'Orchid',
   simple_a: 'Bellflower',
-  simple_b: 'Primrose'
+  simple_b: 'Primrose',
+  mixed_bouquet: 'Rose & Daisy'
 };
 
 const MAX_IMAGES_PER_NOTE = 2;
@@ -69,6 +72,15 @@ const EXCLUSIVE_FLOWERS = [
     exclusive: true,
     images: [],
     createdAt: new Date(2026, 1, 17).getTime()
+  },
+  {
+    id: 'exclusive_mixed_march',
+    text: "Maiaaa, I know it's tiring, but the reason you end up doing most of it is because you're the one who can truly illuminate the group. You're creative, capable, and you get things done. That's not merely doing the work, it's being the pillar of it all. Not everyone carries that kind of presence, but you do. And that's exactly what makes you the one who fully understands, while others just complete it, you flourish. That's my executive girl.",
+    flowerType: 'mixed_bouquet',
+    bloomed: true,
+    exclusive: true,
+    images: [],
+    createdAt: new Date(2026, 2, 5).getTime()
   }
 ];
 
@@ -313,6 +325,23 @@ function getBouquetSVG(type, variation = 0) {
           ${getSimpleBFlowerSVG(colors)}
         </g>`;
       break;
+    case 'mixed_bouquet':
+      const roseColors = FLOWER_COLORS.rose;
+      const daisyColors = FLOWER_COLORS.daisy;
+      flowers = `
+        <g transform="translate(-20, -8) scale(0.88) rotate(-10)">
+          ${getRoseFlowerSVG(roseColors)}
+        </g>
+        <g transform="translate(-6, -4) scale(0.92) rotate(-5)">
+          ${getDaisyFlowerSVG(daisyColors)}
+        </g>
+        <g transform="translate(8, -6) scale(0.9) rotate(8)">
+          ${getDaisyFlowerSVG(daisyColors)}
+        </g>
+        <g transform="translate(22, -7) scale(0.85) rotate(12)">
+          ${getRoseFlowerSVG(roseColors)}
+        </g>`;
+      break;
     default:
       return getFlowerSVG(type, variation);
   }
@@ -470,6 +499,37 @@ function getPressedFlowerSVG(type, variation = 0) {
         petals.push(`<ellipse cx="0" cy="-10" rx="4" ry="7" fill="${muted.primary}" transform="rotate(${a})"/>`);
       }
       head = petals.join('') + `<circle cx="0" cy="0" r="4" fill="${muted.center}"/>`;
+      break;
+    }
+    case 'mixed_bouquet': {
+      const roseMuted = { primary: FLOWER_COLORS.rose.primary + 'aa', secondary: FLOWER_COLORS.rose.secondary + '88', accent: FLOWER_COLORS.rose.accent + '66', center: FLOWER_COLORS.rose.center + '88' };
+      const daisyMuted = { primary: FLOWER_COLORS.daisy.primary + 'aa', secondary: FLOWER_COLORS.daisy.secondary + '88', center: FLOWER_COLORS.daisy.center + '88' };
+      const daisyPetals = [];
+      for (let i = 0; i < 12; i++) {
+        const a = (i * 360) / 12;
+        daisyPetals.push(`<ellipse cx="0" cy="-8" rx="2.5" ry="6" fill="${daisyMuted.primary}" transform="rotate(${a})"/>`);
+      }
+      head = `
+        <g transform="translate(-12, 0)">
+          <ellipse cx="0" cy="-2" rx="12" ry="10" fill="${roseMuted.primary}"/>
+          <ellipse cx="-3" cy="-3" rx="7" ry="7" fill="${roseMuted.secondary}" transform="rotate(-20)"/>
+          <ellipse cx="3" cy="-3" rx="7" ry="7" fill="${roseMuted.secondary}" transform="rotate(20)"/>
+          <circle cx="0" cy="-3" r="2.5" fill="${roseMuted.center}"/>
+        </g>
+        <g transform="translate(12, 0)">
+          ${daisyPetals.join('')}
+          <circle cx="0" cy="0" r="4" fill="${daisyMuted.center}"/>
+        </g>
+        <g transform="translate(-6, 8)">
+          ${daisyPetals.join('')}
+          <circle cx="0" cy="0" r="4" fill="${daisyMuted.center}"/>
+        </g>
+        <g transform="translate(8, 6)">
+          <ellipse cx="0" cy="-2" rx="10" ry="8" fill="${roseMuted.primary}"/>
+          <ellipse cx="-2" cy="-3" rx="6" ry="6" fill="${roseMuted.secondary}" transform="rotate(-15)"/>
+          <ellipse cx="2" cy="-3" rx="6" ry="6" fill="${roseMuted.secondary}" transform="rotate(15)"/>
+          <circle cx="0" cy="-3" r="2" fill="${roseMuted.center}"/>
+        </g>`;
       break;
     }
     default: // rose
