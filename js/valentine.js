@@ -15,7 +15,9 @@ const FLOWER_COLORS = {
   orchid: { primary: '#d8b0e8', secondary: '#c090d8', accent: '#a870c0', center: '#e8d870' },
   simple_a: { primary: '#b8d8e8', secondary: '#a0c0d4', accent: '#88a8c0', center: '#c9c84c' },
   simple_b: { primary: '#e8d8b8', secondary: '#d4c0a0', accent: '#c0a888', center: '#c9b84c' },
-  mixed_bouquet: { primary: '#e8c8d8', secondary: '#d8b0c0', accent: '#c898a8', center: '#d4b870' }
+  iris: { primary: '#c8a0e0', secondary: '#9068c0', accent: '#6040a8', center: '#e8cc40' },
+  anemone: { primary: '#e06888', secondary: '#c04868', accent: '#983050', center: '#f5e8c0' },
+  mixed_exec: { primary: '#c8a0e0', secondary: '#e06888', accent: '#6040a8', center: '#e8cc40' }
 };
 
 const FLOWER_LABELS = {
@@ -27,7 +29,9 @@ const FLOWER_LABELS = {
   orchid: 'Orchidaceae',
   simple_a: 'Campanula',
   simple_b: 'Primula',
-  mixed_bouquet: 'Mixed Bouquet'
+  iris: 'Iris germanica',
+  anemone: 'Anemone coronaria',
+  mixed_exec: 'Iris & Anemone'
 };
 
 const FLOWER_NAMES = {
@@ -39,7 +43,9 @@ const FLOWER_NAMES = {
   orchid: 'Orchid',
   simple_a: 'Bellflower',
   simple_b: 'Primrose',
-  mixed_bouquet: 'Rose & Daisy'
+  iris: 'Iris',
+  anemone: 'Anemone',
+  mixed_exec: 'Mixed Bouquet'
 };
 
 const MAX_IMAGES_PER_NOTE = 2;
@@ -74,9 +80,9 @@ const EXCLUSIVE_FLOWERS = [
     createdAt: new Date(2026, 1, 17).getTime()
   },
   {
-    id: 'exclusive_mixed_march',
+    id: 'exclusive_mixed_exec',
     text: "Maiaaa, I know it's tiring, but the reason you end up doing most of it is because you're the one who can truly illuminate the group. You're creative, capable, and you get things done. That's not merely doing the work, it's being the pillar of it all. Not everyone carries that kind of presence, but you do. And that's exactly what makes you the one who fully understands, while others just complete it, you flourish. That's my executive girl.",
-    flowerType: 'mixed_bouquet',
+    flowerType: 'mixed_exec',
     bloomed: true,
     exclusive: true,
     images: [],
@@ -283,6 +289,54 @@ function getFlowerSVG(type, variation = 0) {
   </svg>`;
 }
 
+function getIrisFlowerSVG(colors) {
+  return `<g class="flower-head">
+    <g class="petal" style="--petal-delay:0"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(120)"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(240)"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:3"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${colors.secondary}" opacity="0.96"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(120)"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${colors.secondary}" opacity="0.96"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(240)"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${colors.secondary}" opacity="0.96"/></g>
+    <ellipse cx="-4.5" cy="7" rx="1.3" ry="3.2" fill="${colors.center}" opacity="0.9"/>
+    <g transform="rotate(120)"><ellipse cx="-4.5" cy="7" rx="1.3" ry="3.2" fill="${colors.center}" opacity="0.9"/></g>
+    <g transform="rotate(240)"><ellipse cx="-4.5" cy="7" rx="1.3" ry="3.2" fill="${colors.center}" opacity="0.9"/></g>
+    <circle cx="0" cy="0" r="3.2" fill="${colors.center}" opacity="0.88"/>
+    <circle cx="0" cy="0" r="2" fill="${colors.secondary}" opacity="0.5"/>
+  </g>`;
+}
+
+function getAnemoneFlowerSVG(colors) {
+  return `<g class="flower-head">
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
+    <circle cx="0" cy="0" r="5.5" fill="${colors.accent}" opacity="0.95"/>
+    <circle cx="0" cy="0" r="4" fill="#180c20" opacity="0.92"/>
+    <circle cx="0" cy="-3" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="1.5" cy="-2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="2.6" cy="-1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="3" cy="0" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="2.6" cy="1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="1.5" cy="2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="0" cy="3" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-1.5" cy="2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-2.6" cy="1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-3" cy="0" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-2.6" cy="-1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-1.5" cy="-2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="0" cy="0" r="1.5" fill="${colors.center}" opacity="0.5"/>
+  </g>`;
+}
+
 function getBouquetSVG(type, variation = 0) {
   const colors = FLOWER_COLORS[type] || FLOWER_COLORS.rose;
   const uniqueId = `bq_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
@@ -325,23 +379,54 @@ function getBouquetSVG(type, variation = 0) {
           ${getSimpleBFlowerSVG(colors)}
         </g>`;
       break;
-    case 'mixed_bouquet':
-      const roseColors = FLOWER_COLORS.rose;
-      const daisyColors = FLOWER_COLORS.daisy;
-      flowers = `
-        <g transform="translate(-20, -8) scale(0.88) rotate(-10)">
-          ${getRoseFlowerSVG(roseColors)}
-        </g>
-        <g transform="translate(-6, -4) scale(0.92) rotate(-5)">
-          ${getDaisyFlowerSVG(daisyColors)}
-        </g>
-        <g transform="translate(8, -6) scale(0.9) rotate(8)">
-          ${getDaisyFlowerSVG(daisyColors)}
-        </g>
-        <g transform="translate(22, -7) scale(0.85) rotate(12)">
-          ${getRoseFlowerSVG(roseColors)}
+    case 'mixed_exec': {
+      const irisC = FLOWER_COLORS.iris;
+      const anemoneC = FLOWER_COLORS.anemone;
+      const mixedStems = `
+        <g class="bouquet-stems">
+          <line x1="0" y1="10" x2="-12" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="-3" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="4" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="13" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="-14" cy="36" rx="5.5" ry="2.5" transform="rotate(-28 -14 36)" fill="#6a8a5a" opacity="0.6"/>
+          <ellipse cx="10" cy="40" rx="5" ry="2.3" transform="rotate(25 10 40)" fill="#6a8a5a" opacity="0.55"/>
+          <ellipse cx="-5" cy="50" rx="4" ry="2" transform="rotate(-35 -5 50)" fill="#6a8a5a" opacity="0.5"/>
+          <ellipse cx="11" cy="54" rx="4.5" ry="2.2" transform="rotate(30 11 54)" fill="#6a8a5a" opacity="0.5"/>
         </g>`;
-      break;
+      const mixedPaper = `
+        <defs>
+          <linearGradient id="paperGrad${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#faf6f0"/>
+            <stop offset="50%" stop-color="#f5efe6"/>
+            <stop offset="100%" stop-color="#ede5d8"/>
+          </linearGradient>
+        </defs>
+        <g class="bouquet-paper">
+          <path d="M-34,10 Q-36,-5 -28,-20 Q-18,-30 0,-32 Q18,-30 28,-20 Q36,-5 34,10 Q24,18 0,22 Q-24,18 -34,10 Z"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.45"/>
+          <path d="M-28,12 Q-30,16 -26,22 L0,26 L26,22 Q30,16 28,12"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
+          <path d="M-20,24 Q0,30 20,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
+        </g>`;
+      return `<svg viewBox="-44 -42 88 124" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
+        ${mixedStems}
+        ${mixedPaper}
+        <g class="flower-head bouquet-head">
+          <g transform="translate(-21, -10) scale(0.88) rotate(-12)">
+            ${getIrisFlowerSVG(irisC)}
+          </g>
+          <g transform="translate(21, -8) scale(0.85) rotate(14)">
+            ${getIrisFlowerSVG(irisC)}
+          </g>
+          <g transform="translate(-7, -2) scale(0.97) rotate(-5)">
+            ${getAnemoneFlowerSVG(anemoneC)}
+          </g>
+          <g transform="translate(9, -3) scale(0.93) rotate(8)">
+            ${getAnemoneFlowerSVG(anemoneC)}
+          </g>
+        </g>
+      </svg>`;
+    }
     default:
       return getFlowerSVG(type, variation);
   }
@@ -501,34 +586,51 @@ function getPressedFlowerSVG(type, variation = 0) {
       head = petals.join('') + `<circle cx="0" cy="0" r="4" fill="${muted.center}"/>`;
       break;
     }
-    case 'mixed_bouquet': {
-      const roseMuted = { primary: FLOWER_COLORS.rose.primary + 'aa', secondary: FLOWER_COLORS.rose.secondary + '88', accent: FLOWER_COLORS.rose.accent + '66', center: FLOWER_COLORS.rose.center + '88' };
-      const daisyMuted = { primary: FLOWER_COLORS.daisy.primary + 'aa', secondary: FLOWER_COLORS.daisy.secondary + '88', center: FLOWER_COLORS.daisy.center + '88' };
-      const daisyPetals = [];
-      for (let i = 0; i < 12; i++) {
-        const a = (i * 360) / 12;
-        daisyPetals.push(`<ellipse cx="0" cy="-8" rx="2.5" ry="6" fill="${daisyMuted.primary}" transform="rotate(${a})"/>`);
+    case 'iris': {
+      const iMuted = { primary: FLOWER_COLORS.iris.primary + 'aa', secondary: FLOWER_COLORS.iris.secondary + '88', center: FLOWER_COLORS.iris.center + '88' };
+      head = `<path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${iMuted.primary}" opacity="0.75"/>
+        <g transform="rotate(120)"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${iMuted.primary}" opacity="0.75"/></g>
+        <g transform="rotate(240)"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${iMuted.primary}" opacity="0.75"/></g>
+        <path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${iMuted.secondary}" opacity="0.8"/>
+        <g transform="rotate(120)"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${iMuted.secondary}" opacity="0.8"/></g>
+        <g transform="rotate(240)"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${iMuted.secondary}" opacity="0.8"/></g>
+        <circle cx="0" cy="0" r="3" fill="${iMuted.center}"/>`;
+      break;
+    }
+    case 'anemone': {
+      const aMuted = { primary: FLOWER_COLORS.anemone.primary + 'aa', accent: FLOWER_COLORS.anemone.accent + '88', center: FLOWER_COLORS.anemone.center + '88' };
+      const aPetals = [];
+      for (let i = 0; i < 6; i++) {
+        const a = (i * 360) / 6;
+        aPetals.push(`<ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${aMuted.primary}" transform="rotate(${a})"/>`);
+      }
+      head = aPetals.join('') + `<circle cx="0" cy="0" r="5.5" fill="${aMuted.accent}"/><circle cx="0" cy="0" r="3.5" fill="#1a0c28" opacity="0.7"/><circle cx="0" cy="0" r="1.5" fill="${aMuted.center}"/>`;
+      break;
+    }
+    case 'mixed_exec': {
+      const irisP = FLOWER_COLORS.iris.primary + 'aa';
+      const irisS = FLOWER_COLORS.iris.secondary + '88';
+      const anemP = FLOWER_COLORS.anemone.primary + 'aa';
+      const anemA = FLOWER_COLORS.anemone.accent + '88';
+      const anemC = FLOWER_COLORS.anemone.center + '88';
+      const petals2 = [];
+      for (let i = 0; i < 6; i++) {
+        petals2.push(`<ellipse cx="0" cy="-7" rx="4" ry="5.5" fill="${anemP}" transform="rotate(${i * 60}) translate(8, 0)"/>`);
       }
       head = `
-        <g transform="translate(-12, 0)">
-          <ellipse cx="0" cy="-2" rx="12" ry="10" fill="${roseMuted.primary}"/>
-          <ellipse cx="-3" cy="-3" rx="7" ry="7" fill="${roseMuted.secondary}" transform="rotate(-20)"/>
-          <ellipse cx="3" cy="-3" rx="7" ry="7" fill="${roseMuted.secondary}" transform="rotate(20)"/>
-          <circle cx="0" cy="-3" r="2.5" fill="${roseMuted.center}"/>
+        <g transform="translate(-8, 0) scale(0.88) rotate(-15)">
+          <path d="M0,-2 Q-5,2 -7,9 Q-5,14 -1,12 Q2,10 2,5 Q1,1 0,-2" fill="${irisP}" opacity="0.75"/>
+          <g transform="rotate(120)"><path d="M0,-2 Q-5,2 -7,9 Q-5,14 -1,12 Q2,10 2,5 Q1,1 0,-2" fill="${irisP}" opacity="0.75"/></g>
+          <g transform="rotate(240)"><path d="M0,-2 Q-5,2 -7,9 Q-5,14 -1,12 Q2,10 2,5 Q1,1 0,-2" fill="${irisP}" opacity="0.75"/></g>
+          <path d="M0,0 Q-3,-4 -2,-10 Q0,-13 2,-10 Q3,-4 0,0" fill="${irisS}" opacity="0.8"/>
+          <g transform="rotate(120)"><path d="M0,0 Q-3,-4 -2,-10 Q0,-13 2,-10 Q3,-4 0,0" fill="${irisS}" opacity="0.8"/></g>
+          <g transform="rotate(240)"><path d="M0,0 Q-3,-4 -2,-10 Q0,-13 2,-10 Q3,-4 0,0" fill="${irisS}" opacity="0.8"/></g>
         </g>
-        <g transform="translate(12, 0)">
-          ${daisyPetals.join('')}
-          <circle cx="0" cy="0" r="4" fill="${daisyMuted.center}"/>
-        </g>
-        <g transform="translate(-6, 8)">
-          ${daisyPetals.join('')}
-          <circle cx="0" cy="0" r="4" fill="${daisyMuted.center}"/>
-        </g>
-        <g transform="translate(8, 6)">
-          <ellipse cx="0" cy="-2" rx="10" ry="8" fill="${roseMuted.primary}"/>
-          <ellipse cx="-2" cy="-3" rx="6" ry="6" fill="${roseMuted.secondary}" transform="rotate(-15)"/>
-          <ellipse cx="2" cy="-3" rx="6" ry="6" fill="${roseMuted.secondary}" transform="rotate(15)"/>
-          <circle cx="0" cy="-3" r="2" fill="${roseMuted.center}"/>
+        <g transform="translate(8, 0) scale(0.9) rotate(10)">
+          ${Array.from({length: 6}, (_, i) => `<ellipse cx="0" cy="-9" rx="5" ry="7" fill="${anemP}" transform="rotate(${i * 60})" opacity="0.75"/>`).join('')}
+          <circle cx="0" cy="0" r="4.5" fill="${anemA}"/>
+          <circle cx="0" cy="0" r="3" fill="#1a0c28" opacity="0.65"/>
+          <circle cx="0" cy="0" r="1.2" fill="${anemC}"/>
         </g>`;
       break;
     }
