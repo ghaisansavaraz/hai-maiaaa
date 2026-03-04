@@ -31,7 +31,7 @@ const FLOWER_LABELS = {
   simple_b: 'Primula',
   iris: 'Iris germanica',
   anemone: 'Anemone coronaria',
-  mixed_exec: 'Iris & Anemone'
+  mixed_exec: 'Iris germanica · Anemone coronaria'
 };
 
 const FLOWER_NAMES = {
@@ -45,7 +45,7 @@ const FLOWER_NAMES = {
   simple_b: 'Primrose',
   iris: 'Iris',
   anemone: 'Anemone',
-  mixed_exec: 'Mixed Bouquet'
+  mixed_exec: 'Iris & Anemone'
 };
 
 const MAX_IMAGES_PER_NOTE = 2;
@@ -291,49 +291,49 @@ function getFlowerSVG(type, variation = 0) {
 
 function getIrisFlowerSVG(colors) {
   return `<g class="flower-head">
-    <g class="petal" style="--petal-delay:0"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${colors.primary}" opacity="0.92"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(120)"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${colors.primary}" opacity="0.92"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(240)"><path d="M0,-2 Q-6,2 -9,11 Q-7,17 -2,15 Q2,13 2,7 Q1,2 0,-2" fill="${colors.primary}" opacity="0.92"/></g>
-    <g class="petal" style="--petal-delay:3"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${colors.secondary}" opacity="0.96"/></g>
-    <g class="petal" style="--petal-delay:4" transform="rotate(120)"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${colors.secondary}" opacity="0.96"/></g>
-    <g class="petal" style="--petal-delay:5" transform="rotate(240)"><path d="M0,0 Q-4,-5 -3,-13 Q0,-16 3,-13 Q4,-5 0,0" fill="${colors.secondary}" opacity="0.96"/></g>
-    <ellipse cx="-4.5" cy="7" rx="1.3" ry="3.2" fill="${colors.center}" opacity="0.9"/>
-    <g transform="rotate(120)"><ellipse cx="-4.5" cy="7" rx="1.3" ry="3.2" fill="${colors.center}" opacity="0.9"/></g>
-    <g transform="rotate(240)"><ellipse cx="-4.5" cy="7" rx="1.3" ry="3.2" fill="${colors.center}" opacity="0.9"/></g>
-    <circle cx="0" cy="0" r="3.2" fill="${colors.center}" opacity="0.88"/>
-    <circle cx="0" cy="0" r="2" fill="${colors.secondary}" opacity="0.5"/>
+    <g class="petal" style="--petal-delay:0" transform="rotate(0)"><ellipse cx="0" cy="9" rx="5.5" ry="8.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(120)"><ellipse cx="0" cy="9" rx="5.5" ry="8.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(240)"><ellipse cx="0" cy="9" rx="5.5" ry="8.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="4" ry="7.5" fill="${colors.secondary}" opacity="0.96"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="4" ry="7.5" fill="${colors.secondary}" opacity="0.96"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="4" ry="7.5" fill="${colors.secondary}" opacity="0.96"/></g>
+    <g transform="rotate(0)"><ellipse cx="0" cy="6.5" rx="1.2" ry="3" fill="${colors.center}" opacity="0.9"/></g>
+    <g transform="rotate(120)"><ellipse cx="0" cy="6.5" rx="1.2" ry="3" fill="${colors.center}" opacity="0.9"/></g>
+    <g transform="rotate(240)"><ellipse cx="0" cy="6.5" rx="1.2" ry="3" fill="${colors.center}" opacity="0.9"/></g>
+    <circle cx="0" cy="0" r="3" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="0" cy="0" r="1.8" fill="${colors.secondary}" opacity="0.55"/>
   </g>`;
 }
 
 function getAnemoneFlowerSVG(colors) {
   return `<g class="flower-head">
-    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="5.5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
-    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
-    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
-    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="3.5" ry="5" fill="${colors.secondary}" opacity="0.35"/></g>
-    <circle cx="0" cy="0" r="5.5" fill="${colors.accent}" opacity="0.95"/>
-    <circle cx="0" cy="0" r="4" fill="#180c20" opacity="0.92"/>
-    <circle cx="0" cy="-3" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="1.5" cy="-2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="2.6" cy="-1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="3" cy="0" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="2.6" cy="1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="1.5" cy="2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="0" cy="3" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-1.5" cy="2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-2.6" cy="1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-3" cy="0" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-2.6" cy="-1.5" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-1.5" cy="-2.6" r="0.65" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="0" cy="0" r="1.5" fill="${colors.center}" opacity="0.5"/>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
+    <circle cx="0" cy="0" r="4.2" fill="${colors.accent}" opacity="0.95"/>
+    <circle cx="0" cy="0" r="3" fill="#180c20" opacity="0.92"/>
+    <circle cx="0" cy="-2.5" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="1.3" cy="-2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="2.1" cy="-1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="2.5" cy="0" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="2.1" cy="1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="1.3" cy="2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="0" cy="2.5" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-1.3" cy="2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-2.1" cy="1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-2.5" cy="0" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-2.1" cy="-1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="-1.3" cy="-2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="0" cy="0" r="1.2" fill="${colors.center}" opacity="0.45"/>
   </g>`;
 }
 
@@ -402,26 +402,26 @@ function getBouquetSVG(type, variation = 0) {
           </linearGradient>
         </defs>
         <g class="bouquet-paper">
-          <path d="M-34,10 Q-36,-5 -28,-20 Q-18,-30 0,-32 Q18,-30 28,-20 Q36,-5 34,10 Q24,18 0,22 Q-24,18 -34,10 Z"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.45"/>
-          <path d="M-28,12 Q-30,16 -26,22 L0,26 L26,22 Q30,16 28,12"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
-          <path d="M-20,24 Q0,30 20,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
+          <path d="M-30,10 Q-32,2 -24,-8 Q-14,-16 0,-18 Q14,-16 24,-8 Q32,2 30,10 Q20,18 0,20 Q-20,18 -30,10 Z"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.4)" stroke-width="0.5" opacity="0.25"/>
+          <path d="M-24,12 Q-26,16 -22,22 L0,26 L22,22 Q26,16 24,12"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.25"/>
+          <path d="M-18,24 Q0,30 18,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
         </g>`;
-      return `<svg viewBox="-44 -42 88 124" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
+      return `<svg viewBox="-40 -42 80 120" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
         ${mixedStems}
         ${mixedPaper}
         <g class="flower-head bouquet-head">
-          <g transform="translate(-21, -10) scale(0.88) rotate(-12)">
+          <g transform="translate(-18, -20) scale(0.84) rotate(-13)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(21, -8) scale(0.85) rotate(14)">
+          <g transform="translate(17, -18) scale(0.81) rotate(14)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(-7, -2) scale(0.97) rotate(-5)">
+          <g transform="translate(-5, -16) scale(0.87) rotate(-4)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
-          <g transform="translate(9, -3) scale(0.93) rotate(8)">
+          <g transform="translate(6, -15) scale(0.84) rotate(7)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
         </g>
@@ -891,6 +891,7 @@ function openFlowerDetailModal(noteId) {
   const contentEl = modal.querySelector('.flower-modal-content');
   if (contentEl) {
     contentEl.classList.toggle('modal-has-images', imgs.length > 0);
+    contentEl.classList.toggle('modal-wide-text', note.exclusive && note.text.length > 120);
   }
 
   modal.classList.add('active');
