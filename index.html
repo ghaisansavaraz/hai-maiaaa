@@ -1982,6 +1982,9 @@ body.light-theme .mood-category {
               </div>
             </section>
 
+            <!-- Bunny Section (autumn pet card) -->
+            <section id="bunnySection"></section>
+
             <!-- Letters Section -->
             <section id="lettersSection" class="letters-section">
               <div id="lettersContainer" class="letters-container"></div>
@@ -2125,6 +2128,14 @@ body.light-theme .mood-category {
             <path d="M19 11h5M19 15h5M19 19h5"/>
           </svg>
         </button>
+        <button id="viewTabBunny" class="view-tab view-tab-bunny" role="tab" aria-selected="false" aria-controls="valentineBunny" tabindex="0" aria-label="Autumn" title="Autumn">
+          <svg class="view-tab-icon view-tab-icon-bunny" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <!-- Maple leaf -->
+            <path d="M16 4c-1 3-3 5-6 6 1 1 2 3 1 5-2 0-4 0-5 1 2 2 3 4 3 6l4-2c0 2 0 4-1 6h4l1-4 1 4h4c-1-2-1-4-1-6l4 2c0-2 1-4 3-6-1-1-3-1-5-1-1-2 0-4 1-5-3-1-5-3-6-6z"/>
+            <!-- Stem -->
+            <path d="M16 22v6"/>
+          </svg>
+        </button>
       </nav>
 
       <!-- Garden View -->
@@ -2144,6 +2155,11 @@ body.light-theme .mood-category {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>
           </button>
         </div>
+      </div>
+
+      <!-- Autumn Bunny View -->
+      <div id="valentineBunny" class="valentine-view" role="tabpanel" aria-labelledby="viewTabBunny">
+        <div class="bunny-scene-inner"></div>
       </div>
     </div>
 
@@ -2196,8 +2212,15 @@ body.light-theme .mood-category {
   <div id="edgeNavLeft" class="edge-nav-trigger edge-nav-left" role="button" tabindex="0" aria-label="Switch dashboard view"></div>
   <div id="edgeNavRight" class="edge-nav-trigger edge-nav-right" role="button" tabindex="0" aria-label="Switch dashboard view"></div>
 
+  <!-- Bunny Fullscreen Overlay -->
+  <div id="bunny-fullscreen">
+    <button class="bunny-close" aria-label="Close">&times;</button>
+    <div class="bunny-scene-inner"></div>
+  </div>
+
   <!-- JavaScript Modules -->
   <script type="module" src="js/valentine.js"></script>
+  <script type="module" src="js/bunny.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
