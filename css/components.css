@@ -2606,7 +2606,8 @@ body:not(.light-theme) .edge-nav-right:hover {
 /* Exclusive Flowers */
 .flower-card.exclusive-flower {
   border: none;
-  width: 160px;
+  width: 220px;
+  max-width: 95vw;
 }
 
 /* Long exclusive message: wide card with flower left, text right */
@@ -2663,6 +2664,11 @@ body:not(.light-theme) .edge-nav-right:hover {
   padding: 6px 6px 4px;
   margin-top: 2px;
   transition: margin-top 0.2s ease;
+}
+
+.flower-card.exclusive-flower .flower-letter-exclusive {
+  width: 200px;
+  max-width: 90vw;
 }
 
 .flower-letter-glow {

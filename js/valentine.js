@@ -394,16 +394,16 @@ function getBouquetSVG(type, variation = 0) {
         ${mixedStems}
         ${mixedPaper}
         <g class="flower-head bouquet-head">
-          <g transform="translate(-16, -6) scale(0.95) rotate(-10)">
+          <g transform="translate(-18, -7) scale(0.92) rotate(-12)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(17, -5) scale(0.92) rotate(12)">
+          <g transform="translate(19, -6) scale(0.9) rotate(14)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(-5, -2) scale(0.98) rotate(-5)">
+          <g transform="translate(-6, -3) scale(0.96) rotate(-6)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
-          <g transform="translate(6, -1) scale(0.96) rotate(6)">
+          <g transform="translate(7, -2) scale(0.94) rotate(7)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
         </g>
