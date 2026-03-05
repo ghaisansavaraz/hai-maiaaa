@@ -2515,10 +2515,6 @@ body:not(.light-theme) .edge-nav-right:hover {
 
 .flower-letter-exclusive .flower-letter-glow {
   opacity: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .flower-letter-text {
@@ -3092,11 +3088,11 @@ body:not(.light-theme) .edge-nav-right:hover {
 .flower-modal-content {
   display: flex;
   gap: 40px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   max-width: 95vw;
   max-height: 90vh;
-  padding-left: 5vw;
-  justify-content: flex-start;
+  padding: 20px;
 }
 
 .flower-modal-content.modal-has-images {
@@ -3146,31 +3142,38 @@ body:not(.light-theme) .edge-nav-right:hover {
 
 /* Sideways layout for exclusive notes with long text */
 .flower-modal-content.modal-wide-text .flower-modal-left {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 28px;
-  max-width: 680px;
+  display: grid;
+  grid-template-areas: "flower note" "flower date";
+  grid-template-columns: 130px 1fr;
+  grid-template-rows: 1fr auto;
+  column-gap: 28px;
+  row-gap: 6px;
+  align-items: start;
+  max-width: 660px;
 }
 
 .flower-modal-content.modal-wide-text .flower-modal-flower {
-  flex-shrink: 0;
+  grid-area: flower;
   width: 130px;
-  height: 170px;
+  height: auto;
+  min-height: 160px;
+  align-self: center;
 }
 
 .flower-modal-content.modal-wide-text #flowerModalNote {
+  grid-area: note;
   text-align: left;
   margin: 0;
-  max-width: 400px;
-  align-self: center;
+  max-width: 420px;
   font-size: 0.95rem;
   line-height: 1.65;
+  align-self: end;
 }
 
 .flower-modal-content.modal-wide-text #flowerModalDate {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  grid-area: date;
+  margin: 0;
+  align-self: start;
 }
 
 .flower-modal-images {

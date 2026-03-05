@@ -384,14 +384,14 @@ function getBouquetSVG(type, variation = 0) {
       const anemoneC = FLOWER_COLORS.anemone;
       const mixedStems = `
         <g class="bouquet-stems">
-          <line x1="0" y1="10" x2="-12" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="-10" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
           <line x1="0" y1="10" x2="-3" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="4" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="13" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <ellipse cx="-14" cy="36" rx="5.5" ry="2.5" transform="rotate(-28 -14 36)" fill="#6a8a5a" opacity="0.6"/>
-          <ellipse cx="10" cy="40" rx="5" ry="2.3" transform="rotate(25 10 40)" fill="#6a8a5a" opacity="0.55"/>
+          <line x1="0" y1="10" x2="3" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="12" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="-12" cy="36" rx="5.5" ry="2.5" transform="rotate(-28 -12 36)" fill="#6a8a5a" opacity="0.6"/>
+          <ellipse cx="9" cy="40" rx="5" ry="2.3" transform="rotate(25 9 40)" fill="#6a8a5a" opacity="0.55"/>
           <ellipse cx="-5" cy="50" rx="4" ry="2" transform="rotate(-35 -5 50)" fill="#6a8a5a" opacity="0.5"/>
-          <ellipse cx="11" cy="54" rx="4.5" ry="2.2" transform="rotate(30 11 54)" fill="#6a8a5a" opacity="0.5"/>
+          <ellipse cx="10" cy="54" rx="4.5" ry="2.2" transform="rotate(30 10 54)" fill="#6a8a5a" opacity="0.5"/>
         </g>`;
       const mixedPaper = `
         <defs>
@@ -402,26 +402,26 @@ function getBouquetSVG(type, variation = 0) {
           </linearGradient>
         </defs>
         <g class="bouquet-paper">
-          <path d="M-30,10 Q-32,2 -24,-8 Q-14,-16 0,-18 Q14,-16 24,-8 Q32,2 30,10 Q20,18 0,20 Q-20,18 -30,10 Z"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.4)" stroke-width="0.5" opacity="0.25"/>
-          <path d="M-24,12 Q-26,16 -22,22 L0,26 L22,22 Q26,16 24,12"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.25"/>
-          <path d="M-18,24 Q0,30 18,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
+          <path d="M-32,10 Q-34,-5 -26,-20 Q-16,-28 0,-30 Q16,-28 26,-20 Q34,-5 32,10 Q22,18 0,20 Q-22,18 -32,10 Z"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.42"/>
+          <path d="M-26,12 Q-28,16 -24,22 L0,26 L24,22 Q28,16 26,12"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
+          <path d="M-20,24 Q0,30 20,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
         </g>`;
-      return `<svg viewBox="-40 -42 80 120" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
+      return `<svg viewBox="-40 -38 80 118" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
         ${mixedStems}
         ${mixedPaper}
         <g class="flower-head bouquet-head">
-          <g transform="translate(-18, -20) scale(0.84) rotate(-13)">
+          <g transform="translate(-19, -8) scale(0.84) rotate(-12)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(17, -18) scale(0.81) rotate(14)">
+          <g transform="translate(19, -6) scale(0.81) rotate(14)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(-5, -16) scale(0.87) rotate(-4)">
+          <g transform="translate(-6, -2) scale(0.88) rotate(-4)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
-          <g transform="translate(6, -15) scale(0.84) rotate(7)">
+          <g transform="translate(7, -1) scale(0.85) rotate(7)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
         </g>
