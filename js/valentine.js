@@ -366,14 +366,14 @@ function getBouquetSVG(type, variation = 0) {
       const anemoneC = FLOWER_COLORS.anemone;
       const mixedStems = `
         <g class="bouquet-stems">
-          <line x1="-10" y1="7.5" x2="-10" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="9" y1="7.5" x2="9" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="-4" y1="7.5" x2="-4" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="5" y1="7.5" x2="5" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
-          <ellipse cx="-10" cy="36" rx="4" ry="2.2" transform="rotate(-22 -10 36)" fill="#5a7a4a" opacity="0.7"/>
-          <ellipse cx="9" cy="36" rx="4" ry="2.2" transform="rotate(20 9 36)" fill="#5a7a4a" opacity="0.7"/>
-          <ellipse cx="-4" cy="44" rx="3.5" ry="1.8" transform="rotate(-25 -4 44)" fill="#5a7a4a" opacity="0.6"/>
-          <ellipse cx="5" cy="44" rx="3.5" ry="1.8" transform="rotate(22 5 44)" fill="#5a7a4a" opacity="0.6"/>
+          <line x1="0" y1="10" x2="-8" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="-2" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="3" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="10" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="-10" cy="38" rx="5" ry="2.5" transform="rotate(-28 -10 38)" fill="#6a8a5a" opacity="0.6"/>
+          <ellipse cx="8" cy="42" rx="5" ry="2.3" transform="rotate(25 8 42)" fill="#6a8a5a" opacity="0.55"/>
+          <ellipse cx="-4" cy="50" rx="4" ry="2" transform="rotate(-35 -4 50)" fill="#6a8a5a" opacity="0.5"/>
+          <ellipse cx="6" cy="52" rx="4" ry="2" transform="rotate(30 6 52)" fill="#6a8a5a" opacity="0.5"/>
         </g>`;
       const mixedPaper = `
         <defs>
@@ -384,25 +384,26 @@ function getBouquetSVG(type, variation = 0) {
           </linearGradient>
         </defs>
         <g class="bouquet-paper">
-          <path d="M-24,10 Q-26,-2 -18,-14 Q-10,-22 0,-24 Q10,-22 18,-14 Q26,-2 24,10 Q16,18 0,20 Q-16,18 -24,10 Z"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(200,185,165,0.4)" stroke-width="0.5" opacity="0.35"/>
-          <path d="M-18,12 Q-20,16 -16,22 L0,26 L16,22 Q20,16 18,12"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(200,185,165,0.25)" stroke-width="0.3" opacity="0.3"/>
+          <path d="M-28,10 Q-30,-5 -22,-18 Q-14,-26 0,-28 Q14,-26 22,-18 Q30,-5 28,10 Q20,18 0,20 Q-20,18 -28,10 Z"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.42"/>
+          <path d="M-22,12 Q-24,16 -20,22 L0,26 L20,22 Q24,16 22,12"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
+          <path d="M-18,24 Q0,30 18,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
         </g>`;
-      return `<svg viewBox="-28 -28 56 100" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
+      return `<svg viewBox="-38 -38 76 120" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
         ${mixedStems}
         ${mixedPaper}
         <g class="flower-head bouquet-head">
-          <g transform="translate(-10, 2.1) scale(0.9) rotate(-8)">
+          <g transform="translate(-16, -6) scale(0.95) rotate(-10)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(9, 2.1) scale(0.88) rotate(10)">
+          <g transform="translate(17, -5) scale(0.92) rotate(12)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(-4, 7.5) scale(0.92) rotate(-4)">
+          <g transform="translate(-5, -2) scale(0.98) rotate(-5)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
-          <g transform="translate(5, 7.5) scale(0.9) rotate(5)">
+          <g transform="translate(6, -1) scale(0.96) rotate(6)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
         </g>
@@ -958,41 +959,18 @@ function renderGarden(justBloomedId = null) {
       if (note.exclusive) {
         const speciesInfo = `<div class="flower-species"><span class="flower-species-latin">${flowerLabel}</span><span class="flower-species-common">${flowerName}</span></div>`;
         const imagesHtml = renderFlowerImages(note, true);
-        const isLongMessage = note.text.length > 120;
-        if (isLongMessage) {
-          card.classList.add('exclusive-wide-message');
-        } else {
-          card.classList.remove('exclusive-wide-message');
-        }
-        if (isLongMessage) {
-          card.innerHTML = `
-            <div class="exclusive-wide-inner">
-              <div class="flower-bloom-container bouquet-container">
-                ${getBouquetSVG(note.flowerType, index)}
-                ${imagesHtml}
-              </div>
-              <div class="exclusive-wide-text">
-                <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
-                  <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
-                </div>
-                ${speciesInfo}
-                <div class="exclusive-label">From Gesan</div>
-                <div class="${dateClass}">${formatDate(note.createdAt)}</div>
-              </div>
-            </div>`;
-        } else {
-          card.innerHTML = `
-            <div class="flower-bloom-container bouquet-container">
-              ${getBouquetSVG(note.flowerType, index)}
-              ${imagesHtml}
-              <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
-                <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
-              </div>
+        card.classList.remove('exclusive-wide-message');
+        card.innerHTML = `
+          <div class="flower-bloom-container bouquet-container">
+            ${getBouquetSVG(note.flowerType, index)}
+            ${imagesHtml}
+            <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
+              <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
             </div>
-            ${speciesInfo}
-            <div class="exclusive-label">From Gesan</div>
-            <div class="${dateClass}">${formatDate(note.createdAt)}</div>`;
-        }
+          </div>
+          ${speciesInfo}
+          <div class="exclusive-label">From Gesan</div>
+          <div class="${dateClass}">${formatDate(note.createdAt)}</div>`;
       } else {
         const deleteBtn = `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
