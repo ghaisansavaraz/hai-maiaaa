@@ -384,14 +384,14 @@ function getBouquetSVG(type, variation = 0) {
       const anemoneC = FLOWER_COLORS.anemone;
       const mixedStems = `
         <g class="bouquet-stems">
-          <line x1="-8" y1="8" x2="-10" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-2" y1="8" x2="-3" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="2" y1="8" x2="3" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="8" y1="8" x2="12" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <ellipse cx="-12" cy="36" rx="5.5" ry="2.5" transform="rotate(-28 -12 36)" fill="#6a8a5a" opacity="0.6"/>
-          <ellipse cx="9" cy="40" rx="5" ry="2.3" transform="rotate(25 9 40)" fill="#6a8a5a" opacity="0.55"/>
-          <ellipse cx="-5" cy="50" rx="4" ry="2" transform="rotate(-35 -5 50)" fill="#6a8a5a" opacity="0.5"/>
-          <ellipse cx="10" cy="54" rx="4.5" ry="2.2" transform="rotate(30 10 54)" fill="#6a8a5a" opacity="0.5"/>
+          <line x1="-10" y1="9" x2="-10" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="9" y1="9" x2="9" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-4" y1="11" x2="-4" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="5" y1="11" x2="5" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="-10" cy="38" rx="5" ry="2.5" transform="rotate(-25 -10 38)" fill="#6a8a5a" opacity="0.6"/>
+          <ellipse cx="9" cy="39" rx="5" ry="2.3" transform="rotate(22 9 39)" fill="#6a8a5a" opacity="0.55"/>
+          <ellipse cx="-4" cy="48" rx="4" ry="2" transform="rotate(-30 -4 48)" fill="#6a8a5a" opacity="0.5"/>
+          <ellipse cx="5" cy="50" rx="4" ry="2" transform="rotate(28 5 50)" fill="#6a8a5a" opacity="0.5"/>
         </g>`;
       const mixedPaper = `
         <defs>
@@ -402,26 +402,26 @@ function getBouquetSVG(type, variation = 0) {
           </linearGradient>
         </defs>
         <g class="bouquet-paper">
-          <path d="M-32,10 Q-34,-5 -26,-20 Q-16,-28 0,-30 Q16,-28 26,-20 Q34,-5 32,10 Q22,18 0,20 Q-22,18 -32,10 Z"
+          <path d="M-28,12 Q-30,0 -22,-14 Q-12,-24 0,-26 Q12,-24 22,-14 Q30,0 28,12 Q20,20 0,22 Q-20,20 -28,12 Z"
             fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.42"/>
-          <path d="M-26,12 Q-28,16 -24,22 L0,26 L24,22 Q28,16 26,12"
+          <path d="M-22,14 Q-24,18 -20,24 L0,28 L20,24 Q24,18 22,14"
             fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
-          <path d="M-20,24 Q0,30 20,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
+          <path d="M-16,26 Q0,32 16,26" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
         </g>`;
-      return `<svg viewBox="-40 -38 80 118" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
+      return `<svg viewBox="-32 -32 64 110" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
         ${mixedStems}
         ${mixedPaper}
         <g class="flower-head bouquet-head">
-          <g transform="translate(-19, 2) scale(0.84) rotate(-12)">
+          <g transform="translate(-10, 0) scale(0.78) rotate(-10)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(18, 4) scale(0.81) rotate(14)">
+          <g transform="translate(9, 1) scale(0.76) rotate(12)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(-6, 5) scale(0.88) rotate(-4)">
+          <g transform="translate(-4, 4) scale(0.82) rotate(-5)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
-          <g transform="translate(7, 6) scale(0.85) rotate(7)">
+          <g transform="translate(5, 5) scale(0.8) rotate(6)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
         </g>
@@ -660,7 +660,12 @@ function getPressedFlowerSVG(type, variation = 0) {
 // ===== STATE =====
 
 let valentineData = { notes: [] };
-let currentValentineView = 'garden'; // 'garden' or 'album'
+let currentValentineView = 'garden'; // 'garden' | 'album' | 'bunny'
+
+/** Called by bunny.js when Autumn tab is shown, so switching back to Garden/Album runs renderGarden/renderAlbum. */
+export function setCurrentValentineView(view) {
+  currentValentineView = view;
+}
 let currentAlbumPage = 0;
 let firstVisit = true;
 
@@ -972,17 +977,41 @@ function renderGarden(justBloomedId = null) {
       if (note.exclusive) {
         const speciesInfo = `<div class="flower-species"><span class="flower-species-latin">${flowerLabel}</span><span class="flower-species-common">${flowerName}</span></div>`;
         const imagesHtml = renderFlowerImages(note, true);
-        card.innerHTML = `
-          <div class="flower-bloom-container bouquet-container">
-            ${getBouquetSVG(note.flowerType, index)}
-            ${imagesHtml}
-            <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
-              <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
+        const isLongMessage = note.text.length > 120;
+        if (isLongMessage) {
+          card.classList.add('exclusive-wide-message');
+        } else {
+          card.classList.remove('exclusive-wide-message');
+        }
+        if (isLongMessage) {
+          card.innerHTML = `
+            <div class="exclusive-wide-inner">
+              <div class="flower-bloom-container bouquet-container">
+                ${getBouquetSVG(note.flowerType, index)}
+                ${imagesHtml}
+              </div>
+              <div class="exclusive-wide-text">
+                <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
+                  <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
+                </div>
+                ${speciesInfo}
+                <div class="exclusive-label">From Gesan</div>
+                <div class="${dateClass}">${formatDate(note.createdAt)}</div>
+              </div>
+            </div>`;
+        } else {
+          card.innerHTML = `
+            <div class="flower-bloom-container bouquet-container">
+              ${getBouquetSVG(note.flowerType, index)}
+              ${imagesHtml}
+              <div class="flower-letter-exclusive flower-note-clickable" data-note-id="${note.id}">
+                <p class="flower-letter-glow">${escapeHtml(note.text)}</p>
+              </div>
             </div>
-          </div>
-          ${speciesInfo}
-          <div class="exclusive-label">From Gesan</div>
-          <div class="${dateClass}">${formatDate(note.createdAt)}</div>`;
+            ${speciesInfo}
+            <div class="exclusive-label">From Gesan</div>
+            <div class="${dateClass}">${formatDate(note.createdAt)}</div>`;
+        }
       } else {
         const deleteBtn = `<button class="flower-delete-btn" data-note-id="${note.id}" aria-label="Delete note" title="Delete note">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.5 4V3a1 1 0 011-1h3a1 1 0 011 1v1M7 7v4M9 7v4M4.5 4l.5 9a1 1 0 001 1h4a1 1 0 001-1l.5-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -1278,8 +1307,18 @@ function switchValentineView(view) {
 
   const gardenEl = document.getElementById('valentineGarden');
   const albumEl = document.getElementById('valentineAlbum');
+  const bunnyEl = document.getElementById('valentineBunny');
+  const bunnyTab = document.getElementById('viewTabBunny');
   const gardenTab = document.getElementById('viewTabGarden');
   const albumTab = document.getElementById('viewTabAlbum');
+
+  // When leaving Autumn tab, hide it and stop the bunny scene so Garden/Album show correctly
+  if (view === 'garden' || view === 'album') {
+    bunnyEl?.classList.remove('active');
+    bunnyTab?.classList.remove('active');
+    bunnyTab?.setAttribute('aria-selected', 'false');
+    if (typeof window.__bunnyDeactivate === 'function') window.__bunnyDeactivate();
+  }
 
   if (view === 'garden') {
     gardenEl?.classList.add('active');

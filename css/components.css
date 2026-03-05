@@ -2609,6 +2609,55 @@ body:not(.light-theme) .edge-nav-right:hover {
   width: 160px;
 }
 
+/* Long exclusive message: wide card with flower left, text right */
+.flower-card.exclusive-wide-message {
+  width: 340px;
+  max-width: 95%;
+  align-items: stretch;
+}
+
+.flower-card.exclusive-wide-message .exclusive-wide-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.flower-card.exclusive-wide-message .flower-bloom-container.bouquet-container {
+  flex-shrink: 0;
+  width: 100px;
+  min-height: 100px;
+}
+
+.flower-card.exclusive-wide-message .exclusive-wide-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.flower-card.exclusive-wide-message .flower-letter-exclusive {
+  width: 100%;
+  max-width: 220px;
+  text-align: left;
+  margin-top: 0;
+}
+
+.flower-card.exclusive-wide-message .flower-letter-glow {
+  text-align: left;
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.flower-card.exclusive-wide-message .flower-species,
+.flower-card.exclusive-wide-message .exclusive-label,
+.flower-card.exclusive-wide-message .flower-date {
+  align-self: center;
+}
+
 .flower-letter-exclusive {
   width: 140px;
   padding: 6px 6px 4px;
@@ -3141,8 +3190,13 @@ body:not(.light-theme) .edge-nav-right:hover {
 }
 
 /* Sideways layout for exclusive notes with long text */
+.flower-modal-content.modal-wide-text {
+  min-width: 620px;
+  flex-wrap: nowrap;
+}
+
 .flower-modal-content.modal-wide-text .flower-modal-left {
-  display: grid;
+  display: grid !important;
   grid-template-areas: "flower note" "flower date";
   grid-template-columns: 130px minmax(380px, 480px);
   grid-template-rows: 1fr auto;
@@ -3150,7 +3204,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   row-gap: 6px;
   align-items: start;
   flex: 1;
-  min-width: 0;
+  min-width: 520px;
 }
 
 .flower-modal-content.modal-wide-text .flower-modal-images.modal-images-none {

@@ -1,6 +1,8 @@
 // Autumn Bunny — ported from vscode-pets state machine
 // Renders a walking white bunny over an autumn forest scene with falling leaves.
 
+import { setCurrentValentineView } from './valentine.js';
+
 const SPRITE_BASE = 'assets/bunny/white';
 const AUTUMN_BG = 'assets/autumn/background.png';
 const AUTUMN_FG = 'assets/autumn/foreground.png';
@@ -380,6 +382,8 @@ function activateBunnyValentineTab() {
   bunnyTab?.setAttribute('aria-selected', 'true');
   bunnyPanel?.classList.add('active');
 
+  setCurrentValentineView('bunny');
+
   if (!bunnyPanel._scene) {
     bunnyPanel._scene = new BunnyScene(bunnyPanel.querySelector('.bunny-scene-inner'), {
       spriteSize: 80, floor: 0, isLarge: true,
@@ -528,19 +532,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Valentine tab
+  // Valentine tab: register deactivate so valentine.js can call it when switching back to Garden/Album
+  window.__bunnyDeactivate = deactivateBunnyValentineTab;
+
   const bunnyTab = document.getElementById('viewTabBunny');
-  const gardenTab = document.getElementById('viewTabGarden');
-  const albumTab = document.getElementById('viewTabAlbum');
-
   if (bunnyTab) {
-    bunnyTab.addEventListener('click', () => {
-      activateBunnyValentineTab();
-    });
-
-    [gardenTab, albumTab].forEach(tab => {
-      if (!tab) return;
-      tab.addEventListener('click', () => deactivateBunnyValentineTab());
-    });
+    bunnyTab.addEventListener('click', () => activateBunnyValentineTab());
   }
 });
