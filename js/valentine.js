@@ -291,49 +291,31 @@ function getFlowerSVG(type, variation = 0) {
 
 function getIrisFlowerSVG(colors) {
   return `<g class="flower-head">
-    <g class="petal" style="--petal-delay:0" transform="rotate(0)"><ellipse cx="0" cy="9" rx="5.5" ry="8.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(120)"><ellipse cx="0" cy="9" rx="5.5" ry="8.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(240)"><ellipse cx="0" cy="9" rx="5.5" ry="8.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:3" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="4" ry="7.5" fill="${colors.secondary}" opacity="0.96"/></g>
-    <g class="petal" style="--petal-delay:4" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="4" ry="7.5" fill="${colors.secondary}" opacity="0.96"/></g>
-    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="4" ry="7.5" fill="${colors.secondary}" opacity="0.96"/></g>
-    <g transform="rotate(0)"><ellipse cx="0" cy="6.5" rx="1.2" ry="3" fill="${colors.center}" opacity="0.9"/></g>
-    <g transform="rotate(120)"><ellipse cx="0" cy="6.5" rx="1.2" ry="3" fill="${colors.center}" opacity="0.9"/></g>
-    <g transform="rotate(240)"><ellipse cx="0" cy="6.5" rx="1.2" ry="3" fill="${colors.center}" opacity="0.9"/></g>
-    <circle cx="0" cy="0" r="3" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="0" cy="0" r="1.8" fill="${colors.secondary}" opacity="0.55"/>
+    <g class="petal" style="--petal-delay:0" transform="rotate(0)"><ellipse cx="0" cy="3" rx="4" ry="3.2" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(120)"><ellipse cx="0" cy="3" rx="4" ry="3.2" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(240)"><ellipse cx="0" cy="3" rx="4" ry="3.2" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(60)"><ellipse cx="0" cy="-3" rx="3.2" ry="2.8" fill="${colors.secondary}" opacity="0.95"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(180)"><ellipse cx="0" cy="-3" rx="3.2" ry="2.8" fill="${colors.secondary}" opacity="0.95"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-3" rx="3.2" ry="2.8" fill="${colors.secondary}" opacity="0.95"/></g>
+    <g transform="rotate(0)"><ellipse cx="0" cy="2" rx="0.9" ry="2" fill="${colors.center}" opacity="0.9"/></g>
+    <g transform="rotate(120)"><ellipse cx="0" cy="2" rx="0.9" ry="2" fill="${colors.center}" opacity="0.9"/></g>
+    <g transform="rotate(240)"><ellipse cx="0" cy="2" rx="0.9" ry="2" fill="${colors.center}" opacity="0.9"/></g>
+    <circle cx="0" cy="0" r="2.2" fill="${colors.center}" opacity="0.9"/>
+    <circle cx="0" cy="0" r="1.2" fill="${colors.secondary}" opacity="0.5"/>
   </g>`;
 }
 
 function getAnemoneFlowerSVG(colors) {
   return `<g class="flower-head">
-    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="5" ry="7.5" fill="${colors.primary}" opacity="0.9"/></g>
-    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
-    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
-    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
-    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
-    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
-    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-9" rx="3" ry="5" fill="${colors.secondary}" opacity="0.3"/></g>
-    <circle cx="0" cy="0" r="4.2" fill="${colors.accent}" opacity="0.95"/>
-    <circle cx="0" cy="0" r="3" fill="#180c20" opacity="0.92"/>
-    <circle cx="0" cy="-2.5" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="1.3" cy="-2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="2.1" cy="-1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="2.5" cy="0" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="2.1" cy="1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="1.3" cy="2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="0" cy="2.5" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-1.3" cy="2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-2.1" cy="1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-2.5" cy="0" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-2.1" cy="-1.3" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="-1.3" cy="-2.1" r="0.6" fill="${colors.center}" opacity="0.9"/>
-    <circle cx="0" cy="0" r="1.2" fill="${colors.center}" opacity="0.45"/>
+    <g class="petal" style="--petal-delay:0"><ellipse cx="0" cy="-5" rx="3.8" ry="5" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:1" transform="rotate(60)"><ellipse cx="0" cy="-5" rx="3.8" ry="5" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:2" transform="rotate(120)"><ellipse cx="0" cy="-5" rx="3.8" ry="5" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:3" transform="rotate(180)"><ellipse cx="0" cy="-5" rx="3.8" ry="5" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:4" transform="rotate(240)"><ellipse cx="0" cy="-5" rx="3.8" ry="5" fill="${colors.primary}" opacity="0.92"/></g>
+    <g class="petal" style="--petal-delay:5" transform="rotate(300)"><ellipse cx="0" cy="-5" rx="3.8" ry="5" fill="${colors.primary}" opacity="0.92"/></g>
+    <circle cx="0" cy="0" r="3" fill="${colors.accent}" opacity="0.95"/>
+    <circle cx="0" cy="0" r="2" fill="#1a0d20" opacity="0.94"/>
+    <circle cx="0" cy="0" r="1" fill="${colors.center}" opacity="0.6"/>
   </g>`;
 }
 
@@ -384,14 +366,14 @@ function getBouquetSVG(type, variation = 0) {
       const anemoneC = FLOWER_COLORS.anemone;
       const mixedStems = `
         <g class="bouquet-stems">
-          <line x1="-10" y1="9" x2="-10" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="9" y1="9" x2="9" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="-4" y1="11" x2="-4" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="5" y1="11" x2="5" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <ellipse cx="-10" cy="38" rx="5" ry="2.5" transform="rotate(-25 -10 38)" fill="#6a8a5a" opacity="0.6"/>
-          <ellipse cx="9" cy="39" rx="5" ry="2.3" transform="rotate(22 9 39)" fill="#6a8a5a" opacity="0.55"/>
-          <ellipse cx="-4" cy="48" rx="4" ry="2" transform="rotate(-30 -4 48)" fill="#6a8a5a" opacity="0.5"/>
-          <ellipse cx="5" cy="50" rx="4" ry="2" transform="rotate(28 5 50)" fill="#6a8a5a" opacity="0.5"/>
+          <line x1="-10" y1="7.5" x2="-10" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="9" y1="7.5" x2="9" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="-4" y1="7.5" x2="-4" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="5" y1="7.5" x2="5" y2="68" stroke="#4a6a3a" stroke-width="1.8" stroke-linecap="round"/>
+          <ellipse cx="-10" cy="36" rx="4" ry="2.2" transform="rotate(-22 -10 36)" fill="#5a7a4a" opacity="0.7"/>
+          <ellipse cx="9" cy="36" rx="4" ry="2.2" transform="rotate(20 9 36)" fill="#5a7a4a" opacity="0.7"/>
+          <ellipse cx="-4" cy="44" rx="3.5" ry="1.8" transform="rotate(-25 -4 44)" fill="#5a7a4a" opacity="0.6"/>
+          <ellipse cx="5" cy="44" rx="3.5" ry="1.8" transform="rotate(22 5 44)" fill="#5a7a4a" opacity="0.6"/>
         </g>`;
       const mixedPaper = `
         <defs>
@@ -402,26 +384,25 @@ function getBouquetSVG(type, variation = 0) {
           </linearGradient>
         </defs>
         <g class="bouquet-paper">
-          <path d="M-28,12 Q-30,0 -22,-14 Q-12,-24 0,-26 Q12,-24 22,-14 Q30,0 28,12 Q20,20 0,22 Q-20,20 -28,12 Z"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.42"/>
-          <path d="M-22,14 Q-24,18 -20,24 L0,28 L20,24 Q24,18 22,14"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
-          <path d="M-16,26 Q0,32 16,26" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
+          <path d="M-24,10 Q-26,-2 -18,-14 Q-10,-22 0,-24 Q10,-22 18,-14 Q26,-2 24,10 Q16,18 0,20 Q-16,18 -24,10 Z"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(200,185,165,0.4)" stroke-width="0.5" opacity="0.35"/>
+          <path d="M-18,12 Q-20,16 -16,22 L0,26 L16,22 Q20,16 18,12"
+            fill="url(#paperGrad${uniqueId})" stroke="rgba(200,185,165,0.25)" stroke-width="0.3" opacity="0.3"/>
         </g>`;
-      return `<svg viewBox="-32 -32 64 110" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
+      return `<svg viewBox="-28 -28 56 100" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
         ${mixedStems}
         ${mixedPaper}
         <g class="flower-head bouquet-head">
-          <g transform="translate(-10, 0) scale(0.78) rotate(-10)">
+          <g transform="translate(-10, 2.1) scale(0.9) rotate(-8)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(9, 1) scale(0.76) rotate(12)">
+          <g transform="translate(9, 2.1) scale(0.88) rotate(10)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(-4, 4) scale(0.82) rotate(-5)">
+          <g transform="translate(-4, 7.5) scale(0.92) rotate(-4)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
-          <g transform="translate(5, 5) scale(0.8) rotate(6)">
+          <g transform="translate(5, 7.5) scale(0.9) rotate(5)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
         </g>
