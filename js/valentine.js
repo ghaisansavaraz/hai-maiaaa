@@ -31,7 +31,7 @@ const FLOWER_LABELS = {
   simple_b: 'Primula',
   iris: 'Iris germanica',
   anemone: 'Anemone coronaria',
-  mixed_exec: 'Iris germanica · Anemone coronaria'
+  mixed_exec: 'Iris germanica · Anemone\u00a0coronaria'
 };
 
 const FLOWER_NAMES = {
@@ -384,10 +384,10 @@ function getBouquetSVG(type, variation = 0) {
       const anemoneC = FLOWER_COLORS.anemone;
       const mixedStems = `
         <g class="bouquet-stems">
-          <line x1="0" y1="10" x2="-10" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="-3" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="3" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="12" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-8" y1="8" x2="-10" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="-2" y1="8" x2="-3" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2" y1="8" x2="3" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="8" y1="8" x2="12" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
           <ellipse cx="-12" cy="36" rx="5.5" ry="2.5" transform="rotate(-28 -12 36)" fill="#6a8a5a" opacity="0.6"/>
           <ellipse cx="9" cy="40" rx="5" ry="2.3" transform="rotate(25 9 40)" fill="#6a8a5a" opacity="0.55"/>
           <ellipse cx="-5" cy="50" rx="4" ry="2" transform="rotate(-35 -5 50)" fill="#6a8a5a" opacity="0.5"/>
@@ -412,16 +412,16 @@ function getBouquetSVG(type, variation = 0) {
         ${mixedStems}
         ${mixedPaper}
         <g class="flower-head bouquet-head">
-          <g transform="translate(-19, -8) scale(0.84) rotate(-12)">
+          <g transform="translate(-19, 2) scale(0.84) rotate(-12)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(19, -6) scale(0.81) rotate(14)">
+          <g transform="translate(18, 4) scale(0.81) rotate(14)">
             ${getIrisFlowerSVG(irisC)}
           </g>
-          <g transform="translate(-6, -2) scale(0.88) rotate(-4)">
+          <g transform="translate(-6, 5) scale(0.88) rotate(-4)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
-          <g transform="translate(7, -1) scale(0.85) rotate(7)">
+          <g transform="translate(7, 6) scale(0.85) rotate(7)">
             ${getAnemoneFlowerSVG(anemoneC)}
           </g>
         </g>

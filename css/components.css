@@ -3144,12 +3144,22 @@ body:not(.light-theme) .edge-nav-right:hover {
 .flower-modal-content.modal-wide-text .flower-modal-left {
   display: grid;
   grid-template-areas: "flower note" "flower date";
-  grid-template-columns: 130px 1fr;
+  grid-template-columns: 130px minmax(380px, 480px);
   grid-template-rows: 1fr auto;
   column-gap: 28px;
   row-gap: 6px;
   align-items: start;
-  max-width: 660px;
+  flex: 1;
+  min-width: 0;
+}
+
+.flower-modal-content.modal-wide-text .flower-modal-images.modal-images-none {
+  flex: 0;
+  min-width: 0;
+  width: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 .flower-modal-content.modal-wide-text .flower-modal-flower {
@@ -3164,7 +3174,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   grid-area: note;
   text-align: left;
   margin: 0;
-  max-width: 420px;
+  max-width: 100%;
   font-size: 0.95rem;
   line-height: 1.65;
   align-self: end;
