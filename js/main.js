@@ -211,7 +211,10 @@ function toggleZenMode() {
 // ===== VALENTINE DASHBOARD VIEW SWITCHING =====
 
 function switchToDashboard(viewName) {
-  if (currentView === viewName) return;
+  if (currentView === viewName) {
+    debugLog(`Already in ${viewName} view, skipping switch`);
+    return;
+  }
   
   debugLog(`Switching to ${viewName} dashboard`);
   
@@ -219,8 +222,13 @@ function switchToDashboard(viewName) {
   const valentineDashboard = document.getElementById('valentineDashboard');
   const centerContainer = document.querySelector('.center');
   
-  if (!mainDashboard || !valentineDashboard) {
-    debugError('Dashboard elements not found');
+  if (!mainDashboard) {
+    debugError('Main dashboard element not found');
+    return;
+  }
+  
+  if (!valentineDashboard) {
+    debugError('Valentine dashboard element not found');
     return;
   }
   
@@ -228,8 +236,10 @@ function switchToDashboard(viewName) {
   
   if (viewName === 'main') {
     // Show main dashboard
+    debugLog('Switching to main dashboard');
     document.body.classList.remove('valentine-view');
     valentineDashboard.classList.remove('active');
+    debugLog('Valentine dashboard active class removed');
     // Pause valentine audio when leaving valentine view
     pauseValentineAudio();
     setTimeout(() => {
@@ -237,16 +247,21 @@ function switchToDashboard(viewName) {
       if (centerContainer) {
         centerContainer.classList.add('dashboard-active');
       }
+      debugLog('Main dashboard is now visible');
     }, 300);
   } else if (viewName === 'valentine') {
     // Show valentine dashboard
+    debugLog('Switching to valentine dashboard');
     document.body.classList.add('valentine-view');
     mainDashboard.classList.remove('visible');
     if (centerContainer) {
       centerContainer.classList.remove('dashboard-active');
     }
+    debugLog('Main dashboard hidden, waiting 300ms before showing valentine');
     setTimeout(() => {
       valentineDashboard.classList.add('active');
+      debugLog('Valentine dashboard active class added');
+      debugLog('Valentine dashboard computed style:', window.getComputedStyle(valentineDashboard).opacity, window.getComputedStyle(valentineDashboard).zIndex);
       // Play valentine audio when entering valentine view
       playValentineAudio();
     }, 300);
