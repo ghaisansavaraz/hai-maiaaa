@@ -216,7 +216,7 @@ function switchToDashboard(viewName) {
   debugLog(`Switching to ${viewName} dashboard`);
   
   const mainDashboard = document.getElementById('dashboard');
-  const valentineDashboard = document.getElementById('pinterestDashboard');
+  const valentineDashboard = document.getElementById('valentineDashboard');
   const centerContainer = document.querySelector('.center');
   
   if (!mainDashboard || !valentineDashboard) {
@@ -228,7 +228,7 @@ function switchToDashboard(viewName) {
   
   if (viewName === 'main') {
     // Show main dashboard
-    document.body.classList.remove('pinterest-view');
+    document.body.classList.remove('valentine-view');
     valentineDashboard.classList.remove('active');
     // Pause valentine audio when leaving valentine view
     pauseValentineAudio();
@@ -240,7 +240,7 @@ function switchToDashboard(viewName) {
     }, 300);
   } else if (viewName === 'valentine') {
     // Show valentine dashboard
-    document.body.classList.add('pinterest-view');
+    document.body.classList.add('valentine-view');
     mainDashboard.classList.remove('visible');
     if (centerContainer) {
       centerContainer.classList.remove('dashboard-active');

@@ -2072,8 +2072,8 @@ body.zen-mode.zen-bloom .stars-layer-front {
 /* ===== VALENTINE BLOOM GARDEN + PRESSED FLOWER ALBUM ===== */
 
 /* Hide main dashboard when Valentine is active */
-body.pinterest-view #dashboard,
-body.pinterest-view .center {
+body.valentine-view #dashboard,
+body.valentine-view .center {
   opacity: 0 !important;
   pointer-events: none !important;
   visibility: hidden !important;
