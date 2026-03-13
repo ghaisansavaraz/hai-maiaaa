@@ -2119,7 +2119,7 @@ body:not(.light-theme) .edge-nav-right:hover {
   width: 90%;
   max-width: 1200px;
   height: 85vh;
-  z-index: 10000;
+  z-index: 10002;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease, transform 0.5s ease;
