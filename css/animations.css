@@ -257,3 +257,90 @@
   }
 }
 
+/* ====================================
+   BUNNY SLEEPY COMPANION ANIMATIONS
+   ==================================== */
+
+/* Zzz Float Animation */
+@keyframes zzzFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-40px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1.2);
+  }
+}
+
+/* Thought Bubble Animation */
+@keyframes thoughtBubble {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(10px);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1.1) translateY(0);
+  }
+  20% {
+    transform: scale(1) translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-5px);
+  }
+}
+
+/* Heart Float Animation */
+@keyframes heartFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.6);
+  }
+}
+
+/* Food Drop Animation */
+@keyframes foodDrop {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  60% {
+    transform: translateY(var(--drop-distance, 100px)) rotate(180deg);
+  }
+  70% {
+    transform: translateY(calc(var(--drop-distance, 100px) - 8px)) rotate(200deg);
+  }
+  80% {
+    transform: translateY(var(--drop-distance, 100px)) rotate(180deg);
+  }
+  90% {
+    transform: translateY(calc(var(--drop-distance, 100px) - 4px)) rotate(190deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(var(--drop-distance, 100px)) rotate(180deg);
+  }
+}
+

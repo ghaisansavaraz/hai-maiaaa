@@ -2159,7 +2159,18 @@ body.light-theme .mood-category {
 
       <!-- Autumn Bunny View -->
       <div id="valentineBunny" class="valentine-view" role="tabpanel" aria-labelledby="viewTabBunny">
-        <div class="bunny-scene-inner"></div>
+        <button id="bunnySleepToggle" class="bunny-sleep-toggle" aria-label="Toggle sleep mode" title="Sleep mode">
+          <svg class="bunny-moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <div class="bunny-scene-inner">
+          <div class="bunny-zzz-container"></div>
+          <div class="bunny-blanket"></div>
+          <div class="bunny-thought-bubble"></div>
+          <div class="bunny-hearts-container"></div>
+          <div class="bunny-food-container"></div>
+        </div>
       </div>
     </div>
 
@@ -2215,7 +2226,18 @@ body.light-theme .mood-category {
   <!-- Bunny Fullscreen Overlay -->
   <div id="bunny-fullscreen">
     <button class="bunny-close" aria-label="Close">&times;</button>
-    <div class="bunny-scene-inner"></div>
+    <button id="bunnySleepToggleFullscreen" class="bunny-sleep-toggle" aria-label="Toggle sleep mode" title="Sleep mode">
+      <svg class="bunny-moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+    <div class="bunny-scene-inner">
+      <div class="bunny-zzz-container"></div>
+      <div class="bunny-blanket"></div>
+      <div class="bunny-thought-bubble"></div>
+      <div class="bunny-hearts-container"></div>
+      <div class="bunny-food-container"></div>
+    </div>
   </div>
 
   <!-- JavaScript Modules -->

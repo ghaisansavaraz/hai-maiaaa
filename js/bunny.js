@@ -205,6 +205,13 @@ class BunnyScene {
     this.stateEnum = S.sitIdle;
     this.idleCounter = 0;
     this.facingDir = DIR.right;
+    
+    // Sleepy Companion Mode state
+    this.isSleepModeTriggered = false;
+    this.targetSleepPosition = null;
+    this.isWalkingToSleep = false;
+    this.foodTarget = null;
+    this.isWalkingToFood = false;
 
     this._buildDOM();
     this._resetBoundary();
@@ -273,6 +280,57 @@ class BunnyScene {
   }
 
   _tick() {
+    // Handle walking to sleep position
+    if (this.isWalkingToSleep && this.targetSleepPosition !== null) {
+      const distance = Math.abs(this.left - this.targetSleepPosition);
+      if (distance < 5) {
+        this.left = this.targetSleepPosition;
+        this.isWalkingToSleep = false;
+        this.stateEnum = S.lie;
+        this.idleCounter = 0;
+        this._applyState();
+        this._showSleepEffects();
+      } else {
+        const direction = this.left < this.targetSleepPosition ? 1 : -1;
+        this.left += this.speed * direction;
+        this.stateEnum = direction > 0 ? S.walkRight : S.walkLeft;
+        this._applyState();
+      }
+      this._render();
+      return;
+    }
+    
+    // Handle walking to food
+    if (this.isWalkingToFood && this.foodTarget !== null) {
+      const distance = Math.abs(this.left - this.foodTarget.x);
+      if (distance < 10) {
+        this.left = this.foodTarget.x;
+        this.isWalkingToFood = false;
+        this._eatFood(this.foodTarget.element);
+        this.foodTarget = null;
+        this.stateEnum = S.sitIdle;
+        this.idleCounter = 0;
+        this._applyState();
+      } else {
+        const direction = this.left < this.foodTarget.x ? 1 : -1;
+        this.left += this.speed * 1.5 * direction;
+        this.stateEnum = direction > 0 ? S.walkRight : S.walkLeft;
+        this._applyState();
+      }
+      this._render();
+      return;
+    }
+    
+    // Lock state machine if sleep mode is active
+    if (this.isSleepModeTriggered) {
+      if (this.stateEnum !== S.lie) {
+        this.stateEnum = S.lie;
+        this._applyState();
+      }
+      this._render();
+      return;
+    }
+    
     const result = this._nextFrame();
     if (result === 'complete') {
       const nextStates = TRANSITIONS[this.stateEnum];
@@ -333,6 +391,142 @@ class BunnyScene {
     }
     this.img.style.left = `${this.left}px`;
     this.img.style.transform = this.facingDir === DIR.left ? 'scaleX(-1)' : 'scaleX(1)';
+  }
+  
+  // Sleepy Companion Methods
+  
+  enterSleepMode() {
+    if (this.isSleepModeTriggered) return;
+    this.isSleepModeTriggered = true;
+    this.targetSleepPosition = Math.max(0, (this.boundary - this.spriteSize) / 2);
+    this.isWalkingToSleep = true;
+  }
+  
+  exitSleepMode() {
+    if (!this.isSleepModeTriggered) return;
+    this.isSleepModeTriggered = false;
+    this.isWalkingToSleep = false;
+    this.targetSleepPosition = null;
+    this._hideSleepEffects();
+    this.stateEnum = S.sitIdle;
+    this.idleCounter = 0;
+    this._applyState();
+  }
+  
+  _showSleepEffects() {
+    const zzzContainer = this.container.querySelector('.bunny-zzz-container');
+    const blanket = this.container.querySelector('.bunny-blanket');
+    
+    if (zzzContainer) {
+      zzzContainer.classList.add('active');
+      zzzContainer.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const zzz = document.createElement('div');
+        zzz.className = 'bunny-zzz';
+        zzz.textContent = 'Z';
+        zzz.style.left = `${this.left + this.spriteSize / 2 + 10}px`;
+        zzz.style.bottom = `${this.floor + this.spriteSize + 10 + i * 15}px`;
+        zzzContainer.appendChild(zzz);
+      }
+    }
+    
+    if (blanket) {
+      blanket.classList.add('active');
+    }
+  }
+  
+  _hideSleepEffects() {
+    const zzzContainer = this.container.querySelector('.bunny-zzz-container');
+    const blanket = this.container.querySelector('.bunny-blanket');
+    
+    if (zzzContainer) {
+      zzzContainer.classList.remove('active');
+      setTimeout(() => { zzzContainer.innerHTML = ''; }, 500);
+    }
+    
+    if (blanket) {
+      blanket.classList.remove('active');
+    }
+  }
+  
+  showDream() {
+    if (!this.isSleepModeTriggered) return;
+    
+    const thoughtBubble = this.container.querySelector('.bunny-thought-bubble');
+    if (!thoughtBubble) return;
+    
+    const dreams = ['❤️', '🥕', '🌙'];
+    const dream = pick(dreams);
+    
+    thoughtBubble.innerHTML = `<span class="bunny-thought-icon">${dream}</span>`;
+    thoughtBubble.style.left = `${this.left + this.spriteSize / 2 - 30}px`;
+    thoughtBubble.style.bottom = `${this.floor + this.spriteSize + 20}px`;
+    thoughtBubble.classList.add('active');
+    
+    setTimeout(() => {
+      thoughtBubble.classList.remove('active');
+    }, 2500);
+  }
+  
+  spawnHeart(x, y) {
+    if (this.isSleepModeTriggered) return;
+    
+    const heartsContainer = this.container.querySelector('.bunny-hearts-container');
+    if (!heartsContainer) return;
+    
+    const heart = document.createElement('div');
+    heart.className = 'bunny-heart';
+    heart.textContent = '♥';
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+    heartsContainer.appendChild(heart);
+    
+    setTimeout(() => heart.remove(), 1500);
+  }
+  
+  spawnFood(x, y) {
+    if (this.isSleepModeTriggered) return;
+    
+    const foodContainer = this.container.querySelector('.bunny-food-container');
+    if (!foodContainer) return;
+    
+    const foods = ['🥕', '🍂'];
+    const food = pick(foods);
+    
+    const foodEl = document.createElement('div');
+    foodEl.className = 'bunny-food';
+    foodEl.textContent = food;
+    foodEl.style.left = `${x}px`;
+    foodEl.style.top = `${y}px`;
+    
+    const dropDistance = this.container.clientHeight - y - this.floor - 24;
+    foodEl.style.setProperty('--drop-distance', `${dropDistance}px`);
+    
+    foodContainer.appendChild(foodEl);
+    
+    setTimeout(() => {
+      this.foodTarget = { x: x, element: foodEl };
+      this.isWalkingToFood = true;
+    }, 600);
+  }
+  
+  _eatFood(foodElement) {
+    if (!foodElement) return;
+    foodElement.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    foodElement.style.opacity = '0';
+    foodElement.style.transform = 'scale(0.5)';
+    setTimeout(() => foodElement.remove(), 300);
+  }
+  
+  isMouseOverBunny(mouseX, mouseY) {
+    const bunnyRect = {
+      left: this.left,
+      right: this.left + this.spriteSize,
+      top: this.container.clientHeight - this.floor - this.spriteSize,
+      bottom: this.container.clientHeight - this.floor
+    };
+    return mouseX >= bunnyRect.left && mouseX <= bunnyRect.right &&
+           mouseY >= bunnyRect.top && mouseY <= bunnyRect.bottom;
   }
 }
 
@@ -512,7 +706,15 @@ document.addEventListener('DOMContentLoaded', () => {
       spriteSize: 40, floor: 0, isLarge: false,
     });
     cardScene.start();
-    cardContainer.addEventListener('click', () => openFullscreen());
+    
+    // Click to open fullscreen (only if not clicking moon toggle)
+    cardContainer.addEventListener('click', (e) => {
+      if (e.target.closest('.bunny-sleep-toggle')) return;
+      openFullscreen();
+    });
+    
+    // Store scene reference for sleep toggle access
+    cardContainer._scene = cardScene;
   }
 
   // Fullscreen close
@@ -538,5 +740,210 @@ document.addEventListener('DOMContentLoaded', () => {
   const bunnyTab = document.getElementById('viewTabBunny');
   if (bunnyTab) {
     bunnyTab.addEventListener('click', () => activateBunnyValentineTab());
+  }
+  
+  // Sleepy Companion Mode - Moon Toggle (Card)
+  const sleepToggle = document.getElementById('bunnySleepToggle');
+  if (sleepToggle && cardContainer) {
+    sleepToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const scene = cardContainer._scene;
+      if (!scene) return;
+      
+      sleepToggle.classList.toggle('active');
+      if (sleepToggle.classList.contains('active')) {
+        scene.enterSleepMode();
+      } else {
+        scene.exitSleepMode();
+      }
+    });
+  }
+  
+  // Sleepy Companion Mode - Moon Toggle (Fullscreen)
+  const sleepToggleFullscreen = document.getElementById('bunnySleepToggleFullscreen');
+  if (sleepToggleFullscreen && overlay) {
+    sleepToggleFullscreen.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const scene = overlay._scene;
+      if (!scene) return;
+      
+      sleepToggleFullscreen.classList.toggle('active');
+      if (sleepToggleFullscreen.classList.contains('active')) {
+        scene.enterSleepMode();
+      } else {
+        scene.exitSleepMode();
+      }
+    });
+  }
+  
+  // Dream interaction - Click sleeping bunny (Card)
+  if (cardContainer) {
+    const sceneInner = cardContainer.querySelector('.bunny-scene-inner');
+    if (sceneInner) {
+      sceneInner.addEventListener('click', (e) => {
+        if (e.target.closest('.bunny-sleep-toggle')) return;
+        const scene = cardContainer._scene;
+        if (scene && scene.isSleepModeTriggered) {
+          e.stopPropagation();
+          scene.showDream();
+        }
+      });
+    }
+  }
+  
+  // Dream interaction - Click sleeping bunny (Fullscreen)
+  if (overlay) {
+    const sceneInner = overlay.querySelector('.bunny-scene-inner');
+    if (sceneInner) {
+      sceneInner.addEventListener('click', (e) => {
+        if (e.target.closest('.bunny-sleep-toggle') || e.target.closest('.bunny-close')) return;
+        const scene = overlay._scene;
+        if (scene && scene.isSleepModeTriggered) {
+          e.stopPropagation();
+          scene.showDream();
+        }
+      });
+    }
+  }
+  
+  // Petting interaction - Hearts on hover (Card)
+  if (cardContainer) {
+    let lastHeartTime = 0;
+    cardContainer.addEventListener('mousemove', (e) => {
+      const scene = cardContainer._scene;
+      if (!scene || scene.isSleepModeTriggered) return;
+      
+      const rect = cardContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      if (scene.isMouseOverBunny(x, y)) {
+        const now = Date.now();
+        if (now - lastHeartTime > 300) {
+          scene.spawnHeart(x, y);
+          lastHeartTime = now;
+        }
+      }
+    });
+  }
+  
+  // Petting interaction - Hearts on hover (Fullscreen)
+  if (overlay) {
+    let lastHeartTimeFS = 0;
+    const sceneInner = overlay.querySelector('.bunny-scene-inner');
+    if (sceneInner) {
+      sceneInner.addEventListener('mousemove', (e) => {
+        const scene = overlay._scene;
+        if (!scene || scene.isSleepModeTriggered) return;
+        
+        const rect = sceneInner.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        if (scene.isMouseOverBunny(x, y)) {
+          const now = Date.now();
+          if (now - lastHeartTimeFS > 300) {
+            scene.spawnHeart(x, y);
+            lastHeartTimeFS = now;
+          }
+        }
+      });
+    }
+  }
+  
+  // Feeding interaction - Double click to drop food (Card)
+  if (cardContainer) {
+    cardContainer.addEventListener('dblclick', (e) => {
+      if (e.target.closest('.bunny-sleep-toggle')) return;
+      const scene = cardContainer._scene;
+      if (!scene || scene.isSleepModeTriggered) return;
+      
+      const rect = cardContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      scene.spawnFood(x, y);
+    });
+  }
+  
+  // Feeding interaction - Double click to drop food (Fullscreen)
+  if (overlay) {
+    const sceneInner = overlay.querySelector('.bunny-scene-inner');
+    if (sceneInner) {
+      sceneInner.addEventListener('dblclick', (e) => {
+        if (e.target.closest('.bunny-sleep-toggle') || e.target.closest('.bunny-close')) return;
+        const scene = overlay._scene;
+        if (!scene || scene.isSleepModeTriggered) return;
+        
+        const rect = sceneInner.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        scene.spawnFood(x, y);
+      });
+    }
+  }
+  
+  // Valentine tab scene setup
+  const valentineBunnyPanel = document.getElementById('valentineBunny');
+  if (valentineBunnyPanel) {
+    const valentineSleepToggle = valentineBunnyPanel.querySelector('.bunny-sleep-toggle');
+    if (valentineSleepToggle) {
+      valentineSleepToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const scene = valentineBunnyPanel._scene;
+        if (!scene) return;
+        
+        valentineSleepToggle.classList.toggle('active');
+        if (valentineSleepToggle.classList.contains('active')) {
+          scene.enterSleepMode();
+        } else {
+          scene.exitSleepMode();
+        }
+      });
+    }
+    
+    // Dream, petting, and feeding for Valentine tab
+    const valentineSceneInner = valentineBunnyPanel.querySelector('.bunny-scene-inner');
+    if (valentineSceneInner) {
+      // Dreams
+      valentineSceneInner.addEventListener('click', (e) => {
+        if (e.target.closest('.bunny-sleep-toggle')) return;
+        const scene = valentineBunnyPanel._scene;
+        if (scene && scene.isSleepModeTriggered) {
+          e.stopPropagation();
+          scene.showDream();
+        }
+      });
+      
+      // Petting
+      let lastHeartTimeVal = 0;
+      valentineSceneInner.addEventListener('mousemove', (e) => {
+        const scene = valentineBunnyPanel._scene;
+        if (!scene || scene.isSleepModeTriggered) return;
+        
+        const rect = valentineSceneInner.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        if (scene.isMouseOverBunny(x, y)) {
+          const now = Date.now();
+          if (now - lastHeartTimeVal > 300) {
+            scene.spawnHeart(x, y);
+            lastHeartTimeVal = now;
+          }
+        }
+      });
+      
+      // Feeding
+      valentineSceneInner.addEventListener('dblclick', (e) => {
+        if (e.target.closest('.bunny-sleep-toggle')) return;
+        const scene = valentineBunnyPanel._scene;
+        if (!scene || scene.isSleepModeTriggered) return;
+        
+        const rect = valentineSceneInner.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        scene.spawnFood(x, y);
+      });
+    }
   }
 });
