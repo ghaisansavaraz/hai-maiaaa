@@ -1,4 +1,4 @@
-// Autumn Bunny — ported from vscode-pets state machine
+// Autumn Bunny — Sleepy Companion Mode + Interactive scenes
 // Renders a walking white bunny over an autumn forest scene with falling leaves.
 
 import { setCurrentValentineView } from './valentine.js';
@@ -194,17 +194,34 @@ class LeafEffect {
 // ── BunnyScene ──────────────────────────────────────
 
 class BunnyScene {
-  constructor(container, { spriteSize = 55, floor = 0, isLarge = false } = {}) {
+  constructor(container, { spriteSize = 55, floor = 0, isLarge = false, isInteractive = false } = {}) {
     this.container = container;
     this.spriteSize = spriteSize;
     this.floor = floor;
     this.isLarge = isLarge;
+    this.isInteractive = isInteractive;
     this.running = false;
     this.left = 0;
     this.speed = rand(1.2, 2.0);
     this.stateEnum = S.sitIdle;
     this.idleCounter = 0;
     this.facingDir = DIR.right;
+
+    // Sleep / interaction state
+    this.isSleepMode = false;
+    this._walkTarget = null;
+    this._walkTargetCallback = null;
+    this._zzzTimeout = null;
+    this._heartCooldown = 0;
+    this._activeHearts = 0;
+    this._foodEl = null;
+
+    // Interactive DOM refs (set in _buildDOM when isInteractive)
+    this.sleepBtn = null;
+    this.blanket = null;
+    this.zzzContainer = null;
+    this.bubbleContainer = null;
+    this.particlesContainer = null;
 
     this._buildDOM();
     this._resetBoundary();
@@ -239,7 +256,293 @@ class BunnyScene {
     this.container.appendChild(fg);
 
     this.leafEffect = new LeafEffect(canvas, this.floor, this.isLarge);
+
+    if (this.isInteractive) {
+      this._buildInteractiveDOM();
+    }
   }
+
+  _buildInteractiveDOM() {
+    // Blanket overlay — above foreground (z-index 5)
+    const blanket = document.createElement('div');
+    blanket.className = 'bunny-blanket';
+    this.container.appendChild(blanket);
+    this.blanket = blanket;
+
+    // Zzz container (z-index 7)
+    const zzzContainer = document.createElement('div');
+    zzzContainer.className = 'bunny-zzz-container';
+    this.container.appendChild(zzzContainer);
+    this.zzzContainer = zzzContainer;
+
+    // Thought bubble container (z-index 8)
+    const bubbleContainer = document.createElement('div');
+    bubbleContainer.className = 'bunny-bubble-container';
+    this.container.appendChild(bubbleContainer);
+    this.bubbleContainer = bubbleContainer;
+
+    // Particles (hearts + food) — highest layer (z-index 9)
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'bunny-particles';
+    this.container.appendChild(particlesContainer);
+    this.particlesContainer = particlesContainer;
+
+    // Sleep toggle button — top-right corner (z-index 6)
+    const sleepBtn = document.createElement('button');
+    sleepBtn.className = 'bunny-sleep-btn';
+    sleepBtn.setAttribute('aria-label', 'Tuck in bunny');
+    sleepBtn.setAttribute('title', 'Tuck in / Wake up');
+    sleepBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+    this.container.appendChild(sleepBtn);
+    this.sleepBtn = sleepBtn;
+
+    sleepBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (this.isSleepMode) {
+        this.disableSleepMode();
+      } else {
+        this.enableSleepMode();
+      }
+    });
+
+    // Blanket click = dream bubble (sleeping only)
+    blanket.addEventListener('click', () => {
+      if (this.isSleepMode) this._spawnThoughtBubble();
+    });
+
+    this._initInteractions();
+  }
+
+  _initInteractions() {
+    // Hover hearts — awake bunny only, throttled
+    this.container.addEventListener('mousemove', (e) => {
+      if (this.isSleepMode || this._walkTarget !== null) return;
+      const now = Date.now();
+      if (now - this._heartCooldown < 320) return;
+      if (this._activeHearts >= 5) return;
+
+      const rect = this.container.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      const bunnyX = this.left + this.spriteSize / 2;
+      const bunnyY = this.container.clientHeight - this.floor - this.spriteSize * 0.5;
+      const dist = Math.hypot(mouseX - bunnyX, mouseY - bunnyY);
+
+      if (dist < 58) {
+        this._heartCooldown = now;
+        this._spawnHeart(mouseX, mouseY - 18);
+      }
+    });
+
+    // Touch petting — finger near bunny
+    this.container.addEventListener('touchmove', (e) => {
+      if (this.isSleepMode || this._walkTarget !== null) return;
+      const now = Date.now();
+      if (now - this._heartCooldown < 400) return;
+      if (this._activeHearts >= 5) return;
+
+      const touch = e.touches[0];
+      const rect = this.container.getBoundingClientRect();
+      const touchX = touch.clientX - rect.left;
+      const touchY = touch.clientY - rect.top;
+      const bunnyX = this.left + this.spriteSize / 2;
+      const bunnyY = this.container.clientHeight - this.floor - this.spriteSize * 0.5;
+      const dist = Math.hypot(touchX - bunnyX, touchY - bunnyY);
+
+      if (dist < 70) {
+        this._heartCooldown = now;
+        this._spawnHeart(touchX, touchY - 20);
+      }
+    }, { passive: true });
+
+    // Double-click to feed — awake only
+    this.container.addEventListener('dblclick', (e) => {
+      if (this.isSleepMode) return;
+      const rect = this.container.getBoundingClientRect();
+      this._dropFood(e.clientX - rect.left, e.clientY - rect.top);
+    });
+  }
+
+  // ── Sleep Mode ───────────────────────────────────
+
+  enableSleepMode() {
+    this.isSleepMode = true;
+    if (this.sleepBtn) {
+      this.sleepBtn.classList.add('active');
+      this.sleepBtn.setAttribute('aria-label', 'Wake up bunny');
+    }
+
+    // Walk to center, then lie down
+    const centerX = Math.max(0, Math.min(
+      this.boundary / 2 - this.spriteSize / 2,
+      this.boundary - this.spriteSize
+    ));
+    this._walkTarget = centerX;
+    this._walkTargetCallback = () => {
+      this.stateEnum = S.lie;
+      this._applyState();
+      this._render();
+      // Fade in blanket
+      if (this.blanket) this.blanket.classList.add('active');
+      // Begin Zzz
+      this._startZzz();
+    };
+  }
+
+  disableSleepMode() {
+    this.isSleepMode = false;
+    if (this.sleepBtn) {
+      this.sleepBtn.classList.remove('active');
+      this.sleepBtn.setAttribute('aria-label', 'Tuck in bunny');
+    }
+
+    // Hide blanket
+    if (this.blanket) this.blanket.classList.remove('active');
+
+    // Stop Zzz
+    this._stopZzz();
+
+    // Clear thought bubbles
+    if (this.bubbleContainer) this.bubbleContainer.innerHTML = '';
+
+    // Resume state machine
+    this.stateEnum = S.sitIdle;
+    this.idleCounter = 0;
+    this._applyState();
+  }
+
+  _startZzz() {
+    this._stopZzz();
+    const spawnLoop = () => {
+      if (!this.isSleepMode || !this.running) return;
+      this._spawnZzzElement();
+      this._zzzTimeout = setTimeout(spawnLoop, 2200 + Math.random() * 600);
+    };
+    this._zzzTimeout = setTimeout(spawnLoop, 700);
+  }
+
+  _stopZzz() {
+    if (this._zzzTimeout) {
+      clearTimeout(this._zzzTimeout);
+      this._zzzTimeout = null;
+    }
+    if (this.zzzContainer) this.zzzContainer.innerHTML = '';
+  }
+
+  _spawnZzzElement() {
+    if (!this.zzzContainer) return;
+    const variants = [
+      { text: 'Z', cls: 'bunny-zzz-large' },
+      { text: 'z', cls: 'bunny-zzz-small' },
+      { text: 'Z', cls: 'bunny-zzz-medium' },
+    ];
+    const v = pick(variants);
+
+    const el = document.createElement('div');
+    el.className = `bunny-zzz ${v.cls}`;
+    el.textContent = v.text;
+
+    const bunnyX = this.left + this.spriteSize / 2;
+    el.style.left = `${bunnyX - 8 + (Math.random() - 0.5) * 22}px`;
+    el.style.bottom = `${this.floor + this.spriteSize + 4 + Math.random() * 12}px`;
+
+    this.zzzContainer.appendChild(el);
+    setTimeout(() => el.remove(), 2900);
+  }
+
+  // ── Dream Bubbles ────────────────────────────────
+
+  _spawnThoughtBubble() {
+    if (!this.bubbleContainer) return;
+    this.bubbleContainer.innerHTML = '';
+
+    const dreams = ['❤️', '🥕', '🌙', '⭐', '🌸', '🍃'];
+    const dream = pick(dreams);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'bunny-thought-bubble';
+
+    const body = document.createElement('div');
+    body.className = 'bunny-thought-bubble-body';
+    body.textContent = dream;
+
+    // Small connecting dots
+    const dot1 = document.createElement('div');
+    dot1.className = 'bunny-thought-dot';
+    dot1.style.cssText = 'width:8px;height:8px;bottom:-10px;left:50%;transform:translateX(-50%);';
+
+    const dot2 = document.createElement('div');
+    dot2.className = 'bunny-thought-dot';
+    dot2.style.cssText = 'width:5px;height:5px;bottom:-17px;left:44%;';
+
+    body.appendChild(dot1);
+    body.appendChild(dot2);
+    wrap.appendChild(body);
+
+    const bunnyX = this.left + this.spriteSize / 2;
+    wrap.style.left = `${bunnyX - 28}px`;
+    wrap.style.bottom = `${this.floor + this.spriteSize + 16}px`;
+
+    this.bubbleContainer.appendChild(wrap);
+    setTimeout(() => wrap.remove(), 2900);
+  }
+
+  // ── Hearts ───────────────────────────────────────
+
+  _spawnHeart(x, y) {
+    if (!this.particlesContainer) return;
+    this._activeHearts++;
+    const el = document.createElement('div');
+    el.className = 'bunny-heart';
+    el.textContent = '♥';
+    el.style.left = `${x + (Math.random() - 0.5) * 18}px`;
+    el.style.top = `${y}px`;
+    this.particlesContainer.appendChild(el);
+    setTimeout(() => {
+      el.remove();
+      this._activeHearts = Math.max(0, this._activeHearts - 1);
+    }, 1900);
+  }
+
+  // ── Food Drop ────────────────────────────────────
+
+  _dropFood(x, y) {
+    if (!this.particlesContainer || this._foodEl || this._walkTarget !== null) return;
+
+    const foods = ['🥕', '🍃', '🌿'];
+    const el = document.createElement('div');
+    el.className = 'bunny-food';
+    el.textContent = pick(foods);
+
+    const dropX = Math.max(10, Math.min(x, this.container.clientWidth - 30));
+    const bottomY = this.container.clientHeight - this.floor - 24;
+
+    el.style.left = `${dropX - 10}px`;
+    el.style.top = `${bottomY}px`;
+    this.particlesContainer.appendChild(el);
+    this._foodEl = el;
+
+    // Walk bunny to food
+    const targetX = Math.max(0, Math.min(dropX - this.spriteSize / 2, this.boundary - this.spriteSize));
+    this._walkTarget = targetX;
+    this._walkTargetCallback = () => {
+      // Eat (swipe) then resume
+      this.stateEnum = S.swipe;
+      this._applyState();
+      this._render();
+      setTimeout(() => {
+        if (this._foodEl) {
+          this._foodEl.remove();
+          this._foodEl = null;
+        }
+        this.stateEnum = S.sitIdle;
+        this.idleCounter = 0;
+        this._applyState();
+      }, 750);
+    };
+  }
+
+  // ── State Machine ────────────────────────────────
 
   _resetBoundary() {
     this.boundary = this.container.clientWidth;
@@ -253,6 +556,12 @@ class BunnyScene {
     this._interval = setInterval(() => this._tick(), 100);
     this._resizeHandler = () => this._resize();
     window.addEventListener('resize', this._resizeHandler);
+
+    // Re-apply sleep mode if it was active when we stopped
+    if (this.isSleepMode && this.isInteractive) {
+      if (this.blanket) this.blanket.classList.add('active');
+      this._startZzz();
+    }
   }
 
   stop() {
@@ -260,6 +569,17 @@ class BunnyScene {
     this.leafEffect.stop();
     if (this._interval) clearInterval(this._interval);
     if (this._resizeHandler) window.removeEventListener('resize', this._resizeHandler);
+
+    if (this.isInteractive) {
+      this._stopZzz();
+      if (this.blanket) this.blanket.classList.remove('active');
+      if (this.bubbleContainer) this.bubbleContainer.innerHTML = '';
+      if (this.particlesContainer) {
+        // Keep food/hearts cleared
+        if (this._foodEl) { this._foodEl.remove(); this._foodEl = null; }
+        this._activeHearts = 0;
+      }
+    }
   }
 
   _resize() {
@@ -273,6 +593,24 @@ class BunnyScene {
   }
 
   _tick() {
+    // Walk-to-target mode: drives movement toward a goal (sleep center or food)
+    if (this._walkTarget !== null) {
+      this._tickWalkToTarget();
+      return;
+    }
+
+    // Sleep lock: frozen in lie state
+    if (this.isSleepMode) {
+      if (this.stateEnum !== S.lie) {
+        this.stateEnum = S.lie;
+        this.idleCounter = 0;
+        this._applyState();
+      }
+      this._render();
+      return;
+    }
+
+    // Normal state machine
     const result = this._nextFrame();
     if (result === 'complete') {
       const nextStates = TRANSITIONS[this.stateEnum];
@@ -283,6 +621,33 @@ class BunnyScene {
       }
       this.idleCounter = 0;
       this._applyState();
+    }
+    this._render();
+  }
+
+  _tickWalkToTarget() {
+    const target = this._walkTarget;
+    const threshold = this.speed * 1.8;
+
+    if (Math.abs(this.left - target) <= threshold) {
+      this.left = target;
+      this._walkTarget = null;
+      const cb = this._walkTargetCallback;
+      this._walkTargetCallback = null;
+      this._applyState();
+      this._render();
+      if (cb) cb();
+      return;
+    }
+
+    if (this.left < target) {
+      this.stateEnum = S.walkRight;
+      this.facingDir = DIR.right;
+      this.left = Math.min(this.left + this.speed * 1.5, target);
+    } else {
+      this.stateEnum = S.walkLeft;
+      this.facingDir = DIR.left;
+      this.left = Math.max(this.left - this.speed * 1.5, target);
     }
     this._render();
   }
@@ -346,7 +711,7 @@ function openFullscreen() {
 
   if (!overlay._scene) {
     overlay._scene = new BunnyScene(overlay.querySelector('.bunny-scene-inner'), {
-      spriteSize: 110, floor: 0, isLarge: true,
+      spriteSize: 110, floor: 0, isLarge: true, isInteractive: true,
     });
   }
   overlay._scene._resize();
@@ -386,7 +751,7 @@ function activateBunnyValentineTab() {
 
   if (!bunnyPanel._scene) {
     bunnyPanel._scene = new BunnyScene(bunnyPanel.querySelector('.bunny-scene-inner'), {
-      spriteSize: 80, floor: 0, isLarge: true,
+      spriteSize: 80, floor: 0, isLarge: true, isInteractive: true,
     });
   }
   bunnyPanel._scene._resize();
@@ -496,6 +861,189 @@ body.light-theme #bunnySection:hover {
   border-radius: 12px;
   overflow: hidden;
 }
+
+/* ─── Sleep toggle button ─── */
+.bunny-sleep-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 6;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0;
+}
+.bunny-sleep-btn:hover {
+  background: rgba(255,255,255,0.2);
+  color: rgba(230,230,255,0.95);
+  box-shadow: 0 0 14px rgba(190,195,255,0.4);
+  border-color: rgba(200,205,255,0.35);
+}
+.bunny-sleep-btn.active {
+  background: rgba(150,155,255,0.2);
+  border-color: rgba(200,205,255,0.5);
+  color: rgba(235,238,255,1);
+  box-shadow: 0 0 18px rgba(180,185,255,0.55), 0 0 34px rgba(160,165,255,0.28);
+}
+
+/* ─── Starry blanket overlay ─── */
+.bunny-blanket {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 55%;
+  background: linear-gradient(0deg,
+    rgba(145,160,235,0.75) 0%,
+    rgba(165,178,242,0.62) 35%,
+    rgba(180,192,248,0.38) 65%,
+    transparent 100%
+  );
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.95s ease;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+.bunny-blanket::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.38) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.22) 1px, transparent 1px);
+  background-size: 26px 26px, 44px 44px;
+  background-position: 0 0, 13px 13px;
+  opacity: 0.65;
+}
+.bunny-blanket::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+}
+.bunny-blanket.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ─── Zzz elements ─── */
+.bunny-zzz-container {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bunny-zzz {
+  position: absolute;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  color: rgba(210, 220, 255, 0.92);
+  text-shadow: 0 0 8px rgba(185, 195, 255, 0.7), 0 0 16px rgba(170, 180, 255, 0.35);
+  animation: bunnyZzzFloat 2.9s ease-out forwards;
+  pointer-events: none;
+  user-select: none;
+}
+.bunny-zzz.bunny-zzz-large  { font-size: 20px; font-weight: 500; }
+.bunny-zzz.bunny-zzz-medium { font-size: 15px; font-weight: 400; }
+.bunny-zzz.bunny-zzz-small  { font-size: 11px; font-weight: 300; }
+@keyframes bunnyZzzFloat {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.55); }
+  18%  { opacity: 1; transform: translate(4px, -14px) scale(1); }
+  60%  { opacity: 0.88; transform: translate(-3px, -40px) scale(1.08); }
+  100% { opacity: 0; transform: translate(5px, -65px) scale(0.82); }
+}
+
+/* ─── Thought bubble ─── */
+.bunny-bubble-container {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+}
+.bunny-thought-bubble {
+  position: absolute;
+  pointer-events: none;
+  animation: bunnyBubbleAppear 2.9s ease-out forwards;
+  transform-origin: bottom center;
+}
+.bunny-thought-bubble-body {
+  background: rgba(255, 255, 255, 0.93);
+  border-radius: 50%;
+  width: 54px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.16),
+    0 0 22px rgba(200,210,255,0.35);
+  position: relative;
+}
+.bunny-thought-dot {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.93);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+@keyframes bunnyBubbleAppear {
+  0%   { opacity: 0; transform: scale(0.2) translateY(8px); }
+  14%  { opacity: 1; transform: scale(1.08) translateY(0); }
+  24%  { transform: scale(1) translateY(0); }
+  78%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(0.88) translateY(-10px); }
+}
+
+/* ─── Floating hearts ─── */
+.bunny-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  overflow: visible;
+}
+.bunny-heart {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  color: rgba(255, 155, 185, 0.92);
+  font-size: 15px;
+  animation: bunnyHeartFloat 1.95s ease-out forwards;
+  text-shadow: 0 0 7px rgba(255, 130, 165, 0.5);
+}
+@keyframes bunnyHeartFloat {
+  0%   { opacity: 0; transform: translateY(0) scale(0.5) rotate(-12deg); }
+  20%  { opacity: 1; transform: translateY(-14px) scale(1.05) rotate(6deg); }
+  60%  { opacity: 0.9; transform: translateY(-38px) scale(0.97) rotate(-4deg); }
+  100% { opacity: 0; transform: translateY(-65px) scale(0.72) rotate(9deg); }
+}
+
+/* ─── Food drop ─── */
+.bunny-food {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  font-size: 19px;
+  animation: bunnyFoodDrop 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform-origin: center bottom;
+}
+@keyframes bunnyFoodDrop {
+  0%   { transform: translateY(-22px) scale(0.35); opacity: 0; }
+  65%  { transform: translateY(4px) scale(1.14); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
 `;
   document.head.appendChild(style);
 }
@@ -505,11 +1053,11 @@ body.light-theme #bunnySection:hover {
 document.addEventListener('DOMContentLoaded', () => {
   injectStyles();
 
-  // Card scene
+  // Card scene (small, click opens fullscreen)
   const cardContainer = document.querySelector('#bunnySection');
   if (cardContainer) {
     const cardScene = new BunnyScene(cardContainer, {
-      spriteSize: 40, floor: 0, isLarge: false,
+      spriteSize: 40, floor: 0, isLarge: false, isInteractive: false,
     });
     cardScene.start();
     cardContainer.addEventListener('click', () => openFullscreen());
@@ -532,7 +1080,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Valentine tab: register deactivate so valentine.js can call it when switching back to Garden/Album
+  // Valentine tab wiring
   window.__bunnyDeactivate = deactivateBunnyValentineTab;
 
   const bunnyTab = document.getElementById('viewTabBunny');
