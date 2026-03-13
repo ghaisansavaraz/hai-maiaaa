@@ -211,24 +211,16 @@ function toggleZenMode() {
 // ===== VALENTINE DASHBOARD VIEW SWITCHING =====
 
 function switchToDashboard(viewName) {
-  if (currentView === viewName) {
-    debugLog(`Already in ${viewName} view, skipping switch`);
-    return;
-  }
+  if (currentView === viewName) return;
   
   debugLog(`Switching to ${viewName} dashboard`);
   
   const mainDashboard = document.getElementById('dashboard');
-  const valentineDashboard = document.getElementById('valentineDashboard');
+  const valentineDashboard = document.getElementById('pinterestDashboard');
   const centerContainer = document.querySelector('.center');
   
-  if (!mainDashboard) {
-    debugError('Main dashboard element not found');
-    return;
-  }
-  
-  if (!valentineDashboard) {
-    debugError('Valentine dashboard element not found');
+  if (!mainDashboard || !valentineDashboard) {
+    debugError('Dashboard elements not found');
     return;
   }
   
@@ -236,10 +228,8 @@ function switchToDashboard(viewName) {
   
   if (viewName === 'main') {
     // Show main dashboard
-    debugLog('Switching to main dashboard');
-    document.body.classList.remove('valentine-view');
+    document.body.classList.remove('pinterest-view');
     valentineDashboard.classList.remove('active');
-    debugLog('Valentine dashboard active class removed');
     // Pause valentine audio when leaving valentine view
     pauseValentineAudio();
     setTimeout(() => {
@@ -247,21 +237,16 @@ function switchToDashboard(viewName) {
       if (centerContainer) {
         centerContainer.classList.add('dashboard-active');
       }
-      debugLog('Main dashboard is now visible');
     }, 300);
   } else if (viewName === 'valentine') {
     // Show valentine dashboard
-    debugLog('Switching to valentine dashboard');
-    document.body.classList.add('valentine-view');
+    document.body.classList.add('pinterest-view');
     mainDashboard.classList.remove('visible');
     if (centerContainer) {
       centerContainer.classList.remove('dashboard-active');
     }
-    debugLog('Main dashboard hidden, waiting 300ms before showing valentine');
     setTimeout(() => {
       valentineDashboard.classList.add('active');
-      debugLog('Valentine dashboard active class added');
-      debugLog('Valentine dashboard computed style:', window.getComputedStyle(valentineDashboard).opacity, window.getComputedStyle(valentineDashboard).zIndex);
       // Play valentine audio when entering valentine view
       playValentineAudio();
     }, 300);
