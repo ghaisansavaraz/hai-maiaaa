@@ -9,7 +9,8 @@ const AUTUMN_FG = 'assets/autumn/foreground.png';
 
 const LEAF_COLORS = ['#D7A50F', '#704910', '#A22D16', '#BB8144'];
 
-// ── States ──────────────────────────────────────────
+// Sleep mode config
+let isSleepModeTriggered = false;
 
 const S = {
   sitIdle:    'sit-idle',
@@ -61,6 +62,37 @@ const TRANSITIONS = {
   [S.runLeft]:    [S.standLeft],
   [S.swipe]:      [S.sitIdle],
 };
+
+// Expose sleep toggle function globally so HTML UI can call it
+export function toggleSleepMode() {
+  isSleepModeTriggered = !isSleepModeTriggered;
+  
+  // Toggle UI elements
+  const btn = document.getElementById('bunnySleepToggle');
+  const zzz = document.getElementById('bunnyZzz');
+  const blanket = document.getElementById('bunnyBlanket');
+  
+  if (btn) btn.classList.toggle('active', isSleepModeTriggered);
+  if (zzz) zzz.classList.toggle('active', isSleepModeTriggered);
+  if (blanket) blanket.classList.toggle('active', isSleepModeTriggered);
+  
+  // Force active scenes to update state immediately
+  if (window._activeBunnyScenes) {
+    window._activeBunnyScenes.forEach(scene => {
+      // If sleeping, force sit first, then it will transition to lie
+      if (isSleepModeTriggered) {
+         scene.stateEnum = S.sitIdle;
+         scene.idleCounter = 0;
+      } else {
+         scene.stateEnum = S.standRight;
+         scene.idleCounter = 0;
+      }
+      scene._applyState();
+      scene._render();
+    });
+  }
+}
+window.toggleBunnySleepMode = toggleSleepMode;
 
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function rand(a, b) { return a + Math.random() * (b - a); }
@@ -205,10 +237,129 @@ class BunnyScene {
     this.stateEnum = S.sitIdle;
     this.idleCounter = 0;
     this.facingDir = DIR.right;
+    
+    // Track food
+    this.foodTarget = null;
+    this.foodElement = null;
 
     this._buildDOM();
     this._resetBoundary();
     this.left = rand(0, Math.max(0, this.boundary - this.spriteSize));
+    this._applyState();
+    
+    // Register scene globally for sleep toggle
+    if (!window._activeBunnyScenes) window._activeBunnyScenes = [];
+    window._activeBunnyScenes.push(this);
+    
+    this._initInteractions();
+  }
+
+  _initInteractions() {
+    this.container.addEventListener('mousemove', (e) => {
+      // Only pet if awake
+      if (isSleepModeTriggered) return;
+      // throttle petting slightly
+      if (this._lastPetTime && Date.now() - this._lastPetTime < 300) return;
+      
+      const rect = this.img.getBoundingClientRect();
+      const contRect = this.container.getBoundingClientRect();
+      // Mouse relative to container
+      const mx = e.clientX - contRect.left;
+      const my = e.clientY - contRect.top;
+      
+      // Check if mouse is roughly over the bunny
+      const bx = this.left + this.spriteSize/2;
+      const by = this.container.clientHeight - this.floor - this.spriteSize/2;
+      
+      const dist = Math.sqrt(Math.pow(mx - bx, 2) + Math.pow(my - by, 2));
+      if (dist < this.spriteSize/1.5) {
+        this._spawnHeart(bx, by - this.spriteSize/2);
+        this._lastPetTime = Date.now();
+      }
+    });
+
+    this.container.addEventListener('dblclick', (e) => {
+      if (isSleepModeTriggered) {
+        this._spawnDream();
+        return;
+      }
+      
+      // Drop food
+      const rect = this.container.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      this._dropFood(clickX);
+    });
+    
+    this.container.addEventListener('click', (e) => {
+      // If sleeping, spawn a dream bubble
+      if (isSleepModeTriggered && e.target.closest('#bunnySection')) {
+         this._spawnDream();
+      }
+    });
+  }
+
+  _spawnHeart(x, y) {
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤️';
+    heart.style.cssText = `position:absolute;left:${x}px;top:${y}px;font-size:14px;pointer-events:none;z-index:10;animation:floatUpFade 1.2s ease-out forwards;`;
+    this.container.appendChild(heart);
+    setTimeout(() => heart.remove(), 1200);
+  }
+  
+  _spawnDream() {
+    // Only spawn one dream at a time roughly
+    if (this._dreamEl) return;
+    const dreams = ['🥕', '❤️', '🌙', '💤'];
+    const dream = pick(dreams);
+    
+    const bx = this.left + this.spriteSize/2;
+    const by = this.container.clientHeight - this.floor - this.spriteSize;
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'bunny-dream';
+    bubble.innerHTML = `<span class="dream-icon">${dream}</span>`;
+    bubble.style.cssText = `position:absolute;left:${bx}px;top:${by - 20}px;transform:translateX(-50%);z-index:20;opacity:0;`;
+    this.container.appendChild(bubble);
+    this._dreamEl = bubble;
+    
+    // animate in and out
+    requestAnimationFrame(() => {
+      bubble.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      bubble.style.top = `${by - 45}px`;
+      bubble.style.opacity = '1';
+    });
+    
+    setTimeout(() => {
+      bubble.style.opacity = '0';
+      bubble.style.top = `${by - 60}px`;
+      setTimeout(() => {
+        bubble.remove();
+        this._dreamEl = null;
+      }, 500);
+    }, 2000);
+  }
+
+  _dropFood(x) {
+    if (this.foodElement) {
+      this.foodElement.remove();
+    }
+    
+    const food = document.createElement('div');
+    food.innerHTML = '🥕';
+    food.style.cssText = `position:absolute;left:${x}px;top:-20px;font-size:16px;z-index:5;transition:top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53);`;
+    this.container.appendChild(food);
+    this.foodElement = food;
+    
+    // fall
+    setTimeout(() => {
+      const bottom = this.container.clientHeight - this.floor - 16;
+      food.style.top = `${bottom}px`;
+    }, 50);
+
+    // tell bunny to get it
+    this.foodTarget = x;
+    this.idleCounter = 0; // break current state
+    this.stateEnum = (x < this.left) ? S.runLeft : S.runRight;
     this._applyState();
   }
 
@@ -260,6 +411,11 @@ class BunnyScene {
     this.leafEffect.stop();
     if (this._interval) clearInterval(this._interval);
     if (this._resizeHandler) window.removeEventListener('resize', this._resizeHandler);
+    
+    // Remove from global active scenes
+    if (window._activeBunnyScenes) {
+       window._activeBunnyScenes = window._activeBunnyScenes.filter(s => s !== this);
+    }
   }
 
   _resize() {
@@ -275,12 +431,43 @@ class BunnyScene {
   _tick() {
     const result = this._nextFrame();
     if (result === 'complete') {
-      const nextStates = TRANSITIONS[this.stateEnum];
-      if (nextStates) {
-        this.stateEnum = pick(nextStates);
-      } else {
-        this.stateEnum = S.sitIdle;
+      
+      // Override logic if sleeping
+      if (isSleepModeTriggered) {
+        if (this.stateEnum !== S.lie) {
+           this.stateEnum = S.sitIdle; // sit before lie for natural transition
+           if (this.idleCounter > 5) this.stateEnum = S.lie;
+        } else {
+           this.stateEnum = S.lie;
+        }
+      } 
+      // Logic for hunting food
+      else if (this.foodTarget !== null) {
+        const dist = Math.abs(this.left + this.spriteSize/2 - this.foodTarget);
+        if (dist < 20) {
+          // Reached food
+          this.stateEnum = S.sitIdle;
+          if (this.foodElement) {
+             this.foodElement.style.transform = 'scale(1.2)';
+             this.foodElement.style.opacity = '0';
+             setTimeout(() => { if(this.foodElement) this.foodElement.remove() }, 300);
+          }
+          this.foodTarget = null;
+          this.foodElement = null;
+        } else {
+          this.stateEnum = (this.foodTarget < this.left + this.spriteSize/2) ? S.runLeft : S.runRight;
+        }
       }
+      else {
+        // Normal random walk
+        const nextStates = TRANSITIONS[this.stateEnum];
+        if (nextStates) {
+          this.stateEnum = pick(nextStates);
+        } else {
+          this.stateEnum = S.sitIdle;
+        }
+      }
+      
       this.idleCounter = 0;
       this._applyState();
     }
@@ -495,6 +682,55 @@ body.light-theme #bunnySection:hover {
   height: 420px;
   border-radius: 12px;
   overflow: hidden;
+}
+/* Bunny specific animations and overlays */
+@keyframes floatUpFade {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  20% { opacity: 1; transform: translateY(-5px) scale(1.1); }
+  100% { transform: translateY(-25px) scale(1); opacity: 0; }
+}
+
+.bunny-dream {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bunny-dream::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  border-radius: 50%;
+  box-shadow: inherit;
+}
+.bunny-dream::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-150%);
+  width: 4px;
+  height: 4px;
+  background: inherit;
+  border-radius: 50%;
+}
+.dream-icon {
+  font-size: 16px;
+  animation: gentlePulse 2s ease-in-out infinite;
+}
+@keyframes gentlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 `;
   document.head.appendChild(style);
