@@ -1383,148 +1383,103 @@ function handleFormSubmit(e) {
 function initValentineClockFace() {
   const svg = document.getElementById('valentineAnalogClock');
   if (!svg) return;
-  svg.innerHTML = '';
-
-  const NS = 'http://www.w3.org/2000/svg';
-  function mk(tag, attrs) {
-    const e = document.createElementNS(NS, tag);
-    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
-    return e;
-  }
 
   const isLight = document.body.classList.contains('light-theme');
-  const roseA  = isLight ? 'rgba(160,90,110,{a})'  : 'rgba(232,160,191,{a})';
-  const roseB  = isLight ? 'rgba(130,70,90,{a})'   : 'rgba(220,140,175,{a})';
-  const rose   = a => roseA.replace('{a}', a);
-  const rose2  = a => roseB.replace('{a}', a);
-  const face   = isLight ? 'rgba(255,250,252,0.9)' : 'rgba(18,8,14,0.0)';
-  const rimFill= isLight ? 'rgba(255,252,254,0.95)': 'rgba(255,255,255,0.03)';
+  const h1 = isLight ? 'rgba(140,75,95,0.9)'   : 'rgba(232,160,191,0.95)';
+  const h2 = isLight ? 'rgba(120,60,80,0.85)'  : 'rgba(215,140,175,0.9)';
+  const sc = isLight ? 'rgba(200,80,110,0.75)'  : 'rgba(255,195,215,0.8)';
+  const tk = isLight ? 'rgba(130,70,90,{a})'    : 'rgba(232,160,191,{a})';
+  const t  = a => tk.replace('{a}', a);
+  const f1 = isLight ? 'rgba(255,248,250,0.96)' : 'rgba(30,10,20,0.55)';
+  const f2 = isLight ? 'rgba(250,240,244,0.88)' : 'rgba(20,5,15,0.3)';
+  const rimStroke  = isLight ? 'rgba(160,90,110,0.55)' : 'rgba(232,160,191,0.45)';
+  const outerStroke = isLight ? 'rgba(160,90,110,0.2)'  : 'rgba(232,160,191,0.15)';
 
-  // ── Defs ──────────────────────────────────────────────────────────────────
-  const defs = mk('defs', {});
-
-  const faceGrad = mk('radialGradient', { id: 'clkFace', cx: '38%', cy: '32%', r: '72%' });
-  faceGrad.append(mk('stop', { offset: '0%',   'stop-color': rimFill }));
-  faceGrad.append(mk('stop', { offset: '100%', 'stop-color': 'rgba(255,255,255,0.01)' }));
-  defs.append(faceGrad);
-
-  // Glow filter for hands
-  const glow = mk('filter', { id: 'clkGlow', x: '-40%', y: '-40%', width: '180%', height: '180%' });
-  const gBlur = mk('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: '1.8', result: 'blur' });
-  const gMerge = mk('feMerge', {});
-  gMerge.append(mk('feMergeNode', { in: 'blur' }));
-  gMerge.append(mk('feMergeNode', { in: 'SourceGraphic' }));
-  glow.append(gBlur); glow.append(gMerge);
-  defs.append(glow);
-
-  svg.append(defs);
-
-  // ── Clock face ─────────────────────────────────────────────────────────────
-  // Outermost decorative ring
-  svg.append(mk('circle', { cx: 100, cy: 100, r: 97, fill: 'none', stroke: rose(0.12), 'stroke-width': 1 }));
-  // Rim ring
-  svg.append(mk('circle', { cx: 100, cy: 100, r: 93, fill: 'none', stroke: rose(0.35), 'stroke-width': 1.8 }));
-  // Main face
-  svg.append(mk('circle', { cx: 100, cy: 100, r: 91, fill: 'url(#clkFace)', stroke: rose(0.2), 'stroke-width': 0.5 }));
-  // Chapter ring (inner)
-  svg.append(mk('circle', { cx: 100, cy: 100, r: 74, fill: 'none', stroke: rose(0.12), 'stroke-width': 0.6 }));
-
-  // ── Tick marks (all 60) ────────────────────────────────────────────────────
-  const tickG = mk('g', {});
+  // Build all 60 tick marks as SVG string
+  let ticks = '';
+  let ornaments = '';
   for (let i = 0; i < 60; i++) {
-    const deg = i * 6;
-    const rad = (deg - 90) * Math.PI / 180;
-    const isQ = i % 15 === 0;   // 12, 3, 6, 9
-    const isH = i % 5 === 0;    // other hours
+    const rad = (i * 6 - 90) * Math.PI / 180;
+    const cos = Math.cos(rad); const sin = Math.sin(rad);
+    const isQ = i % 15 === 0;
+    const isH = i % 5 === 0;
 
-    let rIn, rOut, sw, sc;
-    if (isQ) {
-      rIn = 76; rOut = 93; sw = 2.5; sc = rose(0.85);
-    } else if (isH) {
-      rIn = 82; rOut = 93; sw = 1.8; sc = rose(0.6);
-    } else {
-      rIn = 88; rOut = 93; sw = 0.7; sc = rose(0.3);
-    }
+    let rIn, rOut, sw, sc2;
+    if (isQ)      { rIn = 76; rOut = 93; sw = 2.8; sc2 = t(0.9); }
+    else if (isH) { rIn = 82; rOut = 93; sw = 2.0; sc2 = t(0.65); }
+    else          { rIn = 88; rOut = 93; sw = 0.7; sc2 = t(0.28); }
 
-    const x1 = (100 + rIn  * Math.cos(rad)).toFixed(2);
-    const y1 = (100 + rIn  * Math.sin(rad)).toFixed(2);
-    const x2 = (100 + rOut * Math.cos(rad)).toFixed(2);
-    const y2 = (100 + rOut * Math.sin(rad)).toFixed(2);
-    tickG.append(mk('line', { x1, y1, x2, y2, stroke: sc, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+    const x1 = (100 + rIn  * cos).toFixed(2); const y1 = (100 + rIn  * sin).toFixed(2);
+    const x2 = (100 + rOut * cos).toFixed(2); const y2 = (100 + rOut * sin).toFixed(2);
+    ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${sc2}" stroke-width="${sw}" stroke-linecap="round"/>`;
 
-    // Dot at non-quarter hour positions (on chapter ring)
     if (isH && !isQ) {
-      const dr = 70;
-      tickG.append(mk('circle', {
-        cx: (100 + dr * Math.cos(rad)).toFixed(2),
-        cy: (100 + dr * Math.sin(rad)).toFixed(2),
-        r: 2, fill: rose(0.5)
-      }));
+      const dr = 68;
+      const dx = (100 + dr * cos).toFixed(2); const dy = (100 + dr * sin).toFixed(2);
+      ornaments += `<circle cx="${dx}" cy="${dy}" r="2.2" fill="${t(0.55)}"/>`;
     }
 
-    // Diamond lozenge at quarter positions
     if (isQ) {
-      const dr = 65;
-      const cx = 100 + dr * Math.cos(rad);
-      const cy = 100 + dr * Math.sin(rad);
-      const sz = 4.5; const sw2 = sz * 0.55;
+      const dr = 63; const sz = 5; const sw2 = sz * 0.52;
       const perp = rad + Math.PI / 2;
+      const cx = 100 + dr * cos; const cy = 100 + dr * sin;
       const pts = [
-        `${(cx + Math.cos(rad)   * sz ).toFixed(2)},${(cy + Math.sin(rad)   * sz ).toFixed(2)}`,
-        `${(cx + Math.cos(perp)  * sw2).toFixed(2)},${(cy + Math.sin(perp)  * sw2).toFixed(2)}`,
-        `${(cx - Math.cos(rad)   * sz ).toFixed(2)},${(cy - Math.sin(rad)   * sz ).toFixed(2)}`,
-        `${(cx - Math.cos(perp)  * sw2).toFixed(2)},${(cy - Math.sin(perp)  * sw2).toFixed(2)}`,
+        `${(cx + cos   * sz ).toFixed(2)},${(cy + sin   * sz ).toFixed(2)}`,
+        `${(cx + Math.cos(perp) * sw2).toFixed(2)},${(cy + Math.sin(perp) * sw2).toFixed(2)}`,
+        `${(cx - cos   * sz ).toFixed(2)},${(cy - sin   * sz ).toFixed(2)}`,
+        `${(cx - Math.cos(perp) * sw2).toFixed(2)},${(cy - Math.sin(perp) * sw2).toFixed(2)}`,
       ].join(' ');
-      tickG.append(mk('polygon', { points: pts, fill: rose(0.75) }));
+      ornaments += `<polygon points="${pts}" fill="${t(0.8)}"/>`;
     }
   }
-  svg.append(tickG);
 
-  // ── Decorative inner rosette ──────────────────────────────────────────────
-  const ros = mk('g', {});
+  // Inner rosette spokes
+  let rosette = '';
   for (let i = 0; i < 8; i++) {
     const rad = (i * 45 - 90) * Math.PI / 180;
-    const x1 = (100 + 8  * Math.cos(rad)).toFixed(2);
-    const y1 = (100 + 8  * Math.sin(rad)).toFixed(2);
-    const x2 = (100 + 20 * Math.cos(rad)).toFixed(2);
-    const y2 = (100 + 20 * Math.sin(rad)).toFixed(2);
-    ros.append(mk('line', { x1, y1, x2, y2, stroke: rose(0.25), 'stroke-width': 0.6 }));
+    const x1 = (100 + 9  * Math.cos(rad)).toFixed(2); const y1 = (100 + 9  * Math.sin(rad)).toFixed(2);
+    const x2 = (100 + 22 * Math.cos(rad)).toFixed(2); const y2 = (100 + 22 * Math.sin(rad)).toFixed(2);
+    rosette += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${t(0.2)}" stroke-width="0.7"/>`;
   }
-  ros.append(mk('circle', { cx: 100, cy: 100, r: 20, fill: 'none', stroke: rose(0.18), 'stroke-width': 0.5 }));
-  svg.append(ros);
 
-  // ── Hands ─────────────────────────────────────────────────────────────────
-  // Hour hand — tapered spade, length 44 from center
-  const hourG = mk('g', { id: 'clockHourHand' });
-  hourG.append(mk('path', {
-    d: 'M 0,10 L -4,-32 L 0,-44 L 4,-32 Z',
-    fill: rose(0.95), filter: 'url(#clkGlow)'
-  }));
-  hourG.setAttribute('transform', 'translate(100,100) rotate(0)');
-  svg.append(hourG);
+  svg.innerHTML = `
+    <defs>
+      <radialGradient id="clkFace" cx="38%" cy="32%" r="72%" gradientUnits="objectBoundingBox">
+        <stop offset="0%" stop-color="${f1}"/>
+        <stop offset="100%" stop-color="${f2}"/>
+      </radialGradient>
+    </defs>
 
-  // Minute hand — slender, length 60 from center
-  const minG = mk('g', { id: 'clockMinuteHand' });
-  minG.append(mk('path', {
-    d: 'M 0,12 L -2.5,-50 L 0,-62 L 2.5,-50 Z',
-    fill: rose2(0.88), filter: 'url(#clkGlow)'
-  }));
-  minG.setAttribute('transform', 'translate(100,100) rotate(0)');
-  svg.append(minG);
+    <circle cx="100" cy="100" r="97" fill="none" stroke="${outerStroke}" stroke-width="1"/>
+    <circle cx="100" cy="100" r="93" fill="none" stroke="${rimStroke}" stroke-width="2"/>
+    <circle cx="100" cy="100" r="91" fill="url(#clkFace)" stroke="${t(0.15)}" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="74" fill="none" stroke="${t(0.13)}" stroke-width="0.6"/>
 
-  // Second hand — needle with counterweight
-  const secG = mk('g', { id: 'clockSecondHand' });
-  secG.append(mk('line', {
-    x1: 0, y1: 16, x2: 0, y2: -70,
-    stroke: 'rgba(255,200,215,0.8)', 'stroke-width': 1, 'stroke-linecap': 'round'
-  }));
-  secG.append(mk('circle', { cx: 0, cy: 11, r: 3, fill: 'rgba(255,200,215,0.65)' }));
-  secG.setAttribute('transform', 'translate(100,100) rotate(0)');
-  svg.append(secG);
+    <g>${ticks}</g>
+    <g>${ornaments}</g>
 
-  // ── Center cap ────────────────────────────────────────────────────────────
-  svg.append(mk('circle', { cx: 100, cy: 100, r: 7, fill: rose(1), stroke: 'rgba(255,255,255,0.35)', 'stroke-width': 1 }));
-  svg.append(mk('circle', { cx: 100, cy: 100, r: 3.5, fill: 'rgba(255,255,255,0.5)' }));
+    <g>
+      <circle cx="100" cy="100" r="22" fill="none" stroke="${t(0.16)}" stroke-width="0.5"/>
+      ${rosette}
+    </g>
+
+    <g id="clockHourHand" transform="translate(100,100) rotate(0)">
+      <path d="M 0,11 L -4.5,-30 L 0,-44 L 4.5,-30 Z" fill="${h1}"/>
+      <path d="M 0,-30 L 0,-44" stroke="${h1}" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <g id="clockMinuteHand" transform="translate(100,100) rotate(0)">
+      <path d="M 0,13 L -3,-48 L 0,-64 L 3,-48 Z" fill="${h2}"/>
+    </g>
+
+    <g id="clockSecondHand" transform="translate(100,100) rotate(0)">
+      <line x1="0" y1="18" x2="0" y2="-70" stroke="${sc}" stroke-width="1.1" stroke-linecap="round"/>
+      <circle cx="0" cy="13" r="3.5" fill="${sc}"/>
+    </g>
+
+    <circle cx="100" cy="100" r="7" fill="${h1}" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
+    <circle cx="100" cy="100" r="3.5" fill="rgba(255,255,255,0.55)"/>
+  `;
 }
 
 function updateValentineClock() {
