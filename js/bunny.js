@@ -84,8 +84,10 @@ class Leaf {
     // Spawn leaves clearly BELOW the tree canopy, in a band between canopy and ground
     const canopyY = h - this.treeLine;
     const groundY = h - this.floor;
-    // Define a vertical band: start a bit below canopy, end a bit above ground
-    let bandStart = canopyY + 80;
+    // For large scenes (Valentine), push the spawn band much lower since treeLine is tall
+    // For small scenes (dashboard card), use a smaller offset
+    const offsetBelowCanopy = this.treeLine > 150 ? 180 : 80;
+    let bandStart = canopyY + offsetBelowCanopy;
     let bandEnd = groundY - 40;
     if (bandStart > bandEnd) {
       // Fallback: collapse to middle if layout is tighter than expected
@@ -717,31 +719,6 @@ class BunnyScene {
   }
 }
 
-// ── Fullscreen Overlay ──────────────────────────────
-
-function openFullscreen() {
-  const overlay = document.getElementById('bunny-fullscreen');
-  if (!overlay) return;
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-
-  if (!overlay._scene) {
-    overlay._scene = new BunnyScene(overlay.querySelector('.bunny-scene-inner'), {
-      spriteSize: 110, floor: 0, isLarge: true, isInteractive: true,
-    });
-  }
-  overlay._scene._resize();
-  overlay._scene.start();
-}
-
-function closeFullscreen() {
-  const overlay = document.getElementById('bunny-fullscreen');
-  if (!overlay) return;
-  overlay.classList.remove('active');
-  document.body.style.overflow = '';
-  overlay._scene?.stop();
-}
-
 // ── Valentine Tab Wiring ────────────────────────────
 
 function activateBunnyValentineTab() {
@@ -823,50 +800,6 @@ body.light-theme #bunnySection {
 body.light-theme #bunnySection:hover {
   border-color: rgba(187,129,68,0.4);
   box-shadow: 0 0 20px rgba(187,129,68,0.1);
-}
-
-/* Fullscreen overlay */
-#bunny-fullscreen {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: #0a0705;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-#bunny-fullscreen.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-#bunny-fullscreen .bunny-scene-inner {
-  position: absolute;
-  inset: 0;
-}
-#bunny-fullscreen .bunny-close {
-  position: absolute;
-  top: 20px;
-  right: 24px;
-  z-index: 10;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.7);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-#bunny-fullscreen .bunny-close:hover {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
 }
 
 /* Valentine bunny tab panel */
@@ -1029,30 +962,22 @@ body.light-theme #bunnySection:hover {
 document.addEventListener('DOMContentLoaded', () => {
   injectStyles();
 
-  // Card scene (small, click opens fullscreen)
+  // Card scene (small, click navigates to Valentine page Autumn tab)
   const cardContainer = document.querySelector('#bunnySection');
   if (cardContainer) {
     const cardScene = new BunnyScene(cardContainer, {
       spriteSize: 40, floor: 0, isLarge: false, isInteractive: false,
     });
     cardScene.start();
-    cardContainer.addEventListener('click', () => openFullscreen());
-  }
-
-  // Fullscreen close
-  const overlay = document.getElementById('bunny-fullscreen');
-  if (overlay) {
-    overlay.querySelector('.bunny-close')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeFullscreen();
-    });
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay || e.target.classList.contains('bunny-scene-inner')) {
-        closeFullscreen();
-      }
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay.classList.contains('active')) closeFullscreen();
+    cardContainer.addEventListener('click', () => {
+      // Navigate to Valentine page
+      const rightNavBtn = document.querySelector('.nav-btn.right');
+      if (rightNavBtn) rightNavBtn.click();
+      // Wait for transition, then activate Autumn tab
+      setTimeout(() => {
+        const bunnyTab = document.getElementById('viewTabBunny');
+        if (bunnyTab) bunnyTab.click();
+      }, 300);
     });
   }
 
