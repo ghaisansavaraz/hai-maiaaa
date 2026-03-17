@@ -2161,19 +2161,33 @@ body:not(.light-theme) .edge-nav-right:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 12px;
 }
 
-.valentine-clock-time {
-  font-size: clamp(28px, 4vw, 42px);
-  font-weight: 200;
-  letter-spacing: 0.15em;
-  font-variant-numeric: tabular-nums;
-  margin: 0;
-  color: rgba(255,255,255,0.85);
+.valentine-analog-clock {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 2px 8px rgba(232,160,191,0.15));
 }
 
-.light-theme .valentine-clock-time {
-  color: rgba(60,40,50,0.8);
+.light-theme .valentine-analog-clock .clock-markers line {
+  stroke: rgba(100,70,80,0.4);
+}
+
+.light-theme .valentine-analog-clock circle[fill*="rgba(232"] {
+  fill: rgba(100,70,80,0.08);
+}
+
+.light-theme #clockHourHand {
+  stroke: rgba(100,70,80,0.85);
+}
+
+.light-theme #clockMinuteHand {
+  stroke: rgba(100,70,80,0.75);
+}
+
+.light-theme #clockSecondHand {
+  stroke: rgba(180,100,120,0.6);
 }
 
 .valentine-title {

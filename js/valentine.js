@@ -912,7 +912,11 @@ function closeImageFullscreen() {
 
 function renderGarden(justBloomedId = null) {
   const canvas = document.getElementById('gardenCanvas');
-  if (!canvas) return;
+  if (!canvas) {
+    console.error('[Valentine] gardenCanvas not found');
+    return;
+  }
+  debugLog('[Valentine] renderGarden called, notes:', valentineData.notes.length);
 
   if (valentineData.notes.length === 0) {
     canvas.innerHTML = `<div class="garden-empty-state" role="status">
@@ -1377,13 +1381,23 @@ function handleFormSubmit(e) {
 // ===== CLOCK =====
 
 function updateValentineClock() {
-  const el = document.getElementById('valentineClockTime');
-  if (!el) return;
+  const hourHand = document.getElementById('clockHourHand');
+  const minuteHand = document.getElementById('clockMinuteHand');
+  const secondHand = document.getElementById('clockSecondHand');
+  if (!hourHand || !minuteHand || !secondHand) return;
+  
   const now = new Date();
-  const h = String(now.getHours()).padStart(2, '0');
-  const m = String(now.getMinutes()).padStart(2, '0');
-  const s = String(now.getSeconds()).padStart(2, '0');
-  el.textContent = `${h}:${m}:${s}`;
+  const hours = now.getHours() % 12;
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  
+  const secondDeg = (seconds / 60) * 360;
+  const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
+  const hourDeg = (hours / 12) * 360 + (minutes / 60) * 30;
+  
+  secondHand.setAttribute('transform', `rotate(${secondDeg} 100 100)`);
+  minuteHand.setAttribute('transform', `rotate(${minuteDeg} 100 100)`);
+  hourHand.setAttribute('transform', `rotate(${hourDeg} 100 100)`);
 }
 
 // ===== INIT =====
@@ -1502,7 +1516,12 @@ export function initValentineGarden() {
 
   // Initial render
   renderGarden();
-  renderAlbum();
+  // Initial render based on which view is active (Garden is default)
+  if (currentValentineView === 'garden') {
+    renderGarden();
+  } else if (currentValentineView === 'album') {
+    renderAlbum();
+  }
 
   debugLog('Valentine garden initialized');
 }
