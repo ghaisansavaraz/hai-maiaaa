@@ -1380,24 +1380,171 @@ function handleFormSubmit(e) {
 
 // ===== CLOCK =====
 
+function initValentineClockFace() {
+  const svg = document.getElementById('valentineAnalogClock');
+  if (!svg) return;
+  svg.innerHTML = '';
+
+  const NS = 'http://www.w3.org/2000/svg';
+  function mk(tag, attrs) {
+    const e = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+    return e;
+  }
+
+  const isLight = document.body.classList.contains('light-theme');
+  const roseA  = isLight ? 'rgba(160,90,110,{a})'  : 'rgba(232,160,191,{a})';
+  const roseB  = isLight ? 'rgba(130,70,90,{a})'   : 'rgba(220,140,175,{a})';
+  const rose   = a => roseA.replace('{a}', a);
+  const rose2  = a => roseB.replace('{a}', a);
+  const face   = isLight ? 'rgba(255,250,252,0.9)' : 'rgba(18,8,14,0.0)';
+  const rimFill= isLight ? 'rgba(255,252,254,0.95)': 'rgba(255,255,255,0.03)';
+
+  // ── Defs ──────────────────────────────────────────────────────────────────
+  const defs = mk('defs', {});
+
+  const faceGrad = mk('radialGradient', { id: 'clkFace', cx: '38%', cy: '32%', r: '72%' });
+  faceGrad.append(mk('stop', { offset: '0%',   'stop-color': rimFill }));
+  faceGrad.append(mk('stop', { offset: '100%', 'stop-color': 'rgba(255,255,255,0.01)' }));
+  defs.append(faceGrad);
+
+  // Glow filter for hands
+  const glow = mk('filter', { id: 'clkGlow', x: '-40%', y: '-40%', width: '180%', height: '180%' });
+  const gBlur = mk('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: '1.8', result: 'blur' });
+  const gMerge = mk('feMerge', {});
+  gMerge.append(mk('feMergeNode', { in: 'blur' }));
+  gMerge.append(mk('feMergeNode', { in: 'SourceGraphic' }));
+  glow.append(gBlur); glow.append(gMerge);
+  defs.append(glow);
+
+  svg.append(defs);
+
+  // ── Clock face ─────────────────────────────────────────────────────────────
+  // Outermost decorative ring
+  svg.append(mk('circle', { cx: 100, cy: 100, r: 97, fill: 'none', stroke: rose(0.12), 'stroke-width': 1 }));
+  // Rim ring
+  svg.append(mk('circle', { cx: 100, cy: 100, r: 93, fill: 'none', stroke: rose(0.35), 'stroke-width': 1.8 }));
+  // Main face
+  svg.append(mk('circle', { cx: 100, cy: 100, r: 91, fill: 'url(#clkFace)', stroke: rose(0.2), 'stroke-width': 0.5 }));
+  // Chapter ring (inner)
+  svg.append(mk('circle', { cx: 100, cy: 100, r: 74, fill: 'none', stroke: rose(0.12), 'stroke-width': 0.6 }));
+
+  // ── Tick marks (all 60) ────────────────────────────────────────────────────
+  const tickG = mk('g', {});
+  for (let i = 0; i < 60; i++) {
+    const deg = i * 6;
+    const rad = (deg - 90) * Math.PI / 180;
+    const isQ = i % 15 === 0;   // 12, 3, 6, 9
+    const isH = i % 5 === 0;    // other hours
+
+    let rIn, rOut, sw, sc;
+    if (isQ) {
+      rIn = 76; rOut = 93; sw = 2.5; sc = rose(0.85);
+    } else if (isH) {
+      rIn = 82; rOut = 93; sw = 1.8; sc = rose(0.6);
+    } else {
+      rIn = 88; rOut = 93; sw = 0.7; sc = rose(0.3);
+    }
+
+    const x1 = (100 + rIn  * Math.cos(rad)).toFixed(2);
+    const y1 = (100 + rIn  * Math.sin(rad)).toFixed(2);
+    const x2 = (100 + rOut * Math.cos(rad)).toFixed(2);
+    const y2 = (100 + rOut * Math.sin(rad)).toFixed(2);
+    tickG.append(mk('line', { x1, y1, x2, y2, stroke: sc, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+
+    // Dot at non-quarter hour positions (on chapter ring)
+    if (isH && !isQ) {
+      const dr = 70;
+      tickG.append(mk('circle', {
+        cx: (100 + dr * Math.cos(rad)).toFixed(2),
+        cy: (100 + dr * Math.sin(rad)).toFixed(2),
+        r: 2, fill: rose(0.5)
+      }));
+    }
+
+    // Diamond lozenge at quarter positions
+    if (isQ) {
+      const dr = 65;
+      const cx = 100 + dr * Math.cos(rad);
+      const cy = 100 + dr * Math.sin(rad);
+      const sz = 4.5; const sw2 = sz * 0.55;
+      const perp = rad + Math.PI / 2;
+      const pts = [
+        `${(cx + Math.cos(rad)   * sz ).toFixed(2)},${(cy + Math.sin(rad)   * sz ).toFixed(2)}`,
+        `${(cx + Math.cos(perp)  * sw2).toFixed(2)},${(cy + Math.sin(perp)  * sw2).toFixed(2)}`,
+        `${(cx - Math.cos(rad)   * sz ).toFixed(2)},${(cy - Math.sin(rad)   * sz ).toFixed(2)}`,
+        `${(cx - Math.cos(perp)  * sw2).toFixed(2)},${(cy - Math.sin(perp)  * sw2).toFixed(2)}`,
+      ].join(' ');
+      tickG.append(mk('polygon', { points: pts, fill: rose(0.75) }));
+    }
+  }
+  svg.append(tickG);
+
+  // ── Decorative inner rosette ──────────────────────────────────────────────
+  const ros = mk('g', {});
+  for (let i = 0; i < 8; i++) {
+    const rad = (i * 45 - 90) * Math.PI / 180;
+    const x1 = (100 + 8  * Math.cos(rad)).toFixed(2);
+    const y1 = (100 + 8  * Math.sin(rad)).toFixed(2);
+    const x2 = (100 + 20 * Math.cos(rad)).toFixed(2);
+    const y2 = (100 + 20 * Math.sin(rad)).toFixed(2);
+    ros.append(mk('line', { x1, y1, x2, y2, stroke: rose(0.25), 'stroke-width': 0.6 }));
+  }
+  ros.append(mk('circle', { cx: 100, cy: 100, r: 20, fill: 'none', stroke: rose(0.18), 'stroke-width': 0.5 }));
+  svg.append(ros);
+
+  // ── Hands ─────────────────────────────────────────────────────────────────
+  // Hour hand — tapered spade, length 44 from center
+  const hourG = mk('g', { id: 'clockHourHand' });
+  hourG.append(mk('path', {
+    d: 'M 0,10 L -4,-32 L 0,-44 L 4,-32 Z',
+    fill: rose(0.95), filter: 'url(#clkGlow)'
+  }));
+  hourG.setAttribute('transform', 'translate(100,100) rotate(0)');
+  svg.append(hourG);
+
+  // Minute hand — slender, length 60 from center
+  const minG = mk('g', { id: 'clockMinuteHand' });
+  minG.append(mk('path', {
+    d: 'M 0,12 L -2.5,-50 L 0,-62 L 2.5,-50 Z',
+    fill: rose2(0.88), filter: 'url(#clkGlow)'
+  }));
+  minG.setAttribute('transform', 'translate(100,100) rotate(0)');
+  svg.append(minG);
+
+  // Second hand — needle with counterweight
+  const secG = mk('g', { id: 'clockSecondHand' });
+  secG.append(mk('line', {
+    x1: 0, y1: 16, x2: 0, y2: -70,
+    stroke: 'rgba(255,200,215,0.8)', 'stroke-width': 1, 'stroke-linecap': 'round'
+  }));
+  secG.append(mk('circle', { cx: 0, cy: 11, r: 3, fill: 'rgba(255,200,215,0.65)' }));
+  secG.setAttribute('transform', 'translate(100,100) rotate(0)');
+  svg.append(secG);
+
+  // ── Center cap ────────────────────────────────────────────────────────────
+  svg.append(mk('circle', { cx: 100, cy: 100, r: 7, fill: rose(1), stroke: 'rgba(255,255,255,0.35)', 'stroke-width': 1 }));
+  svg.append(mk('circle', { cx: 100, cy: 100, r: 3.5, fill: 'rgba(255,255,255,0.5)' }));
+}
+
 function updateValentineClock() {
-  const hourHand = document.getElementById('clockHourHand');
+  const hourHand   = document.getElementById('clockHourHand');
   const minuteHand = document.getElementById('clockMinuteHand');
   const secondHand = document.getElementById('clockSecondHand');
   if (!hourHand || !minuteHand || !secondHand) return;
-  
+
   const now = new Date();
-  const hours = now.getHours() % 12;
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
-  
-  const secondDeg = (seconds / 60) * 360;
-  const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
-  const hourDeg = (hours / 12) * 360 + (minutes / 60) * 30;
-  
-  secondHand.setAttribute('transform', `rotate(${secondDeg} 100 100)`);
-  minuteHand.setAttribute('transform', `rotate(${minuteDeg} 100 100)`);
-  hourHand.setAttribute('transform', `rotate(${hourDeg} 100 100)`);
+  const h = now.getHours() % 12;
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+
+  const sDeg = (s / 60) * 360;
+  const mDeg = (m / 60) * 360 + (s / 60) * 6;
+  const hDeg = (h / 12) * 360 + (m / 60) * 30;
+
+  hourHand.setAttribute('transform',   `translate(100,100) rotate(${hDeg})`);
+  minuteHand.setAttribute('transform', `translate(100,100) rotate(${mDeg})`);
+  secondHand.setAttribute('transform', `translate(100,100) rotate(${sDeg})`);
 }
 
 // ===== INIT =====
@@ -1511,8 +1658,15 @@ export function initValentineGarden() {
   }
 
   // Clock
+  initValentineClockFace();
   updateValentineClock();
   setInterval(updateValentineClock, 1000);
+
+  // Re-draw clock face when theme changes
+  new MutationObserver(() => {
+    initValentineClockFace();
+    updateValentineClock();
+  }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
   // Initial render
   renderGarden();
