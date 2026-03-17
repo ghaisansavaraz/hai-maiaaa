@@ -81,9 +81,10 @@ class Leaf {
     const w = this.canvas.width;
     const h = this.canvas.height;
     this.originX = rand(0, w);
-    // Always spawn leaves around the treetop line, not high in the sky
+    // Always spawn leaves well below the treetop line so they match the main falling band
     const baseY = h - this.treeLine;
-    const jitter = rand(-30, 30); // small vertical variation around treeline
+    // Shift the whole spawn band downward (below the canopy) so nothing appears above trees
+    const jitter = rand(50, 110); // start in mid‑air above the ground, not at the top of trees
     this.originY = baseY + jitter;
     // Clamp so we never start below the ground or above the canvas
     this.originY = Math.max(0, Math.min(this.originY, h - this.floor));
