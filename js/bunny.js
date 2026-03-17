@@ -343,7 +343,11 @@ class BunnyScene {
       }
     }, { passive: true });
 
-    // Double-click to feed — awake only
+    // Click scene while sleeping = dream bubble; double-click while awake = drop food
+    this.container.addEventListener('click', (e) => {
+      if (this.isSleepMode) this._spawnThoughtBubble();
+    });
+
     this.container.addEventListener('dblclick', (e) => {
       if (this.isSleepMode) return;
       const rect = this.container.getBoundingClientRect();
