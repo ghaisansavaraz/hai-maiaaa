@@ -2039,6 +2039,30 @@ body.zen-mode #lettersSection {
   transition: opacity 1.3s ease, transform 1.3s ease;
 }
 
+/* ── Zen Mode Bunny Preview ── */
+#zen-bunny-scene {
+  display: none;
+  width: min(560px, 90vw);
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1.1s ease 0.3s, transform 1.1s ease 0.3s;
+  pointer-events: none;
+}
+#zen-bunny-scene .bunny-scene-inner {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+body.zen-mode #zen-bunny-scene {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
 /* Star brightness bloom during zen mode */
 .star {
   transition: box-shadow 1.2s ease, filter 1.2s ease;

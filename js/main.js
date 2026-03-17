@@ -183,6 +183,7 @@ function enterZenMode() {
   scheduleZenModeAutoExit();
   playZenChime();
   triggerShootingStar();
+  if (typeof window.__zenBunnyStart === 'function') window.__zenBunnyStart();
   console.log('[Maiaaa] Zen mode enabled');
 }
 
@@ -197,6 +198,7 @@ function exitZenMode(autoTriggered = false) {
   clearZenModeTimeout();
   stopZenChime();
   stopZenBloom();
+  if (typeof window.__zenBunnyStop === 'function') window.__zenBunnyStop();
   console.log(`[Maiaaa] Zen mode disabled${autoTriggered ? ' (auto)' : ''}`);
 }
 

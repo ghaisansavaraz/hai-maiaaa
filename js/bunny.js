@@ -986,4 +986,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (bunnyTab) {
     bunnyTab.addEventListener('click', () => activateBunnyValentineTab());
   }
+
+  // Zen mode bunny — lazy-init on first start
+  const zenContainer = document.querySelector('#zen-bunny-scene .bunny-scene-inner');
+  let zenScene = null;
+
+  window.__zenBunnyStart = () => {
+    if (!zenContainer) return;
+    if (!zenScene) {
+      zenScene = new BunnyScene(zenContainer, {
+        spriteSize: 55, floor: 0, isLarge: false, isInteractive: true,
+      });
+    }
+    zenScene._resize();
+    zenScene.start();
+  };
+
+  window.__zenBunnyStop = () => {
+    zenScene?.stop();
+  };
 });
