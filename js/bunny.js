@@ -1000,6 +1000,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     zenScene._resize();
     zenScene.start();
+    // Auto-enter sleep mode for zen
+    setTimeout(() => {
+      if (zenScene && !zenScene.isSleepMode) {
+        zenScene.enableSleepMode();
+      }
+    }, 600);
   };
 
   window.__zenBunnyStop = () => {

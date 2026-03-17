@@ -1922,7 +1922,6 @@ body.zen-mode .center.dashboard-active {
   align-items: center !important;
   padding-top: 60px;
   padding-bottom: 60px;
-  transform: translateY(40px);
 }
 
 body.zen-mode #dashboardContent {
@@ -2061,6 +2060,9 @@ body.zen-mode #zen-bunny-scene {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+body.zen-mode #zen-bunny-scene .bunny-sleep-btn {
+  display: none !important;
 }
 
 /* Star brightness bloom during zen mode */
