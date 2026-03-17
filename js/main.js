@@ -175,16 +175,19 @@ function setMoonPressedState(isPressed) {
   }
 }
 
-function enterZenMode() {
+function enterZenMode(silent = false) {
   if (zenModeActive) return;
   zenModeActive = true;
+  localStorage.setItem('zen_mode_active', '1');
   document.body.classList.add('zen-mode');
   setMoonPressedState(true);
   scheduleZenModeAutoExit();
-  playZenChime();
-  triggerShootingStar();
+  if (!silent) {
+    playZenChime();
+    triggerShootingStar();
+  }
   if (typeof window.__zenBunnyStart === 'function') window.__zenBunnyStart();
-  console.log('[Maiaaa] Zen mode enabled');
+  console.log('[Maiaaa] Zen mode enabled' + (silent ? ' (restored)' : ''));
 }
 
 function exitZenMode(autoTriggered = false) {
@@ -193,6 +196,7 @@ function exitZenMode(autoTriggered = false) {
     return;
   }
   zenModeActive = false;
+  localStorage.removeItem('zen_mode_active');
   document.body.classList.remove('zen-mode');
   setMoonPressedState(false);
   clearZenModeTimeout();
@@ -443,10 +447,17 @@ function initZenModeToggle() {
   const moon = document.getElementById('moonIconContainer');
   if (!moon) return;
 
-  document.body.classList.remove('zen-mode');
-  zenModeActive = false;
-  setMoonPressedState(false);
   console.log('[Maiaaa] Zen toggle ready');
+
+  // Restore zen mode if it was active before the page refresh
+  if (localStorage.getItem('zen_mode_active') === '1') {
+    // Small delay so all other modules (bunny, etc.) finish initializing
+    setTimeout(() => enterZenMode(true), 200);
+  } else {
+    document.body.classList.remove('zen-mode');
+    zenModeActive = false;
+    setMoonPressedState(false);
+  }
 
   const handleToggle = () => {
     toggleZenMode();

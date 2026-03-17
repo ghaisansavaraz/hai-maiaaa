@@ -2,6 +2,12 @@
 // Renders a walking white bunny over an autumn forest scene with falling leaves.
 
 import { setCurrentValentineView } from './valentine.js';
+import {
+  startBunnySleep, endBunnySleep,
+  startUserSleep, endUserSleep, isUserSleeping,
+  getUserStats, getBunnyStats,
+  formatDuration, formatRelativeTime,
+} from './sleep-stats.js';
 
 const SPRITE_BASE = 'assets/bunny/white';
 const AUTUMN_BG = 'assets/autumn/background.png';
@@ -253,6 +259,10 @@ class BunnyScene {
     this.bubbleContainer = null;
     this.particlesContainer = null;
 
+    // Sleep stats overlay
+    this.statsOverlay = null;
+    this._statsTickCounter = 0;
+
     this._buildDOM();
     this._resetBoundary();
     this.left = rand(0, Math.max(0, this.boundary - this.spriteSize));
@@ -395,6 +405,9 @@ class BunnyScene {
       this.sleepBtn.setAttribute('aria-label', 'Wake up bunny');
     }
 
+    // Start bunny sleep tracking
+    startBunnySleep();
+
     // Walk to center, then lie down
     const centerX = Math.max(0, Math.min(
       this.boundary / 2 - this.spriteSize / 2,
@@ -407,6 +420,8 @@ class BunnyScene {
       this._render();
       // Begin Zzz
       this._startZzz();
+      // Show sleep stats overlay
+      this._showSleepStatsOverlay();
     };
   }
 
@@ -416,6 +431,12 @@ class BunnyScene {
       this.sleepBtn.classList.remove('active');
       this.sleepBtn.setAttribute('aria-label', 'Tuck in bunny');
     }
+
+    // End bunny sleep tracking
+    endBunnySleep();
+
+    // Hide sleep stats overlay
+    this._hideSleepStatsOverlay();
 
     // Stop Zzz
     this._stopZzz();
@@ -427,6 +448,77 @@ class BunnyScene {
     this.stateEnum = S.sitIdle;
     this.idleCounter = 0;
     this._applyState();
+  }
+
+  // ── Sleep Stats Overlay ──────────────────────────────
+
+  _showSleepStatsOverlay() {
+    if (!this.container) return;
+    this._hideSleepStatsOverlay();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'sleep-stats-overlay';
+    this.statsOverlay = overlay;
+
+    overlay.innerHTML = `
+      <div class="sleep-stats-title">Sleep Statistics</div>
+      <div class="sleep-stats-columns">
+        <div class="sleep-stat-column" id="sso-user-col">
+          <div class="sleep-stat-col-title">Your Sleep</div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Sessions</span><span class="sleep-stat-value" data-key="user-sessions">—</span></div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Average</span><span class="sleep-stat-value" data-key="user-avg">—</span></div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Last sleep</span><span class="sleep-stat-value" data-key="user-last">—</span></div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Duration</span><span class="sleep-stat-value" data-key="user-last-dur">—</span></div>
+          <div class="sleep-stat-row sleep-stat-streak"><span class="sleep-stat-label">Streak</span><span class="sleep-stat-value" data-key="user-streak">—</span></div>
+        </div>
+        <div class="sleep-stat-divider"></div>
+        <div class="sleep-stat-column" id="sso-bunny-col">
+          <div class="sleep-stat-col-title">Bunny's Sleep</div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Currently</span><span class="sleep-stat-value sleep-stat-live" data-key="bunny-current">—</span></div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Sessions</span><span class="sleep-stat-value" data-key="bunny-sessions">—</span></div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Total</span><span class="sleep-stat-value" data-key="bunny-total">—</span></div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Average</span><span class="sleep-stat-value" data-key="bunny-avg">—</span></div>
+          <div class="sleep-stat-row"><span class="sleep-stat-label">Last sleep</span><span class="sleep-stat-value" data-key="bunny-last">—</span></div>
+        </div>
+      </div>
+    `;
+
+    this.container.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('visible'));
+    this._updateSleepStatsOverlay();
+  }
+
+  _updateSleepStatsOverlay() {
+    if (!this.statsOverlay) return;
+    const set = (key, val) => {
+      const el = this.statsOverlay.querySelector(`[data-key="${key}"]`);
+      if (el) el.textContent = val;
+    };
+
+    const u = getUserStats();
+    const b = getBunnyStats();
+
+    // User stats
+    set('user-sessions', u.sessions > 0 ? `${u.sessions}` : '—');
+    set('user-avg', formatDuration(u.avgDuration));
+    set('user-last', u.lastSleep ? formatRelativeTime(u.lastSleep.endTime) : '—');
+    set('user-last-dur', u.lastSleep ? formatDuration(u.lastSleep.duration) : '—');
+    set('user-streak', u.streak > 0 ? `${u.streak} day${u.streak !== 1 ? 's' : ''}` : '—');
+
+    // Bunny stats
+    set('bunny-current', b.isSleeping ? formatDuration(b.currentDuration) : '—');
+    set('bunny-sessions', b.sessions > 0 ? `${b.sessions}` : '—');
+    set('bunny-total', formatDuration(b.totalMs > 0 ? b.totalMs : null));
+    set('bunny-avg', formatDuration(b.avgDuration));
+    set('bunny-last', b.lastSleep ? formatRelativeTime(b.lastSleep.endTime) : '—');
+  }
+
+  _hideSleepStatsOverlay() {
+    if (!this.statsOverlay) return;
+    this.statsOverlay.classList.remove('visible');
+    const el = this.statsOverlay;
+    this.statsOverlay = null;
+    setTimeout(() => el.remove(), 400);
   }
 
   _startZzz() {
@@ -622,6 +714,12 @@ class BunnyScene {
         this.idleCounter = 0;
         this._applyState();
       }
+      // Refresh stats overlay ~every second (tick fires at ~16fps = every ~16 ticks)
+      this._statsTickCounter = (this._statsTickCounter || 0) + 1;
+      if (this._statsTickCounter >= 16) {
+        this._statsTickCounter = 0;
+        this._updateSleepStatsOverlay();
+      }
       this._render();
       return;
     }
@@ -719,6 +817,33 @@ class BunnyScene {
 
 // ── Valentine Tab Wiring ────────────────────────────
 
+function _attachUserSleepButton(container) {
+  if (!container || container._userSleepBtn) return;
+
+  const btn = document.createElement('button');
+  btn.className = 'sleep-btn-user';
+  btn.setAttribute('aria-label', 'Log your sleep');
+  container._userSleepBtn = btn;
+
+  function _syncBtn() {
+    const sleeping = isUserSleeping();
+    btn.textContent = sleeping ? 'Woke Up' : 'Going to Sleep';
+    btn.classList.toggle('sleeping', sleeping);
+  }
+  _syncBtn();
+
+  btn.addEventListener('click', () => {
+    if (isUserSleeping()) {
+      endUserSleep();
+    } else {
+      startUserSleep();
+    }
+    _syncBtn();
+  });
+
+  container.appendChild(btn);
+}
+
 function activateBunnyValentineTab() {
   const bunnyTab = document.getElementById('viewTabBunny');
   const gardenTab = document.getElementById('viewTabGarden');
@@ -740,10 +865,12 @@ function activateBunnyValentineTab() {
 
   setCurrentValentineView('bunny');
 
+  const inner = bunnyPanel.querySelector('.bunny-scene-inner');
   if (!bunnyPanel._scene) {
-    bunnyPanel._scene = new BunnyScene(bunnyPanel.querySelector('.bunny-scene-inner'), {
+    bunnyPanel._scene = new BunnyScene(inner, {
       spriteSize: 80, floor: 0, isLarge: true, isInteractive: true,
     });
+    _attachUserSleepButton(inner);
   }
   bunnyPanel._scene._resize();
   bunnyPanel._scene.start();
@@ -951,6 +1078,122 @@ body.light-theme #bunnySection:hover {
   65%  { transform: translateY(4px) scale(1.14); opacity: 1; }
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
+
+/* ─── Sleep Stats Overlay ─── */
+.sleep-stats-overlay {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: rgba(10, 7, 5, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(215, 165, 15, 0.22);
+  border-radius: 14px;
+  padding: 12px 16px 10px;
+  min-width: 280px;
+  max-width: 420px;
+  width: max-content;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.sleep-stats-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.sleep-stats-title {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(215, 165, 15, 0.8);
+  margin-bottom: 10px;
+}
+.sleep-stats-columns {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+.sleep-stat-column {
+  flex: 1;
+  min-width: 110px;
+}
+.sleep-stat-divider {
+  width: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 0 12px;
+  align-self: stretch;
+}
+.sleep-stat-col-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 7px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.sleep-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.sleep-stat-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+}
+.sleep-stat-value {
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.sleep-stat-live {
+  color: rgba(215, 165, 15, 0.9);
+}
+.sleep-stat-streak .sleep-stat-value {
+  color: rgba(255, 180, 80, 0.9);
+}
+
+/* ─── User Sleep Button ─── */
+.sleep-btn-user {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  z-index: 8;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(10, 7, 5, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255,255,255,0.75);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.sleep-btn-user:hover {
+  background: rgba(30, 20, 10, 0.9);
+  border-color: rgba(215, 165, 15, 0.4);
+  color: rgba(255,255,255,0.95);
+}
+.sleep-btn-user.sleeping {
+  border-color: rgba(215, 165, 15, 0.5);
+  color: rgba(215, 165, 15, 0.9);
+  background: rgba(20, 13, 5, 0.85);
+}
 `;
   document.head.appendChild(style);
 }
@@ -997,6 +1240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       zenScene = new BunnyScene(zenContainer, {
         spriteSize: 55, floor: 0, isLarge: false, isInteractive: true,
       });
+      _attachUserSleepButton(zenContainer);
     }
     zenScene._resize();
     zenScene.start();
@@ -1009,6 +1253,9 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.__zenBunnyStop = () => {
+    if (zenScene?.isSleepMode) {
+      endBunnySleep();
+    }
     zenScene?.stop();
   };
 });
