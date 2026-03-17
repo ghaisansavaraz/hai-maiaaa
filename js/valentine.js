@@ -362,51 +362,81 @@ function getBouquetSVG(type, variation = 0) {
         </g>`;
       break;
     case 'mixed_exec': {
-      const irisC = FLOWER_COLORS.iris;
-      const anemoneC = FLOWER_COLORS.anemone;
-      const mixedStems = `
-        <g class="bouquet-stems">
-          <line x1="0" y1="10" x2="-8" y2="70" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="-2" y2="72" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="3" y2="71" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="10" y2="68" stroke="#5a7a4a" stroke-width="1.5" stroke-linecap="round"/>
-          <ellipse cx="-10" cy="38" rx="5" ry="2.5" transform="rotate(-28 -10 38)" fill="#6a8a5a" opacity="0.6"/>
-          <ellipse cx="8" cy="42" rx="5" ry="2.3" transform="rotate(25 8 42)" fill="#6a8a5a" opacity="0.55"/>
-          <ellipse cx="-4" cy="50" rx="4" ry="2" transform="rotate(-35 -4 50)" fill="#6a8a5a" opacity="0.5"/>
-          <ellipse cx="6" cy="52" rx="4" ry="2" transform="rotate(30 6 52)" fill="#6a8a5a" opacity="0.5"/>
+      const ip = FLOWER_COLORS.iris.primary;
+      const is = FLOWER_COLORS.iris.secondary;
+      const ic = FLOWER_COLORS.iris.center;
+      const ap = FLOWER_COLORS.anemone.primary;
+      const aa = FLOWER_COLORS.anemone.accent;
+      const ac = FLOWER_COLORS.anemone.center;
+
+      // Compact iris: falls (cx=0,cy=5,rx=3,ry=4.5) + standards (cx=0,cy=-4,rx=2.5,ry=3.8) + center
+      // Total radius ≈ 8 units
+      const compactIris = (rot) => `
+        <g transform="rotate(${rot})">
+          <ellipse cx="0" cy="5"  rx="3"   ry="4.5" fill="${ip}" opacity="0.9"/>
+          <ellipse cx="0" cy="5"  rx="3"   ry="4.5" fill="${ip}" opacity="0.9" transform="rotate(120)"/>
+          <ellipse cx="0" cy="5"  rx="3"   ry="4.5" fill="${ip}" opacity="0.9" transform="rotate(240)"/>
+          <ellipse cx="0" cy="-4" rx="2.5" ry="3.8" fill="${is}" opacity="0.95"/>
+          <ellipse cx="0" cy="-4" rx="2.5" ry="3.8" fill="${is}" opacity="0.95" transform="rotate(120)"/>
+          <ellipse cx="0" cy="-4" rx="2.5" ry="3.8" fill="${is}" opacity="0.95" transform="rotate(240)"/>
+          <ellipse cx="0" cy="3"  rx="0.8" ry="1.6" fill="${ic}" opacity="0.9"/>
+          <ellipse cx="0" cy="3"  rx="0.8" ry="1.6" fill="${ic}" opacity="0.9" transform="rotate(120)"/>
+          <ellipse cx="0" cy="3"  rx="0.8" ry="1.6" fill="${ic}" opacity="0.9" transform="rotate(240)"/>
+          <circle cx="0" cy="0" r="2" fill="${ic}" opacity="0.85"/>
         </g>`;
-      const mixedPaper = `
+
+      // Compact anemone: 6 petals each ry=4 + dark center
+      // Total radius ≈ 7 units
+      const compactAnemone = (rot) => `
+        <g transform="rotate(${rot})">
+          <ellipse cx="0" cy="-4.5" rx="2.8" ry="4"   fill="${ap}" opacity="0.92"/>
+          <ellipse cx="0" cy="-4.5" rx="2.8" ry="4"   fill="${ap}" opacity="0.92" transform="rotate(60)"/>
+          <ellipse cx="0" cy="-4.5" rx="2.8" ry="4"   fill="${ap}" opacity="0.92" transform="rotate(120)"/>
+          <ellipse cx="0" cy="-4.5" rx="2.8" ry="4"   fill="${ap}" opacity="0.92" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-4.5" rx="2.8" ry="4"   fill="${ap}" opacity="0.92" transform="rotate(240)"/>
+          <ellipse cx="0" cy="-4.5" rx="2.8" ry="4"   fill="${ap}" opacity="0.92" transform="rotate(300)"/>
+          <circle cx="0" cy="0" r="3.2" fill="${aa}" opacity="0.95"/>
+          <circle cx="0" cy="0" r="2.2" fill="#1a0d20" opacity="0.93"/>
+          <circle cx="0" cy="0" r="0.9" fill="${ac}"  opacity="0.6"/>
+        </g>`;
+
+      // Layout (all in viewBox -38,-38 to +38,+80 = 76×118 units):
+      // Irises at ±17 (back row, y=-6), anemones at ±7 (front row, y=2)
+      // Iris radius ~8 → edges at -25/-9 and +9/+25  (16 unit gap between them ✓)
+      // Anemone radius ~7 → edges at -14/0 and 0/+14  (touch at 0, intentional layer ✓)
+      return `<svg viewBox="-38 -38 76 118" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
         <defs>
-          <linearGradient id="paperGrad${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#faf6f0"/>
-            <stop offset="50%" stop-color="#f5efe6"/>
-            <stop offset="100%" stop-color="#ede5d8"/>
+          <linearGradient id="pg${uniqueId}" x1="0%" y1="0%" x2="80%" y2="100%">
+            <stop offset="0%" stop-color="#faf7f2"/>
+            <stop offset="100%" stop-color="#ede8e0"/>
           </linearGradient>
         </defs>
-        <g class="bouquet-paper">
-          <path d="M-28,10 Q-30,-5 -22,-18 Q-14,-26 0,-28 Q14,-26 22,-18 Q30,-5 28,10 Q20,18 0,20 Q-20,18 -28,10 Z"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.35)" stroke-width="0.5" opacity="0.42"/>
-          <path d="M-22,12 Q-24,16 -20,22 L0,26 L20,22 Q24,16 22,12"
-            fill="url(#paperGrad${uniqueId})" stroke="rgba(210,195,175,0.25)" stroke-width="0.3" opacity="0.35"/>
-          <path d="M-18,24 Q0,30 18,24" fill="none" stroke="rgba(200,185,165,0.2)" stroke-width="0.25"/>
-        </g>`;
-      return `<svg viewBox="-38 -38 76 120" xmlns="http://www.w3.org/2000/svg" class="flower-svg bouquet-svg flower-mixed_exec" aria-hidden="true">
-        ${mixedStems}
-        ${mixedPaper}
-        <g class="flower-head bouquet-head">
-          <g transform="translate(-14, -7) scale(0.88) rotate(-12)">
-            ${getIrisFlowerSVG(irisC)}
-          </g>
-          <g transform="translate(15, -6) scale(0.86) rotate(14)">
-            ${getIrisFlowerSVG(irisC)}
-          </g>
-          <g transform="translate(-5, -3) scale(0.92) rotate(-6)">
-            ${getAnemoneFlowerSVG(anemoneC)}
-          </g>
-          <g transform="translate(6, -2) scale(0.9) rotate(7)">
-            ${getAnemoneFlowerSVG(anemoneC)}
-          </g>
+
+        <!-- Stems fan from (0,9) -->
+        <g stroke="#5a7a4a" stroke-linecap="round" fill="none">
+          <line x1="-1" y1="9" x2="-17" y2="70" stroke-width="1.5"/>
+          <line x1="-1" y1="9" x2="-6"  y2="72" stroke-width="1.5"/>
+          <line x1="1"  y1="9" x2="5"   y2="71" stroke-width="1.5"/>
+          <line x1="1"  y1="9" x2="17"  y2="68" stroke-width="1.5"/>
         </g>
+        <ellipse cx="-15" cy="36" rx="4.5" ry="2"   transform="rotate(-25 -15 36)" fill="#6a8a5a" opacity="0.55"/>
+        <ellipse cx="13"  cy="40" rx="4"   ry="1.8" transform="rotate(22 13 40)"   fill="#6a8a5a" opacity="0.5"/>
+        <ellipse cx="-6"  cy="50" rx="3.5" ry="1.6" transform="rotate(-30 -6 50)"  fill="#6a8a5a" opacity="0.45"/>
+        <ellipse cx="7"   cy="52" rx="3.5" ry="1.6" transform="rotate(28 7 52)"    fill="#6a8a5a" opacity="0.45"/>
+
+        <!-- Paper wrap -->
+        <path d="M-24,10 Q-26,-2 -19,-14 Q-11,-22 0,-24 Q11,-22 19,-14 Q26,-2 24,10 Q16,18 0,20 Q-16,18 -24,10 Z"
+          fill="url(#pg${uniqueId})" stroke="rgba(205,190,170,0.4)" stroke-width="0.5" opacity="0.38"/>
+        <path d="M-19,12 Q-21,16 -17,22 L0,25 L17,22 Q21,16 19,12"
+          fill="url(#pg${uniqueId})" stroke="rgba(200,185,165,0.25)" stroke-width="0.3" opacity="0.3"/>
+
+        <!-- Back row: 2 irises spread wide -->
+        <g transform="translate(-17,-6) rotate(-11)">${compactIris(0)}</g>
+        <g transform="translate(17,-5) rotate(13)">${compactIris(0)}</g>
+
+        <!-- Front row: 2 anemones centered -->
+        <g transform="translate(-7,2) rotate(-5)">${compactAnemone(0)}</g>
+        <g transform="translate(7,3) rotate(8)">${compactAnemone(30)}</g>
       </svg>`;
     }
     default:

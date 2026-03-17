@@ -81,9 +81,12 @@ class Leaf {
     const w = this.canvas.width;
     const h = this.canvas.height;
     this.originX = rand(0, w);
-    this.originY = initial
-      ? rand(h - this.treeLine, h - this.floor)
-      : h - this.treeLine;
+    // Always spawn leaves around the treetop line, not high in the sky
+    const baseY = h - this.treeLine;
+    const jitter = rand(-30, 30); // small vertical variation around treeline
+    this.originY = baseY + jitter;
+    // Clamp so we never start below the ground or above the canvas
+    this.originY = Math.max(0, Math.min(this.originY, h - this.floor));
     this.x = this.originX;
     this.y = this.originY;
     this.vy = rand(10, 50);
@@ -151,7 +154,8 @@ class LeafEffect {
     this.floor = floor;
     this.running = false;
     this.lastTime = 0;
-    const count = isLarge ? 30 : 20;
+    // More leaves for a denser autumn effect
+    const count = isLarge ? 60 : 40;
     const treeLine = isLarge ? 250 : 94;
     const scale = isLarge ? 1 / 10 : 1 / 20;
     this.leaves = [];
@@ -164,6 +168,14 @@ class LeafEffect {
     if (this.running) return;
     this.running = true;
     this.lastTime = performance.now() / 1000;
+    // If canvas width changed since leaves were initialized, redistribute them
+    if (this.canvas.width > 100) {
+      for (const leaf of this.leaves) {
+        if (leaf.originX < 10 || leaf.originX > this.canvas.width - 10) {
+          leaf.reset(true);
+        }
+      }
+    }
     this._raf = requestAnimationFrame(() => this._loop());
   }
 
@@ -173,8 +185,19 @@ class LeafEffect {
   }
 
   resize(w, h) {
+    const oldW = this.canvas.width;
     this.canvas.width = w;
     this.canvas.height = h;
+    
+    // If width changed significantly, redistribute all leaves proportionally
+    if (oldW > 0 && Math.abs(w - oldW) > 50) {
+      const ratio = w / oldW;
+      for (const leaf of this.leaves) {
+        // Scale the leaf's origin position to fit new width
+        leaf.originX = Math.min(w - 50, Math.max(0, leaf.originX * ratio));
+        leaf.x = leaf.originX + leaf.amp * Math.sin(leaf.dx);
+      }
+    }
   }
 
   _loop() {
