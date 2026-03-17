@@ -403,9 +403,9 @@ class BunnyScene {
     const spawnLoop = () => {
       if (!this.isSleepMode || !this.running) return;
       this._spawnZzzElement();
-      this._zzzTimeout = setTimeout(spawnLoop, 2200 + Math.random() * 600);
+      this._zzzTimeout = setTimeout(spawnLoop, 900 + Math.random() * 400);
     };
-    this._zzzTimeout = setTimeout(spawnLoop, 700);
+    this._zzzTimeout = setTimeout(spawnLoop, 400);
   }
 
   _stopZzz() {
@@ -430,11 +430,11 @@ class BunnyScene {
     el.textContent = v.text;
 
     const bunnyX = this.left + this.spriteSize / 2;
-    el.style.left = `${bunnyX - 8 + (Math.random() - 0.5) * 22}px`;
-    el.style.bottom = `${this.floor + this.spriteSize + 4 + Math.random() * 12}px`;
+    el.style.left = `${bunnyX - 8 + (Math.random() - 0.5) * 28}px`;
+    el.style.bottom = `${this.floor + this.spriteSize + 4 + Math.random() * 14}px`;
 
     this.zzzContainer.appendChild(el);
-    setTimeout(() => el.remove(), 2900);
+    setTimeout(() => el.remove(), 4200);
   }
 
   // ── Dream Bubbles ────────────────────────────────
@@ -893,20 +893,20 @@ body.light-theme #bunnySection:hover {
   position: absolute;
   font-family: Georgia, 'Times New Roman', serif;
   font-style: italic;
-  color: rgba(210, 220, 255, 0.92);
-  text-shadow: 0 0 8px rgba(185, 195, 255, 0.7), 0 0 16px rgba(170, 180, 255, 0.35);
-  animation: bunnyZzzFloat 2.9s ease-out forwards;
+  color: rgba(220, 228, 255, 1);
+  text-shadow: 0 0 10px rgba(200, 210, 255, 0.9), 0 0 22px rgba(180, 195, 255, 0.55);
+  animation: bunnyZzzFloat 4.2s ease-out forwards;
   pointer-events: none;
   user-select: none;
 }
-.bunny-zzz.bunny-zzz-large  { font-size: 20px; font-weight: 500; }
-.bunny-zzz.bunny-zzz-medium { font-size: 15px; font-weight: 400; }
-.bunny-zzz.bunny-zzz-small  { font-size: 11px; font-weight: 300; }
+.bunny-zzz.bunny-zzz-large  { font-size: 26px; font-weight: 600; }
+.bunny-zzz.bunny-zzz-medium { font-size: 19px; font-weight: 500; }
+.bunny-zzz.bunny-zzz-small  { font-size: 14px; font-weight: 400; }
 @keyframes bunnyZzzFloat {
-  0%   { opacity: 0; transform: translate(0, 0) scale(0.55); }
-  18%  { opacity: 1; transform: translate(4px, -14px) scale(1); }
-  60%  { opacity: 0.88; transform: translate(-3px, -40px) scale(1.08); }
-  100% { opacity: 0; transform: translate(5px, -65px) scale(0.82); }
+  0%   { opacity: 0;    transform: translate(0, 0) scale(0.5); }
+  12%  { opacity: 1;    transform: translate(4px, -18px) scale(1.05); }
+  55%  { opacity: 0.95; transform: translate(-4px, -70px) scale(1.12); }
+  100% { opacity: 0;    transform: translate(6px, -130px) scale(0.85); }
 }
 
 /* ─── Thought bubble ─── */
