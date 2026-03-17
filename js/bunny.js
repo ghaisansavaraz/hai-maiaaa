@@ -218,7 +218,6 @@ class BunnyScene {
 
     // Interactive DOM refs (set in _buildDOM when isInteractive)
     this.sleepBtn = null;
-    this.blanket = null;
     this.zzzContainer = null;
     this.bubbleContainer = null;
     this.particlesContainer = null;
@@ -263,12 +262,6 @@ class BunnyScene {
   }
 
   _buildInteractiveDOM() {
-    // Blanket overlay — above foreground (z-index 5)
-    const blanket = document.createElement('div');
-    blanket.className = 'bunny-blanket';
-    this.container.appendChild(blanket);
-    this.blanket = blanket;
-
     // Zzz container (z-index 7)
     const zzzContainer = document.createElement('div');
     zzzContainer.className = 'bunny-zzz-container';
@@ -303,11 +296,6 @@ class BunnyScene {
       } else {
         this.enableSleepMode();
       }
-    });
-
-    // Blanket click = dream bubble (sleeping only)
-    blanket.addEventListener('click', () => {
-      if (this.isSleepMode) this._spawnThoughtBubble();
     });
 
     this._initInteractions();
@@ -382,8 +370,6 @@ class BunnyScene {
       this.stateEnum = S.lie;
       this._applyState();
       this._render();
-      // Fade in blanket
-      if (this.blanket) this.blanket.classList.add('active');
       // Begin Zzz
       this._startZzz();
     };
@@ -395,9 +381,6 @@ class BunnyScene {
       this.sleepBtn.classList.remove('active');
       this.sleepBtn.setAttribute('aria-label', 'Tuck in bunny');
     }
-
-    // Hide blanket
-    if (this.blanket) this.blanket.classList.remove('active');
 
     // Stop Zzz
     this._stopZzz();
@@ -559,7 +542,6 @@ class BunnyScene {
 
     // Re-apply sleep mode if it was active when we stopped
     if (this.isSleepMode && this.isInteractive) {
-      if (this.blanket) this.blanket.classList.add('active');
       this._startZzz();
     }
   }
@@ -572,7 +554,6 @@ class BunnyScene {
 
     if (this.isInteractive) {
       this._stopZzz();
-      if (this.blanket) this.blanket.classList.remove('active');
       if (this.bubbleContainer) this.bubbleContainer.innerHTML = '';
       if (this.particlesContainer) {
         // Keep food/hearts cleared
@@ -896,47 +877,6 @@ body.light-theme #bunnySection:hover {
   box-shadow: 0 0 18px rgba(180,185,255,0.55), 0 0 34px rgba(160,165,255,0.28);
 }
 
-/* ─── Starry blanket overlay ─── */
-.bunny-blanket {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 55%;
-  background: linear-gradient(0deg,
-    rgba(145,160,235,0.75) 0%,
-    rgba(165,178,242,0.62) 35%,
-    rgba(180,192,248,0.38) 65%,
-    transparent 100%
-  );
-  z-index: 5;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.95s ease;
-  border-radius: 0 0 12px 12px;
-  overflow: hidden;
-}
-.bunny-blanket::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.38) 1px, transparent 1px),
-    radial-gradient(circle, rgba(255,255,255,0.22) 1px, transparent 1px);
-  background-size: 26px 26px, 44px 44px;
-  background-position: 0 0, 13px 13px;
-  opacity: 0.65;
-}
-.bunny-blanket::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
-}
-.bunny-blanket.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
 /* ─── Zzz elements ─── */
 .bunny-zzz-container {
   position: absolute;
@@ -987,6 +927,7 @@ body.light-theme #bunnySection:hover {
   align-items: center;
   justify-content: center;
   font-size: 22px;
+  filter: grayscale(1);
   box-shadow:
     0 4px 16px rgba(0,0,0,0.16),
     0 0 22px rgba(200,210,255,0.35);
