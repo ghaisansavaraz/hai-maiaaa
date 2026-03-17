@@ -81,22 +81,20 @@ class Leaf {
     const w = this.canvas.width;
     const h = this.canvas.height;
     this.originX = rand(0, w);
-    // Spawn leaves clearly BELOW the tree canopy, in a band between canopy and ground
+    
+    // Spawn leaves in a tight band just below the tree canopy
     const canopyY = h - this.treeLine;
     const groundY = h - this.floor;
-    // For large scenes (Valentine), push the spawn band much lower since treeLine is tall
-    // For small scenes (dashboard card), use a smaller offset
-    const offsetBelowCanopy = this.treeLine > 150 ? 180 : 80;
-    let bandStart = canopyY + offsetBelowCanopy;
-    let bandEnd = groundY - 40;
-    if (bandStart > bandEnd) {
-      // Fallback: collapse to middle if layout is tighter than expected
-      const mid = (canopyY + groundY) / 2;
-      bandStart = bandEnd = mid;
-    }
-    this.originY = rand(bandStart, bandEnd);
-    // Clamp so we never start below the ground or above the canvas
-    this.originY = Math.max(0, Math.min(this.originY, h - this.floor));
+    
+    // Define spawn band: start slightly below canopy top, end mid-way to ground
+    // This creates a natural falling zone visible below trees but not on ground
+    const bandHeight = Math.min(150, (groundY - canopyY) * 0.6);
+    const bandStart = canopyY + 20; // just below tree tops
+    const bandEnd = bandStart + bandHeight;
+    
+    this.originY = rand(bandStart, Math.min(bandEnd, groundY - 30));
+    // Clamp so we never start below the ground or above canvas
+    this.originY = Math.max(canopyY, Math.min(this.originY, groundY - 20));
     this.x = this.originX;
     this.y = this.originY;
     this.vy = rand(10, 50);
