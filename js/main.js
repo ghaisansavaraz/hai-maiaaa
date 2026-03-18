@@ -186,6 +186,17 @@ function enterZenMode(silent = false) {
   if (!silent) {
     localStorage.setItem('zen_mode_start_time', Date.now().toString());
   }
+  
+  // Force night mode (dark theme) for zen
+  const wasLightTheme = document.body.classList.contains('light-theme');
+  if (wasLightTheme) {
+    localStorage.setItem('zen_pre_theme', 'light');
+    document.body.classList.remove('light-theme');
+    document.documentElement.classList.remove('light-theme');
+  } else {
+    localStorage.setItem('zen_pre_theme', 'dark');
+  }
+  
   document.body.classList.add('zen-mode');
   setMoonPressedState(true);
   scheduleZenModeAutoExit();
@@ -205,6 +216,15 @@ function exitZenMode(autoTriggered = false) {
   zenModeActive = false;
   localStorage.removeItem('zen_mode_active');
   localStorage.removeItem('zen_mode_start_time');
+  
+  // Restore previous theme
+  const preTheme = localStorage.getItem('zen_pre_theme');
+  if (preTheme === 'light') {
+    document.body.classList.add('light-theme');
+    document.documentElement.classList.add('light-theme');
+  }
+  localStorage.removeItem('zen_pre_theme');
+  
   document.body.classList.remove('zen-mode');
   setMoonPressedState(false);
   clearZenModeTimeout();

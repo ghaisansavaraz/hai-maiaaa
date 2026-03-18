@@ -454,10 +454,13 @@ class BunnyScene {
 
   _showSleepStatsOverlay() {
     if (!this.container) return;
+    if (!this.isLarge) return; // stats panel is Valentine-only
     this._hideSleepStatsOverlay();
 
     const panel = document.createElement('div');
-    panel.className = 'sleep-stats-panel';
+    panel.className = this.isLarge
+      ? 'sleep-stats-panel ssp-inline'
+      : 'sleep-stats-panel';
     this.statsOverlay = panel;
 
     panel.innerHTML = `
@@ -530,9 +533,14 @@ class BunnyScene {
       </div>
     `;
 
-    // Append BELOW the scene (sibling of .bunny-scene-inner)
-    const parent = this.container.parentElement || this.container;
-    parent.appendChild(panel);
+    // Valentine (isLarge): overlay inside the scene at bottom, no extra scroll
+    // Zen / card: append below the scene as a sibling
+    if (this.isLarge) {
+      this.container.appendChild(panel);
+    } else {
+      const parent = this.container.parentElement || this.container;
+      parent.appendChild(panel);
+    }
     requestAnimationFrame(() => panel.classList.add('visible'));
     this._updateSleepStatsOverlay();
   }
@@ -1166,6 +1174,18 @@ body.light-theme #bunnySection:hover {
   opacity: 1;
   pointer-events: auto;
   animation: sleepPanelIn 0.5s cubic-bezier(0.34,1.1,0.64,1) both;
+}
+
+/* Valentine inline mode: absolutely pinned to the bottom of the scene, no scrolling */
+.sleep-stats-panel.ssp-inline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-radius: 0 0 12px 12px;
+  border-top: 1px solid rgba(215,165,15,0.12);
+  z-index: 10;
 }
 
 /* Star texture dots */
