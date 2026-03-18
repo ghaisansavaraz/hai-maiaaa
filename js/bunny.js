@@ -1441,7 +1441,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!zenContainer) return;
     if (!zenScene) {
       zenScene = new BunnyScene(zenContainer, {
-        spriteSize: 55, floor: 0, isLarge: false, isInteractive: true,
+        spriteSize: 55, floor: 0, isLarge: true, isInteractive: true,
       });
       _attachUserSleepButton(zenContainer);
     }
