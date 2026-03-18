@@ -470,8 +470,10 @@ class BunnyScene {
       <div class="ssp-body">
         <div class="ssp-half ssp-user">
           <div class="ssp-section-header">
-            <span class="ssp-icon">🌙</span>
-            <span class="ssp-section-name">Your Sleep</span>
+            <svg class="ssp-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="ssp-section-name">Maia's Sleep</span>
           </div>
           <div class="ssp-hero-number" data-key="user-hero">—</div>
           <div class="ssp-hero-label" data-key="user-hero-label">nights in a row</div>
@@ -497,8 +499,12 @@ class BunnyScene {
         <div class="ssp-seam"></div>
         <div class="ssp-half ssp-bunny">
           <div class="ssp-section-header">
-            <span class="ssp-icon">✦</span>
-            <span class="ssp-section-name">Bunny's Sleep</span>
+            <svg class="ssp-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M6 3C6 3 4 6 4 9c0 1.5.5 2.8 1.3 3.8C4.5 13.8 4 15 4 16.5C4 19.5 6.5 22 9.5 22h5c3 0 5.5-2.5 5.5-5.5 0-1.5-.5-2.7-1.3-3.7C19.5 11.8 20 10.5 20 9c0-3-2-6-2-6s-1.5 2-4 2c-.7 0-1.4-.1-2-.3-.6.2-1.3.3-2 .3C7.5 5 6 3 6 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="10" r="1" fill="currentColor"/>
+              <circle cx="15" cy="10" r="1" fill="currentColor"/>
+            </svg>
+            <span class="ssp-section-name">Frundles Sleep</span>
           </div>
           <div class="ssp-hero-number ssp-live" data-key="bunny-hero">—</div>
           <div class="ssp-hero-label">currently sleeping</div>
@@ -1254,8 +1260,11 @@ body.light-theme #bunnySection:hover {
   margin-bottom: 6px;
 }
 .ssp-icon {
-  font-size: 14px;
-  line-height: 1;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: rgba(215,165,15,0.65);
+  stroke: currentColor;
 }
 .ssp-section-name {
   font-size: 10px;
