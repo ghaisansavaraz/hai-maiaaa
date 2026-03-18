@@ -182,6 +182,10 @@ function enterZenMode(silent = false) {
   if (zenModeActive) return;
   zenModeActive = true;
   localStorage.setItem('zen_mode_active', '1');
+  // Save entry timestamp for persistence across refreshes
+  if (!silent) {
+    localStorage.setItem('zen_mode_start_time', Date.now().toString());
+  }
   document.body.classList.add('zen-mode');
   setMoonPressedState(true);
   scheduleZenModeAutoExit();
@@ -200,6 +204,7 @@ function exitZenMode(autoTriggered = false) {
   }
   zenModeActive = false;
   localStorage.removeItem('zen_mode_active');
+  localStorage.removeItem('zen_mode_start_time');
   document.body.classList.remove('zen-mode');
   setMoonPressedState(false);
   clearZenModeTimeout();
@@ -492,7 +497,40 @@ function initZenModeToggle() {
   // Restore zen mode if it was active before the page refresh
   if (localStorage.getItem('zen_mode_active') === '1') {
     // Small delay so all other modules (bunny, etc.) finish initializing
-    setTimeout(() => enterZenMode(true), 200);
+    setTimeout(() => {
+      enterZenMode(true);
+      
+      // Adjust auto-exit timer based on elapsed time
+      const startTime = parseInt(localStorage.getItem('zen_mode_start_time') || '0', 10);
+      if (startTime > 0) {
+        const elapsed = Date.now() - startTime;
+        const now = new Date();
+        const hour = now.getHours();
+        const isDay = hour >= DAY_START_HOUR && hour < DAY_END_HOUR;
+        const exitHour = isDay ? ZEN_DAY_AUTO_EXIT_HOUR : ZEN_NIGHT_AUTO_EXIT_HOUR;
+        
+        const target = new Date();
+        target.setHours(exitHour, 0, 0, 0);
+        if (target <= now) {
+          target.setDate(target.getDate() + 1);
+        }
+        
+        const remaining = Math.max(target.getTime() - now.getTime(), 0);
+        
+        // Clear existing timer and reschedule
+        clearZenModeTimeout();
+        if (remaining > 0) {
+          zenModeTimeoutId = window.setTimeout(() => {
+            console.log('[Maiaaa] Zen mode auto-exiting at scheduled boundary (restored)');
+            exitZenMode(true);
+          }, remaining);
+          console.log(`[Maiaaa] Zen mode restored (elapsed: ${Math.floor(elapsed / 1000)}s, remaining: ${Math.floor(remaining / 1000)}s)`);
+        } else {
+          // Already past exit time, exit immediately
+          exitZenMode(true);
+        }
+      }
+    }, 200);
   } else {
     document.body.classList.remove('zen-mode');
     zenModeActive = false;

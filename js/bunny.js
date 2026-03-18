@@ -1418,12 +1418,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     zenScene._resize();
     zenScene.start();
-    // Auto-enter sleep mode for zen
+    
+    // Check if bunny was already sleeping (from before refresh)
+    const bunnyStats = getBunnyStats();
+    const wasAlreadySleeping = bunnyStats.isSleeping;
+    
+    // Auto-enter sleep mode for zen (or restore existing sleep)
     setTimeout(() => {
       if (zenScene && !zenScene.isSleepMode) {
         zenScene.enableSleepMode();
       }
-    }, 600);
+    }, wasAlreadySleeping ? 100 : 600); // Faster restore if continuing sleep
   };
 
   window.__zenBunnyStop = () => {
