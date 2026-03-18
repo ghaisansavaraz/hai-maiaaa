@@ -33,6 +33,9 @@ const ZEN_CHIME_PATH = 'assets/Wind chime Zen/Wind chime, Hai Maiaaa.mp3';
 // Inactivity timeouts (in milliseconds)
 const MAIN_DASHBOARD_INACTIVITY = 10 * 60 * 1000; // 10 minutes
 const VALENTINE_DASHBOARD_INACTIVITY = 5 * 60 * 1000; // 5 minutes
+const AUTO_REFRESH_INACTIVITY = 60 * 60 * 1000; // 1 hour
+
+let autoRefreshTimeoutId = null;
 
 // Show dashboard
 function showDashboard() {
@@ -443,6 +446,43 @@ function initInactivityTimer() {
   debugLog('Inactivity timer initialized');
 }
 
+// ===== AUTO-REFRESH TIMER =====
+
+function resetAutoRefreshTimer() {
+  if (autoRefreshTimeoutId) {
+    clearTimeout(autoRefreshTimeoutId);
+    autoRefreshTimeoutId = null;
+  }
+  
+  autoRefreshTimeoutId = setTimeout(() => {
+    debugLog('Auto-refresh: 1 hour of inactivity, reloading page...');
+    window.location.reload();
+  }, AUTO_REFRESH_INACTIVITY);
+}
+
+function initAutoRefreshTimer() {
+  const activityEvents = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart', 'click'];
+  
+  let throttleTimeout = null;
+  const throttledReset = () => {
+    if (!throttleTimeout) {
+      throttleTimeout = setTimeout(() => {
+        resetAutoRefreshTimer();
+        throttleTimeout = null;
+      }, 5000); // Throttle to once per 5 seconds
+    }
+  };
+  
+  activityEvents.forEach(event => {
+    document.addEventListener(event, throttledReset, { passive: true });
+  });
+  
+  // Start initial timer
+  resetAutoRefreshTimer();
+  
+  debugLog('Auto-refresh timer initialized (1 hour inactivity)');
+}
+
 function initZenModeToggle() {
   const moon = document.getElementById('moonIconContainer');
   if (!moon) return;
@@ -669,6 +709,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize inactivity timer - DISABLED (manual switching only)
     // initInactivityTimer();
+    
+    // Initialize auto-refresh timer (1 hour inactivity)
+    initAutoRefreshTimer();
     
     // Show dashboard immediately
     showDashboard();

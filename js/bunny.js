@@ -456,35 +456,78 @@ class BunnyScene {
     if (!this.container) return;
     this._hideSleepStatsOverlay();
 
-    const overlay = document.createElement('div');
-    overlay.className = 'sleep-stats-overlay';
-    this.statsOverlay = overlay;
+    const panel = document.createElement('div');
+    panel.className = 'sleep-stats-panel';
+    this.statsOverlay = panel;
 
-    overlay.innerHTML = `
-      <div class="sleep-stats-title">Sleep Statistics</div>
-      <div class="sleep-stats-columns">
-        <div class="sleep-stat-column" id="sso-user-col">
-          <div class="sleep-stat-col-title">Your Sleep</div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Sessions</span><span class="sleep-stat-value" data-key="user-sessions">—</span></div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Average</span><span class="sleep-stat-value" data-key="user-avg">—</span></div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Last sleep</span><span class="sleep-stat-value" data-key="user-last">—</span></div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Duration</span><span class="sleep-stat-value" data-key="user-last-dur">—</span></div>
-          <div class="sleep-stat-row sleep-stat-streak"><span class="sleep-stat-label">Streak</span><span class="sleep-stat-value" data-key="user-streak">—</span></div>
+    panel.innerHTML = `
+      <div class="ssp-stars" aria-hidden="true"></div>
+      <div class="ssp-titlebar">
+        <span class="ssp-ornament">— ◯ —</span>
+        <span class="ssp-title-word">sleep</span>
+        <span class="ssp-ornament">— ◯ —</span>
+      </div>
+      <div class="ssp-body">
+        <div class="ssp-half ssp-user">
+          <div class="ssp-section-header">
+            <span class="ssp-icon">🌙</span>
+            <span class="ssp-section-name">Your Sleep</span>
+          </div>
+          <div class="ssp-hero-number" data-key="user-hero">—</div>
+          <div class="ssp-hero-label" data-key="user-hero-label">nights in a row</div>
+          <div class="ssp-pills">
+            <div class="ssp-pill">
+              <span class="ssp-pill-val" data-key="user-avg">—</span>
+              <span class="ssp-pill-lbl">Average</span>
+            </div>
+            <div class="ssp-pill">
+              <span class="ssp-pill-val" data-key="user-sessions">—</span>
+              <span class="ssp-pill-lbl">Sessions</span>
+            </div>
+            <div class="ssp-pill ssp-pill-wide">
+              <span class="ssp-pill-val" data-key="user-last">—</span>
+              <span class="ssp-pill-lbl">Last sleep</span>
+            </div>
+            <div class="ssp-pill">
+              <span class="ssp-pill-val" data-key="user-last-dur">—</span>
+              <span class="ssp-pill-lbl">Duration</span>
+            </div>
+          </div>
         </div>
-        <div class="sleep-stat-divider"></div>
-        <div class="sleep-stat-column" id="sso-bunny-col">
-          <div class="sleep-stat-col-title">Bunny's Sleep</div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Currently</span><span class="sleep-stat-value sleep-stat-live" data-key="bunny-current">—</span></div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Sessions</span><span class="sleep-stat-value" data-key="bunny-sessions">—</span></div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Total</span><span class="sleep-stat-value" data-key="bunny-total">—</span></div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Average</span><span class="sleep-stat-value" data-key="bunny-avg">—</span></div>
-          <div class="sleep-stat-row"><span class="sleep-stat-label">Last sleep</span><span class="sleep-stat-value" data-key="bunny-last">—</span></div>
+        <div class="ssp-seam"></div>
+        <div class="ssp-half ssp-bunny">
+          <div class="ssp-section-header">
+            <span class="ssp-icon">✦</span>
+            <span class="ssp-section-name">Bunny's Sleep</span>
+          </div>
+          <div class="ssp-hero-number ssp-live" data-key="bunny-hero">—</div>
+          <div class="ssp-hero-label">currently sleeping</div>
+          <div class="ssp-pills">
+            <div class="ssp-pill">
+              <span class="ssp-pill-val" data-key="bunny-avg">—</span>
+              <span class="ssp-pill-lbl">Average nap</span>
+            </div>
+            <div class="ssp-pill">
+              <span class="ssp-pill-val" data-key="bunny-sessions">—</span>
+              <span class="ssp-pill-lbl">Naps total</span>
+            </div>
+            <div class="ssp-pill">
+              <span class="ssp-pill-val" data-key="bunny-total">—</span>
+              <span class="ssp-pill-lbl">Total time</span>
+            </div>
+            <div class="ssp-pill ssp-pill-wide">
+              <span class="ssp-pill-val" data-key="bunny-last">—</span>
+              <span class="ssp-pill-lbl">Last sleep</span>
+            </div>
+          </div>
         </div>
       </div>
     `;
 
-    this.container.appendChild(overlay);
-    requestAnimationFrame(() => overlay.classList.add('visible'));
+    // Append BELOW the scene (sibling of .bunny-scene-inner)
+    const parent = this.container.parentElement || this.container;
+    parent.appendChild(panel);
+    requestAnimationFrame(() => panel.classList.add('visible'));
     this._updateSleepStatsOverlay();
   }
 
@@ -498,18 +541,22 @@ class BunnyScene {
     const u = getUserStats();
     const b = getBunnyStats();
 
-    // User stats
-    set('user-sessions', u.sessions > 0 ? `${u.sessions}` : '—');
+    // User hero: streak is the centrepiece
+    const streakNum = u.streak > 0 ? `${u.streak}` : '—';
+    const streakLabel = u.streak === 1 ? 'night in a row' : 'nights in a row';
+    set('user-hero', streakNum);
+    set('user-hero-label', u.streak > 0 ? streakLabel : 'no streak yet');
+
     set('user-avg', formatDuration(u.avgDuration));
+    set('user-sessions', u.sessions > 0 ? `${u.sessions}` : '—');
     set('user-last', u.lastSleep ? formatRelativeTime(u.lastSleep.endTime) : '—');
     set('user-last-dur', u.lastSleep ? formatDuration(u.lastSleep.duration) : '—');
-    set('user-streak', u.streak > 0 ? `${u.streak} day${u.streak !== 1 ? 's' : ''}` : '—');
 
-    // Bunny stats
-    set('bunny-current', b.isSleeping ? formatDuration(b.currentDuration) : '—');
+    // Bunny hero: live duration is the centrepiece
+    set('bunny-hero', b.isSleeping ? formatDuration(b.currentDuration) : '—');
+    set('bunny-avg', formatDuration(b.avgDuration));
     set('bunny-sessions', b.sessions > 0 ? `${b.sessions}` : '—');
     set('bunny-total', formatDuration(b.totalMs > 0 ? b.totalMs : null));
-    set('bunny-avg', formatDuration(b.avgDuration));
     set('bunny-last', b.lastSleep ? formatRelativeTime(b.lastSleep.endTime) : '—');
   }
 
@@ -518,7 +565,7 @@ class BunnyScene {
     this.statsOverlay.classList.remove('visible');
     const el = this.statsOverlay;
     this.statsOverlay = null;
-    setTimeout(() => el.remove(), 400);
+    setTimeout(() => el.remove(), 500);
   }
 
   _startZzz() {
@@ -1079,88 +1126,215 @@ body.light-theme #bunnySection:hover {
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* ─── Sleep Stats Overlay ─── */
-.sleep-stats-overlay {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  background: rgba(10, 7, 5, 0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(215, 165, 15, 0.22);
-  border-radius: 14px;
-  padding: 12px 16px 10px;
-  min-width: 280px;
-  max-width: 420px;
-  width: max-content;
+/* ─── Sleep Stats Panel (below scene) ─── */
+@keyframes sleepPanelIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes glowPulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(215,165,15,0.2); }
+  50%       { text-shadow: 0 0 22px rgba(215,165,15,0.55), 0 0 40px rgba(215,165,15,0.2); }
+}
+@keyframes sspStarTwinkle {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 0.7; }
+}
+
+.sleep-stats-panel {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(215,165,15,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 0%, rgba(215,165,15,0.05) 0%, transparent 55%),
+    rgba(8, 5, 2, 0.96);
+  border-top: 1px solid rgba(215,165,15,0.14);
+  border-radius: 0 0 12px 12px;
+  padding: 16px 24px 18px;
+  overflow: hidden;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  transition: opacity 0.5s cubic-bezier(0.34,1.1,0.64,1);
 }
-.sleep-stats-overlay.visible {
+.sleep-stats-panel.visible {
   opacity: 1;
   pointer-events: auto;
+  animation: sleepPanelIn 0.5s cubic-bezier(0.34,1.1,0.64,1) both;
 }
-.sleep-stats-title {
-  text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+
+/* Star texture dots */
+.ssp-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ssp-stars::before,
+.ssp-stars::after {
+  content: '';
+  position: absolute;
+  width: 1.5px;
+  height: 1.5px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow:
+    18px  14px rgba(255,255,255,0.28),
+    55px  28px rgba(255,255,255,0.18),
+    92px   9px rgba(255,255,255,0.22),
+   135px  35px rgba(255,255,255,0.15),
+   178px  12px rgba(255,255,255,0.25),
+   220px  30px rgba(255,255,255,0.18),
+   265px   8px rgba(255,255,255,0.20),
+   310px  22px rgba(255,255,255,0.14),
+   355px  38px rgba(255,255,255,0.22),
+   395px  15px rgba(255,255,255,0.17),
+   430px  29px rgba(255,255,255,0.20),
+   470px   7px rgba(255,255,255,0.14);
+  animation: sspStarTwinkle 4s ease-in-out infinite;
+}
+.ssp-stars::after {
+  box-shadow:
+    36px  42px rgba(255,255,255,0.16),
+    78px  55px rgba(255,255,255,0.22),
+   118px  48px rgba(255,255,255,0.14),
+   162px  60px rgba(255,255,255,0.20),
+   205px  44px rgba(255,255,255,0.18),
+   248px  58px rgba(255,255,255,0.12),
+   290px  47px rgba(255,255,255,0.22),
+   335px  62px rgba(255,255,255,0.16),
+   378px  50px rgba(255,255,255,0.20),
+   415px  43px rgba(255,255,255,0.14),
+   455px  56px rgba(255,255,255,0.18);
+  animation-delay: 2s;
+  animation-duration: 5.5s;
+}
+
+/* Title bar */
+.ssp-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.ssp-title-word {
+  font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  color: rgba(215,165,15,0.7);
+}
+.ssp-ornament {
+  font-size: 10px;
+  color: rgba(215,165,15,0.35);
+  letter-spacing: 0.1em;
+}
+
+/* Body: two halves */
+.ssp-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+.ssp-half {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+/* Section header */
+.ssp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.ssp-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+.ssp-section-name {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(215, 165, 15, 0.8);
+  color: rgba(255,255,255,0.3);
+  font-variant: small-caps;
+}
+
+/* Hero number */
+.ssp-hero-number {
+  font-size: 44px;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.92);
+  margin: 2px 0 0;
+}
+.ssp-hero-number.ssp-live {
+  color: rgba(215,165,15,0.95);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+.ssp-hero-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
   margin-bottom: 10px;
 }
-.sleep-stats-columns {
+
+/* Pill badges */
+.ssp-pills {
   display: flex;
-  gap: 0;
-  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
 }
-.sleep-stat-column {
-  flex: 1;
-  min-width: 110px;
-}
-.sleep-stat-divider {
-  width: 1px;
-  background: rgba(255,255,255,0.08);
-  margin: 0 12px;
-  align-self: stretch;
-}
-.sleep-stat-col-title {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 7px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-.sleep-stat-row {
+.ssp-pill {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
+  gap: 2px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 5px 11px;
+  min-width: 52px;
 }
-.sleep-stat-label {
-  font-size: 10px;
-  color: rgba(255,255,255,0.4);
-  white-space: nowrap;
+.ssp-pill-wide {
+  min-width: 80px;
 }
-.sleep-stat-value {
+.ssp-pill-val {
   font-size: 11px;
-  color: rgba(255,255,255,0.85);
   font-weight: 500;
+  color: rgba(255,255,255,0.82);
   white-space: nowrap;
 }
-.sleep-stat-live {
-  color: rgba(215, 165, 15, 0.9);
+.ssp-pill-lbl {
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
 }
-.sleep-stat-streak .sleep-stat-value {
-  color: rgba(255, 180, 80, 0.9);
+
+/* Vertical seam divider */
+.ssp-seam {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(215,165,15,0.22) 20%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(215,165,15,0.22) 80%,
+    transparent 100%
+  );
+  margin: 0 4px;
+  flex-shrink: 0;
 }
 
 /* ─── User Sleep Button ─── */
@@ -1170,29 +1344,29 @@ body.light-theme #bunnySection:hover {
   left: 12px;
   z-index: 8;
   height: 28px;
-  padding: 0 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(10, 7, 5, 0.72);
+  padding: 0 13px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(8, 5, 2, 0.75);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.65);
   font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
   white-space: nowrap;
 }
 .sleep-btn-user:hover {
-  background: rgba(30, 20, 10, 0.9);
-  border-color: rgba(215, 165, 15, 0.4);
-  color: rgba(255,255,255,0.95);
+  background: rgba(20, 13, 5, 0.9);
+  border-color: rgba(215,165,15,0.35);
+  color: rgba(255,255,255,0.9);
 }
 .sleep-btn-user.sleeping {
-  border-color: rgba(215, 165, 15, 0.5);
-  color: rgba(215, 165, 15, 0.9);
-  background: rgba(20, 13, 5, 0.85);
+  border-color: rgba(215,165,15,0.45);
+  color: rgba(215,165,15,0.85);
+  background: rgba(12, 8, 2, 0.88);
 }
 `;
   document.head.appendChild(style);
