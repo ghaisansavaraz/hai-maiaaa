@@ -2222,32 +2222,67 @@ body.light-theme .mood-category {
       </header>
       <div class="workspace-scroll">
         <div class="beam-calc-card">
-          <h3 class="beam-calc-heading">Beam reaction calculator</h3>
-          <div class="beam-visualizer" id="beamViz" aria-hidden="true">
-            <div class="beam-support beam-support-a">▲<span class="beam-support-label">A</span></div>
-            <div class="beam-support beam-support-b">▲<span class="beam-support-label">B</span></div>
-            <div class="beam-load-arrow" id="beamLoadIndicator"></div>
+          <div class="beam-calc-card__head">
+            <h3 class="beam-calc-heading">Beam reaction calculator</h3>
+            <p class="beam-calc-lede">Simply supported beam with one point load. Move the sliders — reactions update live.</p>
           </div>
+          <div class="beam-viz-block">
+            <div class="beam-viz-meta">
+              <span class="beam-viz-title">Span diagram</span>
+              <span class="beam-viz-hint">Supports A &amp; B · load F at distance x from A</span>
+            </div>
+          <div class="beam-visualizer" id="beamViz" aria-hidden="true">
+            <div class="beam-load-anchor" id="beamLoadIndicator">
+              <span class="beam-load-shaft" aria-hidden="true"></span>
+              <span class="beam-load-tip" aria-hidden="true">▼</span>
+            </div>
+            <div class="beam-member" role="presentation"></div>
+            <div class="beam-ground"></div>
+            <div class="beam-support beam-support-a">
+              <span class="beam-support-triangle" aria-hidden="true">▲</span>
+              <span class="beam-support-label">A</span>
+            </div>
+            <div class="beam-support beam-support-b">
+              <span class="beam-support-triangle" aria-hidden="true">▲</span>
+              <span class="beam-support-label">B</span>
+            </div>
+          </div>
+          </div>
+          <div class="beam-controls">
           <div class="beam-control-group">
-            <label class="beam-label" for="beamLength">Beam length (L): <span id="beamLVal">10</span> m</label>
+            <label class="beam-label" for="beamLength">
+              <span class="beam-param">Beam length <span class="beam-param-unit">L</span></span>
+              <span class="beam-value-pill"><span id="beamLVal">10</span> m</span>
+            </label>
             <input type="range" id="beamLength" class="beam-range" min="2" max="20" value="10" step="0.5" />
           </div>
           <div class="beam-control-group">
-            <label class="beam-label" for="beamForce">Point load (F): <span id="beamFVal">20</span> kN</label>
+            <label class="beam-label" for="beamForce">
+              <span class="beam-param">Point load <span class="beam-param-unit">F</span></span>
+              <span class="beam-value-pill"><span id="beamFVal">20</span> kN</span>
+            </label>
             <input type="range" id="beamForce" class="beam-range" min="1" max="100" value="20" step="1" />
           </div>
           <div class="beam-control-group">
-            <label class="beam-label" for="beamPosition">Load position (x from A): <span id="beamXVal">4.0</span> m</label>
+            <label class="beam-label" for="beamPosition">
+              <span class="beam-param">Load position <span class="beam-param-unit">x</span> <span class="beam-param-from">from A</span></span>
+              <span class="beam-value-pill"><span id="beamXVal">4.0</span> m</span>
+            </label>
             <input type="range" id="beamPosition" class="beam-range" min="0" max="10" value="4" step="0.1" />
           </div>
+          </div>
+          <div class="beam-results-head">
+            <span class="beam-results-title">Support reactions</span>
+            <span class="beam-results-note">ΣF = 0 · ΣM = 0</span>
+          </div>
           <div class="beam-results">
-            <div class="beam-res-box">
-              <span class="beam-res-label">Reaction at A (R<sub>a</sub>)</span>
+            <div class="beam-res-box beam-res-box--a">
+              <span class="beam-res-label">R<sub>a</sub> <span class="beam-res-at">at A</span></span>
               <div class="beam-res-val" id="beamRaResult">12.00 kN</div>
             </div>
-            <div class="beam-res-box">
-              <span class="beam-res-label">Reaction at B (R<sub>b</sub>)</span>
-              <div class="beam-res-val" id="beamRbResult">8.00 kN</div>
+            <div class="beam-res-box beam-res-box--b">
+              <span class="beam-res-label">R<sub>b</sub> <span class="beam-res-at">at B</span></span>
+              <div class="beam-res-val beam-res-val--b" id="beamRbResult">8.00 kN</div>
             </div>
           </div>
         </div>
