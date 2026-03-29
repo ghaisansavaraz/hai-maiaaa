@@ -20,6 +20,8 @@ export function initWorkspaceBeam() {
   const dimLText = document.getElementById('dimLText');
   const raArrowLabel = document.getElementById('raArrowLabel');
   const rbArrowLabel = document.getElementById('rbArrowLabel');
+  const dimA = document.getElementById('dimA');
+  const dimL = document.getElementById('dimL');
 
   function update() {
     const L = parseFloat(lengthInput.value);
@@ -51,6 +53,37 @@ export function initWorkspaceBeam() {
     // Move load group horizontally: 120px (left edge) + (x/L) * 560px (beam width)
     const loadX = 120 + (x / L) * 560;
     if (loadGroup) loadGroup.setAttribute('transform', `translate(${loadX}, 0)`);
+
+    // Update dimension line 'a' (from support A to load)
+    // The line goes from x=120 to x=loadX at y=255
+    if (dimA) {
+      const dimALine = dimA.querySelector('line:nth-of-type(1)');
+      const dimALeft = dimA.querySelector('line:nth-of-type(2)');
+      const dimARight = dimA.querySelector('line:nth-of-type(3)');
+      const dimATextEl = dimA.querySelector('text');
+      
+      if (dimALine) {
+        dimALine.setAttribute('x2', String(loadX));
+      }
+      if (dimARight) {
+        dimARight.setAttribute('x1', String(loadX));
+        dimARight.setAttribute('x2', String(loadX));
+      }
+      if (dimATextEl) {
+        const midX = (120 + loadX) / 2;
+        dimATextEl.setAttribute('x', String(midX));
+      }
+    }
+
+    // Update dimension line 'L' (full beam length)
+    // The line goes from x=120 to x=680 at y=275 (below the 'a' line)
+    if (dimL) {
+      const dimLTextEl = dimL.querySelector('text');
+      if (dimLTextEl) {
+        const midX = (120 + 680) / 2;
+        dimLTextEl.setAttribute('x', String(midX));
+      }
+    }
   }
 
   [lengthInput, forceInput, posInput].forEach((input) => {
