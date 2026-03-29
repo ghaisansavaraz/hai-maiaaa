@@ -2221,68 +2221,140 @@ body.light-theme .mood-category {
         <p class="workspace-subtitle">Simply supported beam — point load reactions</p>
       </header>
       <div class="workspace-scroll">
-        <div class="beam-calc-card">
-          <div class="beam-calc-card__head">
-            <h3 class="beam-calc-heading">Beam reaction calculator</h3>
-            <p class="beam-calc-lede">Simply supported beam with one point load. Move the sliders — reactions update live.</p>
-          </div>
-          <div class="beam-viz-block">
-            <div class="beam-viz-meta">
-              <span class="beam-viz-title">Span diagram</span>
-              <span class="beam-viz-hint">Supports A &amp; B · load F at distance x from A</span>
+        <div class="beam-calc-wrapper">
+          <!-- Top stats bar -->
+          <div class="beam-stats-bar">
+            <div class="beam-stat-cell">
+              <span class="beam-stat-label">Reaction R<sub>a</sub></span>
+              <span class="beam-stat-value" id="beamRaResult">12.00 kN</span>
             </div>
-          <div class="beam-visualizer" id="beamViz" aria-hidden="true">
-            <div class="beam-load-anchor" id="beamLoadIndicator">
-              <span class="beam-load-shaft" aria-hidden="true"></span>
-              <span class="beam-load-tip" aria-hidden="true">▼</span>
+            <div class="beam-stat-cell">
+              <span class="beam-stat-label">Reaction R<sub>b</sub></span>
+              <span class="beam-stat-value" id="beamRbResult">8.00 kN</span>
             </div>
-            <div class="beam-member" role="presentation"></div>
-            <div class="beam-ground"></div>
-            <div class="beam-support beam-support-a">
-              <span class="beam-support-triangle" aria-hidden="true">▲</span>
-              <span class="beam-support-label">A</span>
-            </div>
-            <div class="beam-support beam-support-b">
-              <span class="beam-support-triangle" aria-hidden="true">▲</span>
-              <span class="beam-support-label">B</span>
+            <div class="beam-stat-cell">
+              <span class="beam-stat-label">Total Load</span>
+              <span class="beam-stat-value" id="beamTotalLoad">20.00 kN</span>
             </div>
           </div>
-          </div>
-          <div class="beam-controls">
-          <div class="beam-control-group">
-            <label class="beam-label" for="beamLength">
-              <span class="beam-param">Beam length <span class="beam-param-unit">L</span></span>
-              <span class="beam-value-pill"><span id="beamLVal">10</span> m</span>
-            </label>
-            <input type="range" id="beamLength" class="beam-range" min="2" max="20" value="10" step="0.5" />
-          </div>
-          <div class="beam-control-group">
-            <label class="beam-label" for="beamForce">
-              <span class="beam-param">Point load <span class="beam-param-unit">F</span></span>
-              <span class="beam-value-pill"><span id="beamFVal">20</span> kN</span>
-            </label>
-            <input type="range" id="beamForce" class="beam-range" min="1" max="100" value="20" step="1" />
-          </div>
-          <div class="beam-control-group">
-            <label class="beam-label" for="beamPosition">
-              <span class="beam-param">Load position <span class="beam-param-unit">x</span> <span class="beam-param-from">from A</span></span>
-              <span class="beam-value-pill"><span id="beamXVal">4.0</span> m</span>
-            </label>
-            <input type="range" id="beamPosition" class="beam-range" min="0" max="10" value="4" step="0.1" />
-          </div>
-          </div>
-          <div class="beam-results-head">
-            <span class="beam-results-title">Support reactions</span>
-            <span class="beam-results-note">ΣF = 0 · ΣM = 0</span>
-          </div>
-          <div class="beam-results">
-            <div class="beam-res-box beam-res-box--a">
-              <span class="beam-res-label">R<sub>a</sub> <span class="beam-res-at">at A</span></span>
-              <div class="beam-res-val" id="beamRaResult">12.00 kN</div>
+
+          <!-- Diagram -->
+          <div class="beam-diagram-panel">
+            <div class="beam-diagram-canvas">
+              <!-- Beam member (horizontal blue bar) -->
+              <svg class="beam-svg" viewBox="0 0 800 280" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <linearGradient id="beamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.85);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.72);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
+                  </linearGradient>
+                  <filter id="beamGlow">
+                    <feGaussianBlur stdDeviation="4" result="blur"/>
+                    <feFlood flood-color="#ffffff" flood-opacity="0.6"/>
+                    <feComposite in2="blur" operator="in"/>
+                    <feMerge>
+                      <feMergeNode/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                  <filter id="beamShadow">
+                    <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.25"/>
+                  </filter>
+                  <filter id="loadShadow">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#ef4444" flood-opacity="0.4"/>
+                  </filter>
+                </defs>
+                
+                <!-- Ground line -->
+                <line x1="80" y1="220" x2="720" y2="220" stroke="#52525b" stroke-width="2" stroke-dasharray="8,6" opacity="0.4"/>
+                
+                <!-- Support A (left triangle) -->
+                <g id="supportA">
+                  <polygon points="120,200 100,220 140,220" fill="#71717a" stroke="#a1a1aa" stroke-width="1.5"/>
+                  <text x="120" y="245" text-anchor="middle" fill="#a1a1aa" font-size="18" font-weight="600" font-family="system-ui">A</text>
+                </g>
+                
+                <!-- Support B (right triangle) -->
+                <g id="supportB">
+                  <polygon points="680,200 660,220 700,220" fill="#71717a" stroke="#a1a1aa" stroke-width="1.5"/>
+                  <text x="680" y="245" text-anchor="middle" fill="#a1a1aa" font-size="18" font-weight="600" font-family="system-ui">B</text>
+                </g>
+                
+                <!-- Beam (glowing white glass bar) -->
+                <rect id="beamBar" x="120" y="185" width="560" height="30" rx="4" fill="url(#beamGrad)" filter="url(#beamGlow)" opacity="0.95"/>
+                <rect x="120" y="185" width="560" height="30" rx="4" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                
+                <!-- Point load (red arrow + label) -->
+                <g id="loadGroup" transform="translate(344, 0)">
+                  <!-- Arrow shaft -->
+                  <line x1="0" y1="60" x2="0" y2="175" stroke="#ef4444" stroke-width="4" stroke-linecap="round" filter="url(#loadShadow)"/>
+                  <!-- Arrow tip -->
+                  <polygon points="0,185 -8,170 8,170" fill="#ef4444"/>
+                  <!-- Load label bubble -->
+                  <g transform="translate(0, 35)">
+                    <rect x="-32" y="-16" width="64" height="28" rx="14" fill="#18181b" stroke="#ef4444" stroke-width="1.5"/>
+                    <text x="0" y="4" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="700" font-family="system-ui, monospace" id="loadLabel">20kN</text>
+                  </g>
+                </g>
+                
+                <!-- Dimension lines -->
+                <!-- Distance 'a' from A to load -->
+                <g id="dimA" opacity="0.7">
+                  <line x1="120" y1="255" x2="344" y2="255" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                  <line x1="120" y1="250" x2="120" y2="260" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                  <line x1="344" y1="250" x2="344" y2="260" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                  <text x="232" y="272" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="13" font-weight="500" font-family="system-ui" id="dimAText">a: 4.0m</text>
+                </g>
+                
+                <!-- Total span L -->
+                <g id="dimL" opacity="0.75">
+                  <line x1="120" y1="275" x2="680" y2="275" stroke="#a1a1aa" stroke-width="1.5"/>
+                  <line x1="120" y1="270" x2="120" y2="280" stroke="#a1a1aa" stroke-width="1.5"/>
+                  <line x1="680" y1="270" x2="680" y2="280" stroke="#a1a1aa" stroke-width="1.5"/>
+                  <text x="400" y="292" text-anchor="middle" fill="#d4d4d8" font-size="14" font-weight="600" font-family="system-ui" id="dimLText">10m</text>
+                </g>
+                
+                <!-- Reaction arrows (upward glowing white) -->
+                <g id="reactionA" opacity="0.9">
+                  <line x1="120" y1="235" x2="120" y2="200" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" filter="url(#beamGlow)"/>
+                  <polygon points="120,195 114,205 126,205" fill="rgba(255,255,255,0.9)"/>
+                  <rect x="80" y="225" width="80" height="22" rx="11" fill="rgba(24,24,27,0.85)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+                  <text x="120" y="240" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-size="12" font-weight="700" font-family="system-ui, monospace" id="raArrowLabel">RA: 12kN</text>
+                </g>
+                
+                <g id="reactionB" opacity="0.9">
+                  <line x1="680" y1="235" x2="680" y2="200" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" filter="url(#beamGlow)"/>
+                  <polygon points="680,195 674,205 686,205" fill="rgba(255,255,255,0.9)"/>
+                  <rect x="640" y="225" width="80" height="22" rx="11" fill="rgba(24,24,27,0.85)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+                  <text x="680" y="240" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-size="12" font-weight="700" font-family="system-ui, monospace" id="rbArrowLabel">RB: 8kN</text>
+                </g>
+              </svg>
             </div>
-            <div class="beam-res-box beam-res-box--b">
-              <span class="beam-res-label">R<sub>b</sub> <span class="beam-res-at">at B</span></span>
-              <div class="beam-res-val beam-res-val--b" id="beamRbResult">8.00 kN</div>
+          </div>
+
+          <!-- Controls (horizontal layout like reference) -->
+          <div class="beam-controls-grid">
+            <div class="beam-control-item">
+              <label class="beam-control-label" for="beamLength">Length (m)</label>
+              <div class="beam-control-row">
+                <input type="range" id="beamLength" class="beam-slider" min="2" max="20" value="10" step="0.5" />
+                <div class="beam-control-readout" id="beamLVal">10</div>
+              </div>
+            </div>
+            <div class="beam-control-item">
+              <label class="beam-control-label" for="beamForce">Point Load (kN)</label>
+              <div class="beam-control-row">
+                <input type="range" id="beamForce" class="beam-slider" min="1" max="100" value="20" step="1" />
+                <div class="beam-control-readout" id="beamFVal">20</div>
+              </div>
+            </div>
+            <div class="beam-control-item">
+              <label class="beam-control-label" for="beamPosition">Position (m)</label>
+              <div class="beam-control-row">
+                <input type="range" id="beamPosition" class="beam-slider" min="0" max="10" value="4" step="0.1" />
+                <div class="beam-control-readout" id="beamXVal">4</div>
+              </div>
             </div>
           </div>
         </div>

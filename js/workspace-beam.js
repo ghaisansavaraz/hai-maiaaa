@@ -5,15 +5,21 @@ export function initWorkspaceBeam() {
   const lengthInput = document.getElementById('beamLength');
   const forceInput = document.getElementById('beamForce');
   const posInput = document.getElementById('beamPosition');
-  const loadInd = document.getElementById('beamLoadIndicator');
+  const loadGroup = document.getElementById('loadGroup');
 
-  if (!lengthInput || !forceInput || !posInput || !loadInd) return;
+  if (!lengthInput || !forceInput || !posInput || !loadGroup) return;
 
   const lVal = document.getElementById('beamLVal');
   const fVal = document.getElementById('beamFVal');
   const xVal = document.getElementById('beamXVal');
   const raResult = document.getElementById('beamRaResult');
   const rbResult = document.getElementById('beamRbResult');
+  const totalLoad = document.getElementById('beamTotalLoad');
+  const loadLabel = document.getElementById('loadLabel');
+  const dimAText = document.getElementById('dimAText');
+  const dimLText = document.getElementById('dimLText');
+  const raArrowLabel = document.getElementById('raArrowLabel');
+  const rbArrowLabel = document.getElementById('rbArrowLabel');
 
   function update() {
     const L = parseFloat(lengthInput.value);
@@ -35,9 +41,16 @@ export function initWorkspaceBeam() {
 
     if (raResult) raResult.textContent = `${Ra.toFixed(2)} kN`;
     if (rbResult) rbResult.textContent = `${Rb.toFixed(2)} kN`;
+    if (totalLoad) totalLoad.textContent = `${F.toFixed(2)} kN`;
+    if (loadLabel) loadLabel.textContent = `${F}kN`;
+    if (raArrowLabel) raArrowLabel.textContent = `RA: ${Ra.toFixed(1)}kN`;
+    if (rbArrowLabel) rbArrowLabel.textContent = `RB: ${Rb.toFixed(1)}kN`;
+    if (dimAText) dimAText.textContent = `a: ${x.toFixed(1)}m`;
+    if (dimLText) dimLText.textContent = `${L}m`;
 
-    const percent = L > 0 ? (x / L) * 100 : 0;
-    loadInd.style.left = `${percent}%`;
+    // Move load group horizontally: 120px (left edge) + (x/L) * 560px (beam width)
+    const loadX = 120 + (x / L) * 560;
+    if (loadGroup) loadGroup.setAttribute('transform', `translate(${loadX}, 0)`);
   }
 
   [lengthInput, forceInput, posInput].forEach((input) => {
