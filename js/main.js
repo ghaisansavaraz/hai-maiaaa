@@ -10,6 +10,7 @@ import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar, triggerShootingStar } from './shootingstar.js';
 import { initValentineGarden } from './valentine.js';
 import { loadLetters, initLettersEventListeners } from './letters.js';
+import { initWorkspaceBeam } from './workspace-beam.js';
 
 let dynamicBackground = null;
 let zenModeActive = false;
@@ -18,7 +19,9 @@ let zenAudioElement = null;
 let zenBloomTimeoutId = null;
 
 // Valentine dashboard view state
-let currentView = 'main'; // 'main' or 'valentine'
+let currentView = 'main'; // 'main' | 'valentine' | 'workspace'
+
+const DASHBOARD_CYCLE = ['main', 'valentine', 'workspace'];
 let inactivityTimeoutId = null;
 let lastActivityTime = Date.now();
 let valentineAudio = null;
@@ -251,20 +254,21 @@ function switchToDashboard(viewName) {
   
   const mainDashboard = document.getElementById('dashboard');
   const valentineDashboard = document.getElementById('pinterestDashboard');
+  const workspaceDashboard = document.getElementById('workspaceDashboard');
   const centerContainer = document.querySelector('.center');
   
-  if (!mainDashboard || !valentineDashboard) {
+  if (!mainDashboard || !valentineDashboard || !workspaceDashboard) {
     debugError('Dashboard elements not found');
     return;
   }
   
   currentView = viewName;
   
+  document.body.classList.remove('pinterest-view', 'workspace-view');
+  valentineDashboard.classList.remove('active');
+  workspaceDashboard.classList.remove('active');
+  
   if (viewName === 'main') {
-    // Show main dashboard
-    document.body.classList.remove('pinterest-view');
-    valentineDashboard.classList.remove('active');
-    // Pause valentine audio when leaving valentine view
     pauseValentineAudio();
     setTimeout(() => {
       mainDashboard.classList.add('visible');
@@ -273,7 +277,6 @@ function switchToDashboard(viewName) {
       }
     }, 300);
   } else if (viewName === 'valentine') {
-    // Show valentine dashboard
     document.body.classList.add('pinterest-view');
     mainDashboard.classList.remove('visible');
     if (centerContainer) {
@@ -281,8 +284,17 @@ function switchToDashboard(viewName) {
     }
     setTimeout(() => {
       valentineDashboard.classList.add('active');
-      // Play valentine audio when entering valentine view
       playValentineAudio();
+    }, 300);
+  } else if (viewName === 'workspace') {
+    pauseValentineAudio();
+    document.body.classList.add('workspace-view');
+    mainDashboard.classList.remove('visible');
+    if (centerContainer) {
+      centerContainer.classList.remove('dashboard-active');
+    }
+    setTimeout(() => {
+      workspaceDashboard.classList.add('active');
     }, 300);
   }
 }
@@ -407,22 +419,34 @@ function initEdgeNavigation() {
     return;
   }
   
-  const handleEdgeClick = () => {
-    const targetView = currentView === 'main' ? 'valentine' : 'main';
-    switchToDashboard(targetView);
+  const cycleIndex = () => {
+    const i = DASHBOARD_CYCLE.indexOf(currentView);
+    return i === -1 ? 0 : i;
   };
-  
-  edgeNavLeft.addEventListener('click', handleEdgeClick);
-  edgeNavRight.addEventListener('click', handleEdgeClick);
+  const goPrev = () => {
+    const prev = DASHBOARD_CYCLE[(cycleIndex() - 1 + DASHBOARD_CYCLE.length) % DASHBOARD_CYCLE.length];
+    switchToDashboard(prev);
+  };
+  const goNext = () => {
+    const next = DASHBOARD_CYCLE[(cycleIndex() + 1) % DASHBOARD_CYCLE.length];
+    switchToDashboard(next);
+  };
+
+  edgeNavLeft.addEventListener('click', goPrev);
+  edgeNavRight.addEventListener('click', goNext);
   
   // Keyboard support
-  [edgeNavLeft, edgeNavRight].forEach(edge => {
-    edge.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleEdgeClick();
-      }
-    });
+  edgeNavLeft.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      goPrev();
+    }
+  });
+  edgeNavRight.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      goNext();
+    }
   });
   
   debugLog('Edge navigation initialized');
@@ -764,6 +788,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize edge navigation
     initEdgeNavigation();
+    
+    initWorkspaceBeam();
     
     // Initialize inactivity timer - DISABLED (manual switching only)
     // initInactivityTimer();

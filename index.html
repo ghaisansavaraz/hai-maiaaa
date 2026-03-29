@@ -2213,9 +2213,51 @@ body.light-theme .mood-category {
     </div>
   </div>
 
+  <!-- Workspace Dashboard -->
+  <div id="workspaceDashboard" class="workspace-dashboard" aria-label="Workspace">
+    <div class="workspace-container">
+      <header class="workspace-header">
+        <h2 class="workspace-title">Workspace</h2>
+        <p class="workspace-subtitle">Simply supported beam — point load reactions</p>
+      </header>
+      <div class="workspace-scroll">
+        <div class="beam-calc-card">
+          <h3 class="beam-calc-heading">Beam reaction calculator</h3>
+          <div class="beam-visualizer" id="beamViz" aria-hidden="true">
+            <div class="beam-support beam-support-a">▲<span class="beam-support-label">A</span></div>
+            <div class="beam-support beam-support-b">▲<span class="beam-support-label">B</span></div>
+            <div class="beam-load-arrow" id="beamLoadIndicator"></div>
+          </div>
+          <div class="beam-control-group">
+            <label class="beam-label" for="beamLength">Beam length (L): <span id="beamLVal">10</span> m</label>
+            <input type="range" id="beamLength" class="beam-range" min="2" max="20" value="10" step="0.5" />
+          </div>
+          <div class="beam-control-group">
+            <label class="beam-label" for="beamForce">Point load (F): <span id="beamFVal">20</span> kN</label>
+            <input type="range" id="beamForce" class="beam-range" min="1" max="100" value="20" step="1" />
+          </div>
+          <div class="beam-control-group">
+            <label class="beam-label" for="beamPosition">Load position (x from A): <span id="beamXVal">4.0</span> m</label>
+            <input type="range" id="beamPosition" class="beam-range" min="0" max="10" value="4" step="0.1" />
+          </div>
+          <div class="beam-results">
+            <div class="beam-res-box">
+              <span class="beam-res-label">Reaction at A (R<sub>a</sub>)</span>
+              <div class="beam-res-val" id="beamRaResult">12.00 kN</div>
+            </div>
+            <div class="beam-res-box">
+              <span class="beam-res-label">Reaction at B (R<sub>b</sub>)</span>
+              <div class="beam-res-val" id="beamRbResult">8.00 kN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Edge Navigation Triggers -->
-  <div id="edgeNavLeft" class="edge-nav-trigger edge-nav-left" role="button" tabindex="0" aria-label="Switch dashboard view"></div>
-  <div id="edgeNavRight" class="edge-nav-trigger edge-nav-right" role="button" tabindex="0" aria-label="Switch dashboard view"></div>
+  <div id="edgeNavLeft" class="edge-nav-trigger edge-nav-left" role="button" tabindex="0" aria-label="Previous dashboard"></div>
+  <div id="edgeNavRight" class="edge-nav-trigger edge-nav-right" role="button" tabindex="0" aria-label="Next dashboard"></div>
 
   <!-- Bunny Fullscreen Overlay -->
   <!-- JavaScript Modules -->
