@@ -277,13 +277,13 @@ class BunnyScene {
 
     const canvas = document.createElement('canvas');
     canvas.className = 'bunny-leaves-canvas';
-    canvas.style.cssText = 'position:absolute;inset:0;z-index:3;pointer-events:none;';
+    canvas.style.cssText = 'position:absolute;inset:0;z-index:15;pointer-events:none;';
     this.container.appendChild(canvas);
     this.canvas = canvas;
 
     const img = document.createElement('img');
     img.className = 'bunny-pet';
-    img.style.cssText = `position:absolute;bottom:${this.floor}px;z-index:2;image-rendering:pixelated;pointer-events:none;max-width:${this.spriteSize}px;max-height:${this.spriteSize}px;width:auto;height:auto;`;
+    img.style.cssText = `position:absolute;bottom:${this.floor}px;z-index:12;image-rendering:pixelated;pointer-events:none;max-width:${this.spriteSize}px;max-height:${this.spriteSize}px;width:auto;height:auto;`;
     img.src = `${SPRITE_BASE}_idle_8fps.gif`;
     img.alt = 'bunny';
     img.draggable = false;
