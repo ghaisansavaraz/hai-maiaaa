@@ -2047,12 +2047,13 @@ body.zen-mode #lettersSection {
   transform: translateY(18px);
   transition: opacity 1.1s ease 0.3s, transform 1.1s ease 0.3s;
   pointer-events: none;
+  border-radius: 14px;
+  overflow: hidden;
 }
 #zen-bunny-scene .bunny-scene-inner {
   position: relative;
   width: 100%;
   height: 460px;
-  border-radius: 14px;
   overflow: hidden;
 }
 body.zen-mode #zen-bunny-scene {
