@@ -19,9 +19,9 @@ let zenAudioElement = null;
 let zenBloomTimeoutId = null;
 
 // Valentine dashboard view state
-let currentView = 'main'; // 'main' | 'valentine' | 'workspace'
+let currentView = 'main'; // 'main' | 'valentine'
 
-const DASHBOARD_CYCLE = ['main', 'valentine', 'workspace'];
+const DASHBOARD_CYCLE = ['main', 'valentine'];
 let inactivityTimeoutId = null;
 let lastActivityTime = Date.now();
 let valentineAudio = null;
