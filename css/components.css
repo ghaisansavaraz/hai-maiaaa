@@ -4715,7 +4715,7 @@ body.zen-mode #lettersSection {
 .mg-backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(10,5,30,0.97) 0%, rgba(0,0,0,0.99) 100%);
+  background: rgba(10,5,20,0.38);
   cursor: pointer;
 }
 
@@ -4810,16 +4810,16 @@ body.zen-mode #lettersSection {
   to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* Carousel rotation — arms spin around the column */
+/* Arms gentle left-right swing */
 #mgArmsGroup {
   transform-box: fill-box;
   transform-origin: 50% 50%;
-  animation: mgArmsCarousel 12s linear infinite;
+  animation: mgArmsSwing 4s ease-in-out infinite;
 }
 
-@keyframes mgArmsCarousel {
-  from { transform: perspective(1200px) rotateY(0deg);   }
-  to   { transform: perspective(1200px) rotateY(360deg); }
+@keyframes mgArmsSwing {
+  0%, 100% { transform: perspective(1200px) rotateY(-22deg); }
+  50%       { transform: perspective(1200px) rotateY(22deg);  }
 }
 
 /* Clock cursor hint on the analog clock */
@@ -4828,6 +4828,6 @@ body.zen-mode #lettersSection {
 }
 
 #valentineAnalogClock:hover {
-  filter: drop-shadow(0 0 12px rgba(212,168,32,0.6));
+  filter: drop-shadow(0 0 12px rgba(232,160,191,0.7));
 }
 
