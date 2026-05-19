@@ -1,6 +1,7 @@
 /* Valentine Bloom Garden and Pressed Flower Album */
 
 import { VALENTINE_STORAGE_KEY, debugLog, debugError } from './config.js';
+import { initMaryGoldClock } from './marygold-clock.js';
 
 // ===== FLOWER SPECIES =====
 
@@ -1646,6 +1647,7 @@ export function initValentineGarden() {
   initValentineClockFace();
   updateValentineClock();
   setInterval(updateValentineClock, 1000);
+  initMaryGoldClock();
 
   // Re-draw clock face when theme changes
   new MutationObserver(() => {
