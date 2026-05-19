@@ -4749,7 +4749,7 @@ body.zen-mode #lettersSection {
 
 /* Spinning gold disc */
 .mg-disc {
-  transform-origin: 300px 68px;
+  transform-origin: 300px 28px;
   animation: mgDiscSpin 12s linear infinite;
 }
 
