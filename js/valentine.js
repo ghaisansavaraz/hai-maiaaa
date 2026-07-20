@@ -1513,6 +1513,14 @@ function initValentineClockFace() {
   `;
 }
 
+function scheduleNextValentineTick(tickFn) {
+  const delay = 1000 - (Date.now() % 1000);
+  setTimeout(() => {
+    tickFn();
+    scheduleNextValentineTick(tickFn);
+  }, delay);
+}
+
 function updateValentineClock() {
   const hourHand   = document.getElementById('clockHourHand');
   const minuteHand = document.getElementById('clockMinuteHand');
@@ -1643,10 +1651,11 @@ export function initValentineGarden() {
     });
   }
 
-  // Clock
+  // Clock, self-correcting against the real clock so execution jitter or
+  // background-tab throttling can't accumulate drift.
   initValentineClockFace();
   updateValentineClock();
-  setInterval(updateValentineClock, 1000);
+  scheduleNextValentineTick(updateValentineClock);
   initMaryGoldClock();
 
   // Re-draw clock face when theme changes

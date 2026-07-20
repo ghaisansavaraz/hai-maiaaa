@@ -509,11 +509,20 @@ export function initPinterestBoard() {
     }
   }
   
-  // Start clock update
+  // Start clock update, self-correcting against the real clock so
+  // execution jitter or background-tab throttling can't accumulate drift.
   updatePinterestClock();
-  setInterval(updatePinterestClock, 1000);
-  
+  scheduleNextPinterestTick(updatePinterestClock);
+
   debugLog('Pinterest board initialized');
+}
+
+function scheduleNextPinterestTick(tickFn) {
+  const delay = 1000 - (Date.now() % 1000);
+  setTimeout(() => {
+    tickFn();
+    scheduleNextPinterestTick(tickFn);
+  }, delay);
 }
 
 // Utility: Escape HTML to prevent XSS

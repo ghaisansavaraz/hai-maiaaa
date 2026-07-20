@@ -127,10 +127,19 @@ export function startTimeDisplay() {
   
   // Update immediately
   updateTime();
-  
-  // Update every second
-  setInterval(updateTime, 1000);
-  
+
+  // Update every second, self-correcting against the real clock so
+  // execution jitter or background-tab throttling can't accumulate drift.
+  scheduleNextTick(updateTime);
+
   debugLog("Header time display started successfully");
+}
+
+function scheduleNextTick(tickFn) {
+  const delay = 1000 - (Date.now() % 1000);
+  setTimeout(() => {
+    tickFn();
+    scheduleNextTick(tickFn);
+  }, delay);
 }
 
