@@ -4608,6 +4608,47 @@ body.zen-mode #lettersSection {
   pointer-events: none !important;
 }
 
+/* ===== Vase Flower ===== */
+/* No card chrome by design - sits as quiet decor, not a widget. */
+.vase-flower-section {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 0;
+}
+
+.vf-svg {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+}
+
+.vf-petal,
+.vf-center {
+  opacity: 0;
+  transform: scale(0.92);
+  animation: vfPetalIn 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* The bud's own inline transform (JS-computed swell scale) must stay untouched
+   by CSS transform animation, so it only fades in via opacity. */
+.vf-bud {
+  opacity: 0;
+  animation: vfFadeInOnly 0.9s ease forwards;
+}
+
+/* White marble vase: give it a touch more edge definition on the pale day
+   background so it doesn't wash out; night's dark background needs none. */
+body.light-theme .vf-vase {
+  stroke: rgba(120, 112, 100, 0.55);
+}
+
+body.light-theme .vf-stem {
+  stroke: #4a6a3c;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .letter-card {

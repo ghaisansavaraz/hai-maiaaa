@@ -923,7 +923,9 @@ body.light-theme .stars-container {
 
 /* High-End Dashboard Design - Transparent Container */
 .dashboard {
-  width: min(1200px, 95vw);
+  /* Wider stage so the flower column can sit to the left without stealing
+     width from the notebook/cards — uses the full viewport, edge to edge. */
+  width: min(1620px, 98vw);
   min-height: 100vh;
   padding: 0;
   background: transparent !important;
@@ -959,7 +961,8 @@ body.light-theme .dashboard {
 
 /* Dashboard Content */
 .dashboard-content {
-  padding: 40px;
+  /* Slim side padding so the columns can use the full width, edge to edge. */
+  padding: 40px 16px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 1s ease, transform 1s ease;
@@ -1059,10 +1062,14 @@ body.light-theme #moonIconContainer:focus-visible {
 /* Dashboard Grid Layout */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Narrow flower column, then the two content columns at full flexible width
+     (each still capped by .dashboard-column's 620px max) — so the notebook and
+     cards keep their original size instead of being squeezed by the flower. */
+  grid-template-columns: minmax(150px, 190px) minmax(0, 1fr) minmax(0, 1fr);
   gap: 32px;
   margin-bottom: 48px;
   justify-content: center;
+  align-items: start;
   max-height: 2000px;
   transition: max-height 0.75s ease, opacity 0.75s ease, transform 0.75s ease;
 }
@@ -1078,6 +1085,16 @@ body.light-theme #moonIconContainer:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+/* Flower column: narrow; vase hugs the right edge (toward the notebook) and
+   sits a little below the top so it reads as standing beside the book. */
+.dashboard-column-flower {
+  max-width: 190px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  align-self: stretch;
+  padding-top: 90px;
 }
 
 /* Dashboard Cards - More transparent for star visibility */
@@ -1840,10 +1857,16 @@ body.light-theme .mood-category {
 
         <!-- Main Grid Layout -->
         <div class="dashboard-grid">
-          
-          <!-- Left Column -->
+
+          <!-- Flower Column (left of the notebook) -->
+          <div class="dashboard-column dashboard-column-flower">
+            <!-- Vase Flower (quiet, decorative, blooms over time) -->
+            <section id="vaseFlowerSection" class="vase-flower-section"></section>
+          </div>
+
+          <!-- Notebook Column -->
           <div class="dashboard-column">
-            
+
             <!-- Mood Section -->
             <section id="moodSection" class="mood-book">
               <div class="book-shell">

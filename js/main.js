@@ -10,6 +10,7 @@ import { loadReminders, initReminderEventListeners } from './reminders.js';
 import { initShootingStar, triggerShootingStar } from './shootingstar.js';
 import { initValentineGarden } from './valentine.js';
 import { loadLetters, initLettersEventListeners } from './letters.js';
+import { initVaseFlower } from './vase-flower.js';
 import { initWorkspaceBeam } from './workspace-beam.js';
 
 let dynamicBackground = null;
@@ -782,6 +783,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize Valentine garden
     initValentineGarden();
+
+    // Initialize the vase flower (quiet, decorative, blooms over real time)
+    initVaseFlower();
     
     // Initialize Valentine audio
     initValentineAudio();

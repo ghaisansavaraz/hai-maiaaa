@@ -354,9 +354,9 @@
   }
   
   .dashboard-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 120px) 1fr 1fr;
   }
-  
+
   .mood-empty-state,
   .reminders-empty-state {
     padding: 32px 20px;

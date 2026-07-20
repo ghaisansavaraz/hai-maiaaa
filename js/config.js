@@ -11,6 +11,11 @@ export const VALENTINE_STORAGE_KEY = "maiaaa_valentine_v1";
 export const EDITOR_CODE = "gesanlove";
 export const DEBUG_MODE = true; // Set to false in production
 
+// Vase flower bloom timing (private, tune freely)
+export const VASE_BLOOM_START_DATE = '2026-07-20';  // EDIT ME — when it starts blooming
+export const VASE_BLOOM_TARGET_DATE = '2026-08-31'; // EDIT ME — when it should be fully bloomed
+export const VASE_BLOOM_PACE = 1;                   // EDIT ME — >1 = faster, <1 = slower (no date math needed)
+
 // Letters from Gesan (easily editable content)
 export const LETTERS_DATA = [
   {

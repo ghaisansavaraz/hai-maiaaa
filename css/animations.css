@@ -159,6 +159,24 @@
   }
 }
 
+/* Vase flower: whichever petals are visible on load fade/scale in together
+   (staggered via per-element animation-delay). Opacity/transform only. */
+@keyframes vfPetalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes vfFadeInOnly {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* Slide in/out animations */
 @keyframes slideInFade {
   from {
