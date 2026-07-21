@@ -923,9 +923,10 @@ body.light-theme .stars-container {
 
 /* High-End Dashboard Design - Transparent Container */
 .dashboard {
-  /* Wider stage so the flower column can sit to the left without stealing
-     width from the notebook/cards — uses the full viewport, edge to edge. */
-  width: min(1620px, 98vw);
+  /* Wider than the grid alone, to leave room for the flower beside it while
+     the grid keeps its original width. The header/clock is centered within
+     this (page-centered) box, so it stays put regardless of the flower. */
+  width: min(1560px, 96vw);
   min-height: 100vh;
   padding: 0;
   background: transparent !important;
@@ -961,8 +962,7 @@ body.light-theme .dashboard {
 
 /* Dashboard Content */
 .dashboard-content {
-  /* Slim side padding so the columns can use the full width, edge to edge. */
-  padding: 40px 16px;
+  padding: 40px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 1s ease, transform 1s ease;
@@ -1062,14 +1062,14 @@ body.light-theme #moonIconContainer:focus-visible {
 /* Dashboard Grid Layout */
 .dashboard-grid {
   display: grid;
-  /* Narrow flower column, then the two content columns at full flexible width
-     (each still capped by .dashboard-column's 620px max) — so the notebook and
-     cards keep their original size instead of being squeezed by the flower. */
-  grid-template-columns: minmax(150px, 190px) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 32px;
   margin-bottom: 48px;
   justify-content: center;
-  align-items: start;
+  /* In the flex stage, target the original 2-column width (~1120px) so each
+     column stays ~544px — its exact original size — and only shrinks if the
+     screen is truly too narrow. */
+  flex: 0 1 1120px;
   max-height: 2000px;
   transition: max-height 0.75s ease, opacity 0.75s ease, transform 0.75s ease;
 }
@@ -1087,14 +1087,24 @@ body.light-theme #moonIconContainer:focus-visible {
   gap: 24px;
 }
 
-/* Flower column: narrow; vase hugs the right edge (toward the notebook) and
-   sits a little below the top so it reads as standing beside the book. */
-.dashboard-column-flower {
-  max-width: 190px;
-  align-items: flex-end;
-  justify-content: flex-start;
-  align-self: stretch;
+/* Stage sits BELOW the header and centers [flower + grid] together as a group,
+   so the trio is page-centered while the header/clock above stays put. The grid
+   keeps its own (~1120px) width; the flower is extra width beside it. */
+.dashboard-stage {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+  width: 100%;
+}
+
+.vase-flower-float {
+  flex: 0 0 auto;
+  width: 190px;
   padding-top: 90px;
+  display: flex;
+  justify-content: flex-end; /* vase hugs the side closest to the notebook */
+  pointer-events: none;
 }
 
 /* Dashboard Cards - More transparent for star visibility */
@@ -1855,14 +1865,17 @@ body.light-theme .mood-category {
           <div class="bunny-scene-inner"></div>
         </div>
 
-        <!-- Main Grid Layout -->
-        <div class="dashboard-grid">
+        <!-- Main Stage: flower + grid, centered together as a group. Sits BELOW
+             the header so the clock stays page-centered and doesn't shift. -->
+        <div class="dashboard-stage">
 
-          <!-- Flower Column (left of the notebook) -->
-          <div class="dashboard-column dashboard-column-flower">
-            <!-- Vase Flower (quiet, decorative, blooms over time) -->
+          <!-- Vase Flower (quiet, decorative, blooms over time) -->
+          <div class="vase-flower-float">
             <section id="vaseFlowerSection" class="vase-flower-section"></section>
           </div>
+
+          <!-- Main Grid Layout -->
+          <div class="dashboard-grid">
 
           <!-- Notebook Column -->
           <div class="dashboard-column">
@@ -1993,7 +2006,11 @@ body.light-theme .mood-category {
 
           </div>
 
+          </div>
+          <!-- /.dashboard-grid -->
+
         </div>
+        <!-- /.dashboard-stage -->
 
 
       </div>
