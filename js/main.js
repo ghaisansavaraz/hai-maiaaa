@@ -12,6 +12,7 @@ import { initValentineGarden } from './valentine.js';
 import { loadLetters, initLettersEventListeners } from './letters.js';
 import { initVaseFlower } from './vase-flower.js';
 import { initDevFlowerMode } from './dev-flower.js';
+import { initMug } from './mug.js';
 import { initWorkspaceBeam } from './workspace-beam.js';
 
 let dynamicBackground = null;
@@ -787,6 +788,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize the vase flower (quiet, decorative, blooms over real time)
     initVaseFlower();
+
+    // "World's Best Reva" mug below the vase
+    initMug();
 
     // Hidden dev/test mode: long-press the moon -> passcode -> bloom schedule
     initDevFlowerMode();

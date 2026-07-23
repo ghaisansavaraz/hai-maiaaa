@@ -1103,8 +1103,23 @@ body.light-theme #moonIconContainer:focus-visible {
   width: 190px;
   padding-top: 90px;
   display: flex;
-  justify-content: flex-end; /* vase hugs the side closest to the notebook */
+  flex-direction: column;
+  align-items: flex-end; /* vase + mug hug the side closest to the notebook */
   pointer-events: none;
+}
+
+/* Mug sits below the vase, pushed down so it lands level with the bunny row. */
+.mug-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 210px;
+}
+.mug-svg {
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+  display: block;
 }
 
 /* Dashboard Cards - More transparent for star visibility */
@@ -1869,9 +1884,10 @@ body.light-theme .mood-category {
              the header so the clock stays page-centered and doesn't shift. -->
         <div class="dashboard-stage">
 
-          <!-- Vase Flower (quiet, decorative, blooms over time) -->
+          <!-- Vase Flower (quiet, decorative, blooms over time) + mug below it -->
           <div class="vase-flower-float">
             <section id="vaseFlowerSection" class="vase-flower-section"></section>
+            <section id="mugSection" class="mug-section"></section>
           </div>
 
           <!-- Main Grid Layout -->
