@@ -3,7 +3,8 @@
    every bloom phase and the date it happens, and can preview each phase.
    Completely inert unless deliberately triggered; never shown to Maia. */
 
-import { debugLog } from './config.js';
+import { debugLog, WORLD_ENTRY_DATE } from './config.js';
+import { enterMeadow } from './world-entry.js';
 import {
   getBloomSchedule,
   getBloomStatus,
@@ -113,7 +114,7 @@ function openDevPanel() {
       </div>
       <div class="dev-status">
         <div><span>Today</span><b>${fmtDateTime(status.now)}</b></div>
-        <div><span>Progress</span><b>${(status.progress * 100).toFixed(1)}%</b></div>
+        <div><span>Progress</span><b>${(status.openness * 100).toFixed(1)}%</b></div>
         <div><span>Now showing</span><b>${status.isBud ? 'Tight bud' : status.isFull ? 'Full bloom' : status.opennessPct + '% open'}</b></div>
         <div><span>Window</span><b>${status.startDate} → ${status.targetDate} (pace ${status.pace}×)</b></div>
       </div>
@@ -126,6 +127,10 @@ function openDevPanel() {
       <div class="dev-panel-foot">
         <span class="dev-hint">Preview is temporary — reloading or “Live” restores the real state.</span>
         <button class="dev-btn" id="devLive">Back to live</button>
+      </div>
+      <div class="dev-panel-foot">
+        <span class="dev-hint">The meadow opens from the flower on ${WORLD_ENTRY_DATE}. Preview skips the date (this tab only).</span>
+        <button class="dev-btn" id="devMeadow">Walk the meadow</button>
       </div>
     </div>
   `;
@@ -142,6 +147,11 @@ function openDevPanel() {
       renderVaseFlowerAt(openness);
       highlightPreview(btn.dataset.openness);
     });
+  });
+  overlay.querySelector('#devMeadow').addEventListener('click', () => {
+    try { sessionStorage.setItem('maiaaa_world_dev', '1'); } catch { /* ignore */ }
+    closeOverlay();
+    enterMeadow();
   });
   overlay.querySelector('#devLive').addEventListener('click', () => {
     renderVaseFlowerNow();

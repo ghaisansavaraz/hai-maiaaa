@@ -13,6 +13,7 @@ import { loadLetters, initLettersEventListeners } from './letters.js';
 import { initVaseFlower } from './vase-flower.js';
 import { initDevFlowerMode } from './dev-flower.js';
 import { initMug } from './mug.js';
+import { initWorldEntry } from './world-entry.js';
 import { initWorkspaceBeam } from './workspace-beam.js';
 
 let dynamicBackground = null;
@@ -791,6 +792,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // "World's Best Reva" mug below the vase
     initMug();
+
+    // From her birthday the vase flower becomes the doorway into the 3D meadow
+    initWorldEntry();
 
     // Hidden dev/test mode: long-press the moon -> passcode -> bloom schedule
     initDevFlowerMode();
