@@ -19,15 +19,22 @@ export const VASE_BLOOM_PACE = 1;                   // EDIT ME — >1 = faster, 
 // ===== The Moonlit Meadow (3D birthday world, world.html) — all EDIT ME =====
 // Dates are her LOCAL midnight.
 // From this date the dashboard's vase flower becomes the doorway into the
-// meadow (before it, the flower behaves exactly as now). Move it earlier if
-// you want her to find the meadow before her birthday.
-export const WORLD_ENTRY_DATE = '2026-10-19';
+// meadow (before it, the flower behaves exactly as now). Set to today so the
+// meadow is open to explore; only the hilltop ending waits for her birthday.
+export const WORLD_ENTRY_DATE = '2026-10-16';
 // From this date the moon-gate on the hilltop opens (the birthday ending).
 export const WORLD_UNLOCK_DATE = '2026-10-19';
-export const WORLD_HER_NAME = 'Maia';
+export const WORLD_HER_NAME = 'Maia Reva';
 export const WORLD_FROM_NAME = 'Gesan';
 // Whisper that fades in under the flower when she hovers it (once it's a door).
-export const WORLD_ENTRY_HINT = 'there’s a little meadow in here';
+export const WORLD_ENTRY_HINT = 'the one who’s lovelier than the moon, the night is waiting';
+
+// MASTER SWITCH for every written message inside the meadow: lantern notes,
+// the bench letter, the greenhouse lines, the "not yet" note and the birthday
+// card. false = none of them appear (not even on her birthday); the visuals,
+// lanterns glow, gate and shooting stars all still work. Set true to bring
+// the texts back once they're written.
+export const WORLD_SHOW_MESSAGES = false;
 
 // One message per lantern, in walking order (entrance → hilltop).
 export const WORLD_LANTERN_MESSAGES = [

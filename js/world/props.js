@@ -738,10 +738,21 @@ export function createBunny(hf) {
     st.yaw = dir;
   };
 
+  // bigger than life so she can spot it in the grass, wrapped in a faint glow
+  const SIZE = 1.5;
+  group.scale.setScalar(SIZE);
+  const aura = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTexture(64, 2.2), color: new THREE.Color(0.75, 0.82, 1.0), blending: THREE.AdditiveBlending,
+    transparent: true, opacity: 0.4, depthWrite: false,
+  }));
+  aura.scale.setScalar(0.85);
+  aura.position.y = 0.16;
+  group.add(aura);
+
   const world = new THREE.Vector3();
   return {
     group,
-    interact: { center: world, radius: 0.35, label: 'click to say hi', bunny: true },
+    interact: { center: world, radius: 0.35 * SIZE, label: 'Mr. Frundles', bunny: true },
     poke() { st.happy = 1.2; st.mode = 'happy'; st.timer = 1.4; },
     update(t, dt, player) {
       const dx = player.x - st.x, dz = player.z - st.z;
@@ -788,7 +799,8 @@ export function createBunny(hf) {
       ears.forEach((e, i) => { e.rotation.x = -0.2 + Math.sin(t * 2.3 + i * 1.7) * 0.06 + (pd < 4 ? 0.12 : 0); });
       group.position.set(st.x, hf.sample(st.x, st.z), st.z);
       group.rotation.y = st.yaw;
-      world.set(st.x, group.position.y + 0.22, st.z);
+      aura.material.opacity = 0.34 + Math.sin(t * 1.4) * 0.08;
+      world.set(st.x, group.position.y + 0.22 * SIZE, st.z);
     },
   };
 }

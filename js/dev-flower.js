@@ -218,9 +218,12 @@ export function initDevFlowerMode() {
     }
   }, true);
 
-  // Keyboard fallback for the focused moon (accessible + testable): Shift+D.
+  // Keyboard fallback for the focused moon (accessible + testable): hold 0 + D.
+  let zeroHeld = false;
+  moon.addEventListener('keyup', (e) => { if (e.key === '0') zeroHeld = false; });
   moon.addEventListener('keydown', (e) => {
-    if (e.shiftKey && (e.key === 'D' || e.key === 'd')) {
+    if (e.key === '0') zeroHeld = true;
+    if (zeroHeld && (e.key === 'D' || e.key === 'd')) {
       e.preventDefault();
       openPasswordModal();
     }

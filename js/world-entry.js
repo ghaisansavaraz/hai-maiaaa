@@ -9,7 +9,9 @@ import { WORLD_ENTRY_DATE, WORLD_ENTRY_HINT, debugLog } from './config.js';
 
 const DEV_FLAG = 'maiaaa_world_dev';
 const VISITED_KEY = 'maiaaa_world_visited';
-const MOTES = 7;
+const MOTES = 24;
+const INTRO_DELAY_MS = 1200;  // let the dashboard settle first
+const INTRO_SHOW_MS = 8000;   // how long the whisper stays on its own
 
 function localMidnight(iso) {
   const [y, m, d] = iso.split('-').map(Number);
@@ -51,7 +53,7 @@ export function initWorldEntry() {
   if (!hasVisited()) door.classList.add('vf-door--calling');
   door.setAttribute('role', 'link');
   door.setAttribute('tabindex', '0');
-  door.setAttribute('aria-label', 'Walk into the meadow');
+  door.setAttribute('aria-label', 'Walk in');
   section.parentNode.insertBefore(door, section);
   door.appendChild(section);
 
@@ -63,9 +65,11 @@ export function initWorldEntry() {
     m.className = 'vf-mote';
     // scattered in a loose ring around the bloom (upper part of the vase art)
     const a = (i / MOTES) * Math.PI * 2 + Math.random() * 0.6;
-    const r = 20 + Math.random() * 20;
-    m.style.left = `${50 + Math.cos(a) * r}%`;
-    m.style.top = `${28 + Math.sin(a) * r * 0.5}%`;
+    const r = 8 + Math.random() * 34;
+    m.style.left = `${50 + Math.cos(a * 2.3) * r}%`;
+    m.style.top = `${26 + Math.sin(a * 2.3) * r * 0.55}%`;
+    const sz = 3 + Math.random() * 2.4;
+    m.style.width = m.style.height = `${sz.toFixed(1)}px`;
     m.style.animationDelay = `${(-Math.random() * 6).toFixed(2)}s, ${(-Math.random() * 3).toFixed(2)}s`;
     m.style.animationDuration = `${(5 + Math.random() * 4).toFixed(2)}s, ${(2.2 + Math.random() * 1.8).toFixed(2)}s`;
     motes.appendChild(m);
@@ -76,6 +80,13 @@ export function initWorldEntry() {
   hint.className = 'vf-door-hint';
   hint.textContent = WORLD_ENTRY_HINT;
   door.appendChild(hint);
+
+  // on every visit the whisper appears by itself for a few seconds, glowing,
+  // so she notices the flower is a door (hovering brings it back later)
+  setTimeout(() => {
+    door.classList.add('vf-door--intro');
+    setTimeout(() => door.classList.remove('vf-door--intro'), INTRO_SHOW_MS);
+  }, INTRO_DELAY_MS);
 
   door.addEventListener('click', enterMeadow);
   door.addEventListener('keydown', (e) => {

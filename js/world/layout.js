@@ -19,7 +19,8 @@ export const GREENHOUSE = { x: 31, z: 12, hw: 2.4, hd: 3.4, wallH: 2.5, roofH: 3
 // Little wooden dock reaching into the lake from the south shore, bench at its end.
 export const DOCK = { x: -24, zLand: 22, zEnd: 6.5, hw: 1.15, deckY: 0.44 };
 export const BENCH = { x: -24, z: 8.2 };
-export const BUNNY_HOME = { x: 6, z: -10, r: 12 };
+// beside the main path, shortly after the autumn grove, so she meets it early
+export const BUNNY_HOME = { x: -2.2, z: 48, r: 5 };
 
 // Moon direction (unit vector toward the moon): north, slightly west, ~15° up,
 // low enough that its glitter path stretches across the lake from the dock.

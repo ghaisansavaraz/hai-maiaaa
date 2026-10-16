@@ -4710,23 +4710,42 @@ body.light-theme .vf-stem {
   position: absolute;
   left: 50%;
   top: 100%;
+  z-index: 5;
   transform: translate(-50%, 4px);
-  white-space: nowrap;
+  width: 170px; /* wraps inside the flower column instead of sliding under the notebook */
+  text-align: center;
+  white-space: normal;
+  line-height: 1.35;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-size: 15px;
   letter-spacing: 0.02em;
-  color: rgba(255, 240, 222, 0.85);
-  text-shadow: 0 0 12px rgba(255, 210, 170, 0.35);
+  color: rgba(255, 244, 228, 0.92);
+  text-shadow: 0 0 8px rgba(255, 214, 170, 0.6), 0 0 20px rgba(255, 200, 150, 0.35);
   opacity: 0;
   transition: opacity 0.9s ease, transform 0.9s ease;
   pointer-events: none;
 }
 
 .vf-door:hover .vf-door-hint,
-.vf-door:focus-visible .vf-door-hint {
+.vf-door:focus-visible .vf-door-hint,
+.vf-door--intro .vf-door-hint {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+/* the arrival moment: the whisper glows bright, pulsing, then settles */
+.vf-door--intro .vf-door-hint {
+  animation: vfHintGlow 2.4s ease-in-out infinite;
+}
+
+.vf-door--intro .vf-svg {
+  filter: drop-shadow(0 0 12px rgba(255, 226, 196, 0.6)) drop-shadow(0 0 30px rgba(196, 210, 255, 0.35));
+}
+
+@keyframes vfHintGlow {
+  0%, 100% { text-shadow: 0 0 8px rgba(255, 214, 170, 0.7), 0 0 20px rgba(255, 200, 150, 0.45); }
+  50% { text-shadow: 0 0 10px rgba(255, 236, 200, 1), 0 0 24px rgba(255, 210, 150, 0.9), 0 0 48px rgba(255, 190, 120, 0.6); }
 }
 
 body.light-theme .vf-mote {
@@ -4734,9 +4753,18 @@ body.light-theme .vf-mote {
   box-shadow: 0 0 6px 2px rgba(214, 160, 60, 0.6), 0 0 12px 3px rgba(214, 160, 60, 0.25);
 }
 
+body.light-theme .vf-door--intro .vf-door-hint {
+  animation-name: vfHintGlowDay;
+}
+
+@keyframes vfHintGlowDay {
+  0%, 100% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 18px rgba(240, 190, 120, 0.5); }
+  50% { text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 22px rgba(255, 200, 110, 0.95), 0 0 42px rgba(255, 190, 90, 0.7); }
+}
+
 body.light-theme .vf-door-hint {
-  color: rgba(92, 72, 52, 0.85);
-  text-shadow: none;
+  color: rgba(92, 72, 52, 0.9);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 18px rgba(240, 190, 120, 0.5);
 }
 
 /* the dashboard fading to night as she walks in */

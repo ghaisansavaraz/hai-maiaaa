@@ -10,7 +10,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 import {
-  WORLD_UNLOCK_DATE, WORLD_LANTERN_MESSAGES, WORLD_ITEM_MESSAGES, WORLD_FINAL_MESSAGE,
+  WORLD_UNLOCK_DATE, WORLD_SHOW_MESSAGES, WORLD_LANTERN_MESSAGES, WORLD_ITEM_MESSAGES, WORLD_FINAL_MESSAGE,
   WORLD_HER_NAME, WORLD_FROM_NAME, LETTERS_DATA,
 } from '../config.js';
 import { localDateMs, nextFrame, smoothstep } from './util.js';
@@ -58,8 +58,6 @@ const GradeShader = {
 async function main() {
   $('enterBtn').disabled = true;
   document.querySelectorAll('[data-name]').forEach((el) => { el.textContent = WORLD_HER_NAME; });
-  const coarseOnly = matchMedia('(pointer: coarse)').matches && !matchMedia('(pointer: fine)').matches;
-  if (coarseOnly) $('touchNote').classList.remove('hidden');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- renderer / scene / camera ---------- */
@@ -121,7 +119,7 @@ async function main() {
   };
 
   /* ---------- build the world ---------- */
-  const setLoading = (t) => { $('loading').querySelector('.loading-text').firstChild.textContent = t; };
+  const setLoading = () => {}; // loading screen is just the moon, no text
   await nextFrame();
   setLoading('shaping the hills');
   const hf = new Heightfield();
@@ -234,6 +232,7 @@ async function main() {
   /* ---------- UI helpers ---------- */
   const card = $('card');
   function showCard({ title = '', body = '', sign = '', finale = false }) {
+    if (!WORLD_SHOW_MESSAGES) return; // texts are switched off in config.js
     card.querySelector('.card-title').textContent = title;
     card.querySelector('.card-body').textContent = body;
     card.querySelector('.card-sign').textContent = sign;
@@ -255,7 +254,10 @@ async function main() {
   const interactables = [
     ...lanterns.lanterns.map((l) => ({
       ...l.interact,
-      get label() { return l.read ? 'click to read again' : 'click to warm the lantern'; },
+      get label() {
+        if (!WORLD_SHOW_MESSAGES) return l.read ? '' : 'click to warm the lantern';
+        return l.read ? 'click to read again' : 'click to warm the lantern';
+      },
       act() {
         if (!l.read) {
           l.read = true;
@@ -267,8 +269,11 @@ async function main() {
         showCard({ body: l.interact.message });
       },
     })),
-    { ...bench.interact, act() { audio.chime(); showCard({ title: letter.title, body: letter.content, sign: `— ${WORLD_FROM_NAME}` }); } },
-    ...greenhouse.interacts.map((it) => ({ ...it, act() { showCard({ body: it.message }); } })),
+    // letter + greenhouse notes only exist to show text, so they're not clickable while texts are off
+    ...(WORLD_SHOW_MESSAGES ? [
+      { ...bench.interact, act() { audio.chime(); showCard({ title: letter.title, body: letter.content, sign: `— ${WORLD_FROM_NAME}` }); } },
+      ...greenhouse.interacts.map((it) => ({ ...it, act() { showCard({ body: it.message }); } })),
+    ] : []),
     { ...bunny.interact, act() { bunny.poke(); bursts.emit(bunny.interact.center, 7, true); } },
     {
       ...gate.interact,
@@ -313,13 +318,23 @@ async function main() {
     if (cardOpen) { hideCard(); return; }
     if (current) current.act();
   });
+  // dev chord: hold 0, press D
+  let zeroHeld = false;
+  const isZero = (e) => e.code === 'Digit0' || e.code === 'Numpad0';
+  document.addEventListener('keyup', (e) => { if (isZero(e)) zeroHeld = false; });
+  window.addEventListener('blur', () => { zeroHeld = false; });
   document.addEventListener('keydown', (e) => {
+    if (isZero(e)) zeroHeld = true;
     if (devOpen) return;
     if (e.code === 'KeyM') { const m = audio.toggleMute(); updateMuteLabel(m); hint(m ? 'sound off' : 'sound on', 1.8); }
     if (e.code === 'KeyE' && controls.isLocked) { if (cardOpen) hideCard(); else if (current) current.act(); }
-    if (e.code === 'KeyD' && e.shiftKey) { e.preventDefault(); openDev(); }
+    if (e.code === 'KeyD' && zeroHeld) { e.preventDefault(); openDev(); }
   });
-  function updateMuteLabel(m) { $('muteBtn2').textContent = m ? 'sound: off' : 'sound: on'; }
+  function updateMuteLabel(m) {
+    const b = $('muteBtn2');
+    b.classList.toggle('muted', m);
+    b.setAttribute('aria-label', m ? 'sound off' : 'sound on');
+  }
   updateMuteLabel(audio.muted);
   $('muteBtn2').addEventListener('click', (e) => { e.stopPropagation(); updateMuteLabel(audio.toggleMute()); });
 
@@ -345,10 +360,11 @@ async function main() {
     $('fade').classList.remove('on');
     controls.lock();
     hint('W A S D to walk · mouse to look · follow the lanterns', 8);
+    setTimeout(() => hint('the night is prettier with you in it', 7), 16000);
   });
   $('resumeBtn').addEventListener('click', () => controls.lock());
 
-  /* ---------- dev tools (Shift+D → passcode 000) ---------- */
+  /* ---------- dev tools (hold 0 + D → passcode 000) ---------- */
   let showFps = false;
   function openDev() {
     devOpen = true;
@@ -511,5 +527,5 @@ async function main() {
 main().catch((err) => {
   console.error('[Meadow] failed to start', err);
   const t = document.querySelector('.loading-text');
-  if (t) t.textContent = 'the meadow could not open on this browser.';
+  if (t) t.textContent = 'this could not open on this browser.';
 });
