@@ -269,3 +269,22 @@ kbd {
   .moon-dot, .dots::after { animation: none; }
   .screen, .card, .fade { transition-duration: 0.01ms; }
 }
+
+/* ---------- the story's one quiet nudge ---------- */
+#story {
+  position: fixed;
+  top: 5vh;
+  left: 50%;
+  transform: translate(-50%, -6px);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  letter-spacing: 0.04em;
+  color: rgba(236, 240, 255, 0.72);
+  text-shadow: 0 0 14px rgba(170, 190, 255, 0.45);
+  opacity: 0;
+  transition: opacity 1.4s ease, transform 1.4s ease;
+  pointer-events: none;
+  z-index: 6;
+}
+#story.on { opacity: 1; transform: translate(-50%, 0); }

@@ -17,6 +17,8 @@ export function createSkyUniforms() {
     uTime: { value: 0 },
     uStarBoost: { value: 1 },
     uAurora: { value: 0.35 },
+    uFlash: { value: new THREE.Color(0, 0, 0) },  // birthday fireworks lighting the sky
+    uWarm: { value: 0 },                          // birthday lanterns glowing in the haze
   };
 }
 
@@ -29,6 +31,8 @@ uniform vec3 uMoonDir;
 uniform float uTime;
 uniform float uStarBoost;
 uniform float uAurora;
+uniform vec3 uFlash;
+uniform float uWarm;
 
 float hash13(vec3 p3) {
   p3 = fract(p3 * 0.1031);
@@ -124,6 +128,10 @@ vec3 skyColor(vec3 dir, float starAmt) {
     vec3 aur = mix(vec3(0.1, 0.75, 0.55), vec3(0.75, 0.3, 0.6), smoothstep(0.12, 0.38, y));
     col += aur * curtain * north * smoothstep(0.45, 0.8, wave) * rays * 0.05 * uAurora * starAmt;
   }
+  // birthday ending: firework flashes wash the sky (and the lake, which
+  // reflects this same function); the valley of lanterns warms the low haze
+  col += uFlash * (0.04 + 0.1 * (1.0 - smoothstep(0.0, 0.6, y)));
+  col += vec3(1.0, 0.55, 0.22) * uWarm * 0.022 * exp(-max(y, 0.0) * 9.0);
   return col;
 }
 `;

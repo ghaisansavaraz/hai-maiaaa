@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mulberry32, noise2 } from './util.js';
 import {
-  lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf, DOCK, BUNNY_HOME,
+  lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf, DOCK, pierDist, BUNNY_HOME,
 } from './layout.js';
 
 const CELL = 40;
@@ -146,7 +146,7 @@ export function createTrees(hf, shared) {
   const free = (x, z, minD) => placed.every(([px, pz]) => (px - x) ** 2 + (pz - z) ** 2 > minD * minD);
   const blocked = (x, z) =>
     lakeDist(x, z) < 1.18 || pathEdgeDist(x, z) < 2.6 || greenhouseSdf(x, z) < 3.5 ||
-    hillDist(x, z) < 10 || (Math.abs(x - DOCK.x) < 4 && z > DOCK.zEnd - 3 && z < DOCK.zLand + 4) ||
+    hillDist(x, z) < 10 || pierDist(x, z) < 4 ||
     Math.hypot(x - BUNNY_HOME.x, z - BUNNY_HOME.z) < BUNNY_HOME.r * 0.6;
 
   // autumn grove framing the entrance

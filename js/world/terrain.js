@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mulberry32, fbm2, noise2, smoothstep, detailTexture, tileTexture } from './util.js';
 import {
-  LAKE, HILL, DOCK, HILLTOP_Y,
+  LAKE, HILL, DOCK, HILLTOP_Y, pierDist,
   lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf,
 } from './layout.js';
 
@@ -126,7 +126,7 @@ export function createRocks(hf) {
     const a = rng() * Math.PI * 2;
     const ld = 1.0 + rng() * 0.16;
     const x = LAKE.cx + Math.cos(a) * LAKE.rx * ld, z = LAKE.cz + Math.sin(a) * LAKE.rz * ld;
-    if (Math.abs(x - DOCK.x) < 3 && z > 10) continue;
+    if (pierDist(x, z) < 2.5) continue;
     if (pathEdgeDist(x, z) < 1.2) continue;
     place(x, z, 0.25 + rng() * 0.7);
   }
@@ -203,7 +203,7 @@ export function createLilies() {
   for (let tries = 0; tries < 400 && n < 46; tries++) {
     const a = rng() * Math.PI * 2, ld = 0.5 + rng() * 0.38;
     const x = LAKE.cx + Math.cos(a) * LAKE.rx * ld, z = LAKE.cz + Math.sin(a) * LAKE.rz * ld;
-    if (Math.abs(x - DOCK.x) < 2.6 && z > DOCK.zEnd - 2) continue;
+    if (pierDist(x, z) < 1.8) continue;
     // cluster: prefer spots near noise peaks
     if (noise2(x * 0.18, z * 0.18) < -0.1) continue;
     p.set(x, 0.02, z);
@@ -249,49 +249,8 @@ export function createLilies() {
     lilies.setMatrixAt(i, m);
   });
   group.add(lilies);
+  group.userData.lilyMat = lilyMat; // brightened in the birthday ending
   return group;
-}
-
-/* ---------------- dock ---------------- */
-
-export function createDock(hf) {
-  const rng = mulberry32(9);
-  const parts = [];
-  const len = DOCK.zLand - DOCK.zEnd;
-  const plankW = 0.2, gap = 0.035;
-  const count = Math.floor(len / (plankW + gap));
-  for (let i = 0; i < count; i++) {
-    const g = new THREE.BoxGeometry(DOCK.hw * 2 + (rng() - 0.5) * 0.06, 0.05, plankW);
-    g.rotateY((rng() - 0.5) * 0.02);
-    g.translate(DOCK.x + (rng() - 0.5) * 0.04, DOCK.deckY - 0.025, DOCK.zEnd + i * (plankW + gap) + plankW / 2);
-    tint(g, 0.75 + rng() * 0.35);
-    parts.push(g);
-  }
-  // stringers
-  for (const sx of [-DOCK.hw + 0.12, DOCK.hw - 0.12]) {
-    const g = new THREE.BoxGeometry(0.1, 0.14, len);
-    g.translate(DOCK.x + sx, DOCK.deckY - 0.12, DOCK.zEnd + len / 2);
-    tint(g, 0.6);
-    parts.push(g);
-  }
-  // posts down to the lake bed
-  for (let i = 0; i <= 4; i++) {
-    const z = DOCK.zEnd + 0.15 + (i / 4) * (len - 3);
-    for (const sx of [-DOCK.hw, DOCK.hw]) {
-      const x = DOCK.x + sx;
-      const bottom = Math.min(hf.sample(x, z), 0) - 0.3;
-      const h = DOCK.deckY + 0.25 - bottom;
-      const g = new THREE.CylinderGeometry(0.08, 0.09, h, 8);
-      g.translate(x, bottom + h / 2, z);
-      tint(g, 0.55);
-      parts.push(g);
-    }
-  }
-  const geo = mergeGeometries(parts);
-  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: '#7a5a3e', vertexColors: true, roughness: 0.82 }));
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  return mesh;
 }
 
 function tint(g, v) {

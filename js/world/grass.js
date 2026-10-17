@@ -10,7 +10,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mulberry32, noise2, smoothstep } from './util.js';
 import {
-  LAKE, DOCK, BOUNDS, lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf,
+  LAKE, DOCK, BOUNDS, pierDist, riverSamples, RIVER_W, lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf,
 } from './layout.js';
 
 export const MAX_LIGHTS = 8;
@@ -183,7 +183,7 @@ export function createGrass(hf, shared) {
         const pe = pathEdgeDist(x, z);
         if (pe < -0.2) continue;
         if (greenhouseSdf(x, z, 0.2) < 0) continue;
-        if (Math.abs(x - DOCK.x) < DOCK.hw + 0.3 && z < DOCK.zLand + 0.5 && z > DOCK.zEnd - 1) continue;
+        if (pierDist(x, z) < 0.3) continue;
 
         const clump = noise2(x * 0.09, z * 0.09) * 0.5 + 0.5;
         const aut = autumnAt(x, z);
@@ -213,9 +213,27 @@ export function createGrass(hf, shared) {
     const ground = hf.sample(x, z);
     if (ground < -0.4 || ground > 0.5) continue;
     if (noise2(x * 0.22, z * 0.22) < -0.05) continue;
-    if (Math.abs(x - DOCK.x) < DOCK.hw + 1.2 && z > DOCK.zEnd - 2) continue;
+    if (pierDist(x, z) < 1.2) continue;
     if (pathEdgeDist(x, z) < 0.6) continue;
     push(x, z, ground - 0.05, rng() * Math.PI * 2, 1.0 + rng() * 1.0, 0.045 + rng() * 0.03, rng(), 0, 1);
+  }
+
+  // --- reeds along both river banks ---
+  for (let i = 1; i < riverSamples.length; i += 1) {
+    const [ax, az] = riverSamples[i - 1], [bx, bz] = riverSamples[i];
+    const tl = Math.hypot(bx - ax, bz - az) || 1;
+    const nx = -(bz - az) / tl, nz = (bx - ax) / tl;
+    for (let k = 0; k < 3; k++) {
+      const side = rng() < 0.5 ? -1 : 1;
+      const off = RIVER_W * (0.75 + rng() * 0.75);
+      const x = bx + nx * off * side + (rng() - 0.5) * 0.8, z = bz + nz * off * side + (rng() - 0.5) * 0.8;
+      if (boundsDist(x, z) > 0.98) continue;
+      const ground = hf.sample(x, z);
+      if (ground < -0.4 || ground > 0.6) continue;
+      if (noise2(x * 0.2, z * 0.2) < -0.15) continue;
+      if (pathEdgeDist(x, z) < 2.5) continue; // keep the bridge approaches clear
+      push(x, z, ground - 0.05, rng() * Math.PI * 2, 0.9 + rng() * 1.0, 0.045 + rng() * 0.03, rng(), 0, 1);
+    }
   }
 
   const material = new THREE.ShaderMaterial({
@@ -390,7 +408,7 @@ export function createFlowers(hf, shared) {
     }
     const ground = hf.sample(x, z);
     if (ground < 0.12 || pathEdgeDist(x, z) < 0.25) continue;
-    if (Math.abs(x - DOCK.x) < DOCK.hw + 0.3 && z < DOCK.zLand + 0.3) continue;
+    if (pierDist(x, z) < 0.3) continue;
     p.set(x, ground - 0.02, z);
     e.set((rng() - 0.5) * 0.3, rng() * Math.PI * 2, (rng() - 0.5) * 0.3);
     q.setFromEuler(e);

@@ -6,8 +6,32 @@
 
 import * as THREE from 'three';
 import { SKY_GLSL } from './sky.js';
-import { LAKE } from './layout.js';
+import { LAKE, RIVER_W, lakeEllipse, riverDist } from './layout.js';
 import { MAX_LIGHTS } from './grass.js';
+
+// Where there is water: the lake ellipse + the river, baked into a small mask
+// texture over the rectangle the water plane covers.
+const RECT = { x0: -114, z0: -50, w: 228, h: 78 };
+function waterMask() {
+  const W = 456, H = 156;
+  const data = new Uint8Array(W * H * 4);
+  for (let j = 0; j < H; j++) {
+    const z = RECT.z0 + ((j + 0.5) / H) * RECT.h;
+    for (let i = 0; i < W; i++) {
+      const x = RECT.x0 + ((i + 0.5) / W) * RECT.w;
+      const lake = 1 - Math.min(Math.max((lakeEllipse(x, z) - 1.0) / 0.1, 0), 1);
+      const river = 1 - Math.min(Math.max((riverDist(x, z) - RIVER_W * 1.6) / 2.0, 0), 1);
+      const v = Math.round(255 * Math.max(lake, river));
+      const k = (j * W + i) * 4;
+      data[k] = data[k + 1] = data[k + 2] = v; data[k + 3] = 255;
+    }
+  }
+  const t = new THREE.DataTexture(data, W, H, THREE.RGBAFormat);
+  t.colorSpace = THREE.NoColorSpace;
+  t.minFilter = t.magFilter = THREE.LinearFilter;
+  t.needsUpdate = true;
+  return t;
+}
 
 export function createWater(skyUniforms, shared) {
   const ripples = [];
@@ -22,7 +46,8 @@ export function createWater(skyUniforms, shared) {
       uLights: shared.uLights,
       uLightCols: shared.uLightCols,
       uRipples: { value: ripples },
-      uLake: { value: new THREE.Vector4(LAKE.cx, LAKE.cz, LAKE.rx, LAKE.rz) },
+      uMask: { value: waterMask() },
+      uMaskRect: { value: new THREE.Vector4(RECT.x0, RECT.z0, RECT.w, RECT.h) },
     },
     vertexShader: /* glsl */ `
       varying vec3 vWorld;
@@ -40,7 +65,8 @@ export function createWater(skyUniforms, shared) {
       uniform vec4 uLights[LIGHTS];
       uniform vec3 uLightCols[LIGHTS];
       uniform vec4 uRipples[4];
-      uniform vec4 uLake;
+      uniform sampler2D uMask;
+      uniform vec4 uMaskRect;
       varying vec3 vWorld;
 
       float waveH(vec2 p) {
@@ -103,8 +129,8 @@ export function createWater(skyUniforms, shared) {
         float reach = smoothstep(1.5, 9.0, length(toFrag));
         col += vec3(0.85, 0.9, 1.05) * column * reach * (glint * 3.6 + 0.08) * mix(0.45, 1.0, fres);
 
-        float ld = length((vWorld.xz - uLake.xy) / uLake.zw);
-        float alpha = 1.0 - smoothstep(1.02, 1.12, ld);
+        float alpha = texture2D(uMask, (vWorld.xz - uMaskRect.xy) / uMaskRect.zw).r;
+        if (alpha < 0.01) discard;
 
         float fogD = distance(vWorld, uCamPos);
         float f = 1.0 - exp(-pow(uFogDensity * fogD, 2.0));
@@ -116,15 +142,20 @@ export function createWater(skyUniforms, shared) {
     transparent: true,
   });
 
-  const geo = new THREE.PlaneGeometry(LAKE.rx * 2 + 10, LAKE.rz * 2 + 10, 1, 1);
+  const geo = new THREE.PlaneGeometry(RECT.w, RECT.h, 1, 1);
   geo.rotateX(-Math.PI / 2);
   const mesh = new THREE.Mesh(geo, material);
-  mesh.position.set(LAKE.cx, 0, LAKE.cz);
+  mesh.position.set(RECT.x0 + RECT.w / 2, 0, RECT.z0 + RECT.h / 2);
 
   let next = 3 + Math.random() * 5;
   let slot = 0;
   return {
     mesh,
+    /** A ring of ripples spreading from (x, z): oar strokes, the boat. */
+    splash(x, z, time, strength = 0.8) {
+      ripples[slot].set(x, z, time, strength);
+      slot = (slot + 1) % ripples.length;
+    },
     update(dt, time) {
       next -= dt;
       if (next <= 0) {

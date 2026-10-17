@@ -65,17 +65,27 @@ function canvas(size) {
 
 /** Soft radial glow (white core fading out). Used for halos, sprites, light pools. */
 export function glowTexture(size = 128, falloff = 2.2) {
-  const c = canvas(size);
-  const g = c.getContext('2d');
-  const grad = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  for (let i = 0; i <= 10; i++) {
-    const t = i / 10;
-    grad.addColorStop(t, `rgba(255,255,255,${Math.pow(1 - t, falloff).toFixed(4)})`);
+  // Built from raw pixels with the glow in the COLOUR channels and alpha fixed
+  // at 1. (A 2D-canvas gradient stores very faint pixels as premultiplied 8-bit
+  // alpha; un-premultiplying them on upload gives random coloured speckles,
+  // which showed up as glitter around the moon, letter and bunny.)
+  const data = new Uint8Array(size * size * 4);
+  const h = size / 2;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const t = Math.min(Math.hypot(x + 0.5 - h, y + 0.5 - h) / h, 1);
+      const v = Math.round(255 * Math.pow(1 - t, falloff));
+      const i = (y * size + x) * 4;
+      data[i] = data[i + 1] = data[i + 2] = v;
+      data[i + 3] = 255;
+    }
   }
-  g.fillStyle = grad;
-  g.fillRect(0, 0, size, size);
-  const tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
+  const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+  tex.colorSpace = THREE.NoColorSpace;
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.generateMipmaps = false;
+  tex.needsUpdate = true;
   return tex;
 }
 
@@ -137,9 +147,8 @@ export function marbleTexture(size = 512) {
 
 /** Soft cloudy blob (for mist sprites). */
 export function cloudTexture(size = 128) {
-  const c = canvas(size);
-  const g = c.getContext('2d');
-  const img = g.createImageData(size, size);
+  // raw RGBA (not a 2D canvas) so faint alpha isn't mangled by premultiplication
+  const data = new Uint8Array(size * size * 4);
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const dx = (x - size / 2) / (size / 2), dy = (y - size / 2) / (size / 2);
@@ -147,17 +156,19 @@ export function cloudTexture(size = 128) {
       const n = fbm2(x * 0.05, y * 0.05, 4) * 0.5 + 0.5;
       const a = clamp((1 - smoothstep(0.25, 1.0, r)) * (0.35 + n * 0.75), 0, 1);
       const i = (y * size + x) * 4;
-      img.data[i] = img.data[i + 1] = img.data[i + 2] = 255;
-      img.data[i + 3] = Math.round(a * 255);
+      data[i] = data[i + 1] = data[i + 2] = 255;
+      data[i + 3] = Math.round(a * 255);
     }
   }
-  g.putImageData(img, 0, 0);
-  const tex = new THREE.CanvasTexture(c);
+  const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
   tex.colorSpace = THREE.SRGBColorSpace;
+  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.generateMipmaps = true;
+  tex.needsUpdate = true;
   return tex;
 }
 
-/** Stone tiles for the greenhouse floor / hilltop plaza. */
 export function tileTexture(size = 256) {
   const c = canvas(size);
   const g = c.getContext('2d');

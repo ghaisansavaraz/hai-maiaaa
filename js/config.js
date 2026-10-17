@@ -26,6 +26,8 @@ export const WORLD_ENTRY_DATE = '2026-10-16';
 export const WORLD_UNLOCK_DATE = '2026-10-19';
 export const WORLD_HER_NAME = 'Maia Reva';
 export const WORLD_FROM_NAME = 'Gesan';
+// Signs on the pier's food stalls (shop names, change freely).
+export const WORLD_PIER_SIGNS = { boutique: 'Reva Maia’s Nhà Việt', gelato: 'Gelato', jamu: 'Jamu' };
 // Whisper that fades in under the flower when she hovers it (once it's a door).
 export const WORLD_ENTRY_HINT = 'the one who’s lovelier than the moon, the night is waiting';
 
@@ -43,6 +45,15 @@ export const WORLD_LANTERN_MESSAGES = [
   "I hope this year is as kind to you as you are to everyone around you.",
   "The flower in the greenhouse took its time. The best things usually do.",
   "Keep going up the hill. The moon has been waiting for you.",
+];
+
+// The story chapters Mr. Frundles leads her through, in order. Shown (as a
+// card) when each one is reached — only while WORLD_SHOW_MESSAGES is true.
+export const WORLD_CHAPTERS = [
+  { id: 'entrance', title: 'The first lantern', message: "Mr. Frundles will show you the way. Follow him." },
+  { id: 'pier', title: 'The pier', message: "Some places are worth walking all the way to the end of." },
+  { id: 'desk', title: 'Your desk', message: "All those pages, all that work. I see how hard you try, and I'm so proud of you." },
+  { id: 'hill', title: 'The hilltop', message: "Last stop. Light the lantern when it's your birthday." },
 ];
 
 // Lines shown when she looks closer at things in the greenhouse.

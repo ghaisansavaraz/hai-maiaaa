@@ -5,7 +5,7 @@
 
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
-import { EYE_HEIGHT, SPAWN, onDock, boundsDist, pathEdgeDist, autumnAt } from './layout.js';
+import { EYE_HEIGHT, SPAWN, deckHeight, surfaceAt, boundsDist, pathEdgeDist, autumnAt } from './layout.js';
 
 const RADIUS = 0.3;
 const WALK = 2.9;
@@ -39,11 +39,14 @@ export function createPlayer(camera, domElement, hf, colliders, opts = {}) {
     }
   }
 
-  function resolve(x, z) {
+  function resolve(x, z, feetY) {
     const list = grid.get(`${Math.floor(x / CELL)},${Math.floor(z / CELL)}`);
     if (!list) return [x, z];
     for (let pass = 0; pass < 2; pass++) {
       for (const c of list) {
+        // some walls only exist on one floor (greenhouse upper floor vs powder room)
+        if (c.minY !== undefined && feetY < c.minY) continue;
+        if (c.maxY !== undefined && feetY > c.maxY) continue;
         let px, pz;
         if (c.seg) {
           const [ax, az, bx, bz] = c.seg;
@@ -64,7 +67,7 @@ export function createPlayer(camera, domElement, hf, colliders, opts = {}) {
     return [x, z];
   }
 
-  const valid = (x, z) => boundsDist(x, z) < 0.965 && (hf.sample(x, z) > -0.18 || onDock(x, z));
+  const valid = (x, z, feetY) => boundsDist(x, z) < 0.965 && (hf.sample(x, z) > -0.18 || deckHeight(x, z, feetY) !== null);
 
   const keys = new Set();
   const onKey = (e, down) => {
@@ -89,6 +92,10 @@ export function createPlayer(camera, domElement, hf, colliders, opts = {}) {
   function look(yaw, pitch) {
     camera.quaternion.setFromEuler(new THREE.Euler(pitch, yaw, 0, 'YXZ'));
   }
+  // a slow, eased turn of her view (used once in the birthday ending)
+  let turn = null;
+  // 'walk', or 'boat' while she's rowing (main.js moves the camera then)
+  let mode = 'walk';
   look(0, -0.04);
   camera.position.set(pos.x, eyeY, pos.y);
 
@@ -98,15 +105,40 @@ export function createPlayer(camera, domElement, hf, colliders, opts = {}) {
     get z() { return pos.y; },
     get speed() { return vel.length(); },
     setEnabled(v) { enabled = v; if (!v) keys.clear(); },
-    teleport(x, z, yaw = 0, pitch = -0.05) {
+    teleport(x, z, yaw = 0, pitch = -0.05, feetY = Infinity) {
       pos.set(x, z);
       vel.set(0, 0);
-      eyeY = hf.walkHeight(x, z) + EYE_HEIGHT;
+      eyeY = hf.walkHeight(x, z, feetY) + EYE_HEIGHT;
       camera.position.set(x, eyeY, z);
       look(yaw, pitch);
     },
+    get inBoat() { return mode === 'boat'; },
+    setBoat(on) { mode = on ? 'boat' : 'walk'; vel.set(0, 0); },
+    /** Rowing input: fwd (W/S) and turn (A/D), each -1..1. */
+    input() {
+      if (!(enabled && controls.isLocked)) return { fwd: 0, turn: 0 };
+      const fwd = (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0) - (keys.has('KeyS') || keys.has('ArrowDown') ? 1 : 0);
+      const tr = (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0) - (keys.has('KeyA') || keys.has('ArrowLeft') ? 1 : 0);
+      return { fwd, turn: tr };
+    },
+    setPos(x, z) { pos.set(x, z); },
+    turnTo(yaw, pitch, seconds = 4) {
+      turn = {
+        from: camera.quaternion.clone(),
+        to: new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw, 0, 'YXZ')),
+        t: 0, dur: seconds,
+      };
+    },
     /** Returns a surface name when a footstep lands this frame, else null. */
     update(dt) {
+      if (turn) {
+        turn.t += dt;
+        const k = Math.min(turn.t / turn.dur, 1);
+        const e = k * k * (3 - 2 * k);
+        camera.quaternion.slerpQuaternions(turn.from, turn.to, e);
+        if (k >= 1) turn = null;
+      }
+      if (mode === 'boat') return null;
       let ix = 0, iz = 0;
       if (enabled && controls.isLocked) {
         if (keys.has('KeyW') || keys.has('ArrowUp')) iz += 1;
@@ -126,16 +158,17 @@ export function createPlayer(camera, domElement, hf, colliders, opts = {}) {
       vel.x += (wx - vel.x) * Math.min(1, dt * accel);
       vel.y += (wz - vel.y) * Math.min(1, dt * accel);
 
+      const feet = eyeY - EYE_HEIGHT;
       let nx = pos.x + vel.x * dt, nz = pos.y + vel.y * dt;
-      [nx, nz] = resolve(nx, nz);
-      if (!valid(nx, nz)) {
-        if (valid(nx, pos.y)) nz = pos.y;
-        else if (valid(pos.x, nz)) nx = pos.x;
+      [nx, nz] = resolve(nx, nz, feet);
+      if (!valid(nx, nz, feet)) {
+        if (valid(nx, pos.y, feet)) nz = pos.y;
+        else if (valid(pos.x, nz, feet)) nx = pos.x;
         else { nx = pos.x; nz = pos.y; vel.set(0, 0); }
       }
       pos.set(nx, nz);
 
-      const target = hf.walkHeight(pos.x, pos.y) + EYE_HEIGHT;
+      const target = hf.walkHeight(pos.x, pos.y, feet + 0.5) + EYE_HEIGHT;
       eyeY += (target - eyeY) * Math.min(1, dt * 10);
 
       const sp = vel.length();
@@ -146,9 +179,9 @@ export function createPlayer(camera, domElement, hf, colliders, opts = {}) {
 
       let step = null;
       if (sp > 0.6 && lastBob > -0.85 && s <= -0.85) {
-        step = onDock(pos.x, pos.y) ? 'wood'
-          : autumnAt(pos.x, pos.y) > 0.5 ? 'leaves'
-          : pathEdgeDist(pos.x, pos.y) < 0 ? 'path' : 'grass';
+        step = surfaceAt(pos.x, pos.y)
+          || (autumnAt(pos.x, pos.y) > 0.5 ? 'leaves'
+          : pathEdgeDist(pos.x, pos.y) < 0 ? 'path' : 'grass');
       }
       lastBob = s;
       return step;
