@@ -53,12 +53,14 @@ export function buildRoutes() {
   const P = PIER, G = GREENHOUSE;
   // inside the pendopo at the end of the pier, beside the bench
   const GAZEBO = [P.x - 1.3, P.pendopo.z + 0.9];
-  const pierIn = [[P.x, P.prom.z1 - 1], [P.x, P.prom.z0 + 1], [P.x, 6], [P.x, 1.5], [P.x, P.walk.z0 - 0.3]];
-  // through the south door, up the marble stairs, to her desk on the upper floor
-  const DESK = [G.x + 1.2, G.z - G.hd + 2.7];
+  const pierIn = [[P.x, P.gate.z], [P.x, 16], [P.x, 8], [P.x, 1], [P.x, P.spine.z0 - 0.4]];
+  // through the grand door, round the centrepiece, up the west flight to her desk on the dais
+  const Fl = G.flight, Da = G.dais;
+  const DESK = [G.x - 1.8, G.z + Da.z0 + 2.5];
   const ghIn = [
-    [G.x, G.z + G.hd + 1.2], [G.x, G.z + G.hd - 1.0], [G.x, G.z + G.stairZ + 0.8],
-    [G.x, G.z + (G.stairZ + G.mezzZ) / 2], [G.x, G.z + G.mezzZ - 0.6],
+    [G.x, G.z + G.half + 3.6], [G.x, G.z + G.half - 0.8], [G.x - 1.5, G.z + 3.4], [G.x - 1.5, G.z + 1.3],
+    [G.x - 0.6, G.z + 0.85], [G.x - 0.6, G.z + Fl.z1 + 0.4], // between the brass stanchions [G.x - 0.6, G.z + (Fl.z0 + Fl.z1) / 2], [G.x - Fl.x0 - 0.3, G.z + (Fl.z0 + Fl.z1) / 2],
+    [G.x - Da.hw + 0.5, G.z + (Fl.z0 + Fl.z1) / 2], [G.x - Da.hw + 0.5, G.z + Da.z1 - 0.7], [G.x - 3.2, G.z + Da.z1 - 1.0],
   ];
   const HILLSPOT = [HILL.x + 1.15, HILL.z + 1.4];
 

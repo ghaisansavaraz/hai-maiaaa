@@ -135,9 +135,17 @@ const matKey = (m) => [
   m.alphaTest, m.depthWrite, m.blending, m.polygonOffset,
 ].join('|');
 
+/** Plain, untextured, non-glowing standard materials differ only by colour:
+    those can share one vertex-coloured material per finish. */
+const plain = (m) => m.type === 'MeshStandardMaterial' && !m.map && !m.transparent && !m.alphaTest && m.opacity === 1
+  && m.emissive.getHex() === 0 && !m.normalMap && !m.envMap;
+const q = (v) => Math.round(v * 20) / 20;
+const plainKey = (m) => ['VC', q(m.roughness), q(m.metalness), m.side, !!m.flatShading].join('|');
+
 /** Merge every static mesh under `root` into one mesh per (look-alike)
-    material, in root space. Subtrees marked userData.keep stay as they are
-    (anything that moves or animates its own material). Huge draw-call saver. */
+    material, in root space; plain coloured materials collapse into one
+    vertex-coloured material per finish. Subtrees marked userData.keep stay as
+    they are (anything that moves or animates its own material). Huge draw-call saver. */
 export function bakeStatic(root) {
   root.updateMatrixWorld(true);
   const inv = new THREE.Matrix4().copy(root.matrixWorld).invert();
@@ -147,7 +155,8 @@ export function bakeStatic(root) {
   const visit = (o, keep) => {
     keep = keep || !!o.userData.keep;
     if (o.isMesh && !keep && !o.isInstancedMesh && !o.isSkinnedMesh && !Array.isArray(o.material) && o.visible && o.geometry) {
-      const m = o.material;
+      let m = o.material;
+      const flat = plain(m);
       let g = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry.clone();
       rel.multiplyMatrices(inv, o.matrixWorld);
       g.applyMatrix4(rel);
@@ -164,14 +173,22 @@ export function bakeStatic(root) {
         }
       }
       const keepAttrs = ['position', 'normal', 'uv'];
-      if (m.vertexColors) keepAttrs.push('color');
+      if (m.vertexColors || flat) keepAttrs.push('color');
       for (const name of Object.keys(g.attributes)) if (!keepAttrs.includes(name)) g.deleteAttribute(name);
       if (!g.attributes.normal) g.computeVertexNormals();
       const n = g.attributes.position.count;
       if (!g.attributes.uv) g.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(n * 2), 2));
-      if (m.vertexColors && !g.attributes.color) g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3).fill(1), 3));
+      if ((m.vertexColors || flat) && !g.attributes.color) g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3).fill(1), 3));
+      if (flat) {
+        // fold the material colour into the vertex colours (both are linear)
+        const c = g.attributes.color, mc = m.color;
+        for (let i = 0; i < n; i++) c.setXYZ(i, c.getX(i) * mc.r, c.getY(i) * mc.g, c.getZ(i) * mc.b);
+      }
       g.morphAttributes = {};
-      const key = matKey(m);
+      const key = flat ? plainKey(m) : matKey(m);
+      if (flat && !buckets.has(key)) {
+        m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: m.roughness, metalness: m.metalness, side: m.side, flatShading: m.flatShading });
+      }
       if (!buckets.has(key)) buckets.set(key, { mat: m, geos: [], cast: false, recv: false, order: o.renderOrder });
       const b = buckets.get(key);
       b.geos.push(g);

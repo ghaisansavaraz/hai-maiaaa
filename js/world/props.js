@@ -1,4 +1,4 @@
-/* Hand-built set pieces: paper lanterns along the path, the bench + letter at
+/* Hand-built set pieces: pierced-brass lantern posts along the path, the bench + letter at
    the end of the dock, the glass greenhouse (marble vase with the fully
    bloomed flower, the WORLD'S BEST REVA mug, string lights, plants) and
    Mr. Frundles the bunny. (The hilltop ending lives in finale.js.) Each returns its
@@ -7,6 +7,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mulberry32, mugTextTexture, glowTexture } from './util.js';
+import { canvasTex } from './build.js';
 import {
   DOCK, BENCH, BUNNY_HOME, mainPathAt, onDock,
 } from './layout.js';
@@ -32,25 +33,99 @@ export function merge(parts) {
 
 /* =============================== lanterns =============================== */
 
+/** Pierced brass for the lantern sides: a star, kawung petals and dots cut out (alphaTest). */
+function piercedTexture() {
+  return canvasTex(128, 192, (g, W, H) => {
+    g.fillStyle = '#ffffff'; g.fillRect(0, 0, W, H);
+    g.globalCompositeOperation = 'destination-out';
+    const star = (x, y, r) => {
+      g.beginPath();
+      for (let k = 0; k < 16; k++) { const a = (k / 16) * Math.PI * 2, rr = k % 2 ? r * 0.45 : r; g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); }
+      g.closePath(); g.fill();
+    };
+    star(W / 2, H / 2, 26);
+    for (const [x, y] of [[W * 0.27, H * 0.17], [W * 0.73, H * 0.17], [W * 0.27, H * 0.83], [W * 0.73, H * 0.83]]) star(x, y, 11);
+    for (let k = 0; k < 4; k++) {
+      const a = k * Math.PI / 2 + Math.PI / 4;
+      g.beginPath(); g.ellipse(W / 2 + Math.cos(a) * 40, H / 2 + Math.sin(a) * 40, 10, 4.5, a, 0, Math.PI * 2); g.fill();
+    }
+    for (let y = 14; y < H - 8; y += 20) for (const x of [14, W - 14]) { g.beginPath(); g.arc(x, y, 3, 0, Math.PI * 2); g.fill(); }
+    g.globalCompositeOperation = 'source-over';
+    g.fillRect(0, 0, W, 8); g.fillRect(0, H - 8, W, 8); g.fillRect(0, 0, 7, H); g.fillRect(W - 7, 0, 7, H);
+  });
+}
+
+/** The pool the lantern throws on the path: a soft warm disc broken into rays by the piercing. */
+function poolTexture() {
+  return canvasTex(256, 256, (g, W) => {
+    const grd = g.createRadialGradient(W / 2, W / 2, 4, W / 2, W / 2, W / 2);
+    grd.addColorStop(0, 'rgba(255,255,255,1)'); grd.addColorStop(0.4, 'rgba(255,255,255,0.5)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = grd; g.fillRect(0, 0, W, W);
+    // soft shadows of the piercing: faint wedges that fade out with distance
+    g.globalCompositeOperation = 'destination-out';
+    const fade = g.createRadialGradient(W / 2, W / 2, 10, W / 2, W / 2, W / 2);
+    fade.addColorStop(0, 'rgba(0,0,0,0)'); fade.addColorStop(0.35, 'rgba(0,0,0,0.32)'); fade.addColorStop(1, 'rgba(0,0,0,0.12)');
+    g.fillStyle = fade;
+    for (let k = 0; k < 12; k++) {
+      g.save(); g.translate(W / 2, W / 2); g.rotate((k / 12) * Math.PI * 2); g.translate(-W / 2, -W / 2);
+      g.beginPath(); g.moveTo(W / 2 + 26, W / 2 - 3); g.lineTo(W, W / 2 - 22); g.lineTo(W, W / 2 + 22); g.lineTo(W / 2 + 26, W / 2 + 3); g.closePath(); g.fill();
+      g.restore();
+    }
+  }, { srgb: false });
+}
+
+/** Javanese-modern lantern posts along the path: a stepped paras-stone umpak,
+    a teak post with bronze bands and a carved bracket, a pierced-brass lantern
+    with a warm core, a patterned light pool on the path and a jasmine planter. */
 export function createLanterns(hf, messages) {
   const group = new THREE.Group();
   const lanterns = [];
   const fractions = [0.075, 0.27, 0.45, 0.63, 0.86];
-  const woodMat = new THREE.MeshStandardMaterial({ color: '#5a3f2c', roughness: 0.85 });
-  const ironMat = new THREE.MeshStandardMaterial({ color: '#2a2622', roughness: 0.5, metalness: 0.6 });
+  const rng = mulberry32(19);
+  const stoneMat = new THREE.MeshStandardMaterial({ color: '#ddd2bf', roughness: 0.85 });
+  const teakMat = new THREE.MeshStandardMaterial({ color: '#6e4224', roughness: 0.5 });
+  const brassMat = new THREE.MeshStandardMaterial({ color: '#c9a25a', roughness: 0.3, metalness: 0.9 });
+  const piercedMat = new THREE.MeshStandardMaterial({ map: piercedTexture(), color: '#c9a25a', roughness: 0.35, metalness: 0.85, alphaTest: 0.5, side: THREE.DoubleSide });
+  const leafMat = new THREE.MeshStandardMaterial({ color: '#3f6b35', roughness: 0.6, side: THREE.DoubleSide });
+  const bloomMat = new THREE.MeshStandardMaterial({ color: '#fbf6ea', emissive: '#f6e6c0', emissiveIntensity: 0.3 });
+  const poolTex = poolTexture();
+  const LX = 0.66, LY = 2.1; // the lantern hangs here (local), out over the path
 
-  const profile = [];
-  for (let i = 0; i <= 14; i++) {
-    const t = i / 14;
-    profile.push(new THREE.Vector2(0.07 + 0.2 * Math.pow(Math.sin(Math.PI * t), 0.8), -0.23 + t * 0.46));
+  // geometry shared by every post, built once in post-local space
+  const stone = [], teak = [], brass = [], pierced = [], leaf = [], bloom = [];
+  stone.push(new THREE.BoxGeometry(0.46, 0.5, 0.46).translate(0, -0.11, 0));
+  stone.push(new THREE.BoxGeometry(0.36, 0.12, 0.36).translate(0, 0.2, 0));
+  stone.push(new THREE.BoxGeometry(0.26, 0.06, 0.26).translate(0, 0.29, 0));
+  teak.push(new THREE.BoxGeometry(0.12, 2.3, 0.12).translate(0, 1.47, 0));
+  teak.push(new THREE.BoxGeometry(0.2, 0.08, 0.2).translate(0, 2.64, 0));
+  teak.push(new THREE.BoxGeometry(0.15, 0.06, 0.15).translate(0, 2.71, 0));
+  teak.push(new THREE.BoxGeometry(0.82, 0.08, 0.08).translate(0.37, 2.55, 0));
+  teak.push(new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(new THREE.Vector3(0.06, 2.0, 0), new THREE.Vector3(0.1, 2.5, 0), new THREE.Vector3(0.56, 2.52, 0)), 16, 0.026, 6));
+  teak.push(new THREE.TorusGeometry(0.05, 0.018, 6, 14, Math.PI * 1.5).translate(0.8, 2.5, 0));
+  for (const y of [0.5, 1.45, 2.38]) brass.push(new THREE.BoxGeometry(0.135, 0.035, 0.135).translate(0, y, 0));
+  brass.push(new THREE.ConeGeometry(0.05, 0.14, 4).rotateY(Math.PI / 4).translate(0, 2.81, 0));
+  brass.push(new THREE.CylinderGeometry(0.006, 0.006, 0.14, 4).translate(LX, 2.44, 0));
+  // the lantern: frame, pyramid cap with finial, base plate and drop
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) brass.push(new THREE.BoxGeometry(0.02, 0.36, 0.02).translate(LX + sx * 0.12, LY, sz * 0.12));
+  brass.push(new THREE.BoxGeometry(0.28, 0.03, 0.28).translate(LX, LY + 0.19, 0));
+  brass.push(new THREE.ConeGeometry(0.2, 0.15, 4).rotateY(Math.PI / 4).translate(LX, LY + 0.28, 0));
+  brass.push(new THREE.SphereGeometry(0.025, 10, 8).translate(LX, LY + 0.37, 0));
+  brass.push(new THREE.BoxGeometry(0.27, 0.03, 0.27).translate(LX, LY - 0.19, 0));
+  brass.push(new THREE.ConeGeometry(0.05, 0.12, 4).rotateX(Math.PI).rotateY(Math.PI / 4).translate(LX, LY - 0.27, 0));
+  brass.push(new THREE.SphereGeometry(0.018, 8, 6).translate(LX, LY - 0.34, 0));
+  for (let k = 0; k < 4; k++) {
+    const p = new THREE.PlaneGeometry(0.24, 0.36).translate(0, 0, 0.12).rotateY((k * Math.PI) / 2).translate(LX, LY, 0);
+    pierced.push(p);
   }
-  const bodyGeo = new THREE.LatheGeometry(profile, 24);
-  const ribGeo = (r) => new THREE.TorusGeometry(r, 0.006, 4, 32).rotateX(Math.PI / 2);
-  const ribs = merge([
-    ribGeo(0.27).translate(0, 0, 0), ribGeo(0.235).translate(0, 0.1, 0), ribGeo(0.235).translate(0, -0.1, 0),
-    ribGeo(0.16).translate(0, 0.18, 0), ribGeo(0.16).translate(0, -0.18, 0),
-  ]);
-  const capGeo = new THREE.CylinderGeometry(0.085, 0.1, 0.05, 16);
+  // the jasmine planter at the foot of the post
+  for (let i = 0; i < 26; i++) {
+    const a = rng() * 6.28, r = rng() * 0.17;
+    leaf.push(new THREE.PlaneGeometry(0.05, 0.1).rotateX(-0.6 - rng()).rotateY(a).translate(-0.3 + Math.cos(a) * r, 0.27 + rng() * 0.14, 0.22 + Math.sin(a) * r));
+  }
+  for (let i = 0; i < 16; i++) bloom.push(new THREE.OctahedronGeometry(0.014).translate(-0.3 + (rng() - 0.5) * 0.3, 0.33 + rng() * 0.12, 0.22 + (rng() - 0.5) * 0.3));
+  const shared = [[stone, stoneMat], [teak, teakMat], [brass, brassMat], [pierced, piercedMat], [leaf, leafMat], [bloom, bloomMat]].map(([parts, mat]) => [merge(parts), mat]);
+  const bowl = new THREE.CylinderGeometry(0.205, 0.155, 0.245, 18).translate(-0.3, 0.12, 0.22);
+  const coreGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.28, 12);
 
   fractions.forEach((f, i) => {
     const pt = mainPathAt(f);
@@ -61,46 +136,47 @@ export function createLanterns(hf, messages) {
 
     const lg = new THREE.Group();
     lg.position.set(px, y, pz);
-    lg.rotation.y = Math.atan2(nz, -nx); // local +x (the hook) reaches back over the path
-    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 2.55, 8).translate(0, 1.27, 0), woodMat);
-    post.castShadow = true;
-    lg.add(post);
-    const hookCurve = new THREE.QuadraticBezierCurve3(
-      new THREE.Vector3(0, 2.5, 0), new THREE.Vector3(0.05, 2.85, 0), new THREE.Vector3(0.62, 2.66, 0));
-    lg.add(new THREE.Mesh(new THREE.TubeGeometry(hookCurve, 18, 0.022, 6), ironMat));
-    lg.add(new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.22, 4).translate(0.62, 2.55, 0), ironMat));
-
-    const paper = new THREE.MeshStandardMaterial({
-      color: '#f3cf9c', emissive: '#ff9a50', emissiveIntensity: 1.2, roughness: 0.75, side: THREE.DoubleSide,
-    });
-    const body = new THREE.Mesh(bodyGeo, paper);
-    body.position.set(0.62, 2.18, 0);
+    lg.rotation.y = Math.atan2(nz, -nx); // local +x (the bracket) reaches back over the path
+    for (const [geo, mat] of shared) {
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.castShadow = mat !== leafMat && mat !== bloomMat;
+      mesh.receiveShadow = true;
+      lg.add(mesh);
+    }
+    lg.add(new THREE.Mesh(bowl, stoneMat));
+    const paper = new THREE.MeshStandardMaterial({ color: '#ffe6c0', emissive: '#ffa45a', emissiveIntensity: 1.2, roughness: 0.6 });
+    const body = new THREE.Mesh(coreGeo, paper);
+    body.position.set(LX, LY, 0);
     lg.add(body);
-    const rib = new THREE.Mesh(ribs, ironMat);
-    rib.position.copy(body.position);
-    lg.add(rib);
-    lg.add(new THREE.Mesh(capGeo, woodMat).translateX(0.62).translateY(2.43));
-    lg.add(new THREE.Mesh(capGeo, woodMat).translateX(0.62).translateY(1.93));
-    const tassel = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.14, 6), new THREE.MeshStandardMaterial({ color: '#9b2b2b', roughness: 0.8 }));
-    tassel.position.set(0.62, 1.84, 0);
-    tassel.rotation.x = Math.PI;
-    lg.add(tassel);
 
     const light = new THREE.PointLight(WARM, 3, 16, 2);
-    light.position.set(0.62, 2.18, 0);
+    light.position.set(LX, LY, 0);
     lg.add(light);
     group.add(lg);
 
-    const world = new THREE.Vector3();
+    // the patterned light pool, laid on the path below the lantern
     lg.updateMatrixWorld(true);
+    const under = new THREE.Vector3(LX, 0, 0).applyMatrix4(lg.matrixWorld);
+    const poolMat = new THREE.MeshBasicMaterial({
+      map: poolTex, color: new THREE.Color(0.42, 0.26, 0.12), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+      polygonOffset: true, polygonOffsetFactor: -4,
+    });
+    const pool = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.4).rotateX(-Math.PI / 2), poolMat);
+    pool.position.set(under.x, hf.sample(under.x, under.z) + 0.05, under.z);
+    pool.rotation.y = rng() * 6.28;
+    pool.renderOrder = 1;
+    group.add(pool);
+
+    const world = new THREE.Vector3();
     body.getWorldPosition(world);
     lanterns.push({
-      index: i, group: lg, paper, light, world, read: false, glow: 0, seed: Math.random() * 10,
-      collider: { x: px, z: pz, r: 0.25 },
+      index: i, group: lg, paper, light, pool: poolMat, world, read: false, glow: 0, seed: Math.random() * 10,
+      collider: { x: px, z: pz, r: 0.3 },
       interact: { center: world.clone(), radius: 0.9, label: 'click to warm the lantern', message: messages[i] || '' },
     });
   });
 
+  const base = new THREE.Color(0.42, 0.26, 0.12);
   return {
     group, lanterns,
     update(t, dt, celebrate) {
@@ -109,8 +185,9 @@ export function createLanterns(hf, messages) {
         const pulse = l.read ? 0 : (Math.sin(t * 1.4 + l.seed) * 0.5 + 0.5) * 0.5;
         const target = (l.read || celebrate ? 3.4 : 1.15 + pulse) * flick;
         l.glow += (target - l.glow) * Math.min(1, dt * 2.5);
-        l.paper.emissiveIntensity = l.glow;
+        l.paper.emissiveIntensity = l.glow * 1.3;
         l.light.intensity = l.glow * (l.read || celebrate ? 3.2 : 2.2);
+        l.pool.color.copy(base).multiplyScalar(0.5 + Math.min(l.glow, 2.2) * 0.3);
       }
     },
   };

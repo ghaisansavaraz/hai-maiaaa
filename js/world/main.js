@@ -538,9 +538,9 @@ async function main() {
   });
   const spots = {
     spawn: [SPAWN.x, SPAWN.z, 0],
-    pier: [PIER.x, PIER.prom.z1 + 1.5, 0, -0.05],
-    dock: [PIER.x, PIER.walk.z0 + 2.5, 0, -0.05],
-    greenhouse: [GREENHOUSE.x, GREENHOUSE.z + GREENHOUSE.hd + 3.5, 0, -0.02],
+    pier: [PIER.x, PIER.gate.z + 3.5, 0, -0.05],
+    dock: [PIER.x, PIER.spine.z0 + 2.5, 0, -0.05],
+    greenhouse: [GREENHOUSE.x, GREENHOUSE.z + GREENHOUSE.half + 6.5, 0, 0.04],
     bridge: [BRIDGE.x - BRIDGE.ux * 14, BRIDGE.z - BRIDGE.uz * 14, Math.atan2(-BRIDGE.ux, -BRIDGE.uz), -0.02],
     // just south of the lantern pedestal, facing it (and the moon beyond)
     hill: [HILL.x, HILL.z + 4.3, 0, -0.12],

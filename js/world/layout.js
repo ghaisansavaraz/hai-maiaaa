@@ -14,29 +14,36 @@ export const BOUNDS = { rx: 98, rz: 120 };
 export const SPAWN = { x: 0, z: 101 };
 export const EYE_HEIGHT = 1.62;
 
-// The glass house: a Javanese-modern luxury conservatory. A long glass hall
-// (local x ±hw, z ±hd), entrance in the middle of the south wall. At the far
-// (north) end an elevated floor (mezzanine) where her desk is, reached by a
-// central marble staircase straight ahead of the door; a powder room under it.
+// The glass house: a cruciform Javanese-modern conservatory. A central square
+// hall (local x, z within ±half) under a two-tier glass summit, with lower glass
+// wings left and right. Grand entrance in the middle of the south face. At the
+// back of the hall a raised dais (her desk) reached by twin flights that rise
+// from the centre outward along its face; the powder room sits under the dais,
+// its arched door between the feet of the two flights.
 export const GREENHOUSE = {
-  x: 33, z: 12, hw: 6, hd: 9, wallH: 4.6, roofH: 7.8, doorW: 2.2,
-  mezzY: 2.5,        // height of the elevated floor
-  mezzZ: -4,         // local z of its front edge (it spans -hd … mezzZ)
-  stairHW: 1.35,     // half width of the staircase (centred on x = 0)
-  stairZ: 0.4,       // local z where the stairs start at the bottom
-  powder: { x0: 1.4, door0: 3.0, door1: 4.1 }, // powder room: x0 … hw under the mezzanine
+  x: 40, z: 12, half: 6, hw: 6, hd: 6,
+  wing: { w: 7, hd: 4.5 },          // each wing: x from half to half + w, z within ±hd
+  wallH: 5.2, tier1: 8.2, summit: 10.8, wingWall: 3.6, wingRidge: 5.0, doorW: 2.6,
+  dais: { y: 2.4, z0: -6, z1: -2.4, hw: 5.9 },
+  flight: { x0: 1.3, x1: 5.0, z0: -2.4, z1: -1.0 }, // each flight spans |x| x0…x1 in front of the dais
+  powder: { hw: 3.0, doorHW: 0.75 },
 };
-// The pier on the south shore: a wide promenade (gelato, Nhà Việt, jamu bar),
-// a walk out over the water and a modern pendopo at the end (bench + letter).
+// The pier: a teak boardwalk along the south shore, an arrival gate on the
+// pier's axis, a central spine out over the water with two symmetrical pods
+// (Nhà Việt west, the jamu bar east), and the pendopo at the end.
 export const PIER = {
-  x: -24, deckY: 1.1,
-  prom: { x0: -33, x1: -15, z0: 10, z1: 23.5 },
-  walk: { hw: 1.8, z0: -3.0, z1: 10 },
-  pendopo: { z: -7.2, half: 4.2 },
+  x: -24, deckY: 1.05,
+  boardwalk: { ld: 1.04, hw: 2.0, th0: Math.PI / 2 - 0.78, th1: Math.PI / 2 + 0.78 },
+  gate: { z: 22.3 },
+  cart: { th: 1.13 }, // the es puter gelato cart, on the boardwalk east of the gate
+  spine: { hw: 2.0, z0: -2.0, z1: 21.0 },
+  podW: { x0: -37, x1: -26, z0: 4.5, z1: 14.5 },
+  podE: { x0: -22, x1: -11, z0: 4.5, z1: 14.5 },
+  pendopo: { z: -7.4, half: 5.4, roof: 4.2 }, // half = deck, roof = the pavilion itself
 };
 // summary box of the whole pier, for code that only needs rough bounds
 export const DOCK = {
-  x: PIER.x, zLand: PIER.prom.z1, zEnd: PIER.pendopo.z - PIER.pendopo.half, hw: PIER.walk.hw, deckY: PIER.deckY,
+  x: PIER.x, zLand: PIER.gate.z, zEnd: PIER.pendopo.z - PIER.pendopo.half, hw: PIER.spine.hw, deckY: PIER.deckY,
 };
 export const BENCH = { x: -24, z: PIER.pendopo.z + 0.7 };
 // beside the main path, shortly after the autumn grove, so she meets it early
@@ -56,8 +63,8 @@ export const MAIN_PATH = [
   [0, 112], [0, 101], [1, 90], [3, 76], [0, 62], [-5, 48], [-8, 34], [-2, 24], [10, 16],
   [20, 9], [24, -4], [18, -20], [9, -34], [4, -48], [8, -60], [-3, -71], [2, -82], [0, -92],
 ];
-export const DOCK_PATH = [[-8, 34], [-14, 30.6], [-20, 27.6], [-24, 25.8], [-24, 23.9]];
-export const GREENHOUSE_PATH = [[20, 9], [23.4, 15.2], [28.2, 21.4], [33, 23.0]]; // to the south door
+export const DOCK_PATH = [[-8, 34], [-14, 30.4], [-20, 27.4], [-24, 25.6], [-24, 24.2]];
+export const GREENHOUSE_PATH = [[20, 9], [25, 14.8], [32, 19.6], [40, 21.2]]; // to the grand south door
 
 // The river: flows in from the western hills, through the lake, and out east,
 // so the hill (north) can only be reached over the stone bridge.
@@ -188,23 +195,42 @@ export function autumnAt(x, z) {
   return smoothstep(50, 66, z) * (1 - smoothstep(58, 80, Math.abs(x)));
 }
 
-/** SDF of the greenhouse footprint (negative inside). */
+/** SDF of the greenhouse footprint: central hall + two wings (negative inside). */
 export function greenhouseSdf(x, z, pad = 0) {
   const G = GREENHOUSE;
-  return Math.max(Math.abs(x - G.x) - G.hw, Math.abs(z - G.z) - G.hd) - pad;
+  const lx = x - G.x, lz = z - G.z;
+  const hall = Math.max(Math.abs(lx) - G.half, Math.abs(lz) - G.half);
+  const wings = Math.max(Math.abs(lx) - (G.half + G.wing.w), Math.abs(lz) - G.wing.hd);
+  return Math.min(hall, wings) - pad;
 }
 
 const box = (x, z, x0, x1, z0, z1) => {
   const dx = Math.max(x0 - x, x - x1), dz = Math.max(z0 - z, z - z1);
   return dx > 0 && dz > 0 ? Math.hypot(dx, dz) : Math.max(dx, dz);
 };
+/** Point on the boardwalk's centre curve at angle th (around the lake centre). */
+export function boardwalkAt(th, k = PIER.boardwalk.ld) {
+  return { x: LAKE.cx + Math.cos(th) * LAKE.rx * k, z: LAKE.cz + Math.sin(th) * LAKE.rz * k };
+}
+function boardwalkDist(x, z) {
+  const B = PIER.boardwalk;
+  const ex = (x - LAKE.cx) / LAKE.rx, ez = (z - LAKE.cz) / LAKE.rz;
+  const ld = Math.hypot(ex, ez);
+  const th = Math.atan2(ez, ex);
+  const radial = Math.abs(ld - B.ld) * LAKE.rz - B.hw;
+  const ang = Math.max(B.th0 - th, th - B.th1) * LAKE.rx * B.ld;
+  return Math.max(radial, ang);
+}
 /** Signed distance to the pier deck footprint (negative = on the deck). */
 export function pierDist(x, z) {
-  const { prom, walk, pendopo } = PIER;
-  const p = box(x, z, prom.x0, prom.x1, prom.z0, prom.z1);
-  const w = box(x, z, PIER.x - walk.hw, PIER.x + walk.hw, walk.z0 - 0.1, walk.z1 + 0.1);
-  const g = box(x, z, PIER.x - pendopo.half, PIER.x + pendopo.half, pendopo.z - pendopo.half, pendopo.z + pendopo.half);
-  return Math.min(p, w, g);
+  const { spine, podW, podE, pendopo } = PIER;
+  return Math.min(
+    box(x, z, PIER.x - spine.hw, PIER.x + spine.hw, spine.z0, spine.z1),
+    box(x, z, podW.x0, podW.x1, podW.z0, podW.z1),
+    box(x, z, podE.x0, podE.x1, podE.z0, podE.z1),
+    box(x, z, PIER.x - pendopo.half, PIER.x + pendopo.half, pendopo.z - pendopo.half, pendopo.z + pendopo.half),
+    boardwalkDist(x, z),
+  );
 }
 
 export function onDock(x, z) {
@@ -242,6 +268,9 @@ export function terrainHeight(x, z) {
     const k = 1 - smoothstep(RIVER_W * 0.9, RIVER_W * 2.4, rd);
     h = lerp(h, Math.min(h, -1.5 + (rd / RIVER_W) ** 2 * 1.35), k);
   }
+  // the shore under the boardwalk sits just below its planks
+  const bwd = boardwalkDist(x, z);
+  if (bwd < 5) h = lerp(h, Math.min(h, PIER.deckY - 0.14), 1 - smoothstep(0.4, 5, bwd));
   const pe = pathEdgeDist(x, z);
   h -= 0.1 * (1 - smoothstep(-0.3, 1.2, pe));
   const gd = greenhouseSdf(x, z);
@@ -334,12 +363,15 @@ export function deckHeight(x, z, feetY = Infinity) {
   if (Math.abs(s) <= BRIDGE.len / 2 && Math.abs(l) <= BRIDGE.hw) return bridgeDeckY(s);
   const G = GREENHOUSE;
   const lx = x - G.x, lz = z - G.z;
-  if (Math.abs(lx) < G.hw && Math.abs(lz) < G.hd) {
-    const y0 = GREENHOUSE_FLOOR_Y;
-    if (Math.abs(lx) <= G.stairHW + 0.05 && lz >= G.mezzZ && lz <= G.stairZ) {
-      return y0 + G.mezzY * (G.stairZ - lz) / (G.stairZ - G.mezzZ);
+  if (Math.abs(lx) < G.half && Math.abs(lz) < G.half) {
+    const y0 = GREENHOUSE_FLOOR_Y, D = G.dais, F = G.flight;
+    const ax = Math.abs(lx);
+    if (lz >= F.z0 && lz <= F.z1 && ax >= F.x0) {
+      // the twin flights rise from the centre outward, then a small landing at the top
+      if (ax <= F.x1) return y0 + D.y * (ax - F.x0) / (F.x1 - F.x0);
+      if (ax <= D.hw) return y0 + D.y;
     }
-    if (lz < G.mezzZ) return feetY > y0 + 1.2 ? y0 + G.mezzY : null;
+    if (lz < D.z1 && ax <= D.hw) return feetY > y0 + 1.2 ? y0 + D.y : null;
   }
   return null;
 }

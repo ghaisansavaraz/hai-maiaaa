@@ -1,16 +1,18 @@
-/* The pier, five-star Javanese-modern: an oiled teak deck edged in cream paras
-   stone, on dark ironwood (ulin) piles; slim teak rails with bronze kawung
-   lattice panels; bronze lantern posts casting warm pools; festoon lights
-   strung across the promenade; and at the end of the walk a modern pendopo
-   (teak columns on stone umpak bases, layered sirap roof, a tumpang-sari
-   ceiling) where the bench and the letter wait. A varnished teak rowboat is
-   tied up by the ladder. The food stalls live in stalls.js. */
+/* The pier, planned on one axis: a teak boardwalk follows the south shore
+   (benches facing the water, frangipani planters, lamps); a candi-bentar split
+   gate of cream paras stone marks the arrival on the pier's axis; a central
+   spine runs straight out over the water to the pendopo, which stands on a
+   wraparound viewing deck; two symmetrical pods branch off the spine for
+   Reva Maia's Nhà Việt (west) and the jamu bar (east) — stalls in stalls.js.
+   Teak decks edged in paras stone on ironwood piles, teak rails with bronze
+   kawung panels, bronze lanterns with warm pools, festoon lights. A varnished
+   teak rowboat is tied up by the ladder. */
 
 import * as THREE from 'three';
 import { mulberry32, glowTexture } from './util.js';
-import { PIER } from './layout.js';
+import { PIER, LAKE, boardwalkAt } from './layout.js';
 import { merge, paint } from './props.js';
-import { V, beam, rod, kawungPanelTexture, sirapTexture, shadowAll } from './build.js';
+import { V, beam, rod, canvasTex, kawungPanelTexture, sirapTexture, shadowAll } from './build.js';
 
 /* ---------------- the rowboat ---------------- */
 
@@ -78,41 +80,28 @@ export function createPier(hf) {
   const group = new THREE.Group();
   const Y = PIER.deckY;
   const X = PIER.x;
-  const { prom, walk, pendopo } = PIER;
-  const PZ = pendopo.z, PH = pendopo.half;
+  const { spine, podW, podE, pendopo, boardwalk: BW, gate } = PIER;
+  const PZ = pendopo.z, PH = pendopo.half, PR = pendopo.roof;
   const colliders = [];
 
-  /* ---------- teak deck (vertex-tinted planks) ---------- */
-  const planks = [];
   const tones = ['#7a4a28', '#875632', '#6e4224', '#82512e', '#8f5c36'];
-  const plank = (x0, x1, z, w = 0.16) => {
-    let x = x0;
-    while (x < x1 - 0.05) {
-      const len = Math.min(x1 - x, 2.0 + rng() * 1.6);
-      const g = new THREE.BoxGeometry(len - 0.01, 0.06, w);
-      g.translate(x + len / 2, Y - 0.03, z);
-      const c = new THREE.Color(tones[Math.floor(rng() * tones.length)]).multiplyScalar(0.9 + rng() * 0.2);
-      paint(g, '#' + c.getHexString());
-      planks.push(g);
-      x += len;
+  const planks = [], stone = [], piles = [];
+  const plankBox = (len, w, cx, cz, yaw) => {
+    const g = new THREE.BoxGeometry(len - 0.01, 0.06, w);
+    g.rotateY(yaw);
+    g.translate(cx, Y - 0.03, cz);
+    const c = new THREE.Color(tones[Math.floor(rng() * tones.length)]).multiplyScalar(0.9 + rng() * 0.2);
+    paint(g, '#' + c.getHexString());
+    planks.push(g);
+  };
+  /** Rectangular deck of planks running along x, rows along z. */
+  const deckRect = (x0, x1, z0, z1) => {
+    for (let z = z0 + 0.09; z < z1; z += 0.18) {
+      let x = x0;
+      while (x < x1 - 0.05) { const len = Math.min(x1 - x, 2 + rng() * 1.6); plankBox(len, 0.16, x + len / 2, z, 0); x += len; }
     }
   };
-  const B = 0.55; // stone border width on the promenade
-  for (let z = prom.z0 + B + 0.09; z < prom.z1 - B; z += 0.18) plank(prom.x0 + B, prom.x1 - B, z);
-  for (let z = walk.z0 + 0.09; z < prom.z0; z += 0.18) plank(X - walk.hw, X + walk.hw, z);
-  for (let z = PZ - PH + 0.45; z < PZ + PH - 0.35; z += 0.18) plank(X - PH + 0.35, X + PH - 0.35, z);
-  const deck = new THREE.Mesh(merge(planks), new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.72 }));
-  deck.receiveShadow = true;
-  deck.castShadow = true;
-  group.add(deck);
-
-  /* ---------- cream paras stone: promenade border, pendopo plinth, fascias ---------- */
-  const stone = [];
-  const slab = (x0, x1, z0, z1, y = Y, t = 0.08) => stone.push(new THREE.BoxGeometry(x1 - x0, t, z1 - z0).translate((x0 + x1) / 2, y - t / 2 + 0.006, (z0 + z1) / 2));
-  slab(prom.x0, prom.x1, prom.z0, prom.z0 + B); slab(prom.x0, prom.x1, prom.z1 - B, prom.z1);
-  slab(prom.x0, prom.x0 + B, prom.z0 + B, prom.z1 - B); slab(prom.x1 - B, prom.x1, prom.z0 + B, prom.z1 - B);
-  slab(X - PH, X + PH, PZ - PH, PZ - PH + 0.35); slab(X - PH, X + PH, PZ + PH - 0.35, PZ + PH);
-  slab(X - PH, X - PH + 0.35, PZ - PH + 0.35, PZ + PH - 0.35); slab(X + PH - 0.35, X + PH, PZ - PH + 0.35, PZ + PH - 0.35);
+  const slab = (x0, x1, z0, z1, t = 0.08) => stone.push(new THREE.BoxGeometry(x1 - x0, t, z1 - z0).translate((x0 + x1) / 2, Y - t / 2 + 0.006, (z0 + z1) / 2));
   const fascia = (ax, az, bx, bz) => {
     const len = Math.hypot(bx - ax, bz - az);
     const g = new THREE.BoxGeometry(len, 0.32, 0.08);
@@ -120,37 +109,83 @@ export function createPier(hf) {
     g.translate((ax + bx) / 2, Y - 0.2, (az + bz) / 2);
     stone.push(g);
   };
-  fascia(prom.x0, prom.z0, prom.x0, prom.z1); fascia(prom.x1, prom.z0, prom.x1, prom.z1); fascia(prom.x0, prom.z1, prom.x1, prom.z1);
-  fascia(prom.x0, prom.z0, X - walk.hw, prom.z0); fascia(X + walk.hw, prom.z0, prom.x1, prom.z0);
-  fascia(X - walk.hw, walk.z0, X - walk.hw, prom.z0); fascia(X + walk.hw, walk.z0, X + walk.hw, prom.z0);
-  fascia(X - PH, PZ - PH, X + PH, PZ - PH); fascia(X - PH, PZ - PH, X - PH, PZ + PH); fascia(X + PH, PZ - PH, X + PH, PZ + PH);
-  fascia(X - PH, PZ + PH, X - walk.hw, PZ + PH); fascia(X + walk.hw, PZ + PH, X + PH, PZ + PH);
-  const stoneMesh = new THREE.Mesh(merge(stone), new THREE.MeshStandardMaterial({ color: '#e6dccb', roughness: 0.8 }));
-  stoneMesh.receiveShadow = true;
-  stoneMesh.castShadow = true;
-  group.add(stoneMesh);
-
-  /* ---------- ironwood piles ---------- */
-  const piles = [];
   const pile = (x, z) => {
     const bottom = Math.min(hf.sample(x, z), 0) - 0.4;
+    if (bottom > Y - 0.3) return;
     rod(V(x, bottom, z), V(x, Y - 0.08, z), 0.11, piles, 10);
   };
-  for (let x = prom.x0 + 0.35; x <= prom.x1 - 0.2; x += 2.6) for (let z = prom.z0 + 0.35; z <= prom.z1 - 0.2; z += 2.6) pile(x, z);
-  for (let z = walk.z0 + 0.4; z < prom.z0; z += 2.4) { pile(X - walk.hw + 0.12, z); pile(X + walk.hw - 0.12, z); }
-  for (const dx of [-PH + 0.3, 0, PH - 0.3]) for (const dz of [-PH + 0.3, 0, PH - 0.3]) pile(X + dx, PZ + dz);
+
+  /* ---------- the boardwalk along the shore ---------- */
+  const R = LAKE.rz * BW.ld; // rough local radius, for spacing
+  const nB = Math.ceil(((BW.th1 - BW.th0) * LAKE.rx * BW.ld) / 0.18);
+  const bwInner = [], bwOuter = [];
+  for (let i = 0; i <= nB; i++) {
+    const th = BW.th0 + (BW.th1 - BW.th0) * (i / nB);
+    const c = boardwalkAt(th);
+    const o = boardwalkAt(th, BW.ld + BW.hw / LAKE.rz), n = boardwalkAt(th, BW.ld - BW.hw / LAKE.rz);
+    bwInner.push(n); bwOuter.push(o);
+    if (i < nB) {
+      const yaw = Math.atan2(-(o.z - n.z), o.x - n.x);
+      plankBox(Math.hypot(o.x - n.x, o.z - n.z), 0.16, c.x, c.z, yaw);
+    }
+  }
+  const stride = (arr, step) => arr.filter((_, i) => i % step === 0 || i === arr.length - 1);
+  const edgeIn = stride(bwInner, 6), edgeOut = stride(bwOuter, 6);
+  for (let i = 1; i < edgeIn.length; i++) {
+    // stone kerb on both edges
+    for (const [A, Bp] of [[edgeIn[i - 1], edgeIn[i]], [edgeOut[i - 1], edgeOut[i]]]) {
+      const len = Math.hypot(Bp.x - A.x, Bp.z - A.z);
+      const g = new THREE.BoxGeometry(len + 0.05, 0.12, 0.4);
+      g.rotateY(Math.atan2(-(Bp.z - A.z), Bp.x - A.x));
+      g.translate((A.x + Bp.x) / 2, Y + 0.0, (A.z + Bp.z) / 2);
+      stone.push(g);
+      fascia(A.x, A.z, Bp.x, Bp.z);
+    }
+    if (i % 2 === 0) pile(edgeIn[i].x, edgeIn[i].z);
+  }
+
+  /* ---------- the spine, the two pods, the pendopo deck ---------- */
+  const B = 0.45; // stone border
+  deckRect(X - spine.hw, X + spine.hw, spine.z0, spine.z1);
+  for (const pod of [podW, podE]) {
+    deckRect(pod.x0 + B, pod.x1 - B, pod.z0 + B, pod.z1 - B);
+    slab(pod.x0, pod.x1, pod.z0, pod.z0 + B); slab(pod.x0, pod.x1, pod.z1 - B, pod.z1);
+    const outerX = pod === podW ? pod.x0 : pod.x1;
+    slab(Math.min(outerX, outerX + (pod === podW ? B : -B)), Math.max(outerX, outerX + (pod === podW ? B : -B)), pod.z0 + B, pod.z1 - B);
+    fascia(pod.x0, pod.z0, pod.x1, pod.z0); fascia(pod.x0, pod.z1, pod.x1, pod.z1); fascia(outerX, pod.z0, outerX, pod.z1);
+    for (let x = pod.x0 + 0.4; x <= pod.x1 - 0.3; x += 2.6) for (let z = pod.z0 + 0.4; z <= pod.z1 - 0.3; z += 2.6) pile(x, z);
+  }
+  deckRect(X - PH + B, X + PH - B, PZ - PH + B, PZ + PH - B);
+  slab(X - PH, X + PH, PZ - PH, PZ - PH + B); slab(X - PH, X - spine.hw, PZ + PH - B, PZ + PH); slab(X + spine.hw, X + PH, PZ + PH - B, PZ + PH);
+  slab(X - PH, X - PH + B, PZ - PH + B, PZ + PH - B); slab(X + PH - B, X + PH, PZ - PH + B, PZ + PH - B);
+  fascia(X - PH, PZ - PH, X + PH, PZ - PH); fascia(X - PH, PZ - PH, X - PH, PZ + PH); fascia(X + PH, PZ - PH, X + PH, PZ + PH);
+  fascia(X - PH, PZ + PH, X - spine.hw, PZ + PH); fascia(X + spine.hw, PZ + PH, X + PH, PZ + PH);
+  for (const s of [-1, 1]) {
+    fascia(X + s * spine.hw, spine.z0, X + s * spine.hw, podW.z0);
+    fascia(X + s * spine.hw, podW.z1, X + s * spine.hw, spine.z1);
+  }
+  for (let z = spine.z0 + 0.4; z < spine.z1; z += 2.4) { pile(X - spine.hw + 0.15, z); pile(X + spine.hw - 0.15, z); }
+  for (const dx of [-PH + 0.3, -1.8, 1.8, PH - 0.3]) for (const dz of [-PH + 0.3, 0, PH - 0.3]) pile(X + dx, PZ + dz);
+
+  const deck = new THREE.Mesh(merge(planks), new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.72 }));
+  deck.receiveShadow = true;
+  group.add(deck);
+  const stoneMat = new THREE.MeshStandardMaterial({ color: '#e6dccb', roughness: 0.8 });
+  const stoneMesh = new THREE.Mesh(merge(stone), stoneMat);
+  stoneMesh.receiveShadow = true; stoneMesh.castShadow = true;
+  group.add(stoneMesh);
   const pileMesh = new THREE.Mesh(merge(piles), new THREE.MeshStandardMaterial({ color: '#3a2a20', roughness: 0.8 }));
-  pileMesh.castShadow = true;
   group.add(pileMesh);
 
-  /* ---------- railings: teak rails, bronze kawung panels ---------- */
+  /* ---------- railings: teak rails with bronze kawung panels ---------- */
   const teakMat = new THREE.MeshStandardMaterial({ color: '#7a4a28', roughness: 0.45 });
   const bronze = new THREE.MeshStandardMaterial({ color: '#8a6a3c', roughness: 0.35, metalness: 0.85 });
   const brass = new THREE.MeshStandardMaterial({ color: '#c9a25a', roughness: 0.3, metalness: 0.9 });
   const panelMat = new THREE.MeshStandardMaterial({ map: kawungPanelTexture(), color: '#8a6a3c', metalness: 0.8, roughness: 0.4, alphaTest: 0.5, side: THREE.DoubleSide });
   const rails = [], posts = [], panels = [], caps = [];
-  const railRun = (ax, az, bx, bz) => {
+  const railRun = (ax, az, bx, bz, collide = true) => {
     const len = Math.hypot(bx - ax, bz - az);
+    if (len < 0.2) return;
     const yaw = Math.atan2(-(bz - az), bx - ax);
     const hr = new THREE.BoxGeometry(len, 0.06, 0.12); hr.rotateY(yaw); hr.translate((ax + bx) / 2, Y + 1.0, (az + bz) / 2);
     rails.push(hr);
@@ -159,33 +194,147 @@ export function createPier(hf) {
       const x = ax + (bx - ax) * (i / n), z = az + (bz - az) * (i / n);
       posts.push(new THREE.BoxGeometry(0.1, 0.98, 0.1).translate(x, Y + 0.49, z));
       caps.push(new THREE.BoxGeometry(0.13, 0.025, 0.13).translate(x, Y + 1.04, z));
-      colliders.push({ x, z, r: 0.12 });
       if (i < n) {
         const x2 = ax + (bx - ax) * ((i + 1) / n), z2 = az + (bz - az) * ((i + 1) / n);
-        const seg = Math.hypot(x2 - x, z2 - z) - 0.12;
-        const p = new THREE.PlaneGeometry(seg, 0.78);
-        p.rotateY(yaw);
-        p.translate((x + x2) / 2, Y + 0.54, (z + z2) / 2);
+        const p = new THREE.PlaneGeometry(Math.hypot(x2 - x, z2 - z) - 0.12, 0.78);
+        p.rotateY(yaw); p.translate((x + x2) / 2, Y + 0.54, (z + z2) / 2);
         panels.push(p);
       }
     }
     beam(V(ax, Y + 0.12, az), V(bx, Y + 0.12, bz), 0.05, rails);
-    colliders.push({ seg: [ax, az, bx, bz], r: 0.14 });
+    if (collide) colliders.push({ seg: [ax, az, bx, bz], r: 0.14 });
   };
   const e = 0.08;
-  const W0 = X - walk.hw + e, W1 = X + walk.hw - e;
-  railRun(prom.x0 + e, prom.z1 - 0.3, prom.x0 + e, prom.z0 + e);
-  railRun(prom.x1 - e, prom.z0 + e, prom.x1 - e, prom.z1 - 0.3);
-  railRun(prom.x0 + e, prom.z0 + e, W0, prom.z0 + e);
-  railRun(W1, prom.z0 + e, prom.x1 - e, prom.z0 + e);
-  const ladderZ = 4.0, gapH = 0.6;
-  railRun(W0, prom.z0, W0, walk.z0 + 0.05);
-  railRun(W1, prom.z0, W1, ladderZ + gapH);
-  railRun(W1, ladderZ - gapH, W1, walk.z0 + 0.05);
+  // boardwalk: rails on the water side, open where the spine leaves
+  const gateTh = Math.atan2((gate.z - LAKE.cz) / LAKE.rz, (X - LAKE.cx) / LAKE.rx);
+  const gap = (spine.hw + 0.1) / (LAKE.rx * BW.ld);
+  const railEdge = stride(bwInner, 8);
+  for (let i = 1; i < railEdge.length; i++) {
+    const A = railEdge[i - 1], Bp = railEdge[i];
+    const thA = Math.atan2((A.z - LAKE.cz) / LAKE.rz, (A.x - LAKE.cx) / LAKE.rx), thB = Math.atan2((Bp.z - LAKE.cz) / LAKE.rz, (Bp.x - LAKE.cx) / LAKE.rx);
+    if (Math.min(thA, thB) < gateTh + gap && Math.max(thA, thB) > gateTh - gap) continue;
+    railRun(A.x, A.z, Bp.x, Bp.z);
+  }
+  // spine rails between the pods and the shore, and between the pods and the pendopo
+  const ladderZ = 1.2, gapH = 0.6;
+  for (const s of [-1, 1]) {
+    const x = X + s * (spine.hw - e);
+    railRun(x, podW.z1, x, spine.z1 - 1.2);
+    if (s > 0) { railRun(x, spine.z0, x, ladderZ - gapH); railRun(x, ladderZ + gapH, x, podW.z0); }
+    else railRun(x, spine.z0, x, podW.z0);
+  }
+  // pods: rails on their three water sides
+  for (const pod of [podW, podE]) {
+    const out = pod === podW ? pod.x0 + e : pod.x1 - e, inn = pod === podW ? pod.x1 : pod.x0;
+    railRun(inn, pod.z0 + e, out, pod.z0 + e); railRun(out, pod.z0 + e, out, pod.z1 - e); railRun(out, pod.z1 - e, inn, pod.z1 - e);
+  }
+  // pendopo deck edge
+  railRun(X - PH + e, PZ - PH + e, X + PH - e, PZ - PH + e);
+  railRun(X - PH + e, PZ - PH + e, X - PH + e, PZ + PH - e); railRun(X + PH - e, PZ - PH + e, X + PH - e, PZ + PH - e);
+  railRun(X - PH + e, PZ + PH - e, X - spine.hw, PZ + PH - e); railRun(X + spine.hw, PZ + PH - e, X + PH - e, PZ + PH - e);
   group.add(new THREE.Mesh(merge(rails), teakMat));
   group.add(new THREE.Mesh(merge(posts), teakMat));
   group.add(new THREE.Mesh(merge(caps), brass));
   group.add(new THREE.Mesh(merge(panels), panelMat));
+
+  /* ---------- the arrival gate: a candi-bentar split gate in paras stone ---------- */
+  // two mirror-image towers, their inner faces cut sheer (the "split"), the outer faces stepping
+  // back tier by tier, antefixes at the corners, carved relief panels, on an andesite plinth
+  const relief = canvasTex(256, 256, (g, W, H) => {
+    g.fillStyle = '#ddd2bf'; g.fillRect(0, 0, W, H);
+    g.lineCap = 'round';
+    const scroll = (col, w, off) => {
+      g.strokeStyle = col; g.lineWidth = w;
+      g.beginPath();
+      for (let t = 0; t <= 1.0001; t += 0.02) { const x = 24 + t * (W - 48), y = H / 2 + Math.sin(t * Math.PI * 3) * 46 + off; if (t === 0) g.moveTo(x, y); else g.lineTo(x, y); }
+      g.stroke();
+      for (let k = 0; k < 6; k++) {
+        const t = (k + 0.5) / 6, x = 24 + t * (W - 48), y = H / 2 + Math.sin(t * Math.PI * 3) * 46 + off;
+        const up = Math.cos(t * Math.PI * 3) > 0 ? -1 : 1;
+        g.beginPath(); g.arc(x + 14, y + up * 26, 18, 0, Math.PI * 1.6); g.stroke();
+        g.beginPath(); g.ellipse(x - 12, y - up * 22, 16, 6, up * 0.7, 0, Math.PI * 2); g.stroke();
+      }
+    };
+    scroll('#9a8e7a', 9, 2); scroll('#f1e8d8', 3, -2);
+    g.strokeStyle = '#9a8e7a'; g.lineWidth = 8; g.strokeRect(8, 8, W - 16, H - 16);
+    g.strokeStyle = '#f1e8d8'; g.lineWidth = 2; g.strokeRect(14, 14, W - 28, H - 28);
+  });
+  const reliefMat = new THREE.MeshStandardMaterial({ map: relief, roughness: 0.85 });
+  const gateParts = [], gateDark = [], gateBase = [], reliefs = [];
+  const tiers = [[2.3, 1.3, 0.5], [1.95, 0.95, 1.8], [1.62, 0.8, 2.75], [1.3, 0.7, 3.55], [0.98, 0.6, 4.25], [0.66, 0.5, 4.85]];
+  for (const s of [-1, 1]) {
+    const gx = X + s * (spine.hw + 1.15), gz = gate.z + 0.6;
+    const at = (w) => gx - s * (2.3 - w) / 2; // tier centre: inner face stays flush
+    gateBase.push(new THREE.BoxGeometry(2.6, 0.5, 1.9).translate(gx + s * 0.15, Y + 0.25, gz));
+    gateBase.push(new THREE.BoxGeometry(2.7, 0.08, 2.0).translate(gx + s * 0.15, Y + 0.52, gz));
+    tiers.forEach(([w, h, y], i) => {
+      const d = 1.5 - i * 0.16;
+      gateParts.push(new THREE.BoxGeometry(w, h, d).translate(at(w), Y + y + h / 2, gz));
+      gateDark.push(new THREE.BoxGeometry(w + 0.08, 0.09, d + 0.08).translate(at(w), Y + y + h, gz));
+      gateDark.push(new THREE.BoxGeometry(w + 0.04, 0.05, d + 0.04).translate(at(w), Y + y + 0.03, gz));
+      // antefixes on the outer corners of each tier
+      for (const sz of [-1, 1]) gateParts.push(new THREE.ConeGeometry(0.11, 0.34, 4).rotateY(Math.PI / 4).translate(at(w) + s * (w / 2 - 0.08), Y + y + h + 0.2, gz + sz * (d / 2 - 0.08)));
+      // carved panels on the front, back and outer faces of the lower tiers
+      if (i < 3) {
+        for (const sz of [-1, 1]) {
+          const p = new THREE.PlaneGeometry(w - 0.36, h - 0.3);
+          if (sz < 0) p.rotateY(Math.PI);
+          reliefs.push(p.translate(at(w), Y + y + h / 2, gz + sz * (d / 2 + 0.006)));
+        }
+        reliefs.push(new THREE.PlaneGeometry(d - 0.36, h - 0.3).rotateY(s * Math.PI / 2).translate(at(w) + s * (w / 2 + 0.006), Y + y + h / 2, gz));
+      }
+    });
+    // the crowning stone finial with a brass tip
+    gateParts.push(new THREE.CylinderGeometry(0.16, 0.24, 0.3, 8).translate(at(0.66), Y + 5.5, gz));
+    gateParts.push(new THREE.SphereGeometry(0.17, 12, 8).translate(at(0.66), Y + 5.75, gz));
+    colliders.push({ seg: [gx - 0.45, gz, gx + 0.45, gz], r: 0.78 });
+    colliders.push({ x: gx + s * 0.9, z: gz, r: 0.6 });
+    // a brass lantern set into each tower's inner face
+    const lan = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.32), new THREE.MeshStandardMaterial({ color: '#ffe0b0', emissive: '#ffb45c', emissiveIntensity: 2.4 }));
+    lan.position.set(gx - s * 1.17, Y + 1.75, gz);
+    group.add(lan);
+    const tip = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.4, 8).translate(at(0.66), Y + 6.05, gz), brass);
+    group.add(tip);
+  }
+  const gateMesh = new THREE.Mesh(merge(gateParts), new THREE.MeshStandardMaterial({ color: '#ddd2bf', roughness: 0.85 }));
+  gateMesh.castShadow = true;
+  group.add(gateMesh);
+  group.add(new THREE.Mesh(merge(gateDark), new THREE.MeshStandardMaterial({ color: '#8a7a64', roughness: 0.8 })));
+  group.add(new THREE.Mesh(merge(gateBase), new THREE.MeshStandardMaterial({ color: '#5a5650', roughness: 0.9 })));
+  group.add(new THREE.Mesh(merge(reliefs), reliefMat));
+
+  /* ---------- boardwalk furniture: benches facing the water, frangipani planters ---------- */
+  const benches = [], planters = [], leaves = [], blooms = [], trunks = [];
+  for (let k = 0; k < 10; k++) {
+    const th = BW.th0 + 0.08 + (k / 9) * (BW.th1 - BW.th0 - 0.16);
+    if (Math.abs(th - gateTh) < 0.12 || Math.abs(th - PIER.cart.th) < 0.1) continue;
+    const c = boardwalkAt(th, BW.ld + (BW.hw - 0.6) / LAKE.rz);
+    const n = boardwalkAt(th, BW.ld - 1 / LAKE.rz);
+    const yaw = Math.atan2(-(n.z - c.z), n.x - c.x) + Math.PI / 2;
+    if (k % 2 === 0) {
+      // a teak bench facing the lake
+      const g = [];
+      g.push(new THREE.BoxGeometry(1.8, 0.06, 0.5).translate(0, 0.46, 0));
+      g.push(new THREE.BoxGeometry(1.8, 0.5, 0.06).translate(0, 0.74, 0.24).rotateX(-0.1));
+      for (const x of [-0.8, 0.8]) g.push(new THREE.BoxGeometry(0.08, 0.46, 0.5).translate(x, 0.23, 0));
+      for (const p of g) { p.rotateY(yaw); p.translate(c.x, Y, c.z); benches.push(p); }
+      colliders.push({ x: c.x, z: c.z, r: 0.6 });
+    } else {
+      planters.push(new THREE.CylinderGeometry(0.45, 0.38, 0.6, 20).translate(c.x, Y + 0.3, c.z));
+      for (let k = 0; k < 4; k++) { const a = (k / 4) * 6.28 + rng(); rod(V(c.x, Y + 0.55, c.z), V(c.x + Math.cos(a) * 0.25, Y + 1.0 + rng() * 0.2, c.z + Math.sin(a) * 0.25), 0.035, trunks, 6); }
+      for (let i = 0; i < 12; i++) {
+        const a = rng() * 6.28;
+        leaves.push(new THREE.SphereGeometry(0.2, 8, 6).scale(1.5, 0.25, 0.6).rotateY(a).translate(c.x + Math.cos(a) * 0.25, Y + 0.85 + rng() * 0.4, c.z + Math.sin(a) * 0.25));
+      }
+      for (let i = 0; i < 14; i++) blooms.push(new THREE.SphereGeometry(0.05, 8, 6).scale(1, 0.4, 1).translate(c.x + (rng() - 0.5) * 0.6, Y + 1.05 + rng() * 0.3, c.z + (rng() - 0.5) * 0.6));
+      colliders.push({ x: c.x, z: c.z, r: 0.5 });
+    }
+  }
+  group.add(new THREE.Mesh(merge(benches), teakMat));
+  group.add(new THREE.Mesh(merge(planters), stoneMat));
+  group.add(new THREE.Mesh(merge(trunks), new THREE.MeshStandardMaterial({ color: '#8a7a68', roughness: 0.8 })));
+  group.add(new THREE.Mesh(merge(leaves), new THREE.MeshStandardMaterial({ color: '#3f6b35', roughness: 0.6 })));
+  group.add(new THREE.Mesh(merge(blooms), new THREE.MeshStandardMaterial({ color: '#fbf1dc', emissive: '#f6d8a0', emissiveIntensity: 0.25 })));
 
   /* ---------- bronze lantern posts + warm pools ---------- */
   const glassMat = new THREE.MeshStandardMaterial({ color: '#fff0d4', emissive: '#ffbf72', emissiveIntensity: 2.2 });
@@ -193,11 +342,14 @@ export function createPier(hf) {
     map: glowTexture(128, 1.6), color: new THREE.Color(0.55, 0.34, 0.15), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
     polygonOffset: true, polygonOffsetFactor: -4,
   });
-  const lampSpots = [
-    [prom.x0 + 0.3, prom.z1 - 0.35], [prom.x1 - 0.3, prom.z1 - 0.35], [prom.x0 + 0.3, prom.z0 + 0.3], [prom.x1 - 0.3, prom.z0 + 0.3],
-    [prom.x0 + 0.3, (prom.z0 + prom.z1) / 2], [prom.x1 - 0.3, (prom.z0 + prom.z1) / 2],
-    [W0 + 0.1, 7.0], [W1 - 0.1, 8.6], [W0 + 0.1, 1.2], [W0 + 0.1, walk.z0 + 0.35], [W1 - 0.1, walk.z0 + 0.35],
-  ];
+  const lampSpots = [];
+  for (const z of [spine.z1 - 1.6, 16.6, 2.8, spine.z0 + 0.6]) for (const s of [-1, 1]) lampSpots.push([X + s * (spine.hw - 0.25), z]);
+  for (let k = 0; k < 7; k++) {
+    const th = BW.th0 + 0.04 + (k / 6) * (BW.th1 - BW.th0 - 0.08);
+    if (Math.abs(th - gateTh) < 0.1) continue;
+    const c = boardwalkAt(th, BW.ld - (BW.hw - 0.3) / LAKE.rz);
+    lampSpots.push([c.x, c.z]);
+  }
   const lampParts = [], glows = [], lampTops = [];
   for (const [x, z] of lampSpots) {
     lampParts.push(new THREE.BoxGeometry(0.26, 0.12, 0.26).translate(x, Y + 0.06, z));
@@ -214,34 +366,32 @@ export function createPier(hf) {
     colliders.push({ x, z, r: 0.2 });
     lampTops.push(V(x, Y + 2.95, z));
   }
-  const lampMesh = new THREE.Mesh(merge(lampParts), bronze);
-  lampMesh.castShadow = true;
-  group.add(lampMesh);
+  group.add(new THREE.Mesh(merge(lampParts), bronze));
   group.add(new THREE.Mesh(merge(glows), glassMat));
 
-  /* ---------- festoon lights across the promenade ---------- */
+  /* ---------- festoon lights over the spine and the pods ---------- */
   const bulbs = [], wires = [];
-  const festoon = (A, B) => {
+  const festoon = (A, Bp, sag = 0.6) => {
     const pts = [];
-    for (let i = 0; i <= 24; i++) {
-      const t = i / 24;
-      const p = A.clone().lerp(B, t);
-      p.y -= Math.sin(Math.PI * t) * 0.7;
-      pts.push(p);
-    }
+    for (let i = 0; i <= 20; i++) { const t = i / 20; const p = A.clone().lerp(Bp, t); p.y -= Math.sin(Math.PI * t) * sag; pts.push(p); }
     const curve = new THREE.CatmullRomCurve3(pts);
-    wires.push(new THREE.TubeGeometry(curve, 48, 0.006, 3));
-    const n = Math.floor(A.distanceTo(B) / 0.6);
+    wires.push(new THREE.TubeGeometry(curve, 40, 0.006, 3));
+    const n = Math.floor(A.distanceTo(Bp) / 0.6);
     for (let i = 1; i < n; i++) bulbs.push(curve.getPoint(i / n).add(V(0, -0.05, 0)));
   };
-  festoon(lampTops[0], lampTops[3]); festoon(lampTops[1], lampTops[2]);
-  festoon(lampTops[0], lampTops[1]); festoon(lampTops[4], lampTops[5]); festoon(lampTops[2], lampTops[3]);
+  // zigzag along the spine
+  for (let i = 0; i < 3; i++) festoon(lampTops[i * 2], lampTops[i * 2 + 3] || lampTops[i * 2 + 1]);
+  festoon(lampTops[0], lampTops[1], 0.3);
+  festoon(lampTops[6], lampTops[7], 0.3);
+  // along the boardwalk, lamp to lamp on the water side
+  for (let i = 9; i < lampTops.length; i++) festoon(lampTops[i - 1], lampTops[i], 0.55);
   group.add(new THREE.Mesh(merge(wires), new THREE.MeshStandardMaterial({ color: '#2a2420' })));
   const bulbMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.04, 10, 8), new THREE.MeshStandardMaterial({ color: '#fff1d6', emissive: '#ffc070', emissiveIntensity: 3 }), bulbs.length);
   bulbs.forEach((p, i) => bulbMesh.setMatrixAt(i, new THREE.Matrix4().makeTranslation(p.x, p.y, p.z)));
   group.add(bulbMesh);
 
-  /* ---------- ladder, bollards ---------- */
+  /* ---------- ladder, bollards, the rowboat ---------- */
+  const W1 = X + spine.hw - e;
   const ladder = [];
   for (const dz of [-0.25, 0.25]) {
     rod(V(W1 + 0.14, Y + 0.95, ladderZ + dz), V(W1 + 0.14, Y - 0.05, ladderZ + dz), 0.022, ladder, 6);
@@ -259,26 +409,23 @@ export function createPier(hf) {
     for (let k = 0; k < 5; k++) wraps.push(new THREE.TorusGeometry(0.105, 0.018, 5, 14).rotateX(Math.PI / 2).translate(W1 - 0.18, Y + 0.16 + k * 0.035, ladderZ + dz));
     group.add(new THREE.Mesh(merge(wraps), ropeMat));
   }
-
-  /* ---------- the rowboat ---------- */
   const boat = rowboat();
   boat.userData.keep = true;
-  const boatHome = V(X + walk.hw + 1.05, 0.0, ladderZ + 0.2);
+  const boatHome = V(X + spine.hw + 1.05, 0.0, ladderZ + 0.2);
   boat.position.copy(boatHome);
   group.add(boat);
-  const tie = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([V(W1 - 0.18, Y + 0.25, ladderZ + gapH + 0.2), V(W1 + 0.4, 0.35, ladderZ + 0.9), V(boatHome.x - 0.05, 0.5, boatHome.z - 1.4)]), 16, 0.012, 4), ropeMat);
-  group.add(tie);
+  group.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([V(W1 - 0.18, Y + 0.25, ladderZ + gapH + 0.2), V(W1 + 0.4, 0.35, ladderZ + 0.9), V(boatHome.x - 0.05, 0.5, boatHome.z - 1.4)]), 16, 0.012, 4), ropeMat));
 
-  /* ---------- the pendopo ---------- */
+  /* ---------- the pendopo on its viewing deck ---------- */
   const pen = new THREE.Group();
   group.add(pen);
   const umpakMat = new THREE.MeshStandardMaterial({ color: '#d9cfbd', roughness: 0.8 });
   const umpak = [], cols = [], beams = [];
   const colH = 2.7, innerH = 4.3;
+  const o = PR - 0.4;
   const outer = [];
-  const o = PH - 0.4;
-  for (const t of [-1, -1 / 3, 1 / 3, 1]) { outer.push([X + t * o, PZ - o], [X + t * o, PZ + o]); }
-  for (const t of [-1 / 3, 1 / 3]) { outer.push([X - o, PZ + t * o], [X + o, PZ + t * o]); }
+  for (const t of [-1, -1 / 3, 1 / 3, 1]) outer.push([X + t * o, PZ - o], [X + t * o, PZ + o]);
+  for (const t of [-1 / 3, 1 / 3]) outer.push([X - o, PZ + t * o], [X + o, PZ + t * o]);
   for (const [x, z] of outer) {
     umpak.push(new THREE.CylinderGeometry(0.16, 0.24, 0.22, 4).rotateY(Math.PI / 4).translate(x, Y + 0.11, z));
     cols.push(new THREE.BoxGeometry(0.17, colH - 0.22, 0.17).translate(x, Y + 0.22 + (colH - 0.22) / 2, z));
@@ -290,7 +437,6 @@ export function createPier(hf) {
     cols.push(new THREE.BoxGeometry(0.24, innerH - 0.26, 0.24).translate(x, Y + 0.26 + (innerH - 0.26) / 2, z));
     colliders.push({ x, z, r: 0.2 });
   }
-  // ring beams
   const ring = (r, y, t) => {
     beam(V(X - r, y, PZ - r), V(X + r, y, PZ - r), t, beams); beam(V(X - r, y, PZ + r), V(X + r, y, PZ + r), t, beams);
     beam(V(X - r, y, PZ - r), V(X - r, y, PZ + r), t, beams); beam(V(X + r, y, PZ - r), V(X + r, y, PZ + r), t, beams);
@@ -298,29 +444,10 @@ export function createPier(hf) {
   ring(o, Y + colH, 0.18);
   ring(1.6, Y + innerH, 0.22);
   for (const [x, z] of inner) beam(V(x, Y + colH, z), V(x + Math.sign(x - X) * (o - 1.6), Y + colH, z + Math.sign(z - PZ) * (o - 1.6)), 0.12, beams);
-  // tumpang sari: stepped square frames rising inside the soko guru
   for (let k = 0; k < 4; k++) ring(1.6 - 0.18 * (k + 1), Y + innerH + 0.12 + k * 0.14, 0.14);
   pen.add(new THREE.Mesh(merge(umpak), umpakMat));
-  const colMesh = new THREE.Mesh(merge(cols), teakMat);
-  colMesh.castShadow = true;
-  pen.add(colMesh);
+  pen.add(new THREE.Mesh(merge(cols), teakMat));
   pen.add(new THREE.Mesh(merge(beams), teakMat));
-  // low balustrade between the outer columns (open on the walk side)
-  const bal = [];
-  const balRun = (ax, az, bx, bz) => {
-    beam(V(ax, Y + 0.62, az), V(bx, Y + 0.62, bz), 0.09, bal);
-    beam(V(ax, Y + 0.1, az), V(bx, Y + 0.1, bz), 0.06, bal);
-    const len = Math.hypot(bx - ax, bz - az), n = Math.round(len / 0.2);
-    for (let i = 1; i < n; i++) { const t = i / n; bal.push(new THREE.BoxGeometry(0.04, 0.52, 0.04).translate(ax + (bx - ax) * t, Y + 0.36, az + (bz - az) * t)); }
-    colliders.push({ seg: [ax, az, bx, bz], r: 0.12 });
-  };
-  balRun(X - o, PZ - o, X + o, PZ - o);
-  balRun(X - o, PZ - o, X - o, PZ + o);
-  balRun(X + o, PZ - o, X + o, PZ + o);
-  balRun(X - o, PZ + o, X - walk.hw, PZ + o);
-  balRun(X + walk.hw, PZ + o, X + o, PZ + o);
-  pen.add(new THREE.Mesh(merge(bal), teakMat));
-  // roofs: a broad hipped lower roof, a short open band, then a steep upper pyramid
   const sirap = sirapTexture();
   const roofMat = new THREE.MeshStandardMaterial({ map: sirap, roughness: 0.85, side: THREE.DoubleSide });
   const hipped = (rOut, yOut, rIn, yIn) => {
@@ -331,32 +458,27 @@ export function createPier(hf) {
       const pts = [V(X + ax * rOut, yOut, PZ + az * rOut), V(X + bx * rOut, yOut, PZ + bz * rOut), V(X + bx * rIn, yIn, PZ + bz * rIn), V(X + ax * rIn, yIn, PZ + az * rIn)];
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.Float32BufferAttribute([...pts[0].toArray(), ...pts[1].toArray(), ...pts[2].toArray(), ...pts[0].toArray(), ...pts[2].toArray(), ...pts[3].toArray()], 3));
-      const L = rOut * 2, D = Math.hypot(rOut - rIn, yOut - yIn);
-      geo.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, L, 0, L * 0.5 + rIn, D, 0, 0, L * 0.5 + rIn, D, L * 0.5 - rIn, D].map((v) => v / 2), 2));
+      const L = rOut * 2, Dd = Math.hypot(rOut - rIn, yOut - yIn);
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, L, 0, L * 0.5 + rIn, Dd, 0, 0, L * 0.5 + rIn, Dd, L * 0.5 - rIn, Dd].map((v) => v / 2), 2));
       geo.computeVertexNormals();
       g.push(geo);
     }
     return g;
   };
-  const roofParts = [...hipped(PH + 0.6, Y + colH - 0.05, 1.85, Y + innerH - 0.05), ...hipped(2.0, Y + innerH + 0.45, 0.05, Y + innerH + 2.3)];
-  const roof = new THREE.Mesh(merge(roofParts), roofMat);
+  const roof = new THREE.Mesh(merge([...hipped(PR + 0.6, Y + colH - 0.05, 1.85, Y + innerH - 0.05), ...hipped(2.0, Y + innerH + 0.45, 0.05, Y + innerH + 2.3)]), roofMat);
   roof.castShadow = true;
   pen.add(roof);
-  // the short vertical band between the roofs, and hip ridges
   const ridges = [];
   for (const [sx, sz] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
-    beam(V(X + sx * (PH + 0.6), Y + colH - 0.02, PZ + sz * (PH + 0.6)), V(X + sx * 1.85, Y + innerH, PZ + sz * 1.85), 0.08, ridges);
+    beam(V(X + sx * (PR + 0.6), Y + colH - 0.02, PZ + sz * (PR + 0.6)), V(X + sx * 1.85, Y + innerH, PZ + sz * 1.85), 0.08, ridges);
     beam(V(X + sx * 2.0, Y + innerH + 0.48, PZ + sz * 2.0), V(X, Y + innerH + 2.3, PZ), 0.07, ridges);
   }
-  ring(1.85, Y + innerH + 0.2, 0.1);
   pen.add(new THREE.Mesh(merge(ridges), new THREE.MeshStandardMaterial({ color: '#1f1a16', roughness: 0.7 })));
-  // mustaka (crown ornament) at the top
   const must = [];
   must.push(new THREE.CylinderGeometry(0.12, 0.18, 0.18, 8).translate(X, Y + innerH + 2.36, PZ));
   must.push(new THREE.SphereGeometry(0.12, 12, 8).translate(X, Y + innerH + 2.55, PZ));
   must.push(new THREE.ConeGeometry(0.05, 0.4, 8).translate(X, Y + innerH + 2.85, PZ));
   pen.add(new THREE.Mesh(merge(must), brass));
-  // brass lantern hanging from the centre
   const hang = new THREE.Group();
   hang.userData.keep = true;
   hang.position.set(X, Y + 2.8, PZ);
@@ -372,23 +494,17 @@ export function createPier(hf) {
   pPool.position.set(X, Y + 0.008, PZ);
   pPool.renderOrder = 1;
   pen.add(pPool);
-  // two big planters at the entrance with frangipani-like blooms
-  for (const s of [-1, 1]) {
-    const pl = new THREE.Group();
-    pl.position.set(X + s * (walk.hw + 0.55), Y, PZ + PH - 0.3);
-    pl.add(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.26, 0.6, 20).translate(0, 0.3, 0), new THREE.MeshStandardMaterial({ color: '#e6dccb', roughness: 0.7 })));
-    const leaves = [];
-    for (let i = 0; i < 14; i++) {
-      const a = rng() * 6.28;
-      const lf = new THREE.SphereGeometry(0.16, 8, 6).scale(1.6, 0.25, 0.6).rotateY(a).translate(Math.cos(a) * 0.2, 0.75 + rng() * 0.35, Math.sin(a) * 0.2);
-      leaves.push(lf);
-    }
-    pl.add(new THREE.Mesh(merge(leaves), new THREE.MeshStandardMaterial({ color: '#3f6b35', roughness: 0.6 })));
-    const fl = [];
-    for (let i = 0; i < 12; i++) fl.push(new THREE.SphereGeometry(0.045, 8, 6).scale(1, 0.4, 1).translate((rng() - 0.5) * 0.5, 0.95 + rng() * 0.25, (rng() - 0.5) * 0.5));
-    pl.add(new THREE.Mesh(merge(fl), new THREE.MeshStandardMaterial({ color: '#fbf1dc', emissive: '#f6d8a0', emissiveIntensity: 0.2 })));
-    group.add(pl);
-    colliders.push({ x: pl.position.x, z: pl.position.z, r: 0.35 });
+  // planters at the corners of the viewing deck
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+    const px = X + sx * (PH - 0.7), pz = PZ + sz * (PH - 0.7);
+    if (sz > 0 && Math.abs(px - X) < spine.hw + 0.8) continue;
+    group.add(new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.33, 0.6, 20).translate(px, Y + 0.3, pz), stoneMat));
+    const lv = [], bl = [];
+    for (let i = 0; i < 12; i++) { const a = rng() * 6.28; lv.push(new THREE.SphereGeometry(0.18, 8, 6).scale(1.5, 0.25, 0.6).rotateY(a).translate(px + Math.cos(a) * 0.22, Y + 0.85 + rng() * 0.35, pz + Math.sin(a) * 0.22)); }
+    for (let i = 0; i < 12; i++) bl.push(new THREE.SphereGeometry(0.045, 8, 6).scale(1, 0.4, 1).translate(px + (rng() - 0.5) * 0.5, Y + 1.05 + rng() * 0.25, pz + (rng() - 0.5) * 0.5));
+    group.add(new THREE.Mesh(merge(lv), new THREE.MeshStandardMaterial({ color: '#3f6b35', roughness: 0.6 })));
+    group.add(new THREE.Mesh(merge(bl), new THREE.MeshStandardMaterial({ color: '#fbf1dc', emissive: '#f6d8a0', emissiveIntensity: 0.25 })));
+    colliders.push({ x: px, z: pz, r: 0.45 });
   }
   shadowAll(pen, true, true);
 

@@ -151,7 +151,8 @@ export function createDrift(shared, count = 520) {
         float size = mix(0.05, 0.11, vLeaf) * (0.7 + aSeed.x * 0.6);
         gl_PointSize = clamp(size * uPixelRatio * 900.0 / max(dist, 0.3), 1.0, 48.0);
         float fog = exp(-pow(uFogDensity * dist, 2.0));
-        vAlpha = fog * (1.0 - smoothstep(16.0, 22.0, length(p.xz - uCamPos.xz))) * mix(0.55, 1.0, uSwirl);
+        // fade the ones that drift right up to the eye, so they don't flare as big blobs
+        vAlpha = fog * (1.0 - smoothstep(16.0, 22.0, length(p.xz - uCamPos.xz))) * mix(0.55, 1.0, uSwirl) * smoothstep(0.9, 2.6, dist);
       }`,
     fragmentShader: /* glsl */ `
       uniform vec3 uMoonColor;
