@@ -7,7 +7,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mulberry32, fbm2, noise2, smoothstep, detailTexture, tileTexture } from './util.js';
 import {
   LAKE, HILL, DOCK, HILLTOP_Y, pierDist,
-  lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf,
+  lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf, dapurSdf,
 } from './layout.js';
 
 const C = (hex) => new THREE.Color(hex);
@@ -66,7 +66,7 @@ export function createTerrain(hf) {
     const hd = hillDist(x, z);
     if (hd < 7.5) col.lerp(PAL.plaza, (1 - smoothstep(5.0, 7.5, hd)) * 0.7);
     col.lerp(PAL.ridge, smoothstep(0.98, 1.3, boundsDist(x, z)));
-    if (greenhouseSdf(x, z) < 0.6) col.lerp(PAL.path, 0.5);
+    if (greenhouseSdf(x, z) < 0.6 || dapurSdf(x, z) < 0.5) col.lerp(PAL.path, 0.5);
 
     colors[k * 3] = col.r; colors[k * 3 + 1] = col.g; colors[k * 3 + 2] = col.b;
   }
@@ -134,7 +134,7 @@ export function createRocks(hf) {
   for (let i = 0; i < 70; i++) {
     const x = (rng() - 0.5) * 180, z = (rng() - 0.5) * 220;
     if (boundsDist(x, z) > 0.97 || lakeDist(x, z) < 1.1) continue;
-    if (pathEdgeDist(x, z) < 1.1 || greenhouseSdf(x, z) < 2.5 || hillDist(x, z) < 8) continue;
+    if (pathEdgeDist(x, z) < 1.1 || greenhouseSdf(x, z) < 2.5 || dapurSdf(x, z) < 2.5 || hillDist(x, z) < 8) continue;
     const near = pathEdgeDist(x, z) < 4;
     place(x, z, near ? 0.15 + rng() * 0.3 : 0.2 + rng() * (rng() < 0.15 ? 1.4 : 0.5));
   }

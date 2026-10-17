@@ -55,23 +55,33 @@ function piercedTexture() {
   });
 }
 
-/** The pool the lantern throws on the path: a soft warm disc broken into rays by the piercing. */
-function poolTexture() {
-  return canvasTex(256, 256, (g, W) => {
-    const grd = g.createRadialGradient(W / 2, W / 2, 4, W / 2, W / 2, W / 2);
-    grd.addColorStop(0, 'rgba(255,255,255,1)'); grd.addColorStop(0.4, 'rgba(255,255,255,0.5)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
-    g.fillStyle = grd; g.fillRect(0, 0, W, W);
-    // soft shadows of the piercing: faint wedges that fade out with distance
-    g.globalCompositeOperation = 'destination-out';
-    const fade = g.createRadialGradient(W / 2, W / 2, 10, W / 2, W / 2, W / 2);
-    fade.addColorStop(0, 'rgba(0,0,0,0)'); fade.addColorStop(0.35, 'rgba(0,0,0,0.32)'); fade.addColorStop(1, 'rgba(0,0,0,0.12)');
-    g.fillStyle = fade;
-    for (let k = 0; k < 12; k++) {
-      g.save(); g.translate(W / 2, W / 2); g.rotate((k / 12) * Math.PI * 2); g.translate(-W / 2, -W / 2);
-      g.beginPath(); g.moveTo(W / 2 + 26, W / 2 - 3); g.lineTo(W, W / 2 - 22); g.lineTo(W, W / 2 + 22); g.lineTo(W / 2 + 26, W / 2 + 3); g.closePath(); g.fill();
-      g.restore();
+/** The pool the lantern throws on the path: a soft warm disc broken into faint
+    rays by the piercing. Built from raw pixels with the light in the colour
+    channels and alpha fixed at 1 (soft canvas alpha turns into coloured
+    speckles in Safari — the "confetti"). Use with additive blending. */
+function poolTexture(size = 256) {
+  const data = new Uint8Array(size * size * 4);
+  const h = size / 2;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const dx = x + 0.5 - h, dy = y + 0.5 - h;
+      const t = Math.min(Math.hypot(dx, dy) / h, 1);
+      const base = Math.pow(1 - t, 1.7);
+      const ray = Math.pow(0.5 + 0.5 * Math.cos(Math.atan2(dy, dx) * 12), 3);
+      const shade = 1 - 0.32 * ray * Math.min(Math.max((t - 0.1) / 0.25, 0), 1);
+      const v = Math.round(255 * base * shade);
+      const i = (y * size + x) * 4;
+      data[i] = data[i + 1] = data[i + 2] = v;
+      data[i + 3] = 255;
     }
-  }, { srgb: false });
+  }
+  const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+  tex.colorSpace = THREE.NoColorSpace;
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.generateMipmaps = false;
+  tex.needsUpdate = true;
+  return tex;
 }
 
 /** Javanese-modern lantern posts along the path: a stepped paras-stone umpak,

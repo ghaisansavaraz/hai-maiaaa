@@ -356,6 +356,79 @@ export function jamuGlass(kind) {
   return g;
 }
 
+/* ---------------- martabak (Gesan's Legit & Gurih) ---------------- */
+
+const kraftTray = () => new THREE.Mesh(merge([
+  new THREE.BoxGeometry(0.22, 0.006, 0.16).translate(0, 0.003, 0),
+  new THREE.BoxGeometry(0.22, 0.03, 0.005).translate(0, 0.015, 0.08), new THREE.BoxGeometry(0.22, 0.03, 0.005).translate(0, 0.015, -0.08),
+  new THREE.BoxGeometry(0.005, 0.03, 0.16).translate(0.11, 0.015, 0), new THREE.BoxGeometry(0.005, 0.03, 0.16).translate(-0.11, 0.015, 0),
+]), new THREE.MeshStandardMaterial({ color: '#c9a27a', roughness: 0.9 }));
+
+/** Martabak manis ("legit"): three thick folded wedges, chocolate and cheese between the layers, buttery. */
+export function martabakManis() {
+  const group = new THREE.Group();
+  group.add(kraftTray());
+  const cake = new THREE.MeshPhysicalMaterial({ color: '#d89a3a', roughness: 0.45, clearcoat: 0.5 });
+  const crust = new THREE.MeshPhysicalMaterial({ color: '#c47e30', roughness: 0.4, clearcoat: 0.6 });
+  const choc = new THREE.MeshStandardMaterial({ color: '#3e2214', roughness: 0.5 });
+  const cheese = new THREE.MeshStandardMaterial({ color: '#f2d36a', roughness: 0.6 });
+  const rng = mulberry32(23);
+  const wedges = [];
+  for (let i = 0; i < 3; i++) {
+    const w = new THREE.Group();
+    const span = 0.62, th0 = -span / 2;
+    const layer = (r, h, y, mat) => w.add(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 14, 1, false, th0, span).translate(0, y, 0), mat));
+    layer(0.11, 0.022, 0.011, cake);
+    layer(0.106, 0.009, 0.0265, choc);
+    layer(0.11, 0.022, 0.042, cake);
+    layer(0.111, 0.003, 0.0545, crust);
+    const sh = [];
+    for (let k = 0; k < 10; k++) { const a = th0 + rng() * span; sh.push(new THREE.BoxGeometry(0.01, 0.006, 0.004).translate(Math.sin(a) * 0.104, 0.027, Math.cos(a) * 0.104)); }
+    w.add(new THREE.Mesh(merge(sh), cheese));
+    // point the tip at the tray centre, rows side by side
+    // fanned from one point, like slices lifted from the round
+    w.rotation.y = Math.PI + (i - 1) * 0.68;
+    w.position.set(0, 0.006, 0.055);
+    group.add(w);
+    wedges.push(w);
+  }
+  group.userData.bites = wedges.slice().reverse();
+  return group;
+}
+
+/** Martabak telur ("gurih"): crisp golden squares of egg and leek, with a dish of acar. */
+export function martabakTelur() {
+  const group = new THREE.Group();
+  group.add(kraftTray());
+  const shell = new THREE.MeshPhysicalMaterial({ color: '#d8a040', roughness: 0.4, clearcoat: 0.4 });
+  const fill = new THREE.MeshStandardMaterial({ color: '#e8c45a', roughness: 0.6 });
+  const leek = new THREE.MeshStandardMaterial({ color: '#4f9a3a', roughness: 0.6 });
+  const rng = mulberry32(29);
+  const sq = [];
+  for (let i = 0; i < 4; i++) {
+    const p = new THREE.Group();
+    p.add(new THREE.Mesh(new THREE.BoxGeometry(0.066, 0.028, 0.066).translate(0, 0.014, 0), shell));
+    p.add(new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.018, 0.004).translate(0, 0.014, 0.0335), fill));
+    const g = [];
+    for (let k = 0; k < 5; k++) g.push(new THREE.BoxGeometry(0.008, 0.004, 0.003).translate((rng() - 0.5) * 0.05, 0.01 + rng() * 0.01, 0.0355));
+    p.add(new THREE.Mesh(merge(g), leek));
+    p.position.set(-0.075 + (i % 2) * 0.072, 0.006, -0.035 + Math.floor(i / 2) * 0.072);
+    p.rotation.y = (rng() - 0.5) * 0.2;
+    group.add(p);
+    sq.push(p);
+  }
+  const dish = new THREE.Mesh(new THREE.LatheGeometry([[0, 0], [0.025, 0], [0.034, 0.02], [0.031, 0.02], [0, 0.004]].map(([r, y]) => new THREE.Vector2(r, y)), 16), ceramicWhite());
+  dish.position.set(0.075, 0.006, 0);
+  group.add(dish);
+  const acar = [];
+  for (let k = 0; k < 9; k++) acar.push(new THREE.BoxGeometry(0.009, 0.009, 0.009).translate(0.075 + (rng() - 0.5) * 0.035, 0.02, (rng() - 0.5) * 0.035));
+  group.add(new THREE.Mesh(merge(acar.slice(0, 5)), new THREE.MeshStandardMaterial({ color: '#b8d890', roughness: 0.4 })));
+  group.add(new THREE.Mesh(merge(acar.slice(5, 7)), new THREE.MeshStandardMaterial({ color: '#a8506a', roughness: 0.4 })));
+  group.add(new THREE.Mesh(merge(acar.slice(7)), new THREE.MeshStandardMaterial({ color: '#d42a1a', roughness: 0.4 })));
+  group.userData.bites = sq.slice().reverse();
+  return group;
+}
+
 /* ---------------- holding food ---------------- */
 
 export function createFoodHands(camera, scene) {
@@ -390,7 +463,7 @@ export function createFoodHands(camera, scene) {
       const [level] = item.userData.bites;
       level.scale.y = Math.max(1 - done, 0.001);
       level.visible = done < 1;
-    } else if (kind === 'rolls') {
+    } else if (kind === 'rolls' || kind === 'manis' || kind === 'telur') {
       const rolls = item.userData.bites;
       rolls.forEach((r, i) => { r.visible = done < (rolls.length - i) / rolls.length - 0.01; });
     }
@@ -405,6 +478,8 @@ export function createFoodHands(camera, scene) {
       if (k === 'gelato') { item = gelatoCone(flavor); item.scale.setScalar(1.5); item.position.set(0, 0.02, 0); item.rotation.set(0.15, -0.3, 0.05); totalBites = 5; }
       else if (k === 'pho') { item = phoBowl(); item.scale.setScalar(1.25); item.position.set(-0.08, -0.06, -0.06); item.rotation.set(0.38, -0.2, 0); totalBites = 5; }
       else if (k === 'jamu') { item = jamuGlass(flavor); item.scale.setScalar(1.6); item.position.set(0.0, -0.02, 0); item.rotation.set(0.12, 0, 0.04); totalBites = 4; }
+      else if (k === 'manis') { item = martabakManis(); item.scale.setScalar(1.35); item.position.set(-0.06, -0.05, -0.05); item.rotation.set(0.45, -0.25, 0); totalBites = 6; }
+      else if (k === 'telur') { item = martabakTelur(); item.scale.setScalar(1.35); item.position.set(-0.06, -0.05, -0.05); item.rotation.set(0.45, -0.25, 0); totalBites = 4; }
       else { item = springRollPlate(); item.scale.setScalar(1.3); item.position.set(-0.06, -0.04, -0.05); item.rotation.set(0.42, -0.2, 0); totalBites = 6; }
       item.traverse((o) => {
         if (!o.isMesh) return;

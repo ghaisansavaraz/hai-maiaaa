@@ -20,10 +20,10 @@
 
 import * as THREE from 'three';
 import { mulberry32, cloudTexture } from './util.js';
-import { PIER, LAKE, boardwalkAt } from './layout.js';
+import { PIER, CART_BAYS } from './layout.js';
 import { merge } from './props.js';
 import { V, beam, rod, canvasTex, signTexture, kawungPanelTexture, teakTexture, sirapTexture, shadowAll } from './build.js';
-import { FLAVORS, JAMU, phoBowl, jamuGlass } from './food.js';
+import { FLAVORS, JAMU, phoBowl, jamuGlass, martabakManis, martabakTelur } from './food.js';
 import { caneTexture, batikTexture, orchid, palmFronds } from './greenhouse.js';
 
 const Y = PIER.deckY;
@@ -253,7 +253,7 @@ function stripeTexture(a, b, n = 8) {
 /* ---------------- roofs ---------------- */
 
 /** One sloped face a→b at the eave up to d→c, outward-facing, tile UVs in metres × s. */
-function quadGeo(a, b, c, d, s = 0.5) {
+export function quadGeo(a, b, c, d, s = 0.5) {
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.Float32BufferAttribute([...a.toArray(), ...c.toArray(), ...b.toArray(), ...a.toArray(), ...d.toArray(), ...c.toArray()], 3));
   const ab = b.clone().sub(a); const w = ab.length(); ab.normalize();
@@ -264,7 +264,7 @@ function quadGeo(a, b, c, d, s = 0.5) {
   return geo;
 }
 /** Four faces from an outer rectangle (half sizes ax, az at y0) to an inner one (bx, bz at y1). bz = 0 → a ridge. */
-function frustum(ax, az, y0, bx, bz, y1, s = 0.5) {
+export function frustum(ax, az, y0, bx, bz, y1, s = 0.5) {
   const C = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
   const out = [];
   for (let k = 0; k < 4; k++) {
@@ -273,7 +273,7 @@ function frustum(ax, az, y0, bx, bz, y1, s = 0.5) {
   }
   return out;
 }
-function hips(ax, az, y0, bx, bz, y1, t, out) {
+export function hips(ax, az, y0, bx, bz, y1, t, out) {
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) beam(V(sx * ax, y0 + 0.03, sz * az), V(sx * bx, y1 + 0.03, sz * bz), t, out);
 }
 /** A Vietnamese upturned eave corner (đầu đao) at the corner of a roof tier. */
@@ -709,14 +709,10 @@ function bell(m) {
 
 /* ======================= ES PUTER (the gelato gerobak) ======================= */
 
-function buildEsPuter(m, rng, name, out) {
+function buildEsPuter(m, rng, name, out, bay) {
   const cart = new THREE.Group();
-  const th = PIER.cart.th;
-  const c = boardwalkAt(th, PIER.boardwalk.ld + 0.75 / LAKE.rz);
-  const nx = Math.cos(th) / LAKE.rx, nz = Math.sin(th) / LAKE.rz, nl = Math.hypot(nx, nz);
-  const fx = -nx / nl, fz = -nz / nl; // its front (local -z) faces the water
-  cart.position.set(c.x, Y, c.z);
-  cart.rotation.y = Math.atan2(-fx, -fz);
+  cart.position.set(bay.x, Y, bay.z);
+  cart.rotation.y = bay.yaw; // its front (local -z) faces the promenade aisle
   out.group.add(cart);
   const L = 2.8, D = 0.95, H0 = 0.4, H1 = 1.0, T = H1 + 0.05;
 
@@ -952,6 +948,221 @@ function buildEsPuter(m, rng, name, out) {
       light.intensity = 4 * (0.94 + Math.sin(t * 9.1) * 0.03 + Math.sin(t * 15.7) * 0.03);
     },
   };
+}
+
+/* ======================= GESAN'S LEGIT & GURIH (the martabak cart) ======================= */
+
+/** Sajian Dapur Gesan livery: deep green lacquer, gold double border, cream lettering, a round crest. */
+function dapurPanelTexture(title, sub) {
+  return canvasTex(512, 170, (g, W, H) => {
+    g.fillStyle = '#1f3d2e'; g.fillRect(0, 0, W, H);
+    g.strokeStyle = '#c9a25a'; g.lineWidth = 6; g.strokeRect(8, 8, W - 16, H - 16);
+    g.lineWidth = 2; g.strokeRect(18, 18, W - 36, H - 36);
+    const crest = (x, y, r) => {
+      g.fillStyle = '#c9a25a'; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#1f3d2e'; g.beginPath(); g.arc(x, y, r * 0.8, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = '#efe2c4'; g.lineWidth = 2.5;
+      g.beginPath(); g.arc(x, y + r * 0.1, r * 0.42, 0.15, Math.PI - 0.15); g.stroke(); // a wok
+      for (let k = -1; k <= 1; k++) { g.beginPath(); g.moveTo(x + k * r * 0.2, y - r * 0.05); g.quadraticCurveTo(x + k * r * 0.2 + r * 0.12, y - r * 0.3, x + k * r * 0.2, y - r * 0.55); g.stroke(); } // steam
+    };
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    if (title) {
+      crest(56, H / 2, 30); crest(W - 56, H / 2, 30);
+      g.fillStyle = '#efe2c4';
+      g.font = `italic ${Math.round(Math.min(H * 0.34, 660 / Math.max(title.length, 5)))}px Georgia, serif`;
+      g.fillText(title, W / 2, H * 0.42);
+      if (sub) { g.fillStyle = '#c9a25a'; g.font = `${Math.round(H * 0.12)}px Georgia, serif`; g.fillText(sub.toUpperCase().split('').join(' '), W / 2, H * 0.74); }
+    } else {
+      crest(W / 2, H / 2, 46);
+      if (sub) { g.fillStyle = '#c9a25a'; g.font = `${Math.round(H * 0.1)}px Georgia, serif`; g.fillText(sub.toUpperCase().split('').join(' '), W / 2, H - 30); }
+    }
+  });
+}
+
+function honeycombTexture() {
+  return canvasTex(128, 128, (g, W, H) => {
+    g.fillStyle = '#c9842e'; g.fillRect(0, 0, W, H);
+    const rng = mulberry32(31);
+    for (let i = 0; i < 260; i++) { g.fillStyle = `rgba(${90 + rng() * 40},${45 + rng() * 25},15,${0.5 + rng() * 0.4})`; g.beginPath(); g.arc(rng() * W, rng() * H, 1.5 + rng() * 2.5, 0, Math.PI * 2); g.fill(); }
+  });
+}
+
+function buildMartabak(m, rng, name, brand, out, bay) {
+  const cart = new THREE.Group();
+  cart.position.set(bay.x, Y, bay.z);
+  cart.rotation.y = bay.yaw;
+  out.group.add(cart);
+  const L = 2.6, D = 0.95, H0 = 0.4, H1 = 1.0, T = H1 + 0.05;
+  const livery = new THREE.MeshPhysicalMaterial({ color: '#1f3d2e', roughness: 0.3, clearcoat: 0.8 });
+  cart.add(new THREE.Mesh(new THREE.BoxGeometry(L, H1 - H0, D).translate(0, (H0 + H1) / 2, 0), livery));
+  const named = new THREE.MeshStandardMaterial({ map: dapurPanelTexture(name, brand), roughness: 0.45 });
+  const crestOnly = new THREE.MeshStandardMaterial({ map: dapurPanelTexture('', brand), roughness: 0.45 });
+  const pane = (w, mat, x, z, ry) => { const p = new THREE.Mesh(new THREE.PlaneGeometry(w, H1 - H0 - 0.14), mat); p.position.set(x, (H0 + H1) / 2, z); p.rotation.y = ry; cart.add(p); };
+  pane(1.75, named, 0.35, -D / 2 - 0.006, Math.PI);
+  pane(0.6, crestOnly, -0.93, -D / 2 - 0.006, Math.PI);
+  pane(L - 0.3, crestOnly, 0, D / 2 + 0.006, 0);
+  const fr = [], gold = [];
+  for (const y of [H0 + 0.035, H1 - 0.035]) fr.push(new THREE.BoxGeometry(L + 0.04, 0.07, D + 0.04).translate(0, y, 0));
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) fr.push(new THREE.BoxGeometry(0.08, H1 - H0, 0.08).translate(sx * L / 2, (H0 + H1) / 2, sz * D / 2));
+  cart.add(new THREE.Mesh(merge(fr), m.darkTeak));
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) for (const y of [H0 + 0.04, H1 - 0.04]) gold.push(new THREE.BoxGeometry(0.1, 0.1, 0.1).translate(sx * L / 2, y, sz * D / 2));
+  // brushed steel worktop with a brass edge
+  cart.add(new THREE.Mesh(new THREE.BoxGeometry(L + 0.12, 0.05, D + 0.12).translate(0, H1 + 0.025, 0), m.steel));
+  for (const sz of [-1, 1]) gold.push(new THREE.BoxGeometry(L + 0.12, 0.03, 0.015).translate(0, H1 + 0.04, sz * (D / 2 + 0.06)));
+  // wheels, axle, legs, handles
+  const wheelG = [];
+  for (const sz of [-1, 1]) {
+    const wh = [new THREE.TorusGeometry(0.38, 0.032, 8, 36)];
+    for (let k = 0; k < 12; k++) { const a = (k / 12) * Math.PI * 2; rod(V(0, 0, 0), V(Math.cos(a) * 0.37, Math.sin(a) * 0.37, 0), 0.015, wh, 5); }
+    wheelG.push(merge(wh).translate(-0.85, 0.42, sz * (D / 2 + 0.09)));
+    cart.add(new THREE.Mesh(new THREE.TorusGeometry(0.41, 0.013, 6, 40).translate(-0.85, 0.42, sz * (D / 2 + 0.09)), m.dark));
+    gold.push(new THREE.CylinderGeometry(0.07, 0.07, 0.15, 14).rotateX(Math.PI / 2).translate(-0.85, 0.42, sz * (D / 2 + 0.09)));
+  }
+  cart.add(new THREE.Mesh(merge(wheelG), m.darkTeak));
+  const legs = [];
+  rod(V(-0.85, 0.42, -D / 2 - 0.1), V(-0.85, 0.42, D / 2 + 0.1), 0.025, legs, 8);
+  for (const sz of [-1, 1]) {
+    legs.push(new THREE.BoxGeometry(0.07, H0, 0.07).translate(1.15, H0 / 2, sz * 0.36));
+    rod(V(-1.3, H0 + 0.35, sz * 0.36), V(-1.9, 0.92, sz * 0.36), 0.026, legs, 8);
+  }
+  cart.add(new THREE.Mesh(merge(legs), m.darkTeak));
+  rod(V(-1.9, 0.92, -0.42), V(-1.9, 0.92, 0.42), 0.03, gold, 10);
+
+  // the round loyang for martabak manis, on its burner, a golden honeycomb cake inside
+  const iron = new THREE.MeshStandardMaterial({ color: '#2a2826', roughness: 0.45, metalness: 0.7 });
+  const burner = (x, z) => {
+    cart.add(new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.06, 20).translate(x, T + 0.03, z), m.dark));
+    cart.add(new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.01, 6, 24).rotateX(Math.PI / 2).translate(x, T + 0.065, z), new THREE.MeshStandardMaterial({ color: '#4a8cff', emissive: '#3a6cff', emissiveIntensity: 1.6 })));
+  };
+  burner(-0.75, 0.1);
+  cart.add(new THREE.Mesh(lathe([[0, 0], [0.2, 0], [0.24, 0.09], [0.225, 0.09], [0.19, 0.012], [0, 0.012]], 32).translate(-0.75, T + 0.07, 0.1), iron));
+  const cake = new THREE.Mesh(new THREE.CylinderGeometry(0.215, 0.19, 0.065, 32).translate(-0.75, T + 0.11, 0.1), new THREE.MeshStandardMaterial({ map: honeycombTexture(), roughness: 0.55 }));
+  cart.add(cake);
+  // the flat square iron for martabak telur, one folded parcel crisping on it, a spatula
+  burner(0.05, 0.1);
+  cart.add(new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.025, 0.5).translate(0.05, T + 0.08, 0.1), iron));
+  const parcel = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.035, 0.18).translate(0.05, T + 0.11, 0.1), std('#d8a040', { roughness: 0.5 }));
+  cart.add(parcel);
+  cart.add(new THREE.Mesh(merge([new THREE.BoxGeometry(0.11, 0.004, 0.09).translate(0.27, T + 0.096, 0.18), new THREE.CylinderGeometry(0.008, 0.008, 0.18, 6).rotateZ(Math.PI / 2 - 0.25).translate(0.4, T + 0.115, 0.2)]), m.steel));
+  // prep along the back edge: eggs, leek, onion, toppings, butter, condensed milk, dough
+  const BZ = 0.36;
+  const eggs = [];
+  for (let i = 0; i < 9; i++) eggs.push(new THREE.SphereGeometry(0.024, 10, 8).scale(1, 1.25, 1).translate(-1.12 + (i % 3) * 0.05, T + 0.05 + Math.floor(i / 3) * 0.03, BZ + (i % 2) * 0.03 - 0.02));
+  cart.add(new THREE.Mesh(merge(eggs), std('#e8d0b0', { roughness: 0.5 })));
+  cart.add(new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.08, 0.08, 14, 1, true).translate(-1.07, T + 0.04, BZ), new THREE.MeshStandardMaterial({ color: '#8a8a88', metalness: 0.8, roughness: 0.4, wireframe: true })));
+  const bowl = (x, col, n) => {
+    cart.add(new THREE.Mesh(lathe([[0, 0], [0.045, 0], [0.07, 0.05], [0.067, 0.05], [0, 0.006]], 18).translate(x, T, BZ), m.white));
+    const bits = [];
+    for (let i = 0; i < n; i++) bits.push(new THREE.BoxGeometry(0.012, 0.006, 0.012).rotateY(rng() * 3).translate(x + (rng() - 0.5) * 0.08, T + 0.04 + rng() * 0.012, BZ + (rng() - 0.5) * 0.08));
+    cart.add(new THREE.Mesh(merge(bits), std(col)));
+  };
+  bowl(-0.42, '#5aa040', 40); bowl(-0.25, '#f0e8f0', 34);
+  [['#3e2214', 0.42], ['#f2d36a', 0.55], ['#c89a5a', 0.68]].forEach(([col, x]) => {
+    const j = new THREE.Group();
+    const gl = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.13, 16, 1, true).translate(0, 0.065, 0), m.glass);
+    gl.renderOrder = 2; j.add(gl);
+    j.add(new THREE.Mesh(new THREE.CylinderGeometry(0.047, 0.047, 0.09, 14).translate(0, 0.045, 0), std(col, { roughness: 0.8 })));
+    j.add(new THREE.Mesh(new THREE.CylinderGeometry(0.053, 0.053, 0.02, 16).translate(0, 0.14, 0), m.brass));
+    j.position.set(x, T, BZ); cart.add(j);
+  });
+  cart.add(new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.1, 16).translate(0.82, T + 0.05, BZ), std('#f2d040', { metalness: 0.4, roughness: 0.35 })));
+  cart.add(new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.09, 16).translate(0.94, T + 0.045, BZ), std('#e8e2d4', { metalness: 0.5, roughness: 0.3 })));
+  cart.add(new THREE.Mesh(lathe([[0, 0], [0.08, 0], [0.12, 0.07], [0.115, 0.07], [0, 0.008]], 20).translate(1.1, T, BZ - 0.05), m.steel));
+  cart.add(new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, 0.5, 1).translate(1.1, T + 0.02, BZ - 0.05), std('#efe0c0', { roughness: 0.7 })));
+  // serving plates at the front edge: what she can take
+  const manisShow = martabakManis(); manisShow.position.set(0.55, T, -0.3); manisShow.rotation.y = 0.2; cart.add(manisShow);
+  const telurShow = martabakTelur(); telurShow.position.set(-0.3, T, -0.3); telurShow.rotation.y = -0.15; cart.add(telurShow);
+  // a stack of kraft boxes
+  const boxes = [];
+  for (let i = 0; i < 5; i++) boxes.push(new THREE.BoxGeometry(0.24, 0.05, 0.24).translate(1.12, T + 0.025 + i * 0.052, -0.22));
+  cart.add(new THREE.Mesh(merge(boxes), std('#c9a27a', { roughness: 0.9 })));
+  cart.add(new THREE.Mesh(merge(gold), m.gold));
+
+  // canopy: teak posts, a green-and-cream striped vault, a gold fringe, the name board on top
+  const posts = [];
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) posts.push(new THREE.BoxGeometry(0.05, 1.5, 0.05).translate(sx * 1.22, T + 0.75, sz * 0.44));
+  for (const sz of [-1, 1]) posts.push(new THREE.BoxGeometry(2.54, 0.06, 0.05).translate(0, T + 1.47, sz * 0.44));
+  cart.add(new THREE.Mesh(merge(posts), m.darkTeak));
+  const canTex = canvasTex(64, 256, (g, W, H) => {
+    g.fillStyle = '#efe2c4'; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#1f3d2e';
+    for (let i = 0; i < 8; i++) g.fillRect(0, (i + 0.25) * (H / 8), W, H / 16);
+  });
+  const r = 0.69, a = 0.85;
+  const vault = new THREE.CylinderGeometry(r, r, L + 0.3, 24, 1, true, Math.PI / 2 - a, 2 * a).rotateZ(Math.PI / 2).translate(0, T + 1.5 - r * Math.cos(a), 0);
+  const canopy = new THREE.Mesh(vault, new THREE.MeshStandardMaterial({ map: canTex, roughness: 0.85, side: THREE.DoubleSide }));
+  canopy.castShadow = true;
+  cart.add(canopy);
+  const edgeZ = r * Math.sin(a), edgeY = T + 1.5, fringe = [];
+  for (const sz of [-1, 1]) for (let i = 0; i < 26; i++) fringe.push(new THREE.BoxGeometry(0.012, 0.09, 0.006).translate(-L / 2 - 0.15 + (i + 0.5) * ((L + 0.3) / 26), edgeY - 0.045, sz * (edgeZ + 0.005)));
+  cart.add(new THREE.Mesh(merge(fringe), m.gold));
+  const board = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 0.42).rotateY(Math.PI), new THREE.MeshBasicMaterial({ map: dapurPanelTexture(name, brand), color: '#cfc6b4' }));
+  board.position.set(0, T + 1.95, -0.02);
+  cart.add(board);
+  const boardBack = board.clone(); boardBack.rotation.y = Math.PI; boardBack.position.z = 0.02; cart.add(boardBack);
+  cart.add(new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.5, 0.03).translate(0, T + 1.95, 0), m.darkTeak));
+  for (const sx of [-0.85, 0.85]) rod(V(sx, T + 1.7, 0), V(sx, T + 1.72, 0), 0.02, posts, 6);
+  // a caged bulb lamp hanging over the griddles
+  const lampG = new THREE.Group();
+  lampG.add(new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8).scale(1, 1.3, 1), m.soft));
+  const cage = [];
+  for (let k = 0; k < 6; k++) { const b = (k / 6) * Math.PI * 2; rod(V(Math.cos(b) * 0.08, -0.09, Math.sin(b) * 0.08), V(Math.cos(b) * 0.08, 0.1, Math.sin(b) * 0.08), 0.004, cage, 4); }
+  cage.push(new THREE.CylinderGeometry(0.003, 0.003, 0.3, 4).translate(0, 0.25, 0));
+  lampG.add(new THREE.Mesh(merge(cage), m.brass));
+  lampG.position.set(-0.35, T + 1.15, 0);
+  cart.add(lampG);
+  const light = new THREE.PointLight('#ffc27a', 4, 8, 2);
+  light.position.set(-0.35, T + 1.0, -0.4);
+  cart.add(light);
+  // menu A-frame
+  const menu = new THREE.Group();
+  menu.position.set(-1.0, 0, -1.05); menu.rotation.y = 0.25;
+  const mb = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.7).rotateY(Math.PI), new THREE.MeshBasicMaterial({ map: signTexture([name, 'Martabak Manis', 'cokelat · keju · kacang', 'Martabak Telur', 'telur bebek · daun bawang'], { w: 300, h: 440, bg: '#1f3d2e', fg: '#efe2c4', border: '#c9a25a', title: 0.12 }), color: '#c8c0b0' }));
+  mb.position.set(0, 0.62, 0); mb.rotation.x = 0.12;
+  menu.add(mb);
+  const mf = [];
+  rod(V(-0.24, 0, -0.08), V(-0.24, 0.98, 0.04), 0.015, mf); rod(V(0.24, 0, -0.08), V(0.24, 0.98, 0.04), 0.015, mf);
+  rod(V(-0.24, 0, 0.3), V(-0.24, 0.98, 0.05), 0.012, mf); rod(V(0.24, 0, 0.3), V(0.24, 0.98, 0.05), 0.012, mf);
+  menu.add(new THREE.Mesh(merge(mf), m.darkTeak));
+  cart.add(menu);
+  shadowAll(cart, true, true);
+
+  cart.updateMatrixWorld(true);
+  const W = (x, y, z) => V(x, y, z).applyMatrix4(cart.matrixWorld);
+  const a0 = W(-1.9, 0, 0), a1 = W(1.35, 0, 0);
+  out.colliders.push({ seg: [a0.x, a0.z, a1.x, a1.z], r: 0.62 });
+  const mp = W(-1.0, 0, -1.0); out.colliders.push({ x: mp.x, z: mp.z, r: 0.3 });
+  out.interacts.push({ center: W(0.55, T + 0.05, -0.3), radius: 0.17, label: 'martabak manis', food: 'manis' });
+  out.interacts.push({ center: W(-0.3, T + 0.05, -0.3), radius: 0.17, label: 'martabak telur', food: 'telur' });
+  out.tables.push(W(0.95, T + 0.01, -0.3));
+  return {
+    light,
+    update(t) { light.intensity = 4 * (0.96 + Math.sin(t * 7.3) * 0.02); },
+  };
+}
+
+/** An empty cart bay waits with a frangipani planter until a new cart arrives. */
+function emptyBay(m, rng, out, bay) {
+  const g = new THREE.Group();
+  g.position.set(bay.x, Y, bay.z);
+  g.rotation.y = bay.yaw;
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.55, 0.8).translate(0, 0.275, 0.3), m.stone));
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.02, 0.7).translate(0, 0.55, 0.3), std('#3a2a1e', { roughness: 1 })));
+  const tr = [], lv = [], bl = [];
+  for (let k = 0; k < 5; k++) { const a = (k / 5) * 6.28 + rng(); rod(V(0, 0.5, 0.3), V(Math.cos(a) * 0.4, 1.3 + rng() * 0.3, 0.3 + Math.sin(a) * 0.25), 0.04, tr, 6); }
+  for (let i = 0; i < 40; i++) { const a = rng() * 6.28, r = 0.15 + rng() * 0.45; lv.push(new THREE.SphereGeometry(0.16, 8, 6).scale(1.5, 0.22, 0.6).rotateY(a).translate(Math.cos(a) * r, 1.35 + rng() * 0.35, 0.3 + Math.sin(a) * r * 0.6)); }
+  for (let i = 0; i < 40; i++) bl.push(new THREE.SphereGeometry(0.04, 8, 6).scale(1, 0.45, 1).translate((rng() - 0.5) * 1.1, 1.5 + rng() * 0.3, 0.3 + (rng() - 0.5) * 0.7));
+  g.add(new THREE.Mesh(merge(tr), std('#8a7a68', { roughness: 0.8 })));
+  g.add(new THREE.Mesh(merge(lv), std('#3f6b35', { roughness: 0.6 })));
+  g.add(new THREE.Mesh(merge(bl), new THREE.MeshStandardMaterial({ color: '#fbf1dc', emissive: '#f6d8a0', emissiveIntensity: 0.25 })));
+  for (let i = 0; i < 26; i++) {
+    const a = rng() * 6.28;
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.035, 6, 4).scale(1, 0.4, 1).translate((rng() - 0.5) * 1.5, 0.6 + rng() * 0.1, 0.3 + (rng() - 0.5) * 0.6), std(['#d4849b', '#f0e0e6', '#f3e08a'][i % 3])));
+  }
+  shadowAll(g, true, true);
+  out.group.add(g);
+  const p = V(0, 0, 0.3).applyAxisAngle(V(0, 1, 0), bay.yaw);
+  out.colliders.push({ x: bay.x + p.x, z: bay.z + p.z, r: 0.75 });
 }
 
 /* ======================= shared pavilion frame ======================= */
@@ -1679,20 +1890,35 @@ function buildJamuBar(m, rng, name, cx, cz, out) {
 
 /* ======================= build all three ======================= */
 
-export function createStalls(signs = {}) {
+const CART_BUILDERS = {
+  esputer: (m, rng, signs, out, bay) => buildEsPuter(m, rng, signs.gelato || 'Gelato', out, bay),
+  martabak: (m, rng, signs, out, bay) => buildMartabak(m, rng, signs.martabak || 'Gesan’s Legit & Gurih', signs.dapur || 'Sajian Dapur Gesan', out, bay),
+};
+
+export function createStalls(signs = {}, carts = ['esputer', 'martabak']) {
   const rng = mulberry32(71);
   const m = mats();
   const out = { group: new THREE.Group(), colliders: [], interacts: [], tables: [] };
   const { podW, podE } = PIER;
-  const cart = buildEsPuter(m, rng, signs.gelato || 'Gelato', out);
+  // carts fill the promenade bays in order; the rest wait as planters
+  const built = [];
+  let bell = null;
+  CART_BAYS.forEach((bay, i) => {
+    const kind = carts[i];
+    if (kind && CART_BUILDERS[kind]) {
+      const c = CART_BUILDERS[kind](m, rng, signs, out, bay);
+      built.push(c);
+      if (c.bell && !bell) bell = c.bell;
+    } else emptyBay(m, rng, out, bay);
+  });
   const nv = buildNhaViet(m, rng, signs.boutique || 'Reva Maia’s Nhà Việt', (podW.x0 + podW.x1) / 2, (podW.z0 + podW.z1) / 2, out);
   const jamu = buildJamuBar(m, rng, signs.jamu || 'Jamu', (podE.x0 + podE.x1) / 2, (podE.z0 + podE.z1) / 2, out);
   return {
     group: out.group, colliders: out.colliders, interacts: out.interacts, tables: out.tables,
-    light: nv.light, lights: [cart.light, nv.light, jamu.light],
-    bell: cart.bell,
+    light: nv.light, lights: [...built.map((c) => c.light), nv.light, jamu.light],
+    bell: bell || { center: V(0, -100, 0), radius: 0.01, reach: 0, label: '', ring() {} },
     update(t, dt) {
-      cart.update(t, dt);
+      for (const c of built) c.update(t, dt);
       nv.update(t, dt);
     },
   };

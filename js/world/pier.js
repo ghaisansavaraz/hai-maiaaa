@@ -10,7 +10,7 @@
 
 import * as THREE from 'three';
 import { mulberry32, glowTexture } from './util.js';
-import { PIER, LAKE, boardwalkAt } from './layout.js';
+import { PIER, LAKE, CART_BAYS, boardwalkAt } from './layout.js';
 import { merge, paint } from './props.js';
 import { V, beam, rod, canvasTex, kawungPanelTexture, sirapTexture, shadowAll } from './build.js';
 
@@ -80,7 +80,7 @@ export function createPier(hf) {
   const group = new THREE.Group();
   const Y = PIER.deckY;
   const X = PIER.x;
-  const { spine, podW, podE, pendopo, boardwalk: BW, gate } = PIER;
+  const { spine, podW, podE, pendopo, boardwalk: BW, gate, promenade: PRM } = PIER;
   const PZ = pendopo.z, PH = pendopo.half, PR = pendopo.roof;
   const colliders = [];
 
@@ -95,8 +95,8 @@ export function createPier(hf) {
     planks.push(g);
   };
   /** Rectangular deck of planks running along x, rows along z. */
-  const deckRect = (x0, x1, z0, z1) => {
-    for (let z = z0 + 0.09; z < z1; z += 0.18) {
+  const deckRect = (x0, x1, z0, z1, zFrom = z0 + 0.09) => {
+    for (let z = zFrom; z < z1; z += 0.18) {
       let x = x0;
       while (x < x1 - 0.05) { const len = Math.min(x1 - x, 2 + rng() * 1.6); plankBox(len, 0.16, x + len / 2, z, 0); x += len; }
     }
@@ -147,8 +147,23 @@ export function createPier(hf) {
   /* ---------- the spine, the two pods, the pendopo deck ---------- */
   const B = 0.45; // stone border
   deckRect(X - spine.hw, X + spine.hw, spine.z0, spine.z1);
+  // the promenade widens the spine on both sides; rows stay in step with the spine's
+  const rowFrom = spine.z0 + 0.09 + Math.ceil((PRM.z0 - spine.z0) / 0.18) * 0.18;
+  deckRect(X - PRM.hw, X - spine.hw, PRM.z0, PRM.z1, rowFrom);
+  deckRect(X + spine.hw, X + PRM.hw, PRM.z0, PRM.z1, rowFrom);
+  for (const s of [-1, 1]) {
+    fascia(X + s * PRM.hw, PRM.z0, X + s * PRM.hw, PRM.z1);
+    fascia(X + s * spine.hw, PRM.z0, X + s * PRM.hw, PRM.z0);
+    for (let z = PRM.z0 + 0.4; z < PRM.z1; z += 2.4) pile(X + s * (PRM.hw - 0.15), z);
+  }
+  // inlaid paras-stone frames marking each cart bay
+  for (const b of CART_BAYS) {
+    const x0 = b.x - 0.95, x1 = b.x + 0.95, z0 = b.z - 2.15, z1 = b.z + 2.15, t = 0.12;
+    for (const [a0, a1, c0, c1] of [[x0, x1, z0, z0 + t], [x0, x1, z1 - t, z1], [x0, x0 + t, z0, z1], [x1 - t, x1, z0, z1]]) slab(a0, a1, c0, c1, 0.02);
+  }
   for (const pod of [podW, podE]) {
-    deckRect(pod.x0 + B, pod.x1 - B, pod.z0 + B, pod.z1 - B);
+    // the side facing the walkway runs flush into it, so there's no border (or gap) there
+    deckRect(pod === podW ? pod.x0 + B : pod.x0, pod === podW ? pod.x1 : pod.x1 - B, pod.z0 + B, pod.z1 - B);
     slab(pod.x0, pod.x1, pod.z0, pod.z0 + B); slab(pod.x0, pod.x1, pod.z1 - B, pod.z1);
     const outerX = pod === podW ? pod.x0 : pod.x1;
     slab(Math.min(outerX, outerX + (pod === podW ? B : -B)), Math.max(outerX, outerX + (pod === podW ? B : -B)), pod.z0 + B, pod.z1 - B);
@@ -162,7 +177,7 @@ export function createPier(hf) {
   fascia(X - PH, PZ + PH, X - spine.hw, PZ + PH); fascia(X + spine.hw, PZ + PH, X + PH, PZ + PH);
   for (const s of [-1, 1]) {
     fascia(X + s * spine.hw, spine.z0, X + s * spine.hw, podW.z0);
-    fascia(X + s * spine.hw, podW.z1, X + s * spine.hw, spine.z1);
+    fascia(X + s * spine.hw, podW.z1, X + s * spine.hw, PRM.z0);
   }
   for (let z = spine.z0 + 0.4; z < spine.z1; z += 2.4) { pile(X - spine.hw + 0.15, z); pile(X + spine.hw - 0.15, z); }
   for (const dx of [-PH + 0.3, -1.8, 1.8, PH - 0.3]) for (const dz of [-PH + 0.3, 0, PH - 0.3]) pile(X + dx, PZ + dz);
@@ -207,7 +222,7 @@ export function createPier(hf) {
   const e = 0.08;
   // boardwalk: rails on the water side, open where the spine leaves
   const gateTh = Math.atan2((gate.z - LAKE.cz) / LAKE.rz, (X - LAKE.cx) / LAKE.rx);
-  const gap = (spine.hw + 0.1) / (LAKE.rx * BW.ld);
+  const gap = (PRM.hw + 0.1) / (LAKE.rx * BW.ld);
   const railEdge = stride(bwInner, 8);
   for (let i = 1; i < railEdge.length; i++) {
     const A = railEdge[i - 1], Bp = railEdge[i];
@@ -216,10 +231,13 @@ export function createPier(hf) {
     railRun(A.x, A.z, Bp.x, Bp.z);
   }
   // spine rails between the pods and the shore, and between the pods and the pendopo
-  const ladderZ = 1.2, gapH = 0.6;
+  const ladderZ = -10.2, gapH = 0.6;
   for (const s of [-1, 1]) {
     const x = X + s * (spine.hw - e);
-    railRun(x, podW.z1, x, spine.z1 - 1.2);
+    railRun(x, podW.z1, x, PRM.z0);
+    // the promenade: rails along its sides and across its lake end
+    railRun(X + s * (PRM.hw - e), PRM.z0 + e, X + s * (PRM.hw - e), PRM.z1 - 0.6);
+    railRun(X + s * spine.hw, PRM.z0 + e, X + s * (PRM.hw - e), PRM.z0 + e);
     if (s > 0) { railRun(x, spine.z0, x, ladderZ - gapH); railRun(x, ladderZ + gapH, x, podW.z0); }
     else railRun(x, spine.z0, x, podW.z0);
   }
@@ -307,7 +325,7 @@ export function createPier(hf) {
   const benches = [], planters = [], leaves = [], blooms = [], trunks = [];
   for (let k = 0; k < 10; k++) {
     const th = BW.th0 + 0.08 + (k / 9) * (BW.th1 - BW.th0 - 0.16);
-    if (Math.abs(th - gateTh) < 0.12 || Math.abs(th - PIER.cart.th) < 0.1) continue;
+    if (Math.abs(th - gateTh) < 0.14) continue;
     const c = boardwalkAt(th, BW.ld + (BW.hw - 0.6) / LAKE.rz);
     const n = boardwalkAt(th, BW.ld - 1 / LAKE.rz);
     const yaw = Math.atan2(-(n.z - c.z), n.x - c.x) + Math.PI / 2;
@@ -330,6 +348,20 @@ export function createPier(hf) {
       colliders.push({ x: c.x, z: c.z, r: 0.5 });
     }
   }
+  // teak benches on the pods' terraces, looking out over the lake
+  const benchAt = (x, z, yaw) => {
+    const g = [];
+    g.push(new THREE.BoxGeometry(1.8, 0.06, 0.5).translate(0, 0.46, 0));
+    g.push(new THREE.BoxGeometry(1.8, 0.5, 0.06).translate(0, 0.74, 0.24).rotateX(-0.1));
+    for (const bx of [-0.8, 0.8]) g.push(new THREE.BoxGeometry(0.08, 0.46, 0.5).translate(bx, 0.23, 0));
+    for (const p of g) { p.rotateY(yaw); p.translate(x, Y, z); benches.push(p); }
+    colliders.push({ x, z, r: 0.62 });
+  };
+  for (const pod of [podW, podE]) {
+    const cxp = (pod.x0 + pod.x1) / 2, czp = (pod.z0 + pod.z1) / 2, west = pod === podW;
+    for (const dz of [-3, 3]) benchAt(west ? pod.x0 + 0.85 : pod.x1 - 0.85, czp + dz, west ? Math.PI / 2 : -Math.PI / 2);
+    for (const dx of [-3, 3]) benchAt(cxp + dx, pod.z0 + 0.8, 0);
+  }
   group.add(new THREE.Mesh(merge(benches), teakMat));
   group.add(new THREE.Mesh(merge(planters), stoneMat));
   group.add(new THREE.Mesh(merge(trunks), new THREE.MeshStandardMaterial({ color: '#8a7a68', roughness: 0.8 })));
@@ -343,7 +375,10 @@ export function createPier(hf) {
     polygonOffset: true, polygonOffsetFactor: -4,
   });
   const lampSpots = [];
-  for (const z of [spine.z1 - 1.6, 16.6, 2.8, spine.z0 + 0.6]) for (const s of [-1, 1]) lampSpots.push([X + s * (spine.hw - 0.25), z]);
+  // promenade lamps stand between the cart bays; the spine has two pairs out past the pods
+  for (const z of [16.625, 11.875, PRM.z0 + 0.35]) for (const s of [-1, 1]) lampSpots.push([X + s * (PRM.hw - 0.25), z]);
+  for (const z of [podW.z0 - 1.2, spine.z0 + 0.6]) for (const s of [-1, 1]) lampSpots.push([X + s * (spine.hw - 0.25), z]);
+  const BW0 = lampSpots.length;
   for (let k = 0; k < 7; k++) {
     const th = BW.th0 + 0.04 + (k / 6) * (BW.th1 - BW.th0 - 0.08);
     if (Math.abs(th - gateTh) < 0.1) continue;
@@ -380,11 +415,13 @@ export function createPier(hf) {
     for (let i = 1; i < n; i++) bulbs.push(curve.getPoint(i / n).add(V(0, -0.05, 0)));
   };
   // zigzag along the spine
-  for (let i = 0; i < 3; i++) festoon(lampTops[i * 2], lampTops[i * 2 + 3] || lampTops[i * 2 + 1]);
-  festoon(lampTops[0], lampTops[1], 0.3);
+  // a canopy of lights over the cart promenade: across each pair, and crossing between pairs
+  for (const i of [0, 2, 4]) festoon(lampTops[i], lampTops[i + 1], 0.9);
+  for (const i of [0, 2]) { festoon(lampTops[i], lampTops[i + 3], 0.7); festoon(lampTops[i + 1], lampTops[i + 2], 0.7); }
   festoon(lampTops[6], lampTops[7], 0.3);
+  festoon(lampTops[8], lampTops[9], 0.3);
   // along the boardwalk, lamp to lamp on the water side
-  for (let i = 9; i < lampTops.length; i++) festoon(lampTops[i - 1], lampTops[i], 0.55);
+  for (let i = BW0 + 1; i < lampTops.length; i++) festoon(lampTops[i - 1], lampTops[i], 0.55);
   group.add(new THREE.Mesh(merge(wires), new THREE.MeshStandardMaterial({ color: '#2a2420' })));
   const bulbMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.04, 10, 8), new THREE.MeshStandardMaterial({ color: '#fff1d6', emissive: '#ffc070', emissiveIntensity: 3 }), bulbs.length);
   bulbs.forEach((p, i) => bulbMesh.setMatrixAt(i, new THREE.Matrix4().makeTranslation(p.x, p.y, p.z)));

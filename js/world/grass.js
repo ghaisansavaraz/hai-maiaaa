@@ -10,7 +10,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mulberry32, noise2, smoothstep } from './util.js';
 import {
-  LAKE, DOCK, BOUNDS, pierDist, riverSamples, RIVER_W, lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf,
+  LAKE, DOCK, BOUNDS, pierDist, riverSamples, RIVER_W, lakeDist, pathEdgeDist, autumnAt, boundsDist, hillDist, greenhouseSdf, dapurSdf,
 } from './layout.js';
 
 export const MAX_LIGHTS = 8;
@@ -182,7 +182,7 @@ export function createGrass(hf, shared) {
         if (ground < 0.08) continue;
         const pe = pathEdgeDist(x, z);
         if (pe < -0.2) continue;
-        if (greenhouseSdf(x, z, 0.2) < 0) continue;
+        if (greenhouseSdf(x, z, 0.2) < 0 || dapurSdf(x, z, 0.2) < 0) continue;
         if (pierDist(x, z) < 0.3) continue;
 
         const clump = noise2(x * 0.09, z * 0.09) * 0.5 + 0.5;
@@ -377,7 +377,7 @@ export function createFlowers(hf, shared) {
     const x = (rng() - 0.5) * 190, z = (rng() - 0.5) * 230;
     if (boundsDist(x, z) > 0.96 || autumnAt(x, z) > 0.4) continue;
     const ground = hf.sample(x, z);
-    if (ground < 0.2 || pathEdgeDist(x, z) < 0.4 || greenhouseSdf(x, z, 0.3) < 0 || hillDist(x, z) < 6.5) continue;
+    if (ground < 0.2 || pathEdgeDist(x, z) < 0.4 || greenhouseSdf(x, z, 0.3) < 0 || dapurSdf(x, z, 0.4) < 0 || hillDist(x, z) < 6.5) continue;
     // clusters: drifts of flowers rather than an even sprinkle
     const cl = noise2(x * 0.06 + 9, z * 0.06 - 3);
     const nearGh = greenhouseSdf(x, z) < 9 ? 0.35 : 0;

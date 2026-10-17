@@ -12,9 +12,10 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import {
   WORLD_UNLOCK_DATE, WORLD_SHOW_MESSAGES, WORLD_LANTERN_MESSAGES, WORLD_ITEM_MESSAGES, WORLD_FINAL_MESSAGE,
   WORLD_HER_NAME, WORLD_FROM_NAME, LETTERS_DATA, WORLD_PIER_SIGNS, WORLD_CHAPTERS,
+  WORLD_CARTS, WORLD_DAPUR_EVENTS, WORLD_DAPUR_OPEN, WORLD_DAPUR_MENU,
 } from '../config.js';
 import { localDateMs, nextFrame, smoothstep } from './util.js';
-import { Heightfield, SPAWN, MOON_DIR, PIER, GREENHOUSE, HILL, LAKE, BRIDGE, lakeDist, pierDist } from './layout.js';
+import { Heightfield, SPAWN, MOON_DIR, PIER, GREENHOUSE, HILL, LAKE, BRIDGE, DAPUR, lakeDist, pierDist } from './layout.js';
 import { createSkyUniforms, createSky } from './sky.js';
 import { createTerrain, createRocks, createLeafLitter, createLilies, createPlaza } from './terrain.js';
 import { createPier } from './pier.js';
@@ -28,6 +29,7 @@ import { createWater } from './water.js';
 import { createTrees } from './trees.js';
 import { createLanterns, createBench, createBunny } from './props.js';
 import { createGreenhouse } from './greenhouse.js';
+import { createDapur } from './dapur.js';
 import { createFinale, FINALE_T } from './finale.js';
 import { createFireflies, createDrift, createMist, createBursts } from './particles.js';
 import { createAudio } from './audio.js';
@@ -137,7 +139,7 @@ async function main() {
   const lilies = createLilies();
   scene.add(rocks.mesh, createLeafLitter(hf), lilies, createPlaza());
   const pier = createPier(hf);
-  const stalls = createStalls(WORLD_PIER_SIGNS || {});
+  const stalls = createStalls(WORLD_PIER_SIGNS || {}, WORLD_CARTS || ['esputer', 'martabak']);
   const bridge = createBridge();
   scene.add(pier.group, stalls.group, bridge.group);
   for (const g of [pier.group, stalls.group, bridge.group]) bakeStatic(g);
@@ -173,6 +175,12 @@ async function main() {
   const greenhouse = createGreenhouse(WORLD_ITEM_MESSAGES);
   scene.add(greenhouse.group);
   bakeStatic(greenhouse.group);
+  // Sajian Dapur Gesan opens on the listed days (her local date), or by hand
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
+  const dapurOpen = typeof WORLD_DAPUR_OPEN === 'boolean' ? WORLD_DAPUR_OPEN : (WORLD_DAPUR_EVENTS || []).includes(today);
+  const dapur = createDapur({ open: dapurOpen, name: (WORLD_PIER_SIGNS || {}).dapur || 'Sajian Dapur Gesan', menu: WORLD_DAPUR_MENU || [], showText: WORLD_SHOW_MESSAGES });
+  scene.add(dapur.group);
+  bakeStatic(dapur.group);
   const audio = createAudio();
   const finale = createFinale(hf, { audio });
   finale.setLilies(lilies.userData.lilyMat);
@@ -206,7 +214,7 @@ async function main() {
   const colliders = [
     ...trees.colliders, ...rocks.colliders, ...lanterns.lanterns.map((l) => l.collider),
     ...bench.colliders, ...greenhouse.colliders, ...finale.colliders, ...pier.colliders,
-    ...stalls.colliders, ...bridge.colliders,
+    ...stalls.colliders, ...bridge.colliders, ...dapur.colliders,
   ];
   const player = createPlayer(camera, document.body, hf, colliders, { reducedMotion });
 
@@ -540,6 +548,7 @@ async function main() {
     spawn: [SPAWN.x, SPAWN.z, 0],
     pier: [PIER.x, PIER.gate.z + 3.5, 0, -0.05],
     dock: [PIER.x, PIER.spine.z0 + 2.5, 0, -0.05],
+    dapur: [DAPUR.x, DAPUR.z + DAPUR.hd + 4.5, 0, -0.04],
     greenhouse: [GREENHOUSE.x, GREENHOUSE.z + GREENHOUSE.half + 6.5, 0, 0.04],
     bridge: [BRIDGE.x - BRIDGE.ux * 14, BRIDGE.z - BRIDGE.uz * 14, Math.atan2(-BRIDGE.ux, -BRIDGE.uz), -0.02],
     // just south of the lantern pedestal, facing it (and the moon beyond)
@@ -622,6 +631,7 @@ async function main() {
     $('story').classList.toggle('on', sv.hint && controls.isLocked);
     pier.update(time);
     stalls.update(time, dt);
+    dapur.update(time, dt);
     food.update(time, dt, player.speed);
     mist.update(time);
     bursts.update(dt);
@@ -736,6 +746,7 @@ async function main() {
     food, setFoodDown, story, bunny, boardBoat, leaveBoat, get rowing() { return rowing; },
     teleport: (k, ...rest) => (spots[k] ? player.teleport(...spots[k]) : player.teleport(k, ...rest)),
     unlock() { devUnlocked = true; },
+    dapur(v) { dapur.setOpen(v); },
     celebrate() { devUnlocked = true; startCelebration(); },
     info: () => ({ grassBlades: grass.total, fireflies: fireflies.count, level, unlocked: isUnlocked(), entered }),
   };

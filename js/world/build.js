@@ -137,10 +137,30 @@ const matKey = (m) => [
 
 /** Plain, untextured, non-glowing standard materials differ only by colour:
     those can share one vertex-coloured material per finish. */
-const plain = (m) => m.type === 'MeshStandardMaterial' && !m.map && !m.transparent && !m.alphaTest && m.opacity === 1
-  && m.emissive.getHex() === 0 && !m.normalMap && !m.envMap;
-const q = (v) => Math.round(v * 20) / 20;
-const plainKey = (m) => ['VC', q(m.roughness), q(m.metalness), m.side, !!m.flatShading].join('|');
+const plainish = (m) => m.type === 'MeshStandardMaterial' && !m.map && !m.transparent && !m.alphaTest && m.opacity === 1
+  && !m.normalMap && !m.envMap && !m.emissiveMap;
+// self-lit: glows in its own colour (silk lanterns, chè layers, gelato tops)
+const selfLit = (m) => m.emissive.getHex() !== 0 && m.emissive.getHex() === m.color.getHex();
+const plain = (m) => plainish(m) && (m.emissive.getHex() === 0 || selfLit(m));
+const qr = (v) => Math.round(v / 0.15) * 0.15;
+const qm = (v) => (v < 0.25 ? 0 : v < 0.7 ? 0.5 : 0.9);
+const qe = (v) => Math.round(v * 10) / 10;
+const plainKey = (m) => ['VC', qr(m.roughness).toFixed(2), qm(m.metalness), m.side, !!m.flatShading, selfLit(m) ? qe(m.emissiveIntensity) : 0].join('|');
+/** Vertex-coloured standard material; with glow > 0 it also glows in its vertex colours. */
+function vcMaterial(m) {
+  const glow = selfLit(m) ? qe(m.emissiveIntensity) : 0;
+  const out = new THREE.MeshStandardMaterial({
+    vertexColors: true, roughness: qr(m.roughness), metalness: qm(m.metalness), side: m.side, flatShading: m.flatShading,
+    emissive: glow ? '#ffffff' : '#000000', emissiveIntensity: glow || 1,
+  });
+  if (glow) {
+    out.onBeforeCompile = (sh) => {
+      sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n  totalEmissiveRadiance *= vColor.rgb;');
+    };
+    out.customProgramCacheKey = () => 'vc-selflit';
+  }
+  return out;
+}
 
 /** Merge every static mesh under `root` into one mesh per (look-alike)
     material, in root space; plain coloured materials collapse into one
@@ -187,7 +207,7 @@ export function bakeStatic(root) {
       g.morphAttributes = {};
       const key = flat ? plainKey(m) : matKey(m);
       if (flat && !buckets.has(key)) {
-        m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: m.roughness, metalness: m.metalness, side: m.side, flatShading: m.flatShading });
+        m = vcMaterial(m);
       }
       if (!buckets.has(key)) buckets.set(key, { mat: m, geos: [], cast: false, recv: false, order: o.renderOrder });
       const b = buckets.get(key);

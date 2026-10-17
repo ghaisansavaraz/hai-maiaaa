@@ -8,6 +8,7 @@
    show when WORLD_SHOW_MESSAGES is on. */
 
 import * as THREE from 'three';
+import { glowTexture } from './util.js';
 import {
   MAIN_PATH, DOCK_PATH, GREENHOUSE_PATH, PIER, GREENHOUSE, HILL, mainPathAt,
 } from './layout.js';
@@ -53,7 +54,7 @@ export function buildRoutes() {
   const P = PIER, G = GREENHOUSE;
   // inside the pendopo at the end of the pier, beside the bench
   const GAZEBO = [P.x - 1.3, P.pendopo.z + 0.9];
-  const pierIn = [[P.x, P.gate.z], [P.x, 16], [P.x, 8], [P.x, 1], [P.x, P.spine.z0 - 0.4]];
+  const pierIn = [[P.x, P.gate.z], [P.x, 14.25], [P.x, 6], [P.x, -1.5], [P.x, -9.5], [P.x, P.spine.z0 - 0.4]]; // down the cart aisle
   // through the grand door, round the centrepiece, up the west flight to her desk on the dais
   const Fl = G.flight, Da = G.dais;
   const DESK = [G.x - 1.8, G.z + Da.z0 + 2.5];
@@ -89,16 +90,8 @@ export function buildRoutes() {
 
 function pawPrints(scene) {
   const N = 90;
-  const c = document.createElement('canvas');
-  c.width = c.height = 64;
-  const g = c.getContext('2d');
-  const grd = g.createRadialGradient(32, 32, 2, 32, 32, 30);
-  grd.addColorStop(0, 'rgba(255,255,255,1)');
-  grd.addColorStop(0.5, 'rgba(255,255,255,0.45)');
-  grd.addColorStop(1, 'rgba(255,255,255,0)');
-  g.fillStyle = grd;
-  g.fillRect(0, 0, 64, 64);
-  const tex = new THREE.CanvasTexture(c);
+  // raw-pixel glow (alpha fixed at 1): soft canvas alpha makes Safari "confetti"
+  const tex = glowTexture(64, 1.4);
   const geo = new THREE.PlaneGeometry(0.09, 0.14).rotateX(-Math.PI / 2);
   const mat = new THREE.MeshBasicMaterial({
     map: tex, color: '#ffffff', transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,

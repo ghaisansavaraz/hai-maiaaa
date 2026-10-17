@@ -27,7 +27,25 @@ export const WORLD_UNLOCK_DATE = '2026-10-19';
 export const WORLD_HER_NAME = 'Maia Reva';
 export const WORLD_FROM_NAME = 'Gesan';
 // Signs on the pier's food stalls (shop names, change freely).
-export const WORLD_PIER_SIGNS = { boutique: 'Reva Maia’s Nhà Việt', gelato: 'Gelato', jamu: 'Jamu' };
+export const WORLD_PIER_SIGNS = {
+  boutique: 'Reva Maia’s Nhà Việt', gelato: 'Gelato', jamu: 'Jamu',
+  martabak: 'Gesan’s Legit & Gurih', dapur: 'Sajian Dapur Gesan',
+};
+// The carts on the pier's promenade, in bay order (gate end first, east then
+// west, then the next pair). Add a name here to fill the next empty bay;
+// known carts: 'esputer' (gelato), 'martabak'. Empty bays hold a planter.
+export const WORLD_CARTS = ['esputer', 'martabak'];
+
+// Sajian Dapur Gesan, the little private restaurant by the lake. It is only
+// open on the days listed here (her local date), or whenever WORLD_DAPUR_OPEN
+// says so: true = open now, false = closed now, null = follow the dates.
+export const WORLD_DAPUR_EVENTS = ['2026-10-19'];
+export const WORLD_DAPUR_OPEN = null;
+// What you're cooking, shown on the menu board inside (only while
+// WORLD_SHOW_MESSAGES is true; otherwise the board just carries the name).
+export const WORLD_DAPUR_MENU = [
+  'tonight, cooked by Gesan',
+];
 // Whisper that fades in under the flower when she hovers it (once it's a door).
 export const WORLD_ENTRY_HINT = 'the one who’s lovelier than the moon, the night is waiting';
 

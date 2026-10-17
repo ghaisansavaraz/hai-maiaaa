@@ -29,22 +29,33 @@ export const GREENHOUSE = {
   powder: { hw: 3.0, doorHW: 0.75 },
 };
 // The pier: a teak boardwalk along the south shore, an arrival gate on the
-// pier's axis, a central spine out over the water with two symmetrical pods
-// (Nhà Việt west, the jamu bar east), and the pendopo at the end.
+// pier's axis, then a wide cart promenade (Pasar Gerobak) whose bays hold the
+// food carts facing a central aisle, a spine out over the water past two
+// symmetrical pods (Nhà Việt west, the jamu bar east, each with a terrace
+// round its pavilion), and the pendopo at the end.
 export const PIER = {
   x: -24, deckY: 1.05,
   boardwalk: { ld: 1.04, hw: 2.0, th0: Math.PI / 2 - 0.78, th1: Math.PI / 2 + 0.78 },
   gate: { z: 22.3 },
-  cart: { th: 1.13 }, // the es puter gelato cart, on the boardwalk east of the gate
-  spine: { hw: 2.0, z0: -2.0, z1: 21.0 },
-  podW: { x0: -37, x1: -26, z0: 4.5, z1: 14.5 },
-  podE: { x0: -22, x1: -11, z0: 4.5, z1: 14.5 },
-  pendopo: { z: -7.4, half: 5.4, roof: 4.2 }, // half = deck, roof = the pavilion itself
+  promenade: { hw: 4.5, z0: 7.5, z1: 21.0 },
+  spine: { hw: 2.5, z0: -13.0, z1: 21.0 },
+  podW: { x0: -40.5, x1: -26.5, z0: -7.5, z1: 4.5 },
+  podE: { x0: -21.5, x1: -7.5, z0: -7.5, z1: 4.5 },
+  pendopo: { z: -18.4, half: 5.4, roof: 4.2 }, // half = deck, roof = the pavilion itself
 };
+// cart bays along the promenade: carts stand with their backs to the rail and
+// face the aisle (yaw turns the cart's front, local -z, toward the centre)
+export const CART_BAYS = [19.0, 14.25, 9.5].flatMap((z) => [
+  { x: PIER.x + 3.35, z, yaw: Math.PI / 2 },
+  { x: PIER.x - 3.35, z, yaw: -Math.PI / 2 },
+]);
 // summary box of the whole pier, for code that only needs rough bounds
 export const DOCK = {
   x: PIER.x, zLand: PIER.gate.z, zEnd: PIER.pendopo.z - PIER.pendopo.half, hw: PIER.spine.hw, deckY: PIER.deckY,
 };
+// Sajian Dapur Gesan: a little private restaurant on the lakeside lawn east of
+// the pier, open only on the days Gesan cooks. Front door faces south (+z).
+export const DAPUR = { x: 7.5, z: 4.6, hw: 4.0, hd: 3.2, plinth: 0.36 };
 export const BENCH = { x: -24, z: PIER.pendopo.z + 0.7 };
 // beside the main path, shortly after the autumn grove, so she meets it early
 export const BUNNY_HOME = { x: -2.2, z: 48, r: 5 };
@@ -65,6 +76,7 @@ export const MAIN_PATH = [
 ];
 export const DOCK_PATH = [[-8, 34], [-14, 30.4], [-20, 27.4], [-24, 25.6], [-24, 24.2]];
 export const GREENHOUSE_PATH = [[20, 9], [25, 14.8], [32, 19.6], [40, 21.2]]; // to the grand south door
+export const DAPUR_PATH = [[10, 16], [8.9, 12.6], [7.5, 9.4]]; // to the restaurant door
 
 // The river: flows in from the western hills, through the lake, and out east,
 // so the hill (north) can only be reached over the stone bridge.
@@ -93,7 +105,7 @@ function catmullRom(points, step) {
 }
 
 const mainSamples = catmullRom(MAIN_PATH, 0.6);
-const branchSamples = [...catmullRom(DOCK_PATH, 0.6), ...catmullRom(GREENHOUSE_PATH, 0.6)];
+const branchSamples = [...catmullRom(DOCK_PATH, 0.6), ...catmullRom(GREENHOUSE_PATH, 0.6), ...catmullRom(DAPUR_PATH, 0.6)];
 
 // cumulative arc length of the main path (for placing lanterns along it)
 const mainLen = [0];
@@ -204,6 +216,11 @@ export function greenhouseSdf(x, z, pad = 0) {
   return Math.min(hall, wings) - pad;
 }
 
+/** Signed distance to the restaurant's plinth (negative = on it). */
+export function dapurSdf(x, z, pad = 0) {
+  return Math.max(Math.abs(x - DAPUR.x) - DAPUR.hw, Math.abs(z - DAPUR.z) - DAPUR.hd) - pad;
+}
+
 const box = (x, z, x0, x1, z0, z1) => {
   const dx = Math.max(x0 - x, x - x1), dz = Math.max(z0 - z, z - z1);
   return dx > 0 && dz > 0 ? Math.hypot(dx, dz) : Math.max(dx, dz);
@@ -223,9 +240,10 @@ function boardwalkDist(x, z) {
 }
 /** Signed distance to the pier deck footprint (negative = on the deck). */
 export function pierDist(x, z) {
-  const { spine, podW, podE, pendopo } = PIER;
+  const { spine, podW, podE, pendopo, promenade: pr } = PIER;
   return Math.min(
     box(x, z, PIER.x - spine.hw, PIER.x + spine.hw, spine.z0, spine.z1),
+    box(x, z, PIER.x - pr.hw, PIER.x + pr.hw, pr.z0, pr.z1),
     box(x, z, podW.x0, podW.x1, podW.z0, podW.z1),
     box(x, z, podE.x0, podE.x1, podE.z0, podE.z1),
     box(x, z, PIER.x - pendopo.half, PIER.x + pendopo.half, pendopo.z - pendopo.half, pendopo.z + pendopo.half),
@@ -253,6 +271,8 @@ function baseHeight(x, z) {
 }
 
 const GREENHOUSE_BASE = baseHeight(GREENHOUSE.x, GREENHOUSE.z) + 0.05;
+const DAPUR_BASE = baseHeight(DAPUR.x, DAPUR.z) - 0.05;
+export const DAPUR_FLOOR_Y = DAPUR_BASE + DAPUR.plinth;
 export const GREENHOUSE_FLOOR_Y = GREENHOUSE_BASE;
 export const HILLTOP_Y = baseHeight(HILL.x, HILL.z);
 
@@ -275,6 +295,7 @@ export function terrainHeight(x, z) {
   h -= 0.1 * (1 - smoothstep(-0.3, 1.2, pe));
   const gd = greenhouseSdf(x, z);
   h = lerp(h, GREENHOUSE_BASE, 1 - smoothstep(0.6, 4.5, gd));
+  h = lerp(h, DAPUR_BASE, 1 - smoothstep(0.4, 3.5, dapurSdf(x, z)));
   // flatten the hilltop plaza
   const hd = hillDist(x, z);
   h = lerp(h, HILLTOP_Y, 1 - smoothstep(5.5, 8, hd));
@@ -361,6 +382,9 @@ export function deckHeight(x, z, feetY = Infinity) {
   if (pierDist(x, z) <= 0) return PIER.deckY;
   const { s, l } = bridgeLocal(x, z);
   if (Math.abs(s) <= BRIDGE.len / 2 && Math.abs(l) <= BRIDGE.hw) return bridgeDeckY(s);
+  if (dapurSdf(x, z) <= 0) return DAPUR_FLOOR_Y;
+  const sz = z - (DAPUR.z + DAPUR.hd);
+  if (sz > 0 && sz < 1.0 && Math.abs(x - DAPUR.x) < 1.3) return DAPUR_FLOOR_Y - DAPUR.plinth * sz;
   const G = GREENHOUSE;
   const lx = x - G.x, lz = z - G.z;
   if (Math.abs(lx) < G.half && Math.abs(lz) < G.half) {
@@ -382,5 +406,6 @@ export function surfaceAt(x, z) {
   const { s, l } = bridgeLocal(x, z);
   if (Math.abs(s) <= BRIDGE.len / 2 && Math.abs(l) <= BRIDGE.hw) return 'path';
   if (greenhouseSdf(x, z) < 0) return 'path';
+  if (dapurSdf(x, z) < 0) return 'wood';
   return null;
 }
